@@ -24,9 +24,7 @@ module.exports = {
       const sourceMapRule = webpackConfig.module.rules
         .flatMap((rule) => (rule.oneOf ? rule.oneOf : [rule]))
         .find(
-          (rule) =>
-            rule.loader &&
-            rule.loader.includes('source-map-loader'),
+          (rule) => rule.loader && rule.loader.includes('source-map-loader'),
         );
 
       if (sourceMapRule) {
