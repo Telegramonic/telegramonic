@@ -1,5 +1,11 @@
 import { TitleBoxContainer } from '@components';
-import { HeroSection } from './components';
+import {
+  HeroSection,
+  BentoPreview,
+  FeaturesSection,
+  StatsSection,
+  CTASection,
+} from './components';
 
 const LandingPage = () => {
   return (
@@ -8,10 +14,13 @@ const LandingPage = () => {
       icon="app"
       display="flex"
       flexDir="column"
-      rowGap={10}
-      height={'100vh'}
+      width="100%"
     >
       <HeroSection />
+      <BentoPreview />
+      <FeaturesSection />
+      <StatsSection />
+      <CTASection />
     </TitleBoxContainer>
   );
 };

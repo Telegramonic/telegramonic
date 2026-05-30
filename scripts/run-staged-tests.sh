@@ -3,9 +3,8 @@
 # Get the staged files
 diff_command="git diff --cached --name-only"
 if [ "$1" == "--pushed" ]; then
-  # Command to obtain all changes that will be pushed
-    current_branch=$(git rev-parse --abbrev-ref HEAD)
-    diff_files="git diff --name-only origin/$current_branch..HEAD"
+  # Command to obtain all changes on this branch compared to development
+  diff_command="git diff --name-only origin/development...HEAD"
 fi
 
 changed_files=$($diff_command)
@@ -19,18 +18,20 @@ for file in $changed_files; do
   else
     test_dir="$dir/__tests__"
   fi
-    if [ -d "$test_dir" ]; then
-        if [[ ! " ${testing_directories[@]} " =~ " ${dir} " ]]; then
-            test_files=$(find "$test_dir" \( -name "*.test.ts" -o -name "*.test.tsx" \) -type f)
-            all_these_files+=($test_files) 
-            testing_directories+=($dir)
-        fi
+  if [ -d "$test_dir" ]; then
+    if [[ ! " ${testing_directories[@]} " =~ " ${dir} " ]]; then
+      test_files=$(find "$test_dir" \( -name "*.test.ts" -o -name "*.test.tsx" \) -type f 2>/dev/null)
+      if [ -n "$test_files" ]; then
+        all_these_files+=($test_files)
+      fi
+      testing_directories+=($dir)
     fi
+  fi
 done
 
-if [ ${#all_these_files[@]} -gt 0]; then
-    yarn test "${all_these_files[@]}"
+if [ ${#all_these_files[@]} -gt 0 ]; then
+  yarn test "${all_these_files[@]}"
 else 
-    echo "No test files found"
-    exit 0
+  echo "No test files found"
+  exit 0
 fi

@@ -5,7 +5,6 @@ import { TextEncoder, TextDecoder } from 'util';
 globalThis.TextEncoder = TextEncoder;
 globalThis.TextDecoder = TextDecoder;
 
-
 // Polyfill structuredClone for Jest jsdom environment (required by Chakra UI v3)
 // jsdom may not expose Node's native structuredClone
 if (typeof globalThis.structuredClone === 'undefined') {

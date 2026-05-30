@@ -1,6 +1,12 @@
 import { createSystem, defaultConfig, defineConfig } from '@chakra-ui/react';
 import colors from './colors';
-import { breakpoints, fontSize, fontWeight, lineHeight, zIndices } from './fonts';
+import {
+  breakpoints,
+  fontSize,
+  fontWeight,
+  lineHeight,
+  zIndices,
+} from './fonts';
 import '@fontsource/bungee-shade';
 
 const customConfig = defineConfig({
@@ -70,8 +76,8 @@ const customConfig = defineConfig({
         'error.400': { value: colors.error[400] },
       },
       fonts: {
-        heading: { value: `'Bungee Shade', sans-serif` },
-        body: { value: `'Karla Variable', sans-serif` },
+        heading: { value: `'Inter', sans-serif` },
+        body: { value: `'Inter', sans-serif` },
       },
       fontSizes: {
         xs: { value: fontSize.xs },
@@ -127,13 +133,13 @@ const customConfig = defineConfig({
           value: { _light: colors.primary, _dark: colors.primary },
         },
         'green.700': {
-          value: { _light: colors.green[700], _dark: colors.green[700] },
+          value: { _light: '#0088cc', _dark: '#0088cc' },
         },
         'green.800': {
-          value: { _light: colors.green[800], _dark: colors.green[800] },
+          value: { _light: '#007bb9', _dark: '#007bb9' },
         },
         'green.900': {
-          value: { _light: colors.green[900], _dark: colors.green[900] },
+          value: { _light: '#006193', _dark: '#006193' },
         },
         'neutral.200': {
           value: { _light: colors.neutral[200], _dark: colors.neutral[800] },

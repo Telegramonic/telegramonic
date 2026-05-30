@@ -2,68 +2,47 @@
 
 ## 1. Executive Summary
 
-**Telegramonic** is a highly curated, utilitarian web directory designed for digital craftsmen, developers, and tech enthusiasts. The platform serves as a central hub for discovering free, open-source, and high-utility resources across the internet—ranging from development tools and AI models to privacy-focused software and digital media.
+**Telegramonic** is a high-performance, minimalist cloud storage solution designed for digital craftsmen, developers, and tech professionals. The platform prioritizes speed, security, and utility, helping users maintain calm, effortless control over their digital assets.
 
 ## 2. Product Vision
 
-To provide a noise-free, high-fidelity discovery experience that prioritizes utility and speed, helping users find the best digital tools without the friction of traditional search engines.
+To provide an ergonomic, noise-free cloud storage experience that optimizes workflow efficiency through high-speed operations, seamless organization, and a professional-grade interface.
 
 ## 3. Target Audience
 
-- **Developers & Engineers:** Looking for frameworks, libraries, and infrastructure tools.
-- **Privacy Advocates:** Seeking ad-blocking, encryption, and secure OS resources.
-- **Digital Content Creators:** Searching for fonts, icons, and creative assets.
-- **Power Users:** Exploring specialized software, emulators, and tech literature.
+- **Developers & Engineers:** Requiring fast upload/download of assets, code snippets, and deployment bundles.
+- **Digital Craftsmen & Creators:** Managing large creative assets, images, and documents without UI clutter.
+- **Power Users:** Seeking a reliable, high-performance workspace to organize secure personal and team files.
 
 ## 4. Design Identity
 
-- **Aesthetic:** Utilitarian Minimalism / Terminal-Luxury.
-- **Theme:** Dark mode by default with a deep charcoal surface (#15111e) and high-energy violet accents (#8b5cf6).
-- **Typography:** Geist (Sans-serif) and Mono variants for technical data.
-- **Visual Language:** Glassmorphic overlays, subtle grain/noise textures, and crisp border-based separation.
+- **Aesthetic:** Modern Corporate / Utility Minimalism.
+- **Theme:** Light mode by default with a clean, tiered neutral system. Base background is soft gray (#F8F9FA) with workspace cards in pure white (#FFFFFF).
+- **Brand Colors:** Telegram Blue (#0088CC) as primary accent, Deep Charcoal (#212529) for body text and headings, Success Green (#28A745) for upload completions, and Amber (#FFC107) for warnings or sync interrupts.
+- **Typography:** Inter (Sans-serif) for primary UI, leveraging its tall x-height and bold weights to establish a clear hierarchy.
+- **Elevation & Depth:** Tonal layering with soft ambient shadows (`0 4px 12px rgba(0,0,0,0.05)`) instead of heavy gradients.
+- **Shapes:** Rounded element corners with a 0.5rem (8px) radius for buttons/inputs and a 1rem (16px) radius for large containers and modals.
 
 ## 5. Core Feature Requirements
 
-### 5.1 Resource Discovery (Landing Page)
+### 5.1 File Explorer & Storage (Landing Page)
 
-- **Advanced Search:** Prominent central search bar with support for tags and categories.
-- **Featured Categories:** High-visibility grid for primary verticals (AI, Privacy, Streaming, etc.).
-- **Latest Additions:** Dynamic feed of newly indexed resources with metadata tags (e.g., "CSS", "SVG").
+- **Advanced Search:** Central search bar with input focus effects and quick-clear action to quickly query files and directories.
+- **Layout Grid/List Toggle:** Fluid 12-column file explorer grid with 24px gutters that transitions cleanly between card grid and list views.
+- **Progress Indicators:** Standardized 4px progress tracking bars for file uploads and sync actions, transitioning from Telegram Blue to Success Green upon completion.
 
-### 5.2 Content Hierarchy (Categories)
+### 5.2 Workspace Management (Sidebar Navigation)
 
-The platform organizes resources into 13 distinct categories:
+- **Persistent Navigation:** Fixed-width 280px sidebar for rapid switching between file categories, shared workspaces, and system settings.
+- **Ergonomic Spacing:** Linear 8px rhythm scale with 24px container paddings ensuring elements feel balanced and easy to interact with.
 
-1. **Adblocking / Privacy:** Tools for blocking trackers and ads.
-2. **Artificial Intelligence:** AI models and machine learning tools.
-3. **Streaming:** Media consumption and torrenting resources.
-4. **Listening:** Audio, podcasts, and music tools.
-5. **Gaming:** Emulation and game discovery.
-6. **Reading:** Digital literature, comics, and documentation.
-7. **Downloading:** Software and media acquisition.
-8. **Torrenting:** BitTorrent protocol specific tools.
-9. **Educational:** Learning content for all skill levels.
-10. **Android / iOS:** Mobile-specific resources.
-11. **Linux / macOS:** Desktop-specific software and guides.
-12. **Non-English:** Internationalized content.
-13. **Miscellaneous:** Food, travel, and niche tech interests.
+### 5.3 Technical Details & Integration
 
-### 5.3 Resource Viewer (Documentation/Guide Page)
-
-- **Article Reader:** Clean, readable layout for guides and resource descriptions.
-- **Technical Implementation Blocks:** Standardized code blocks with copy-to-clipboard functionality.
-- **On-Page Navigation:** Right-aligned table of contents for long-form guides.
-- **Persistent Sidebar:** Quick access to all categories for seamless browsing.
-
-### 5.4 Global Navigation
-
-- **Header:** Brand logo, Search icon, Theme Toggle (Light/Dark), and GitHub integration.
-- **Footer:** Standardized links for Documentation, Changelog, API, and Legal.
+- **Upload Queue & Metadata:** Real-time upload queue showcasing status chips (e.g. "Work", "Private") with clear label text size hierarchy.
+- **Accessibility:** AA/AAA contrast ratios with semantic coloring and high-fidelity text elements.
 
 ## 6. Technical Constraints
 
-- **Responsiveness:** Desktop-first architecture with mobile-optimized navigation.
-- **Performance:** Low-latency interactions with minimal client-side bloat.
-- **Accessibility:** High contrast ratios and semantic HTML structure.
-
----
+- **Responsiveness:** Fluid grid layout that collapses to a mobile-optimized single column navigation bar below 600px width.
+- **Performance:** Sub-second interaction times and optimized file rendering queues.
+- **Typography Integration:** Clean import of the Inter variable font weight system.

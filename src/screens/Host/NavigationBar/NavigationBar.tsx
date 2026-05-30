@@ -4,18 +4,26 @@ import {
   Separator,
   HStack,
   Heading,
-  Icon,
   Menu,
   Text,
 } from '@chakra-ui/react';
 import { ThemeIcon } from '@components';
-import { TelegramonicIcon, IconHc } from '@assets';
+import { Logo } from '@assets';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 
 import { usePaddingForScreen } from '../../hooks';
 import { NAVIGATION_LINKS } from './constants';
+
+const IconMenu = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg fill="none" viewBox="0 0 24 24" height="1em" width="1em" {...props}>
+    <path
+      fill="currentColor"
+      d="M2 6a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1zM2 12.032a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1zM3 17.064a1 1 0 100 2h18a1 1 0 000-2H3z"
+    />
+  </svg>
+);
 
 const NavigationBar = () => {
   const { t } = useTranslation();
@@ -25,79 +33,77 @@ const NavigationBar = () => {
   return (
     <HStack
       paddingX={padding}
-      height={12}
+      height={16}
       borderBottomWidth={1}
-      shadow={'md'}
+      borderBottomColor="border"
+      shadow="sm"
       justifyContent={'space-between'}
-      py={6}
+      position="sticky"
+      top={0}
+      zIndex={50}
+      bg="bg.panel"
     >
       <HStack
-        gap={0.2}
+        gap={1}
         _hover={{
           cursor: 'pointer',
         }}
       >
-        <Link to={'https://www.telegramonic.com'} style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-          <Icon
+        <Link
+          to={'/'}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+        >
+          <Box
             color={'white'}
-            width={'3em'}
-            height={'3em'}
-            focusable={false}
-            borderRadius={'full'}
-            bg={'primary'}
-            padding={2}
-            asChild
+            width={'2.5rem'}
+            height={'2.5rem'}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
           >
-            <span>
-              <TelegramonicIcon icon={IconHc.TELEGRAMONIC} />
-            </span>
-          </Icon>
-          <Box display={{ base: 'none', xl: 'flex' }}>
-            <Heading size={'md'} color={'primary'}>
+            <Logo />
+          </Box>
+          <Box display="flex">
+            <Heading size={'md'} color={'primary'} fontWeight="bold">
               {t('Title_1')}
             </Heading>
-            <Heading size={'md'}>{t('Title_2')}</Heading>
+            <Heading size={'md'} fontWeight="bold">
+              {t('Title_2')}
+            </Heading>
           </Box>
         </Link>
         {!isEmpty(title) ? (
           <>
             <Separator
               orientation={'vertical'}
-              mx={6}
-              bg={'primary'}
+              mx={4}
+              bg={'border'}
               width={'1px'}
               height={6}
             />
-            <Text>{title} </Text>
+            <Text fontSize="sm" color="fg.muted">
+              {title}{' '}
+            </Text>
           </>
         ) : null}
       </HStack>
-      <HStack>
-        <HStack
-          gap={{ base: 1, xl: 2 }}
-          display={{ base: 'none', xl: 'flex' }}
-        >
-          {NAVIGATION_LINKS.map(({ name, link, icon }) => (
+      <HStack gap={4}>
+        <HStack gap={{ base: 2, xl: 4 }} display={{ base: 'none', md: 'flex' }}>
+          {NAVIGATION_LINKS.map(({ name, link }) => (
             <Button
               asChild
-              p={0}
               variant={'ghost'}
               key={link}
               aria-label={link + '-nav-link'}
+              px={3}
+              py={2}
+              borderRadius="md"
+              color="fg.muted"
+              _hover={{ bg: 'bg.hover', color: 'primary' }}
+              transition="all 0.2s"
             >
-              <Link to={link}>
-                <TelegramonicIcon icon={icon} height={20} width={20} />
-                <Text
-                  p={1}
-                  fontSize={{ base: 'smaller', md: 'medium' }}
-                  fontWeight={'bold'}
-                  textAlign={'center'}
-                  _hover={{
-                    cursor: 'pointer',
-                    color: 'primary',
-                  }}
-                  transition={'all 0.3s'}
-                >
+              <Link to={link} style={{ display: 'flex', alignItems: 'center' }}>
+                <Text fontSize="sm" fontWeight={'medium'}>
                   {name}
                 </Text>
               </Link>
@@ -109,30 +115,34 @@ const NavigationBar = () => {
             <Menu.Trigger asChild>
               <Button
                 variant={'outline'}
-                borderColor="primary"
+                borderColor="border"
                 borderWidth={1}
+                px={3}
+                py={2}
+                size="sm"
               >
                 Menu
-                <TelegramonicIcon icon={IconHc.MENU} />
+                <IconMenu />
               </Button>
             </Menu.Trigger>
             <Menu.Content
               zIndex={100}
-              borderRadius={10}
+              borderRadius="md"
               boxShadow={'md'}
-              display={{ base: 'flex', md: 'none' }}
-              flexDir="column"
+              bg="bg.panel"
+              borderColor="border"
             >
-              {NAVIGATION_LINKS.map(({ name, link, icon }) => (
+              {NAVIGATION_LINKS.map(({ name, link }) => (
                 <Menu.Item key={link} value={link} asChild>
-                  <Link to={link}>
-                    <TelegramonicIcon icon={icon} height={20} width={20} />
-                    <Text
-                      p={1}
-                      fontSize={{ base: 'smaller', md: 'medium' }}
-                      fontWeight={'bold'}
-                      textAlign={'center'}
-                    >
+                  <Link
+                    to={link}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '8px 16px',
+                    }}
+                  >
+                    <Text fontSize="sm" fontWeight={'medium'}>
                       {name}
                     </Text>
                   </Link>

@@ -5,7 +5,12 @@ import { ModalID } from '@uiStore';
 
 const ModalComponent = ({ isOpen, modalID, onModalClose }: ModalProps) => {
   return (
-    <Dialog.Root open={isOpen} onOpenChange={(details: { open: boolean }) => { if (!details.open) onModalClose(); }}>
+    <Dialog.Root
+      open={isOpen}
+      onOpenChange={(details: { open: boolean }) => {
+        if (!details.open) onModalClose();
+      }}
+    >
       <Dialog.Backdrop />
       <Dialog.Content>
         <ModalToShow modalID={modalID} />

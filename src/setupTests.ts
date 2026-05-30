@@ -6,5 +6,6 @@ import '@testing-library/jest-dom';
 
 // Polyfill structuredClone for Jest jsdom environment (required by Chakra UI v3)
 if (typeof globalThis.structuredClone === 'undefined') {
-  globalThis.structuredClone = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
+  globalThis.structuredClone = <T>(obj: T): T =>
+    JSON.parse(JSON.stringify(obj));
 }

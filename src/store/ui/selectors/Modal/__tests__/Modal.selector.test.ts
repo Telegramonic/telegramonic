@@ -7,7 +7,8 @@ describe('Modal selector', () => {
   const onModalCloseMock = jest.fn();
 
   it('should return modal selector state and actions', () => {
-    const modal = renderHook(() => appStore(useShallow(modalSelector))).result.current;
+    const modal = renderHook(() => appStore(useShallow(modalSelector))).result
+      .current;
 
     expect(modal).toMatchSnapshot();
   });
@@ -19,7 +20,9 @@ describe('Modal selector', () => {
   });
 
   it('should return modal state on modal data set using openModal', () => {
-    const { result: modalResult } = renderHook(() => appStore(useShallow(modalSelector)));
+    const { result: modalResult } = renderHook(() =>
+      appStore(useShallow(modalSelector)),
+    );
     const { result: dataResult } = renderHook(() =>
       appStore(useShallow(modalDataSelector)),
     );
@@ -39,7 +42,9 @@ describe('Modal selector', () => {
       },
       modalOpenState: ModalOpenState.OPEN,
     };
-    const { result: modalResult } = renderHook(() => appStore(useShallow(modalSelector)));
+    const { result: modalResult } = renderHook(() =>
+      appStore(useShallow(modalSelector)),
+    );
     const { result: dataResult } = renderHook(() =>
       appStore(useShallow(modalDataSelector)),
     );
