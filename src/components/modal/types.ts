@@ -1,8 +1,7 @@
+import { ModalID } from '@uiStore';
+
 export type ModalProps = {
+  modalID: ModalID;
   isOpen: boolean;
-  title: string;
-  message: string;
   onModalClose: () => void;
-  primaryButtonLabel?: string;
-  onPrimaryButtonClick?: () => void;
 };

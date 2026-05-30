@@ -1,0 +1,59 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Modal should render correctly 1`] = `
+<div>
+  <div
+    class="chakra-dialog__backdrop css-1cnmm3c"
+    data-part="backdrop"
+    data-scope="dialog"
+    data-state="open"
+    dir="ltr"
+    id="dialog::r0::backdrop"
+  />
+  <div
+    aria-describedby="dialog::r0::description"
+    aria-labelledby="dialog::r0::title"
+    aria-modal="true"
+    class="chakra-dialog__content css-1n543c7"
+    data-part="content"
+    data-scope="dialog"
+    data-state="open"
+    dir="ltr"
+    id="dialog::r0::content"
+    role="dialog"
+    tabindex="-1"
+  >
+    <div
+      class="css-16wkbyj"
+    >
+      Search
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Modal should render correctly with different modalID 1`] = `
+<div>
+  <div
+    class="chakra-dialog__backdrop css-1cnmm3c"
+    data-part="backdrop"
+    data-scope="dialog"
+    data-state="open"
+    dir="ltr"
+    id="dialog::r1::backdrop"
+  />
+  <div
+    aria-describedby="dialog::r1::description"
+    aria-labelledby="dialog::r1::title"
+    aria-modal="true"
+    class="chakra-dialog__content css-1n543c7"
+    data-part="content"
+    data-scope="dialog"
+    data-state="open"
+    dir="ltr"
+    id="dialog::r1::content"
+    role="dialog"
+    tabindex="-1"
+  />
+</div>
+`;

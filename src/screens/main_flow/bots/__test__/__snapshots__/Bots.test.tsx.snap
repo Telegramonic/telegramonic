@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Bots screen should render correctly 1`] = `
-<div>
-  <div>
-    Bots
-  </div>
-</div>
-`;

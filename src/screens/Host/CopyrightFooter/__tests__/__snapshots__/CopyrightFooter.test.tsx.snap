@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CopyrightFooter should render 1`] = `
+<div>
+  <div
+    class="css-tpkhba"
+  >
+    <a
+      class="chakra-button css-1pwwpbx"
+      href="https://www.telegramonic.com/about/privacy-policy"
+      type="button"
+    >
+      Privacy policy
+    </a>
+    <a
+      class="chakra-button css-1pwwpbx"
+      href="https://www.telegramonic.com/about/terms-of-use"
+      type="button"
+    >
+      Terms of service
+    </a>
+    <a
+      class="chakra-button css-1pwwpbx"
+      href="https://www.telegramonic.com/about/contact-us"
+      type="button"
+    >
+      Contact us
+    </a>
+    <a
+      class="chakra-button css-1pwwpbx"
+      href="https://www.telegramonic.com/about/about-us"
+      type="button"
+    >
+      About us
+    </a>
+    <a
+      class="chakra-button css-1pwwpbx"
+      href="https://www.telegramonic.com/about/faq"
+      type="button"
+    >
+      FAQs
+    </a>
+  </div>
+  <div
+    class="css-1ij1t7h"
+  >
+    © 2026 telegramonic.com | All rights reserved
+  </div>
+</div>
+`;

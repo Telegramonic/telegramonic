@@ -1,3 +1,4 @@
 yarn lint:staged
 yarn prettier:staged
-yarn test
+chmod +x scripts/run-staged-tests.sh
+yarn run-pushed-files-tests

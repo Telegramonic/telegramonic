@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Modal slice should return modal selector state and actions 1`] = `
+{
+  "modalData": undefined,
+  "modalID": "none",
+  "modalOpenState": "CLOSE",
+  "openModal": [Function],
+  "resetModalState": [Function],
+}
+`;
+
+exports[`Modal slice should return modal state on modal data set using openModal 1`] = `
+{
+  "modalData": {
+    "onModalClose": [MockFunction],
+  },
+  "modalID": "search",
+  "modalOpenState": "OPEN",
+  "openModal": [Function],
+  "resetModalState": [Function],
+}
+`;
+
+exports[`Modal slice should return modal state with initial value 1`] = `
+{
+  "modalData": undefined,
+  "modalID": "none",
+  "modalOpenState": "CLOSE",
+  "openModal": [Function],
+  "resetModalState": [Function],
+}
+`;
