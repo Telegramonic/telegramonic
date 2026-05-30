@@ -35,7 +35,11 @@ const MdPage = () => {
   return (
     <Box flex={1} bg="bg" minH="60vh">
       {/* Markdown Content */}
-      <Container maxW={{ base: '100%', md: '3xl', lg: '4xl' }} py={12} px={pagePadding}>
+      <Container
+        maxW={{ base: '100%', md: '3xl', lg: '4xl' }}
+        py={12}
+        px={pagePadding}
+      >
         {isLoading ? (
           <Box
             display="flex"

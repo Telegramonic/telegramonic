@@ -24,7 +24,9 @@ describe('ThemeSelector', () => {
       </ChakraProvider>,
     );
     expect(container).toBeInTheDocument();
-    const select = container.querySelector('#theme-selector') as HTMLSelectElement;
+    const select = container.querySelector(
+      '#theme-selector',
+    ) as HTMLSelectElement;
     expect(select).not.toBeNull();
     expect(select.value).toBe('system');
   });
@@ -36,7 +38,9 @@ describe('ThemeSelector', () => {
       </ChakraProvider>,
     );
     const options = container.querySelectorAll('#theme-selector option');
-    const values = Array.from(options).map((o) => (o as HTMLOptionElement).value);
+    const values = Array.from(options).map(
+      (o) => (o as HTMLOptionElement).value,
+    );
     expect(values).toEqual(['system', 'light', 'dark']);
   });
 
@@ -46,7 +50,9 @@ describe('ThemeSelector', () => {
         <ThemeSelector />
       </ChakraProvider>,
     );
-    const select = container.querySelector('#theme-selector') as HTMLSelectElement;
+    const select = container.querySelector(
+      '#theme-selector',
+    ) as HTMLSelectElement;
     fireEvent.change(select, { target: { value: 'dark' } });
     expect(mockSetTheme).toHaveBeenCalledWith('dark');
   });
@@ -57,9 +63,10 @@ describe('ThemeSelector', () => {
         <ThemeSelector />
       </ChakraProvider>,
     );
-    const select = container.querySelector('#theme-selector') as HTMLSelectElement;
+    const select = container.querySelector(
+      '#theme-selector',
+    ) as HTMLSelectElement;
     fireEvent.change(select, { target: { value: 'light' } });
     expect(mockSetTheme).toHaveBeenCalledWith('light');
   });
 });
-

@@ -1,4 +1,12 @@
-import { Box, Button, HStack, Text, VStack, Stack, Heading } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  HStack,
+  Text,
+  VStack,
+  Stack,
+  Heading,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Logo } from '@assets';
@@ -65,7 +73,12 @@ const CopyrightFooter = () => {
                 Telegramonic
               </Heading>
             </HStack>
-            <Text fontSize="xs" color="fg.muted" maxW="xs" textAlign={{ base: 'center', md: 'left' }}>
+            <Text
+              fontSize="xs"
+              color="fg.muted"
+              maxW="xs"
+              textAlign={{ base: 'center', md: 'left' }}
+            >
               {t('Footer.tagline')}
             </Text>
           </VStack>
@@ -154,7 +167,11 @@ const CopyrightFooter = () => {
           alignItems="center"
           gap={4}
         >
-          <Text fontSize="xs" color="fg.muted" textAlign={{ base: 'center', sm: 'left' }}>
+          <Text
+            fontSize="xs"
+            color="fg.muted"
+            textAlign={{ base: 'center', sm: 'left' }}
+          >
             {t('Footer.copyrightText', { year: currentYear })}
           </Text>
           {/* Theme selector — bottom right */}
@@ -166,4 +183,3 @@ const CopyrightFooter = () => {
 };
 
 export default CopyrightFooter;
-

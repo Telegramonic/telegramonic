@@ -19,12 +19,12 @@ Traditional cloud storage providers limit your digital life with tight storage q
 
 ## Core Features
 
-| Feature | What It Means for You |
-|---|---|
-| **Infinite Storage** | Save files, media, and archives without worrying about running out of gigabytes. |
-| **MTProto Encryption** | Your files benefit from the same robust security protocol that protects messages for 900M+ users. |
-| **Lightning-Fast Speeds** | Dynamically download and upload files optimized for Telegram's distributed server network. |
-| **Zero-Knowledge Architecture** | Telegramonic is a visual client; we never read, decrypt, or log your file contents. |
+| Feature                         | What It Means for You                                                                             |
+| ------------------------------- | ------------------------------------------------------------------------------------------------- |
+| **Infinite Storage**            | Save files, media, and archives without worrying about running out of gigabytes.                  |
+| **MTProto Encryption**          | Your files benefit from the same robust security protocol that protects messages for 900M+ users. |
+| **Lightning-Fast Speeds**       | Dynamically download and upload files optimized for Telegram's distributed server network.        |
+| **Zero-Knowledge Architecture** | Telegramonic is a visual client; we never read, decrypt, or log your file contents.               |
 
 ---
 

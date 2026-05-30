@@ -8,7 +8,9 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Icon, IconType } from '@assets';
+import { appStore, selectIsAuthenticated } from '@appStore';
 
 // ---------------------------------------------------------------------------
 // DriveWidget — Glassmorphic mock-drive card shown in the Hero right column
@@ -32,183 +34,233 @@ const DriveWidget = () => {
       transition="all 0.3s ease"
       _hover={{ shadow: '3xl', transform: 'translateY(-6px)' }}
     >
-    {/* Shimmer sweep overlay */}
-    <Box
-      position="absolute"
-      top={0}
-      left={0}
-      right={0}
-      bottom={0}
-      pointerEvents="none"
-      zIndex={10}
-      className="drive-shimmer"
-      borderRadius="2xl"
-    />
-
-    {/* Header mock controls */}
-    <HStack justify="space-between" mb={6} position="relative" zIndex={1}>
-      <HStack gap={2}>
-        <Box w={3} h={3} borderRadius="full" bg="red.400" className="dot-pulse dot-pulse-1" />
-        <Box w={3} h={3} borderRadius="full" bg="yellow.400" className="dot-pulse dot-pulse-2" />
-        <Box w={3} h={3} borderRadius="full" bg="green.400" className="dot-pulse dot-pulse-3" />
-      </HStack>
-      <Text fontSize="xs" fontWeight="bold" color="fg.muted">
-        {t('LandingPage.driveWidget.title')}
-      </Text>
-      <Box color="fg.muted">
-        <Icon type={IconType.LOGO} size="18px" />
-      </Box>
-    </HStack>
-
-    {/* Simulated file entries */}
-    <VStack gap={3.5} align="stretch" position="relative" zIndex={1}>
-
-      {/* File 1: Uploading Video — animated progress */}
+      {/* Shimmer sweep overlay */}
       <Box
-        p={3.5}
-        borderRadius="xl"
-        bg="bg.default"
-        borderWidth="1px"
-        borderColor="border"
-        position="relative"
-        overflow="hidden"
-        className="row-slide-in row-slide-in-1"
-      >
-        {/* Row glow when uploading */}
-        <Box
-          position="absolute"
-          inset={0}
-          className="upload-row-glow"
-          borderRadius="xl"
-          pointerEvents="none"
-        />
-        <HStack justify="space-between" mb={2}>
-          <HStack gap={3}>
-            <Box color="primary" p={2} bg="primary/10" borderRadius="lg" className="icon-pulse">
-              <Icon type={IconType.VIDEO} />
-            </Box>
-            <VStack align="flex-start" gap={0}>
-              <Text fontSize="xs" fontWeight="bold" color="fg">
-                Video_Tutorial.mp4
-              </Text>
-              <HStack gap={1.5}>
-                <Text fontSize="10px" color="fg.muted">
-                  1.2 GB •
-                </Text>
-                <Text fontSize="10px" color="primary" fontWeight="semibold" className="uploading-text-blink">
-                  {t('LandingPage.driveWidget.uploading')}
-                </Text>
-              </HStack>
-            </VStack>
-          </HStack>
-          {/* Animated percentage counter */}
-          <Text fontSize="10px" fontWeight="bold" color="primary" className="percent-counter">
-            <span className="pct-value" />
-          </Text>
-        </HStack>
-        {/* Looping progress bar */}
-        <Box w="100%" h="4px" bg="bg.subtle" borderRadius="full" overflow="hidden">
+        position="absolute"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        pointerEvents="none"
+        zIndex={10}
+        className="drive-shimmer"
+        borderRadius="2xl"
+      />
+
+      {/* Header mock controls */}
+      <HStack justify="space-between" mb={6} position="relative" zIndex={1}>
+        <HStack gap={2}>
           <Box
-            h="100%"
-            bg="linear-gradient(90deg, var(--chakra-colors-primary), #60efff)"
+            w={3}
+            h={3}
             borderRadius="full"
-            className="upload-progress-loop"
+            bg="red.400"
+            className="dot-pulse dot-pulse-1"
           />
-        </Box>
-      </Box>
-
-      {/* File 2: Completed Invoice */}
-      <Box
-        p={3.5}
-        borderRadius="xl"
-        bg="bg.default"
-        borderWidth="1px"
-        borderColor="border"
-        _hover={{ bg: 'bg.hover' }}
-        transition="background 0.2s"
-        className="row-slide-in row-slide-in-2"
-      >
-        <HStack justify="space-between">
-          <HStack gap={3}>
-            <Box color="success.400" p={2} bg="success.100" borderRadius="lg">
-              <Icon type={IconType.FILE} />
-            </Box>
-            <VStack align="flex-start" gap={0}>
-              <Text fontSize="xs" fontWeight="bold" color="fg">
-                Invoice_May.pdf
-              </Text>
-              <Text fontSize="10px" color="fg.muted">
-                245 KB • {t('LandingPage.driveWidget.hoursAgo')}
-              </Text>
-            </VStack>
-          </HStack>
-          <Box bg="success.100" p={1} borderRadius="full" className="check-pop">
-            <Icon type={IconType.CHECK} />
-          </Box>
+          <Box
+            w={3}
+            h={3}
+            borderRadius="full"
+            bg="yellow.400"
+            className="dot-pulse dot-pulse-2"
+          />
+          <Box
+            w={3}
+            h={3}
+            borderRadius="full"
+            bg="green.400"
+            className="dot-pulse dot-pulse-3"
+          />
         </HStack>
-      </Box>
-
-      {/* File 3: Completed Archive */}
-      <Box
-        p={3.5}
-        borderRadius="xl"
-        bg="bg.default"
-        borderWidth="1px"
-        borderColor="border"
-        _hover={{ bg: 'bg.hover' }}
-        transition="background 0.2s"
-        className="row-slide-in row-slide-in-3"
-      >
-        <HStack justify="space-between">
-          <HStack gap={3}>
-            <Box color="warning.400" p={2} bg="warning.100" borderRadius="lg">
-              <Icon type={IconType.ZIP} />
-            </Box>
-            <VStack align="flex-start" gap={0}>
-              <Text fontSize="xs" fontWeight="bold" color="fg">
-                Family_Photos.zip
-              </Text>
-              <Text fontSize="10px" color="fg.muted">
-                450 MB • {t('LandingPage.driveWidget.yesterday')}
-              </Text>
-            </VStack>
-          </HStack>
-          <Box bg="success.100" p={1} borderRadius="full" className="check-pop" style={{ animationDelay: '0.2s' }}>
-            <Icon type={IconType.CHECK} />
-          </Box>
-        </HStack>
-      </Box>
-
-      {/* Drag and Drop Zone */}
-      <Box
-        borderWidth="2px"
-        borderStyle="dashed"
-        borderColor="primary/30"
-        bg="primary/5"
-        borderRadius="xl"
-        p={5}
-        textAlign="center"
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        gap={2}
-        cursor="pointer"
-        className="row-slide-in row-slide-in-4 dropzone-breathe"
-        _hover={{ bg: 'primary/10', borderColor: 'primary/60' }}
-        transition="all 0.2s"
-      >
-        <Box color="primary" className="cloud-bounce">
-          <Icon type={IconType.CLOUD_UPLOAD} />
+        <Text fontSize="xs" fontWeight="bold" color="fg.muted">
+          {t('LandingPage.driveWidget.title')}
+        </Text>
+        <Box color="fg.muted">
+          <Icon type={IconType.LOGO} size="18px" />
         </Box>
-        <Text fontSize="xs" fontWeight="bold" color="fg">
-          {t('LandingPage.driveWidget.dropzoneTitle')}
-        </Text>
-        <Text fontSize="9px" color="fg.muted">
-          {t('LandingPage.driveWidget.dropzoneSubtitle')}
-        </Text>
-      </Box>
-    </VStack>
-  </Box>
+      </HStack>
+
+      {/* Simulated file entries */}
+      <VStack gap={3.5} align="stretch" position="relative" zIndex={1}>
+        {/* File 1: Uploading Video — animated progress */}
+        <Box
+          p={3.5}
+          borderRadius="xl"
+          bg="bg.default"
+          borderWidth="1px"
+          borderColor="border"
+          position="relative"
+          overflow="hidden"
+          className="row-slide-in row-slide-in-1"
+        >
+          {/* Row glow when uploading */}
+          <Box
+            position="absolute"
+            inset={0}
+            className="upload-row-glow"
+            borderRadius="xl"
+            pointerEvents="none"
+          />
+          <HStack justify="space-between" mb={2}>
+            <HStack gap={3}>
+              <Box
+                color="primary"
+                p={2}
+                bg="primary/10"
+                borderRadius="lg"
+                className="icon-pulse"
+              >
+                <Icon type={IconType.VIDEO} />
+              </Box>
+              <VStack align="flex-start" gap={0}>
+                <Text fontSize="xs" fontWeight="bold" color="fg">
+                  Video_Tutorial.mp4
+                </Text>
+                <HStack gap={1.5}>
+                  <Text fontSize="10px" color="fg.muted">
+                    1.2 GB •
+                  </Text>
+                  <Text
+                    fontSize="10px"
+                    color="primary"
+                    fontWeight="semibold"
+                    className="uploading-text-blink"
+                  >
+                    {t('LandingPage.driveWidget.uploading')}
+                  </Text>
+                </HStack>
+              </VStack>
+            </HStack>
+            {/* Animated percentage counter */}
+            <Text
+              fontSize="10px"
+              fontWeight="bold"
+              color="primary"
+              className="percent-counter"
+            >
+              <span className="pct-value" />
+            </Text>
+          </HStack>
+          {/* Looping progress bar */}
+          <Box
+            w="100%"
+            h="4px"
+            bg="bg.subtle"
+            borderRadius="full"
+            overflow="hidden"
+          >
+            <Box
+              h="100%"
+              bg="linear-gradient(90deg, var(--chakra-colors-primary), #60efff)"
+              borderRadius="full"
+              className="upload-progress-loop"
+            />
+          </Box>
+        </Box>
+
+        {/* File 2: Completed Invoice */}
+        <Box
+          p={3.5}
+          borderRadius="xl"
+          bg="bg.default"
+          borderWidth="1px"
+          borderColor="border"
+          _hover={{ bg: 'bg.hover' }}
+          transition="background 0.2s"
+          className="row-slide-in row-slide-in-2"
+        >
+          <HStack justify="space-between">
+            <HStack gap={3}>
+              <Box color="success.400" p={2} bg="success.100" borderRadius="lg">
+                <Icon type={IconType.FILE} />
+              </Box>
+              <VStack align="flex-start" gap={0}>
+                <Text fontSize="xs" fontWeight="bold" color="fg">
+                  Invoice_May.pdf
+                </Text>
+                <Text fontSize="10px" color="fg.muted">
+                  245 KB • {t('LandingPage.driveWidget.hoursAgo')}
+                </Text>
+              </VStack>
+            </HStack>
+            <Box
+              bg="success.100"
+              p={1}
+              borderRadius="full"
+              className="check-pop"
+            >
+              <Icon type={IconType.CHECK} />
+            </Box>
+          </HStack>
+        </Box>
+
+        {/* File 3: Completed Archive */}
+        <Box
+          p={3.5}
+          borderRadius="xl"
+          bg="bg.default"
+          borderWidth="1px"
+          borderColor="border"
+          _hover={{ bg: 'bg.hover' }}
+          transition="background 0.2s"
+          className="row-slide-in row-slide-in-3"
+        >
+          <HStack justify="space-between">
+            <HStack gap={3}>
+              <Box color="warning.400" p={2} bg="warning.100" borderRadius="lg">
+                <Icon type={IconType.ZIP} />
+              </Box>
+              <VStack align="flex-start" gap={0}>
+                <Text fontSize="xs" fontWeight="bold" color="fg">
+                  Family_Photos.zip
+                </Text>
+                <Text fontSize="10px" color="fg.muted">
+                  450 MB • {t('LandingPage.driveWidget.yesterday')}
+                </Text>
+              </VStack>
+            </HStack>
+            <Box
+              bg="success.100"
+              p={1}
+              borderRadius="full"
+              className="check-pop"
+              style={{ animationDelay: '0.2s' }}
+            >
+              <Icon type={IconType.CHECK} />
+            </Box>
+          </HStack>
+        </Box>
+
+        {/* Drag and Drop Zone */}
+        <Box
+          borderWidth="2px"
+          borderStyle="dashed"
+          borderColor="primary/30"
+          bg="primary/5"
+          borderRadius="xl"
+          p={5}
+          textAlign="center"
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          gap={2}
+          cursor="pointer"
+          className="row-slide-in row-slide-in-4 dropzone-breathe"
+          _hover={{ bg: 'primary/10', borderColor: 'primary/60' }}
+          transition="all 0.2s"
+        >
+          <Box color="primary" className="cloud-bounce">
+            <Icon type={IconType.CLOUD_UPLOAD} />
+          </Box>
+          <Text fontSize="xs" fontWeight="bold" color="fg">
+            {t('LandingPage.driveWidget.dropzoneTitle')}
+          </Text>
+          <Text fontSize="9px" color="fg.muted">
+            {t('LandingPage.driveWidget.dropzoneSubtitle')}
+          </Text>
+        </Box>
+      </VStack>
+    </Box>
   );
 };
 
@@ -217,6 +269,7 @@ const DriveWidget = () => {
 // ---------------------------------------------------------------------------
 const HeroSection = () => {
   const { t } = useTranslation();
+  const isAuthenticated = appStore(selectIsAuthenticated);
 
   return (
     <Stack
@@ -296,7 +349,15 @@ const HeroSection = () => {
             borderColor="primary/20"
             backdropFilter="blur(8px)"
           >
-            <span style={{ display: 'inline-block', width: '6px', height: '6px', backgroundColor: 'var(--chakra-colors-primary)', borderRadius: '50%' }}></span>
+            <span
+              style={{
+                display: 'inline-block',
+                width: '6px',
+                height: '6px',
+                backgroundColor: 'var(--chakra-colors-primary)',
+                borderRadius: '50%',
+              }}
+            ></span>
             {t('LandingPage.heroBadge')}
           </Box>
 
@@ -335,20 +396,47 @@ const HeroSection = () => {
             width={{ base: '100%', sm: 'auto' }}
             mt={2}
           >
-            <Button
-              size="lg"
-              bg="primary"
-              color="white"
-              borderRadius="xl"
-              px={8}
-              py={6}
-              fontWeight="bold"
-              shadow="lg"
-              _hover={{ bg: 'primary/90', transform: 'translateY(-2px)', shadow: 'xl' }}
-              transition="all 0.2s"
-            >
-              {t('LandingPage.getStarted')}
-            </Button>
+            {isAuthenticated ? (
+              <Button
+                asChild
+                size="lg"
+                bg="primary"
+                color="white"
+                borderRadius="xl"
+                px={8}
+                py={6}
+                fontWeight="bold"
+                shadow="lg"
+                _hover={{
+                  bg: 'primary/90',
+                  transform: 'translateY(-2px)',
+                  shadow: 'xl',
+                }}
+                transition="all 0.2s"
+              >
+                <Link to="/dashboard">Go to Dashboard</Link>
+              </Button>
+            ) : (
+              <Button
+                asChild
+                size="lg"
+                bg="primary"
+                color="white"
+                borderRadius="xl"
+                px={8}
+                py={6}
+                fontWeight="bold"
+                shadow="lg"
+                _hover={{
+                  bg: 'primary/90',
+                  transform: 'translateY(-2px)',
+                  shadow: 'xl',
+                }}
+                transition="all 0.2s"
+              >
+                <Link to="/login">{t('LandingPage.getStarted')}</Link>
+              </Button>
+            )}
             <Button
               size="lg"
               variant="outline"
@@ -362,7 +450,9 @@ const HeroSection = () => {
               _hover={{ bg: 'bg.hover', transform: 'translateY(-2px)' }}
               transition="all 0.2s"
               onClick={() => {
-                document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' });
+                document
+                  .getElementById('features')
+                  ?.scrollIntoView({ behavior: 'smooth' });
               }}
             >
               {t('LandingPage.exploreFeatures')}

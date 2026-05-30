@@ -9,12 +9,12 @@ We'd love to hear from you! Whether you have questions about Telegramonic, need 
 
 ## Contact Channels
 
-| Department | Contact Method | Response Time |
-|---|---|---|
-| **General & Customer Support** | support@telegramonic.com | Within 24 hours |
-| **Business & Partnerships** | support@telegramonic.com | 1-2 business days |
-| **Security & Privacy Reports** | support@telegramonic.com | Immediate review |
-| **Community & Announcements** | [@telegramonic](https://t.me/telegramonic) | Real-time updates |
+| Department                     | Contact Method                             | Response Time     |
+| ------------------------------ | ------------------------------------------ | ----------------- |
+| **General & Customer Support** | support@telegramonic.com                   | Within 24 hours   |
+| **Business & Partnerships**    | support@telegramonic.com                   | 1-2 business days |
+| **Security & Privacy Reports** | support@telegramonic.com                   | Immediate review  |
+| **Community & Announcements**  | [@telegramonic](https://t.me/telegramonic) | Real-time updates |
 
 ---
 

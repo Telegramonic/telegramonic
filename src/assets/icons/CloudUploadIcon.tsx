@@ -2,7 +2,14 @@ import React from 'react';
 import { resolveIconSize } from '../iconUtils';
 import { IconProps } from '../types';
 
-const CloudUploadIcon = ({ size, w, h, width, height, ...props }: IconProps) => {
+const CloudUploadIcon = ({
+  size,
+  w,
+  h,
+  width,
+  height,
+  ...props
+}: IconProps) => {
   const finalWidth = resolveIconSize(size ?? w ?? width, 32);
   const finalHeight = resolveIconSize(size ?? h ?? height, 32);
 

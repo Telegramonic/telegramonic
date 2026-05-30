@@ -12,4 +12,3 @@ export { default as CloudUploadIcon } from './icons/CloudUploadIcon';
 export { default as MenuIcon } from './icons/MenuIcon';
 export * from './types';
 export * from './iconUtils';
-

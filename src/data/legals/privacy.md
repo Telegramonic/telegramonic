@@ -33,12 +33,12 @@ Your files are stored via **Telegram's MTProto infrastructure**. Telegramonic it
 
 ## 2. How We Use Your Information
 
-| Purpose | Legal Basis |
-|---|---|
-| Providing and improving the service | Legitimate interest |
-| Authentication and security | Contract performance |
-| Usage analytics (anonymized) | Legitimate interest |
-| Legal compliance | Legal obligation |
+| Purpose                             | Legal Basis          |
+| ----------------------------------- | -------------------- |
+| Providing and improving the service | Legitimate interest  |
+| Authentication and security         | Contract performance |
+| Usage analytics (anonymized)        | Legitimate interest  |
+| Legal compliance                    | Legal obligation     |
 
 ---
 

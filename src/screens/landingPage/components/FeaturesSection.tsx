@@ -35,7 +35,9 @@ const FeatureCard = ({
     flexDirection="column"
     justifyContent="space-between"
     gap={6}
-    style={{ '--glow': glowColor, willChange: 'transform' } as React.CSSProperties}
+    style={
+      { '--glow': glowColor, willChange: 'transform' } as React.CSSProperties
+    }
     className="feat-card"
     role="group"
   >
@@ -58,7 +60,8 @@ const FeatureCard = ({
       inset={0}
       pointerEvents="none"
       style={{
-        backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)',
+        backgroundImage:
+          'radial-gradient(circle, currentColor 1px, transparent 1px)',
         backgroundSize: '20px 20px',
         opacity: 0.045,
       }}
@@ -250,7 +253,10 @@ export const FeaturesSection = () => {
         </Box>
 
         {/* ── Bento grid ── */}
-        <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} gap={{ base: 4, md: 5 }}>
+        <SimpleGrid
+          columns={{ base: 1, sm: 2, lg: 3 }}
+          gap={{ base: 4, md: 5 }}
+        >
           {cards.map((card) => (
             <FeatureCard key={card.title} {...card} />
           ))}

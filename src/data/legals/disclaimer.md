@@ -9,7 +9,7 @@ Please read this Disclaimer carefully before using the **Telegramonic** cloud st
 
 ## 1. Service "As Is"
 
-**Telegramonic** is provided on an "as is" and "as available" basis. We make no representations or warranties of any kind, express or implied, regarding the operation of the service, the completeness of data, or the safety of file uploads. 
+**Telegramonic** is provided on an "as is" and "as available" basis. We make no representations or warranties of any kind, express or implied, regarding the operation of the service, the completeness of data, or the safety of file uploads.
 
 To the maximum extent permitted by law, we disclaim all warranties, including:
 

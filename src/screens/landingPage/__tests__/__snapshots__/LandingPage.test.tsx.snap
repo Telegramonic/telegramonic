@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LandingPage should render correctly 1`] = `
+exports[`LandingPage should render correctly for guest user 1`] = `
 <div>
   <div
     class="css-1ofqig9"
@@ -52,12 +52,14 @@ exports[`LandingPage should render correctly 1`] = `
           <div
             class="chakra-stack css-19cg7hp"
           >
-            <button
+            <a
               class="chakra-button css-1hp9x0"
+              data-discover="true"
+              href="/login"
               type="button"
             >
               Get Started
-            </button>
+            </a>
             <button
               class="chakra-button css-18ne13"
               type="button"

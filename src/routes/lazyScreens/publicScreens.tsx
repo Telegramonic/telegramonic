@@ -36,3 +36,27 @@ export const LazyMdPage = () => (
 );
 
 // [End]-------- MdPage screen --------
+
+// [Start]-------- Login screen --------
+
+const LoginPage = lazy(() => import('@screens/loginPage/LoginPage'));
+
+export const LazyLoginPage = () => (
+  <LazyProvider>
+    <LoginPage />
+  </LazyProvider>
+);
+
+// [End]-------- Login screen --------
+
+// [Start]-------- Dashboard screen --------
+
+const Dashboard = lazy(() => import('@screens/dashboard/Dashboard'));
+
+export const LazyDashboardPage = () => (
+  <LazyProvider>
+    <Dashboard />
+  </LazyProvider>
+);
+
+// [End]-------- Dashboard screen --------
