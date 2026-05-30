@@ -66,7 +66,11 @@ jest.mock('@uiw/react-markdown-preview', () => {
       const match = source.match(/\[([^\]]+)\]\(([^)]+)\)/);
       if (match) {
         return (
-          <div data-testid="markdown-preview" className={className} style={style}>
+          <div
+            data-testid="markdown-preview"
+            className={className}
+            style={style}
+          >
             <a href={match[2]}>{match[1]}</a>
           </div>
         );
@@ -79,4 +83,3 @@ jest.mock('@uiw/react-markdown-preview', () => {
     );
   });
 });
-

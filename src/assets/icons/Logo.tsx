@@ -2,14 +2,14 @@ import React from 'react';
 import { resolveIconSize } from '../iconUtils';
 import { IconProps } from '../types';
 
-const Logo = ({ 
-  size, 
-  w, 
-  h, 
-  width, 
-  height, 
-  className = '', 
-  ...props 
+const Logo = ({
+  size,
+  w,
+  h,
+  width,
+  height,
+  className = '',
+  ...props
 }: IconProps) => {
   const finalSize = resolveIconSize(size ?? w ?? width, 120);
   return (
@@ -27,7 +27,7 @@ const Logo = ({
           <stop offset="0%" stopColor="#0088cc" />
           <stop offset="100%" stopColor="#007bb9" />
         </linearGradient>
-        
+
         {/* Darker Blue for the 3D Edge of the Hard Drives */}
         <linearGradient id="blueGradDark" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stopColor="#007bb9" />
@@ -37,29 +37,90 @@ const Logo = ({
 
       {/* 1. Hard Drive Stack (Kept 3D) */}
       <g transform="translate(-1, -9) scale(1.2)">
-        <rect x="7" y="60" width="56" height="18" rx="4" fill="rgba(0,0,0,0.15)" />
-        <rect x="7" y="38" width="56" height="18" rx="4" fill="rgba(0,0,0,0.15)" />
-        <rect x="7" y="16" width="56" height="18" rx="4" fill="rgba(0,0,0,0.15)" />
-  
+        <rect
+          x="7"
+          y="60"
+          width="56"
+          height="18"
+          rx="4"
+          fill="rgba(0,0,0,0.15)"
+        />
+        <rect
+          x="7"
+          y="38"
+          width="56"
+          height="18"
+          rx="4"
+          fill="rgba(0,0,0,0.15)"
+        />
+        <rect
+          x="7"
+          y="16"
+          width="56"
+          height="18"
+          rx="4"
+          fill="rgba(0,0,0,0.15)"
+        />
         {/* Bottom Hard Drive */}
-        <rect x="5" y="56" width="56" height="18" rx="4" fill="url(#blueGrad)" />
-        <rect x="5" y="66" width="56" height="8" rx="4" fill="url(#blueGradDark)" />
+        <rect
+          x="5"
+          y="56"
+          width="56"
+          height="18"
+          rx="4"
+          fill="url(#blueGrad)"
+        />
+        <rect
+          x="5"
+          y="66"
+          width="56"
+          height="8"
+          rx="4"
+          fill="url(#blueGradDark)"
+        />
         <circle cx="52" cy="65" r="2" fill="#00ffcc" /> {/* Status Light */}
-        <rect x="12" y="64" width="30" height="2" rx="1" fill="#006193" /> {/* Drive Slot */}
-  
+        <rect x="12" y="64" width="30" height="2" rx="1" fill="#006193" />{' '}
+        {/* Drive Slot */}
         {/* Middle Hard Drive */}
-        <rect x="5" y="34" width="56" height="18" rx="4" fill="url(#blueGrad)" />
-        <rect x="5" y="44" width="56" height="8" rx="4" fill="url(#blueGradDark)" />
+        <rect
+          x="5"
+          y="34"
+          width="56"
+          height="18"
+          rx="4"
+          fill="url(#blueGrad)"
+        />
+        <rect
+          x="5"
+          y="44"
+          width="56"
+          height="8"
+          rx="4"
+          fill="url(#blueGradDark)"
+        />
         <circle cx="52" cy="43" r="2" fill="#00ffcc" />
         <rect x="12" y="42" width="30" height="2" rx="1" fill="#006193" />
-  
         {/* Top Hard Drive */}
-        <rect x="5" y="12" width="56" height="18" rx="4" fill="url(#blueGrad)" />
-        <rect x="5" y="22" width="56" height="8" rx="4" fill="url(#blueGradDark)" />
+        <rect
+          x="5"
+          y="12"
+          width="56"
+          height="18"
+          rx="4"
+          fill="url(#blueGrad)"
+        />
+        <rect
+          x="5"
+          y="22"
+          width="56"
+          height="8"
+          rx="4"
+          fill="url(#blueGradDark)"
+        />
         <circle cx="52" cy="21" r="2" fill="#00ffcc" />
         <rect x="12" y="20" width="30" height="2" rx="1" fill="#006193" />
       </g>
- 
+
       {/* 2. New Paper Plane SVG path */}
       <g transform="translate(29.1, 16.5) scale(1.68)">
         {/* Inner shadow/fold filled with theme primary color */}

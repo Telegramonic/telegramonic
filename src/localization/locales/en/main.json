@@ -75,7 +75,8 @@
     "about-us": "About Us",
     "contact-us": "Contact Us",
     "faq": "FAQs",
-    "disclaimer": "Disclaimer"
+    "disclaimer": "Disclaimer",
+    "Login": "Login"
   },
   "MdPage": {
     "privacy": {
@@ -103,5 +104,38 @@
       "badge": "Legal"
     },
     "lastUpdated": "Last updated: May 30, 2026"
+  },
+  "LoginPage": {
+    "title": "Connect Telegram Drive",
+    "subtitle": "Access your unlimited cloud storage space via MTProto 2.0 secure API connection.",
+    "phone": {
+      "title": "Phone Number",
+      "description": "Enter the phone number associated with your Telegram account.",
+      "label": "Phone Number",
+      "placeholder": "Enter phone number without country code",
+      "errorEmpty": "Phone number is required to proceed.",
+      "button": "Continue"
+    },
+    "code": {
+      "title": "Enter Verification Code",
+      "description": "We sent a verification code to your Telegram app or via SMS. Please enter it below.",
+      "label": "Verification Code",
+      "placeholder": "Enter 5-digit code",
+      "errorEmpty": "Verification code is required.",
+      "button": "Verify Code"
+    },
+    "api": {
+      "title": "API Configuration",
+      "description": "Provide your custom Telegram API credentials. Obtain these securely from my.telegram.org.",
+      "idLabel": "API ID",
+      "idPlaceholder": "e.g., 123456",
+      "idError": "API ID is required.",
+      "hashLabel": "API Hash",
+      "hashPlaceholder": "e.g., d58a9e...",
+      "hashError": "API Hash is required.",
+      "button": "Configure & Connect"
+    },
+    "loading": "Establishing connection...",
+    "success": "Connected successfully! Redirecting..."
   }
 }

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NavigationBar should render 1`] = `
+exports[`NavigationBar should render standard navigation bar correctly 1`] = `
 <div>
   <div
     class="chakra-stack css-uoulu9"
@@ -237,6 +237,14 @@ exports[`NavigationBar should render 1`] = `
           </p>
         </a>
       </div>
+      <a
+        class="chakra-button css-14ajgaz"
+        data-discover="true"
+        href="/login"
+        type="button"
+      >
+        Login
+      </a>
       <div
         class="css-19r7uti"
       >

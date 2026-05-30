@@ -6,7 +6,20 @@ import { AppStoreState } from './types';
 
 export const appStore = create<AppStoreState>()(
   persist(
-    immer((..._api) => ({})),
+    immer((set) => ({
+      apiId: null,
+      apiHash: null,
+      setApiCredentials: (apiId, apiHash) =>
+        set((state) => {
+          state.apiId = apiId;
+          state.apiHash = apiHash;
+        }),
+      clearApiCredentials: () =>
+        set((state) => {
+          state.apiId = null;
+          state.apiHash = null;
+        }),
+    })),
     {
       name: 'appStore',
       storage: createJSONStorage(() => localStorage),
@@ -19,13 +32,16 @@ export const appStore = create<AppStoreState>()(
 /**
  * Function to merge the persisted state with the current state.
  *
- * @param _currentState current state
- * @param _persistedState persisted state
+ * @param currentState current state
+ * @param persistedState persisted state
  * @returns merged state
  */
 function deepMerge(
-  _currentState: AppStoreState,
-  _persistedState: AppStoreState,
+  currentState: AppStoreState,
+  persistedState: AppStoreState,
 ): AppStoreState {
-  return {};
+  return {
+    ...currentState,
+    ...persistedState,
+  };
 }

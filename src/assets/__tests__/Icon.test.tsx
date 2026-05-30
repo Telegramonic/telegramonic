@@ -2,7 +2,6 @@ import { render } from '@testing-library/react';
 import Icon from '../Icon';
 import { IconType } from '../types';
 
-
 describe('Icon Wrapper', () => {
   it('renders Logo icon correctly', () => {
     const { container } = render(<Icon type={IconType.LOGO} size={60} />);

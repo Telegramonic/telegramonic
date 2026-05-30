@@ -1,8 +1,5 @@
 import { TitleBoxContainer } from '@components';
-import {
-  HeroSection,
-  FeaturesSection,
-} from './components';
+import { HeroSection, FeaturesSection } from './components';
 
 const LandingPage = () => {
   return (

@@ -1,4 +1,7 @@
-export const resolveIconSize = (val: number | string | undefined, defaultVal?: number | string): number | string | undefined => {
+export const resolveIconSize = (
+  val: number | string | undefined,
+  defaultVal?: number | string,
+): number | string | undefined => {
   if (val === undefined) return defaultVal;
   if (typeof val === 'number') {
     return val < 16 ? val * 4 : val;

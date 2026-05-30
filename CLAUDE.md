@@ -51,4 +51,3 @@ All user-facing copy strings (headings, paragraphs, labels, button texts, toolti
 ## 🧪 Testing Guidelines
 
 Always add or update the unit tests (and their snapshots) to align with the requested feature implementations or changes. Run the test suite using `yarn test` or `yarn test -u` to verify that all changes are fully covered, correct, and pass successfully.
-

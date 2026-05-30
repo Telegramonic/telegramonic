@@ -72,11 +72,11 @@ We strive to maintain high availability, but:
 - Scheduled maintenance windows will be communicated in advance
 - We are not liable for downtime caused by Telegram's infrastructure
 
-| Service Level | Target |
-|---|---|
-| Planned uptime | 99.5% monthly |
+| Service Level      | Target           |
+| ------------------ | ---------------- |
+| Planned uptime     | 99.5% monthly    |
 | Maintenance notice | 48 hours advance |
-| Incident response | Within 4 hours |
+| Incident response  | Within 4 hours   |
 
 ---
 
