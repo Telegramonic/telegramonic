@@ -1,10 +1,7 @@
 import { TitleBoxContainer } from '@components';
 import {
   HeroSection,
-  BentoPreview,
   FeaturesSection,
-  StatsSection,
-  CTASection,
 } from './components';
 
 const LandingPage = () => {
@@ -17,10 +14,7 @@ const LandingPage = () => {
       width="100%"
     >
       <HeroSection />
-      <BentoPreview />
       <FeaturesSection />
-      <StatsSection />
-      <CTASection />
     </TitleBoxContainer>
   );
 };

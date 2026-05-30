@@ -17,7 +17,6 @@ describe('LandingPage', () => {
     // Verify Features Section copy is rendered
     expect(screen.getByText('Engineered for Performance')).toBeInTheDocument();
     expect(screen.getAllByText('Infinite Storage')[0]).toBeInTheDocument();
-    expect(screen.getAllByText('Bank-Grade Security')[0]).toBeInTheDocument();
     expect(screen.getAllByText('Turbocharged Transfers')[0]).toBeInTheDocument();
     expect(screen.getAllByText('Seamless Sync across Devices')[0]).toBeInTheDocument();
   });

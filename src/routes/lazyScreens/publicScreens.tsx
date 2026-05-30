@@ -24,3 +24,15 @@ export const LazyLandingPage = () => (
 );
 
 // [End]-------- Landing screens --------
+
+// [Start]-------- MdPage screen --------
+
+const MdPage = lazy(() => import('@screens/MdPage/MdPage'));
+
+export const LazyMdPage = () => (
+  <LazyProvider>
+    <MdPage />
+  </LazyProvider>
+);
+
+// [End]-------- MdPage screen --------

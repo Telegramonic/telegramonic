@@ -18,5 +18,22 @@ module.exports = {
       '@services': path.resolve(__dirname, './src/services'),
       '@testUtils': path.resolve(__dirname, './src/testUtils'),
     },
+    configure: (webpackConfig) => {
+      // Exclude node_modules from source-map-loader to suppress missing
+      // .map file warnings (e.g. parse5) that come from third-party packages.
+      const sourceMapRule = webpackConfig.module.rules
+        .flatMap((rule) => (rule.oneOf ? rule.oneOf : [rule]))
+        .find(
+          (rule) =>
+            rule.loader &&
+            rule.loader.includes('source-map-loader'),
+        );
+
+      if (sourceMapRule) {
+        sourceMapRule.exclude = /node_modules/;
+      }
+
+      return webpackConfig;
+    },
   },
 };

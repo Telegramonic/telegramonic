@@ -1,1 +1,15 @@
-export { default as Logo } from './Logo';
+export { default as Icon } from './Icon';
+export { default as Logo } from './icons/Logo';
+export { default as CloudIcon } from './icons/CloudIcon';
+export { default as BoltIcon } from './icons/BoltIcon';
+export { default as SyncIcon } from './icons/SyncIcon';
+export { default as SpeedIcon } from './icons/SpeedIcon';
+export { default as VideoIcon } from './icons/VideoIcon';
+export { default as FileIcon } from './icons/FileIcon';
+export { default as ZipIcon } from './icons/ZipIcon';
+export { default as CheckIcon } from './icons/CheckIcon';
+export { default as CloudUploadIcon } from './icons/CloudUploadIcon';
+export { default as MenuIcon } from './icons/MenuIcon';
+export * from './types';
+export * from './iconUtils';
+

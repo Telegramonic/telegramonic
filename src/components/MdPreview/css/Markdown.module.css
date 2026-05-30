@@ -1,0 +1,386 @@
+.markdown {
+  width: 100%;
+  padding: 0;
+  background-color: transparent !important;
+  font-family: 'Inter', sans-serif !important;
+  line-height: 1.8;
+  word-wrap: break-word !important;
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+
+  /* Theme-based Color Variable Mappings */
+  --color-canvas-default: transparent !important;
+  --color-canvas-subtle: var(--chakra-colors-bg-subtle) !important;
+  --color-fg-default: var(--chakra-colors-fg) !important;
+  --color-fg-muted: var(--chakra-colors-fg-muted) !important;
+  --color-fg-subtle: var(--chakra-colors-fg-subtle) !important;
+  --color-border-default: var(--chakra-colors-border) !important;
+  --color-border-muted: var(--chakra-colors-border) !important;
+  --color-neutral-muted: var(--chakra-colors-bg-subtle) !important;
+  --color-accent-fg: var(--chakra-colors-primary) !important;
+  --color-accent-emphasis: var(--chakra-colors-primary) !important;
+}
+
+.markdown :global(.wmde-markdown-var) {
+  background-color: transparent !important;
+}
+
+/* Typography */
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4 {
+  scroll-margin-top: 120px !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.markdown h1 {
+  font-size: clamp(1.75rem, 4vw, 2.75rem) !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.04em !important;
+  margin-bottom: 1rem !important;
+  margin-top: 1rem !important;
+  padding-bottom: 0.3rem !important;
+  border-bottom: 1px solid var(--chakra-colors-border) !important;
+  color: var(--chakra-colors-fg) !important;
+  display: block !important;
+  width: fit-content !important;
+  line-height: 1.2 !important;
+}
+
+.markdown h2 {
+  font-size: clamp(1.1rem, 3vw, 1.5rem) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.02em !important;
+  margin-top: 3rem !important;
+  margin-bottom: 1.25rem !important;
+  color: var(--chakra-colors-fg) !important;
+}
+
+.markdown h3 {
+  font-size: clamp(1.05rem, 3vw, 1.3rem) !important;
+  font-weight: 700 !important;
+  margin-top: 2rem !important;
+  margin-bottom: 0.75rem !important;
+  color: var(--chakra-colors-primary) !important;
+}
+
+.markdown h4 {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  margin-top: 1.5rem !important;
+  margin-bottom: 0.5rem !important;
+  color: var(--chakra-colors-fg-muted) !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.markdown p {
+  margin-bottom: 1.5rem !important;
+  font-size: 1.0625rem !important;
+  color: var(--chakra-colors-fg-muted) !important;
+  line-height: 1.8;
+}
+
+/* Lists */
+.markdown ul,
+.markdown ol {
+  padding-left: 0 !important;
+  margin-bottom: 1rem !important;
+  list-style: none !important;
+}
+
+.markdown ul ul,
+.markdown ul ol,
+.markdown ol ul,
+.markdown ol ol {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  padding-left: 1.5rem !important;
+  border-left: 2px solid var(--chakra-colors-border) !important;
+}
+
+.markdown li {
+  position: relative !important;
+  padding: 0.2rem 0.75rem 0.2rem 2.25rem !important;
+  margin-bottom: 0 !important;
+  color: var(--chakra-colors-fg-muted) !important;
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+  border-radius: 6px !important;
+}
+
+/* Custom bullet for ul */
+.markdown ul > li::before {
+  content: '›' !important;
+  position: absolute !important;
+  left: 0.75rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: var(--chakra-colors-primary) !important;
+  font-size: 1.3rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  pointer-events: none !important;
+}
+
+/* Custom number for ol */
+.markdown ol {
+  counter-reset: list-counter !important;
+}
+
+.markdown ol > li {
+  counter-increment: list-counter !important;
+}
+
+.markdown ol > li::before {
+  content: counter(list-counter) !important;
+  position: absolute !important;
+  left: 0.55rem !important;
+  top: 0.45rem !important;
+  width: 1.35rem !important;
+  height: 1.35rem !important;
+  background: var(--chakra-colors-bg-subtle) !important;
+  color: var(--chakra-colors-primary) !important;
+  font-size: 0.7rem !important;
+  font-weight: 800 !important;
+  font-family: monospace !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  user-select: none !important;
+  -webkit-user-select: none !important;
+  pointer-events: none !important;
+}
+
+.markdown li strong {
+  color: var(--chakra-colors-fg) !important;
+  font-weight: 700;
+}
+
+/* Tables */
+.markdown table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  margin: 1rem 0 !important;
+  border: none !important;
+}
+
+.markdown th {
+  background-color: var(--chakra-colors-bg-subtle) !important;
+  padding: 0.5rem 1rem !important;
+  text-align: left !important;
+  font-weight: 700 !important;
+  color: var(--chakra-colors-fg) !important;
+  border: 1px solid var(--chakra-colors-border) !important;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+.markdown td {
+  padding: 0.5rem 1rem !important;
+  border: 1px solid var(--chakra-colors-border) !important;
+  color: var(--chakra-colors-fg-muted) !important;
+  font-size: 0.9375rem !important;
+}
+
+.markdown tr:hover td {
+  background-color: var(--chakra-colors-bg-subtle) !important;
+}
+
+/* Blockquotes */
+.markdown blockquote {
+  margin: 2rem 0 !important;
+  padding: 1.5rem 2rem !important;
+  border-left: 4px solid var(--chakra-colors-primary) !important;
+  background: var(--chakra-colors-bg-subtle) !important;
+  border-radius: 0 8px 8px 0 !important;
+  font-style: italic !important;
+  position: relative;
+}
+
+.markdown blockquote p {
+  margin-bottom: 0 !important;
+  color: var(--chakra-colors-fg) !important;
+  font-size: 1.1rem !important;
+}
+
+/* Code */
+.markdown code {
+  font-family: 'Courier New', Consolas, monospace !important;
+  background-color: var(--chakra-colors-bg-subtle) !important;
+  color: var(--chakra-colors-primary) !important;
+  padding: 0.15rem 0.45rem !important;
+  border-radius: 4px !important;
+  font-size: 0.88em !important;
+  border: 1px solid var(--chakra-colors-border) !important;
+}
+
+.markdown pre {
+  background-color: var(--chakra-colors-bg-subtle) !important;
+  padding: 1.75rem !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--chakra-colors-border) !important;
+  margin: 1.75rem 0 !important;
+  overflow-x: auto !important;
+  position: relative;
+}
+
+.markdown pre::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--chakra-colors-primary),
+    transparent
+  );
+  opacity: 0.5;
+  border-radius: 12px 12px 0 0;
+}
+
+.markdown pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+  color: var(--chakra-colors-fg) !important;
+  border: none !important;
+}
+
+/* Links */
+.markdown a {
+  color: var(--chakra-colors-primary) !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  border-bottom: 1.5px solid var(--chakra-colors-primary) !important;
+  padding-bottom: 1px;
+  transition: all 0.2s ease !important;
+}
+
+.markdown a:hover {
+  border-bottom-color: var(--chakra-colors-primary) !important;
+  background-color: var(--chakra-colors-bg-subtle) !important;
+  border-radius: 2px;
+  padding: 1px 3px !important;
+  margin: 0 -3px;
+}
+
+/* Prevent borders and underlines on heading anchor links */
+.markdown h1 a,
+.markdown h2 a,
+.markdown h3 a,
+.markdown h4 a,
+.markdown :global(.anchor) {
+  border-bottom: none !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.markdown h1 a:hover,
+.markdown h2 a:hover,
+.markdown h3 a:hover,
+.markdown h4 a:hover,
+.markdown :global(.anchor):hover {
+  border-bottom: none !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Custom Scrollbar for Code and Tables */
+.markdown pre::-webkit-scrollbar,
+.markdown table::-webkit-scrollbar {
+  height: 6px;
+}
+
+.markdown pre::-webkit-scrollbar-track,
+.markdown table::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.markdown pre::-webkit-scrollbar-thumb,
+.markdown table::-webkit-scrollbar-thumb {
+  background: #cccbcb;
+  border-radius: 10px;
+}
+
+.markdown pre::-webkit-scrollbar-thumb:hover,
+.markdown table::-webkit-scrollbar-thumb:hover {
+  background: var(--chakra-colors-primary);
+}
+
+/* Horizontal Rule */
+.markdown hr {
+  margin: 2rem 0 !important;
+  border: none !important;
+  height: 1px !important;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--chakra-colors-border),
+    transparent
+  ) !important;
+}
+
+/* Image */
+.markdown img {
+  max-width: 100% !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--chakra-colors-border) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  margin: 1.5rem 0 !important;
+}
+
+/* Responsiveness */
+@media screen and (max-width: 768px) {
+  .markdown {
+    line-height: 1.7;
+  }
+
+  .markdown h1 {
+    font-size: clamp(1.4rem, 6vw, 1.9rem) !important;
+  }
+
+  .markdown p {
+    font-size: 1rem !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .markdown li {
+    font-size: 0.95rem !important;
+    padding-left: 1.75rem !important;
+  }
+
+  .markdown ul > li::before {
+    left: 0.5rem !important;
+  }
+
+  .markdown ol > li::before {
+    left: 0.35rem !important;
+  }
+
+  .markdown blockquote {
+    padding: 1rem 1.25rem !important;
+  }
+
+  .markdown table {
+    display: block !important;
+    overflow-x: auto !important;
+    border-radius: 8px !important;
+  }
+
+  .markdown pre {
+    padding: 1.25rem !important;
+    border-radius: 8px !important;
+  }
+}

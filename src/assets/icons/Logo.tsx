@@ -1,19 +1,22 @@
-import React, { SVGProps } from 'react';
+import React from 'react';
+import { resolveIconSize } from '../iconUtils';
+import { IconProps } from '../types';
 
-interface LogoProps extends SVGProps<SVGSVGElement> {
-  size?: number | string;
-}
-
-const Logo: React.FC<LogoProps> = ({ 
-  size = 120, 
+const Logo = ({ 
+  size, 
+  w, 
+  h, 
+  width, 
+  height, 
   className = '', 
   ...props 
-}) => {
+}: IconProps) => {
+  const finalSize = resolveIconSize(size ?? w ?? width, 120);
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width={size}
-      height={size}
+      width={finalSize}
+      height={finalSize}
       viewBox="0 0 85 85"
       className={`telegramonic-icon ${className}`}
       {...props}

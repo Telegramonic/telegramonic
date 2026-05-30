@@ -11,565 +11,1325 @@ exports[`LandingPage should render correctly 1`] = `
       </title>
     </div>
     <div
-      class="chakra-stack css-4c3t7q"
+      class="chakra-stack css-169ciz3"
     >
       <div
-        class="css-1kvs8dy"
+        class="blob-animation-1 css-14m0ogg"
       />
       <div
-        class="css-k8uknu"
+        class="blob-animation-2 css-hbef6r"
       />
       <div
-        class="chakra-stack css-1xnk8s8"
+        class="chakra-stack css-1rncypo"
       >
         <div
-          class="css-6kzdtx"
-        >
-          <svg
-            class="telegramonic-icon "
-            height="100%"
-            viewBox="0 0 85 85"
-            width="100%"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <lineargradient
-                id="blueGrad"
-                x1="0%"
-                x2="0%"
-                y1="0%"
-                y2="100%"
-              >
-                <stop
-                  offset="0%"
-                  stop-color="#0088cc"
-                />
-                <stop
-                  offset="100%"
-                  stop-color="#007bb9"
-                />
-              </lineargradient>
-              <lineargradient
-                id="blueGradDark"
-                x1="0%"
-                x2="0%"
-                y1="0%"
-                y2="100%"
-              >
-                <stop
-                  offset="0%"
-                  stop-color="#007bb9"
-                />
-                <stop
-                  offset="100%"
-                  stop-color="#006193"
-                />
-              </lineargradient>
-            </defs>
-            <g
-              transform="translate(-1, -9) scale(1.2)"
-            >
-              <rect
-                fill="rgba(0,0,0,0.15)"
-                height="18"
-                rx="4"
-                width="56"
-                x="7"
-                y="60"
-              />
-              <rect
-                fill="rgba(0,0,0,0.15)"
-                height="18"
-                rx="4"
-                width="56"
-                x="7"
-                y="38"
-              />
-              <rect
-                fill="rgba(0,0,0,0.15)"
-                height="18"
-                rx="4"
-                width="56"
-                x="7"
-                y="16"
-              />
-              <rect
-                fill="url(#blueGrad)"
-                height="18"
-                rx="4"
-                width="56"
-                x="5"
-                y="56"
-              />
-              <rect
-                fill="url(#blueGradDark)"
-                height="8"
-                rx="4"
-                width="56"
-                x="5"
-                y="66"
-              />
-              <circle
-                cx="52"
-                cy="65"
-                fill="#00ffcc"
-                r="2"
-              />
-               
-              <rect
-                fill="#006193"
-                height="2"
-                rx="1"
-                width="30"
-                x="12"
-                y="64"
-              />
-               
-              <rect
-                fill="url(#blueGrad)"
-                height="18"
-                rx="4"
-                width="56"
-                x="5"
-                y="34"
-              />
-              <rect
-                fill="url(#blueGradDark)"
-                height="8"
-                rx="4"
-                width="56"
-                x="5"
-                y="44"
-              />
-              <circle
-                cx="52"
-                cy="43"
-                fill="#00ffcc"
-                r="2"
-              />
-              <rect
-                fill="#006193"
-                height="2"
-                rx="1"
-                width="30"
-                x="12"
-                y="42"
-              />
-              <rect
-                fill="url(#blueGrad)"
-                height="18"
-                rx="4"
-                width="56"
-                x="5"
-                y="12"
-              />
-              <rect
-                fill="url(#blueGradDark)"
-                height="8"
-                rx="4"
-                width="56"
-                x="5"
-                y="22"
-              />
-              <circle
-                cx="52"
-                cy="21"
-                fill="#00ffcc"
-                r="2"
-              />
-              <rect
-                fill="#006193"
-                height="2"
-                rx="1"
-                width="30"
-                x="12"
-                y="20"
-              />
-            </g>
-            <g
-              transform="translate(29.1, 16.5) scale(1.68)"
-            >
-              <path
-                d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882 L27.338,3.713 Z"
-                fill="#0088cc"
-              />
-              <path
-                d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882L27.338,3.713 M30.285,0L0.984,14.678 l8.174,5.128l3.749,11.464l4.789-5.779l5.616,3.586L30.285,0L30.285,0z"
-                fill="#ffffff"
-              />
-            </g>
-          </svg>
-        </div>
-        <h2
-          class="chakra-heading css-10wt3dj"
-        >
-          Vast Cloud Storage
-          <br />
-          <span
-            class="css-1plvz19"
-          >
-            Powered by Telegram
-          </span>
-        </h2>
-        <p
-          class="css-1rz7zvh"
-        >
-          Experience unlimited cloud storage built on top of the world's most secure and lightning-fast messaging infrastructure.
-        </p>
-        <div
-          class="chakra-stack css-1i1duxm"
-        >
-          <button
-            class="chakra-button css-9cft7l"
-            type="button"
-          >
-            Get Started
-          </button>
-          <button
-            class="chakra-button css-1q3ek2r"
-            type="button"
-          >
-            Explore Features
-          </button>
-        </div>
-      </div>
-    </div>
-    <div
-      class="css-110grf2"
-    >
-      <div
-        class="css-x3bf94"
-      >
-        <div
-          class="css-11old5t"
-        >
-          <img
-            alt="Telegramonic Dashboard Preview"
-            class="chakra-image css-bh4wo8"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmZcBkur3CsmMPaGhR0W13Slx0eJNohmGuC665cYbAt1uhiUXbdcjXZIhGABzcAmkr0eheScF3RS0k1fz8qmq7YP1EKEnnUR3nUcEWV9oZwQEev9xIkGmrdc-_eT0U9Qn-aN6y0MXegEDf7pgUHxVAdKXVXTN3b5dnPd_A18yCa6ndpbxFFxvdi2ze0yLV3uFML1in12s_rlK-mrIiJpfj0n0WvRfOLEnN5HfgytBqzpFQh3TJIOJvLuAem85WaRuUAkwtn6CyIwg"
-          />
-          <div
-            class="css-153y4sy"
-          />
-        </div>
-        <div
-          class="css-1j0onbf"
+          class="chakra-stack css-ic8uy2"
         >
           <div
-            class="css-euahea"
+            class="css-1790f86"
           >
-            <svg
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="24"
-            >
-              <path
-                d="M22 12A10 10 0 1 1 12 2v4a6 6 0 1 0 6 6z"
-              />
-              <path
-                d="m19 5.07-4.3 4.29"
-              />
-            </svg>
+            <span
+              style="display: inline-block; width: 6px; height: 6px; border-radius: 50%;"
+            />
+            Secure & Limitless Cloud Storage
           </div>
-          <p
-            class="css-12rxb4e"
+          <h2
+            class="chakra-heading css-rst1vz"
           >
-            Turbocharged Transfers
-          </p>
+            Vast Cloud Storage
+            <br />
+            <span
+              class="css-x1gurf"
+            >
+              Powered by Telegram
+            </span>
+          </h2>
           <p
-            class="css-knt9ic"
+            class="css-jya90p"
           >
-            Utilizing Telegram's MTProto for encrypted, multi-threaded data streams that saturate your bandwidth.
+            Access limitless cloud storage directly through Telegram's MTProto API. Upload, manage, and share your files instantly with zero middleman databases, no file sizes caps, and complete ownership of your data.
           </p>
+          <div
+            class="chakra-stack css-19cg7hp"
+          >
+            <button
+              class="chakra-button css-1hp9x0"
+              type="button"
+            >
+              Get Started
+            </button>
+            <button
+              class="chakra-button css-18ne13"
+              type="button"
+            >
+              Explore Features
+            </button>
+          </div>
+          <div
+            class="chakra-stack css-1bl8red"
+          >
+            <div
+              class="chakra-stack css-141cw8v"
+            >
+              <p
+                class="css-1plvz19"
+              >
+                🔒
+              </p>
+              <p>
+                MTProto Encrypted
+              </p>
+            </div>
+            <div
+              class="chakra-stack css-141cw8v"
+            >
+              <p
+                class="css-1plvz19"
+              >
+                📁
+              </p>
+              <p>
+                Up to 4GB/File
+              </p>
+            </div>
+            <div
+              class="chakra-stack css-141cw8v"
+            >
+              <p
+                class="css-1plvz19"
+              >
+                🚀
+              </p>
+              <p>
+                Direct-to-API
+              </p>
+            </div>
+          </div>
+        </div>
+        <div
+          class="css-1cr7chv"
+        >
+          <div
+            class="drive-card-float css-13uhqlx"
+          >
+            <div
+              class="drive-shimmer css-1uhx2i9"
+            />
+            <div
+              class="chakra-stack css-xem9ya"
+            >
+              <div
+                class="chakra-stack css-1x0y7ph"
+              >
+                <div
+                  class="dot-pulse dot-pulse-1 css-1qj96zm"
+                />
+                <div
+                  class="dot-pulse dot-pulse-2 css-15ssp54"
+                />
+                <div
+                  class="dot-pulse dot-pulse-3 css-1aa7ouc"
+                />
+              </div>
+              <p
+                class="css-1t542ad"
+              >
+                My Telegramonic Drive
+              </p>
+              <div
+                class="css-1xrpz2b"
+              >
+                <svg
+                  class="telegramonic-icon "
+                  height="18px"
+                  viewBox="0 0 85 85"
+                  width="18px"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <defs>
+                    <lineargradient
+                      id="blueGrad"
+                      x1="0%"
+                      x2="0%"
+                      y1="0%"
+                      y2="100%"
+                    >
+                      <stop
+                        offset="0%"
+                        stop-color="#0088cc"
+                      />
+                      <stop
+                        offset="100%"
+                        stop-color="#007bb9"
+                      />
+                    </lineargradient>
+                    <lineargradient
+                      id="blueGradDark"
+                      x1="0%"
+                      x2="0%"
+                      y1="0%"
+                      y2="100%"
+                    >
+                      <stop
+                        offset="0%"
+                        stop-color="#007bb9"
+                      />
+                      <stop
+                        offset="100%"
+                        stop-color="#006193"
+                      />
+                    </lineargradient>
+                  </defs>
+                  <g
+                    transform="translate(-1, -9) scale(1.2)"
+                  >
+                    <rect
+                      fill="rgba(0,0,0,0.15)"
+                      height="18"
+                      rx="4"
+                      width="56"
+                      x="7"
+                      y="60"
+                    />
+                    <rect
+                      fill="rgba(0,0,0,0.15)"
+                      height="18"
+                      rx="4"
+                      width="56"
+                      x="7"
+                      y="38"
+                    />
+                    <rect
+                      fill="rgba(0,0,0,0.15)"
+                      height="18"
+                      rx="4"
+                      width="56"
+                      x="7"
+                      y="16"
+                    />
+                    <rect
+                      fill="url(#blueGrad)"
+                      height="18"
+                      rx="4"
+                      width="56"
+                      x="5"
+                      y="56"
+                    />
+                    <rect
+                      fill="url(#blueGradDark)"
+                      height="8"
+                      rx="4"
+                      width="56"
+                      x="5"
+                      y="66"
+                    />
+                    <circle
+                      cx="52"
+                      cy="65"
+                      fill="#00ffcc"
+                      r="2"
+                    />
+                     
+                    <rect
+                      fill="#006193"
+                      height="2"
+                      rx="1"
+                      width="30"
+                      x="12"
+                      y="64"
+                    />
+                     
+                    <rect
+                      fill="url(#blueGrad)"
+                      height="18"
+                      rx="4"
+                      width="56"
+                      x="5"
+                      y="34"
+                    />
+                    <rect
+                      fill="url(#blueGradDark)"
+                      height="8"
+                      rx="4"
+                      width="56"
+                      x="5"
+                      y="44"
+                    />
+                    <circle
+                      cx="52"
+                      cy="43"
+                      fill="#00ffcc"
+                      r="2"
+                    />
+                    <rect
+                      fill="#006193"
+                      height="2"
+                      rx="1"
+                      width="30"
+                      x="12"
+                      y="42"
+                    />
+                    <rect
+                      fill="url(#blueGrad)"
+                      height="18"
+                      rx="4"
+                      width="56"
+                      x="5"
+                      y="12"
+                    />
+                    <rect
+                      fill="url(#blueGradDark)"
+                      height="8"
+                      rx="4"
+                      width="56"
+                      x="5"
+                      y="22"
+                    />
+                    <circle
+                      cx="52"
+                      cy="21"
+                      fill="#00ffcc"
+                      r="2"
+                    />
+                    <rect
+                      fill="#006193"
+                      height="2"
+                      rx="1"
+                      width="30"
+                      x="12"
+                      y="20"
+                    />
+                  </g>
+                  <g
+                    transform="translate(29.1, 16.5) scale(1.68)"
+                  >
+                    <path
+                      d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882 L27.338,3.713 Z"
+                      fill="#0088cc"
+                    />
+                    <path
+                      d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882L27.338,3.713 M30.285,0L0.984,14.678 l8.174,5.128l3.749,11.464l4.789-5.779l5.616,3.586L30.285,0L30.285,0z"
+                      fill="#ffffff"
+                    />
+                  </g>
+                </svg>
+              </div>
+            </div>
+            <div
+              class="chakra-stack css-xy0tnp"
+            >
+              <div
+                class="row-slide-in row-slide-in-1 css-1p5v1dy"
+              >
+                <div
+                  class="upload-row-glow css-1pnaq37"
+                />
+                <div
+                  class="chakra-stack css-1ikvrng"
+                >
+                  <div
+                    class="chakra-stack css-vyigcq"
+                  >
+                    <div
+                      class="icon-pulse css-15q6hm8"
+                    >
+                      <svg
+                        fill="none"
+                        height="18"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="18"
+                      >
+                        <path
+                          d="m22 8-6 4 6 4V8Z"
+                        />
+                        <rect
+                          height="12"
+                          rx="2"
+                          ry="2"
+                          width="14"
+                          x="2"
+                          y="6"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      class="chakra-stack css-y76bkb"
+                    >
+                      <p
+                        class="css-55aua7"
+                      >
+                        Video_Tutorial.mp4
+                      </p>
+                      <div
+                        class="chakra-stack css-141cw8v"
+                      >
+                        <p
+                          class="css-oihfo8"
+                        >
+                          1.2 GB •
+                        </p>
+                        <p
+                          class="uploading-text-blink css-h4kbxh"
+                        >
+                          Uploading…
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <p
+                    class="percent-counter css-183ehfl"
+                  >
+                    <span
+                      class="pct-value"
+                    />
+                  </p>
+                </div>
+                <div
+                  class="css-1do7td8"
+                >
+                  <div
+                    class="upload-progress-loop css-14qkfl8"
+                  />
+                </div>
+              </div>
+              <div
+                class="row-slide-in row-slide-in-2 css-76asj2"
+              >
+                <div
+                  class="chakra-stack css-1y3f6ad"
+                >
+                  <div
+                    class="chakra-stack css-vyigcq"
+                  >
+                    <div
+                      class="css-evuwaj"
+                    >
+                      <svg
+                        fill="none"
+                        height="18"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="18"
+                      >
+                        <path
+                          d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"
+                        />
+                        <path
+                          d="M14 2v4a2 2 0 0 0 2 2h4"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      class="chakra-stack css-y76bkb"
+                    >
+                      <p
+                        class="css-55aua7"
+                      >
+                        Invoice_May.pdf
+                      </p>
+                      <p
+                        class="css-oihfo8"
+                      >
+                        245 KB • 
+                        2 hours ago
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="check-pop css-eyw2ll"
+                  >
+                    <svg
+                      fill="none"
+                      height="14"
+                      stroke="#22c55e"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      width="14"
+                    >
+                      <path
+                        d="M20 6 9 17l-5-5"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="row-slide-in row-slide-in-3 css-76asj2"
+              >
+                <div
+                  class="chakra-stack css-1y3f6ad"
+                >
+                  <div
+                    class="chakra-stack css-vyigcq"
+                  >
+                    <div
+                      class="css-1bx98cw"
+                    >
+                      <svg
+                        fill="none"
+                        height="18"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        viewBox="0 0 24 24"
+                        width="18"
+                      >
+                        <path
+                          d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+                        />
+                        <path
+                          d="M12 11v6"
+                        />
+                        <path
+                          d="m9 14 3-3 3 3"
+                        />
+                      </svg>
+                    </div>
+                    <div
+                      class="chakra-stack css-y76bkb"
+                    >
+                      <p
+                        class="css-55aua7"
+                      >
+                        Family_Photos.zip
+                      </p>
+                      <p
+                        class="css-oihfo8"
+                      >
+                        450 MB • 
+                        Yesterday
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    class="check-pop css-eyw2ll"
+                    style="animation-delay: 0.2s;"
+                  >
+                    <svg
+                      fill="none"
+                      height="14"
+                      stroke="#22c55e"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                      width="14"
+                    >
+                      <path
+                        d="M20 6 9 17l-5-5"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="row-slide-in row-slide-in-4 dropzone-breathe css-10fm46z"
+              >
+                <div
+                  class="cloud-bounce css-1plvz19"
+                >
+                  <svg
+                    fill="none"
+                    height="32"
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                    width="32"
+                  >
+                    <path
+                      d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"
+                    />
+                    <path
+                      d="M12 12v9"
+                    />
+                    <path
+                      d="m8 16 4-4 4 4"
+                    />
+                  </svg>
+                </div>
+                <p
+                  class="css-55aua7"
+                >
+                  Drag and drop files to upload
+                </p>
+                <p
+                  class="css-16ia7rv"
+                >
+                  Syncs immediately directly with Telegram API
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
+      <style>
+        
+        /* ── Background blobs ── */
+        @keyframes float-1 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(25px, -35px) scale(1.05); }
+        }
+        @keyframes float-2 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(-30px, 20px) scale(1.08); }
+        }
+        .blob-animation-1 { animation: float-1 12s ease-in-out infinite; }
+        .blob-animation-2 { animation: float-2 15s ease-in-out infinite; }
+
+        /* ── Card gentle float ── */
+        @keyframes card-float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-8px); }
+        }
+        .drive-card-float { animation: card-float 6s ease-in-out infinite; }
+        .drive-card-float:hover { animation-play-state: paused; }
+
+        /* ── Shimmer sweep across card ── */
+        @keyframes shimmer-sweep {
+          0%   { transform: translateX(-100%) skewX(-15deg); opacity: 0; }
+          10%  { opacity: 1; }
+          40%  { transform: translateX(220%) skewX(-15deg); opacity: 0; }
+          100% { transform: translateX(220%) skewX(-15deg); opacity: 0; }
+        }
+        .drive-shimmer::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255,255,255,0.07) 40%,
+            rgba(255,255,255,0.18) 50%,
+            rgba(255,255,255,0.07) 60%,
+            transparent 100%
+          );
+          animation: shimmer-sweep 4s ease-in-out infinite;
+          border-radius: inherit;
+        }
+
+        /* ── Traffic-light dot breathe ── */
+        @keyframes dot-breathe {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50%       { opacity: 0.55; transform: scale(0.82); }
+        }
+        .dot-pulse-1 { animation: dot-breathe 2.4s ease-in-out infinite; }
+        .dot-pulse-2 { animation: dot-breathe 2.4s ease-in-out infinite 0.4s; }
+        .dot-pulse-3 { animation: dot-breathe 2.4s ease-in-out infinite 0.8s; }
+
+        /* ── Staggered row slide-in ── */
+        @keyframes row-in {
+          from { opacity: 0; transform: translateX(18px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        .row-slide-in   { animation: row-in 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+        .row-slide-in-1 { animation-delay: 0.05s; }
+        .row-slide-in-2 { animation-delay: 0.18s; }
+        .row-slide-in-3 { animation-delay: 0.31s; }
+        .row-slide-in-4 { animation-delay: 0.44s; }
+
+        /* ── Upload row ambient glow loop ── */
+        @keyframes row-glow {
+          0%, 100% { box-shadow: inset 0 0 0px 0 rgba(99,102,241,0); }
+          50%       { box-shadow: inset 0 0 14px 2px rgba(99,102,241,0.12); }
+        }
+        .upload-row-glow { animation: row-glow 2.2s ease-in-out infinite; }
+
+        /* ── Video icon pulse ── */
+        @keyframes icon-pulse {
+          0%, 100% { transform: scale(1); }
+          50%       { transform: scale(1.14); }
+        }
+        .icon-pulse { animation: icon-pulse 1.8s ease-in-out infinite; }
+
+        /* ── Uploading text blink ── */
+        @keyframes text-blink {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0.35; }
+        }
+        .uploading-text-blink { animation: text-blink 1.4s ease-in-out infinite; }
+
+        /* ── Looping upload progress bar (0 → 100% → reset) ── */
+        @keyframes upload-loop {
+          0%   { width: 0%;   opacity: 1; }
+          80%  { width: 100%; opacity: 1; }
+          85%  { width: 100%; opacity: 0; }
+          86%  { width: 0%;   opacity: 0; }
+          100% { width: 0%;   opacity: 1; }
+        }
+        .upload-progress-loop {
+          animation: upload-loop 3.5s cubic-bezier(0.4,0,0.2,1) infinite;
+        }
+
+        /* ── Check mark pop ── */
+        @keyframes check-pop {
+          0%, 90%, 100% { transform: scale(1); }
+          95%            { transform: scale(1.3) rotate(8deg); }
+        }
+        .check-pop { animation: check-pop 4s ease-in-out infinite; }
+
+        /* ── Drop zone border breathe ── */
+        @keyframes dropzone-breathe {
+          0%, 100% { border-color: rgba(99,102,241,0.3); background: rgba(99,102,241,0.05); }
+          50%       { border-color: rgba(99,102,241,0.65); background: rgba(99,102,241,0.1); }
+        }
+        .dropzone-breathe { animation: dropzone-breathe 3s ease-in-out infinite; }
+
+        /* ── Cloud icon bounce ── */
+        @keyframes cloud-bounce {
+          0%, 100% { transform: translateY(0px) scale(1); }
+          40%       { transform: translateY(-5px) scale(1.08); }
+          60%       { transform: translateY(-3px) scale(1.05); }
+        }
+        .cloud-bounce { animation: cloud-bounce 2.6s ease-in-out infinite; }
+      
+      </style>
     </div>
     <div
-      class="css-1onjgng"
+      class="css-w2meao"
       id="features"
     >
       <div
-        class="css-2lfxhj"
-      >
-        <p
-          class="css-7y3roa"
-        >
-          Engineered for Performance
-        </p>
-        <p
-          class="css-19oco2h"
-        >
-          Everything you need to manage your digital life with minimal friction.
-        </p>
-      </div>
+        class="css-1sw6twk"
+      />
       <div
-        class="css-m2djmm"
+        class="css-nlwo9e"
       >
         <div
-          class="css-1hbkjh5"
-        >
-          <div>
-            <div
-              class="css-1jql487"
-            >
-              <svg
-                fill="none"
-                height="24"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                width="24"
-              >
-                <path
-                  d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.54-1.92-2.18-3.5-4.5-3.5C8 7.5 5 10 5 13.5c-1.5.5-2.5 2-2.5 3.5A3.5 3.5 0 0 0 6 20.5h11.5"
-                />
-                <path
-                  d="m9 13 2 2 4-4"
-                />
-              </svg>
-            </div>
-            <p
-              class="css-1m9slp5"
-            >
-              Infinite Storage
-            </p>
-            <p
-              class="css-knt9ic"
-            >
-              Break free from restrictive quotas. Leverage Telegram's limitless infrastructure to store documents, media, and archives without ever worrying about running out of space.
-            </p>
-          </div>
-        </div>
-        <div
-          class="css-r41mx4"
-          id="security"
+          class="css-1nod75n"
         >
           <div
-            class="css-1bd6ui5"
+            class="feat-badge-ping css-4csgs1"
           >
-            <svg
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="24"
-            >
-              <path
-                d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
-              />
-              <rect
-                height="5"
-                rx="1"
-                width="6"
-                x="9"
-                y="11"
-              />
-              <path
-                d="M10 11V9a2 2 0 0 1 4 0v2"
-              />
-            </svg>
+            <span
+              class="feat-dot-live"
+              style="display: inline-block; width: 6px; height: 6px; border-radius: 50%;"
+            />
+            Why Telegramonic?
           </div>
           <p
-            class="css-1m9slp5"
+            class="css-52pbor"
           >
-            Bank-Grade Security
+            Engineered for Performance
           </p>
           <p
-            class="css-knt9ic"
+            class="css-1pnrre5"
           >
-            Your files are protected by MTProto encryption. Only you hold the keys to your data, ensuring absolute privacy.
+            Everything you need to manage your digital life with minimal friction.
           </p>
         </div>
         <div
-          class="css-r41mx4"
+          class="css-1ld6jqw"
         >
           <div
-            class="css-soaivv"
-          >
-            <svg
-              fill="none"
-              height="24"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-              width="24"
-            >
-              <path
-                d="M13 2 L3 14 h9 l-1 8 L21 10 h-9 Z"
-              />
-            </svg>
-          </div>
-          <p
-            class="css-1m9slp5"
-          >
-            Turbocharged Transfers
-          </p>
-          <p
-            class="css-knt9ic"
-          >
-            Experience unmatched upload and download speeds optimized across global distributed servers.
-          </p>
-        </div>
-        <div
-          class="css-l2kxss"
-        >
-          <div
-            class="css-aa37jl"
+            class="feat-card css-1p6bv84"
+            role="group"
+            style="--glow: rgba(99,102,241,0.22); will-change: transform;"
           >
             <div
-              class="css-w9id53"
+              class="feat-orb css-1bgcbzk"
+              style="filter: blur(60px);"
+            />
+            <div
+              class="css-1i70edg"
+              style="background-size: 20px 20px; opacity: 0.045;"
+            />
+            <div
+              class="feat-accent-bar css-ji1402"
+            />
+            <div
+              class="css-rqgsqp"
             >
-              <svg
-                fill="none"
-                height="24"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                viewBox="0 0 24 24"
-                width="24"
+              <div
+                class="feat-icon-badge css-zi7ejc"
+                style="will-change: transform;"
               >
-                <path
-                  d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+                <div
+                  class="feat-icon-glow css-1l0qgtb"
+                  style="filter: blur(12px);"
                 />
-                <path
-                  d="M3 3v5h5"
-                />
-                <path
-                  d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"
-                />
-                <path
-                  d="M16 16h5v5"
-                />
-              </svg>
+                <svg
+                  fill="none"
+                  height="22px"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="22px"
+                >
+                  <path
+                    d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.54-1.92-2.18-3.5-4.5-3.5C8 7.5 5 10 5 13.5c-1.5.5-2.5 2-2.5 3.5A3.5 3.5 0 0 0 6 20.5h11.5"
+                  />
+                  <path
+                    d="m9 13 2 2 4-4"
+                  />
+                </svg>
+              </div>
+              <p
+                class="css-1nhm66s"
+              >
+                Infinite Storage
+              </p>
+              <p
+                class="css-knt9ic"
+              >
+                Break free from restrictive quotas. Leverage Telegram's limitless infrastructure to store documents, media, and archives without ever worrying about running out of space.
+              </p>
             </div>
-            <p
-              class="css-1m9slp5"
+            <div
+              class="chakra-stack feat-stat css-jvdp9d"
+              style="will-change: transform;"
             >
-              Seamless Sync across Devices
-            </p>
-            <p
-              class="css-knt9ic"
+              <div
+                class="chakra-stack css-y76bkb"
+              >
+                <p
+                  class="css-13t6hp"
+                >
+                  Unlimited
+                </p>
+                <p
+                  class="css-h17njc"
+                >
+                  Storage cap
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="feat-card css-ydc27c"
+            role="group"
+            style="--glow: rgba(168,85,247,0.22); will-change: transform;"
+          >
+            <div
+              class="feat-orb css-1bgcbzk"
+              style="filter: blur(60px);"
+            />
+            <div
+              class="css-1i70edg"
+              style="background-size: 20px 20px; opacity: 0.045;"
+            />
+            <div
+              class="feat-accent-bar css-ji1402"
+            />
+            <div
+              class="css-rqgsqp"
             >
-              Access your files instantly from your desktop, tablet, or phone. Changes sync in real-time across the ecosystem.
-            </p>
+              <div
+                class="feat-icon-badge css-pvz7lr"
+                style="will-change: transform;"
+              >
+                <div
+                  class="feat-icon-glow css-1l0qgtb"
+                  style="filter: blur(12px);"
+                />
+                <svg
+                  fill="none"
+                  height="22px"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="22px"
+                >
+                  <rect
+                    height="11"
+                    rx="2"
+                    ry="2"
+                    width="18"
+                    x="3"
+                    y="11"
+                  />
+                  <path
+                    d="M7 11V7a5 5 0 0 1 10 0v4"
+                  />
+                </svg>
+              </div>
+              <p
+                class="css-1nhm66s"
+              >
+                Bank-Grade Security
+              </p>
+              <p
+                class="css-knt9ic"
+              >
+                Your files are protected by MTProto 2.0 encryption — the same protocol securing 900M+ Telegram users. Only you hold the decryption keys.
+              </p>
+            </div>
+            <div
+              class="chakra-stack feat-stat css-jvdp9d"
+              style="will-change: transform;"
+            >
+              <div
+                class="chakra-stack css-y76bkb"
+              >
+                <p
+                  class="css-13t6hp"
+                >
+                  256-bit
+                </p>
+                <p
+                  class="css-h17njc"
+                >
+                  AES encryption
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="feat-card css-ydc27c"
+            role="group"
+            style="--glow: rgba(34,197,94,0.22); will-change: transform;"
+          >
+            <div
+              class="feat-orb css-1bgcbzk"
+              style="filter: blur(60px);"
+            />
+            <div
+              class="css-1i70edg"
+              style="background-size: 20px 20px; opacity: 0.045;"
+            />
+            <div
+              class="feat-accent-bar css-ji1402"
+            />
+            <div
+              class="css-rqgsqp"
+            >
+              <div
+                class="feat-icon-badge css-1awalr2"
+                style="will-change: transform;"
+              >
+                <div
+                  class="feat-icon-glow css-1l0qgtb"
+                  style="filter: blur(12px);"
+                />
+                <svg
+                  fill="none"
+                  height="22px"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="22px"
+                >
+                  <polyline
+                    points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"
+                  />
+                </svg>
+              </div>
+              <p
+                class="css-1nhm66s"
+              >
+                Turbocharged Transfers
+              </p>
+              <p
+                class="css-knt9ic"
+              >
+                Experience unmatched upload and download speeds optimized across global distributed servers.
+              </p>
+            </div>
+            <div
+              class="chakra-stack feat-stat css-jvdp9d"
+              style="will-change: transform;"
+            >
+              <div
+                class="chakra-stack css-y76bkb"
+              >
+                <p
+                  class="css-13t6hp"
+                >
+                  Up to 4 GB
+                </p>
+                <p
+                  class="css-h17njc"
+                >
+                  Per file
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="feat-card css-1p6bv84"
+            role="group"
+            style="--glow: rgba(245,158,11,0.22); will-change: transform;"
+          >
+            <div
+              class="feat-orb css-1bgcbzk"
+              style="filter: blur(60px);"
+            />
+            <div
+              class="css-1i70edg"
+              style="background-size: 20px 20px; opacity: 0.045;"
+            />
+            <div
+              class="feat-accent-bar css-ji1402"
+            />
+            <div
+              class="css-rqgsqp"
+            >
+              <div
+                class="feat-icon-badge css-1ag2x5a"
+                style="will-change: transform;"
+              >
+                <div
+                  class="feat-icon-glow css-1l0qgtb"
+                  style="filter: blur(12px);"
+                />
+                <svg
+                  fill="none"
+                  height="22px"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="22px"
+                >
+                  <path
+                    d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+                  />
+                  <path
+                    d="M3 3v5h5"
+                  />
+                  <path
+                    d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"
+                  />
+                  <path
+                    d="M16 16h5v5"
+                  />
+                </svg>
+              </div>
+              <p
+                class="css-1nhm66s"
+              >
+                Seamless Sync across Devices
+              </p>
+              <p
+                class="css-knt9ic"
+              >
+                Access your files instantly from your desktop, tablet, or phone. Changes sync in real-time across the ecosystem.
+              </p>
+            </div>
+            <div
+              class="chakra-stack feat-stat css-jvdp9d"
+              style="will-change: transform;"
+            >
+              <div
+                class="chakra-stack css-y76bkb"
+              >
+                <p
+                  class="css-13t6hp"
+                >
+                  Real-time
+                </p>
+                <p
+                  class="css-h17njc"
+                >
+                  Cross-device sync
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="feat-card css-1ua19xr"
+            role="group"
+            style="--glow: rgba(6,182,212,0.22); will-change: transform;"
+          >
+            <div
+              class="feat-orb css-1bgcbzk"
+              style="filter: blur(60px);"
+            />
+            <div
+              class="css-1i70edg"
+              style="background-size: 20px 20px; opacity: 0.045;"
+            />
+            <div
+              class="feat-accent-bar css-ji1402"
+            />
+            <div
+              class="css-rqgsqp"
+            >
+              <div
+                class="feat-icon-badge css-1mno7cu"
+                style="will-change: transform;"
+              >
+                <div
+                  class="feat-icon-glow css-1l0qgtb"
+                  style="filter: blur(12px);"
+                />
+                <svg
+                  fill="none"
+                  height="22px"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="22px"
+                >
+                  <circle
+                    cx="11"
+                    cy="11"
+                    r="8"
+                  />
+                  <line
+                    x1="21"
+                    x2="16.65"
+                    y1="21"
+                    y2="16.65"
+                  />
+                </svg>
+              </div>
+              <p
+                class="css-1nhm66s"
+              >
+                Instant Smart Search
+              </p>
+              <p
+                class="css-knt9ic"
+              >
+                Find any file in milliseconds with full-text search across filenames, types, and metadata. No more endless scrolling.
+              </p>
+            </div>
+            <div
+              class="chakra-stack feat-stat css-jvdp9d"
+              style="will-change: transform;"
+            >
+              <div
+                class="chakra-stack css-y76bkb"
+              >
+                <p
+                  class="css-13t6hp"
+                >
+                  &lt;50 ms
+                </p>
+                <p
+                  class="css-h17njc"
+                >
+                  Average search time
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="feat-card css-ran27t"
+            role="group"
+            style="--glow: rgba(236,72,153,0.22); will-change: transform;"
+          >
+            <div
+              class="feat-orb css-1bgcbzk"
+              style="filter: blur(60px);"
+            />
+            <div
+              class="css-1i70edg"
+              style="background-size: 20px 20px; opacity: 0.045;"
+            />
+            <div
+              class="feat-accent-bar css-ji1402"
+            />
+            <div
+              class="css-rqgsqp"
+            >
+              <div
+                class="feat-icon-badge css-1boktzq"
+                style="will-change: transform;"
+              >
+                <div
+                  class="feat-icon-glow css-1l0qgtb"
+                  style="filter: blur(12px);"
+                />
+                <svg
+                  fill="none"
+                  height="22px"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                  width="22px"
+                >
+                  <circle
+                    cx="18"
+                    cy="5"
+                    r="3"
+                  />
+                  <circle
+                    cx="6"
+                    cy="12"
+                    r="3"
+                  />
+                  <circle
+                    cx="18"
+                    cy="19"
+                    r="3"
+                  />
+                  <line
+                    x1="8.59"
+                    x2="15.42"
+                    y1="13.51"
+                    y2="17.49"
+                  />
+                  <line
+                    x1="15.41"
+                    x2="8.59"
+                    y1="6.51"
+                    y2="10.49"
+                  />
+                </svg>
+              </div>
+              <p
+                class="css-1nhm66s"
+              >
+                One-Click Sharing
+              </p>
+              <p
+                class="css-knt9ic"
+              >
+                Generate secure shareable links instantly. Set expiry times, password-protect links, and revoke access at any time.
+              </p>
+            </div>
+            <div
+              class="chakra-stack feat-stat css-jvdp9d"
+              style="will-change: transform;"
+            >
+              <div
+                class="chakra-stack css-y76bkb"
+              >
+                <p
+                  class="css-13t6hp"
+                >
+                  Zero
+                </p>
+                <p
+                  class="css-h17njc"
+                >
+                  Third-party servers
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div
-      class="css-1fs8t8g"
-    >
-      <div
-        class="css-11nu1wd"
-      >
-        <div
-          class="css-143qpkj"
-        >
-          <div
-            class="css-44c6y4"
-          >
-            <p
-              class="css-vnufqw"
-            >
-              800M+
-            </p>
-            <p
-              class="css-18n5tmu"
-            >
-              Telegram Users
-            </p>
-          </div>
-          <div
-            class="css-44c6y4"
-          >
-            <p
-              class="css-vnufqw"
-            >
-              2GB+
-            </p>
-            <p
-              class="css-18n5tmu"
-            >
-              Single File Limit
-            </p>
-          </div>
-          <div
-            class="css-44c6y4"
-          >
-            <p
-              class="css-vnufqw"
-            >
-              0$
-            </p>
-            <p
-              class="css-18n5tmu"
-            >
-              Monthly Cost
-            </p>
-          </div>
-          <div
-            class="css-44c6y4"
-          >
-            <p
-              class="css-vnufqw"
-            >
-              99.9%
-            </p>
-            <p
-              class="css-18n5tmu"
-            >
-              Uptime Record
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="css-1onjgng"
-    >
-      <div
-        class="css-vtf7iz"
-      >
-        <div
-          class="css-1r91smo"
-        />
-        <div
-          class="css-1elnnoq"
-        />
-        <div
-          class="css-1115ety"
-        >
-          <p
-            class="css-qlxg8c"
-          >
-            Ready to upgrade your storage?
-          </p>
-          <p
-            class="css-1xrb4mn"
-          >
-            Join thousands of users who have moved their entire digital life to the cloud without paying a dime.
-          </p>
-          <button
-            class="chakra-button css-19tm9i1"
-            type="button"
-          >
-            Create Your Drive
-          </button>
-        </div>
-      </div>
+      <style>
+        
+        /* ═══════════════════════════════════════════════
+           CARD — base state (all transitions defined here,
+           never inside :hover so both enter & exit are smooth)
+           ═══════════════════════════════════════════════ */
+        .feat-card {
+          box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+          transform: translateY(0);
+          border-color: var(--chakra-colors-border);
+
+          transition:
+            transform       0.45s cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow      0.45s cubic-bezier(0.22, 1, 0.36, 1),
+            border-color    0.35s ease;
+        }
+        .feat-card:hover {
+          transform: translateY(-6px);
+          box-shadow: 0 24px 56px var(--glow), 0 4px 16px rgba(0,0,0,0.07);
+          border-color: rgba(99,102,241,0.28);
+        }
+
+        /* ── Top accent bar ── */
+        .feat-accent-bar {
+          width: 36%;
+          transition: width 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .feat-card:hover .feat-accent-bar {
+          width: 100%;
+        }
+
+        /* ── Background orb ── */
+        .feat-orb {
+          opacity: 0.28;
+          transform: scale(1);
+          transition:
+            opacity   0.5s ease,
+            transform 0.5s ease;
+        }
+        .feat-card:hover .feat-orb {
+          opacity: 0.55;
+          transform: scale(1.18);
+        }
+
+        /* ── Icon badge ── */
+        .feat-icon-badge {
+          transform: scale(1) rotate(0deg);
+          transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .feat-card:hover .feat-icon-badge {
+          transform: scale(1.12) rotate(-6deg);
+        }
+
+        /* ── Icon glow ring ── */
+        .feat-icon-glow {
+          opacity: 0;
+          transition: opacity 0.4s ease;
+        }
+        .feat-card:hover .feat-icon-glow {
+          opacity: 0.55;
+        }
+
+        /* ── Stat pill ── */
+        .feat-stat {
+          transform: translateY(0);
+          box-shadow: none;
+          transition:
+            transform   0.4s cubic-bezier(0.22, 1, 0.36, 1),
+            box-shadow  0.4s ease;
+        }
+        .feat-card:hover .feat-stat {
+          transform: translateY(-3px);
+          box-shadow: 0 6px 18px rgba(0,0,0,0.09);
+        }
+
+        /* ═══════════════════════════════════════════════
+           ENTRANCE ANIMATIONS (staggered slide-up)
+           ═══════════════════════════════════════════════ */
+        @keyframes feat-enter {
+          from { opacity: 0; transform: translateY(32px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .feat-card { animation: feat-enter 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+        .feat-card:nth-child(1) { animation-delay: 0.04s; }
+        .feat-card:nth-child(2) { animation-delay: 0.13s; }
+        .feat-card:nth-child(3) { animation-delay: 0.22s; }
+        .feat-card:nth-child(4) { animation-delay: 0.31s; }
+        .feat-card:nth-child(5) { animation-delay: 0.40s; }
+        .feat-card:nth-child(6) { animation-delay: 0.49s; }
+
+        /* ═══════════════════════════════════════════════
+           SECTION BADGE
+           ═══════════════════════════════════════════════ */
+        @keyframes live-dot {
+          0%, 100% { transform: scale(1);   opacity: 1; }
+          50%       { transform: scale(1.7); opacity: 0.5; }
+        }
+        .feat-dot-live { animation: live-dot 2s ease-in-out infinite; }
+
+        @keyframes badge-breathe {
+          0%, 100% { box-shadow: 0 0 0 0   rgba(99,102,241,0); }
+          50%       { box-shadow: 0 0 0 5px rgba(99,102,241,0.1); }
+        }
+        .feat-badge-ping { animation: badge-breathe 3.2s ease-in-out infinite; }
+      
+      </style>
     </div>
   </div>
 </div>

@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react';
-import Logo from '../Logo';
+import Logo from '../icons/Logo';
+
 
 describe('Logo', () => {
   it('renders correctly with default size', () => {
@@ -27,3 +28,5 @@ describe('Logo', () => {
     expect(svgElement).toHaveAttribute('opacity', '0.5');
   });
 });
+
+

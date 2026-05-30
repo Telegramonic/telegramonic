@@ -56,3 +56,27 @@ jest.mock('next-themes', () => ({
     setTheme: jest.fn(),
   }),
 }));
+
+/**
+ * Mock @uiw/react-markdown-preview for test environment to avoid ESM import syntax errors
+ */
+jest.mock('@uiw/react-markdown-preview', () => {
+  return jest.fn(({ source, className, style }) => {
+    if (typeof source === 'string') {
+      const match = source.match(/\[([^\]]+)\]\(([^)]+)\)/);
+      if (match) {
+        return (
+          <div data-testid="markdown-preview" className={className} style={style}>
+            <a href={match[2]}>{match[1]}</a>
+          </div>
+        );
+      }
+    }
+    return (
+      <div data-testid="markdown-preview" className={className} style={style}>
+        {source}
+      </div>
+    );
+  });
+});
+
