@@ -1,28 +1,39 @@
 import React from 'react';
+import { HelmetProvider } from 'react-helmet-async';
 import {
-  AlertProvider,
-  AppRouterProvider,
   LocalizationProvider,
   ModalProvider,
+  RouterProvider,
   ThemeProvider,
 } from '@providers';
-import { DrawerProvider } from './providers/drawer_provider';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 5,
+      retryDelay: 1000,
+    },
+  },
+});
 
 const App = () => {
   return (
-    <ThemeProvider>
+    <QueryClientProvider client={queryClient}>
       <React.StrictMode>
         <LocalizationProvider>
-          <DrawerProvider>
-            <AlertProvider>
+          <HelmetProvider>
+            <ThemeProvider>
               <ModalProvider>
-                <AppRouterProvider />
+                <RouterProvider />
               </ModalProvider>
-            </AlertProvider>
-          </DrawerProvider>
+            </ThemeProvider>
+          </HelmetProvider>
         </LocalizationProvider>
       </React.StrictMode>
-    </ThemeProvider>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   );
 };
 

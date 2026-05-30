@@ -14,6 +14,15 @@ const fontSize = {
   '9xl': '8rem',
 };
 
+const breakpoints = {
+  base: '0em',
+  sm: '30em',
+  md: '48em',
+  lg: '62em',
+  xl: '80em',
+  '2xl': '96em',
+};
+
 const fontWeight = {
   hairline: 100,
   thin: 200,
@@ -60,4 +69,4 @@ const zIndices = {
   tooltip: 1800,
 };
 
-export { fontSize, fontWeight, lineHeight, zIndices };
+export { fontSize, fontWeight, lineHeight, zIndices, breakpoints };

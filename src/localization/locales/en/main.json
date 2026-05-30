@@ -1,70 +1,17 @@
 {
-  "Home": {
-    "header": {
-      "title": "Discover the best of Telegram on Telegramonic.com",
-      "subTitle": "Find the best channels, groups, bots, stickers, themes, games and more on Telegramonic.com"
-    }
-  },
-  "Navigation": {
-    "appName": "Telegramonic.com",
-    "navButton": {
-      "blogs": "Blogs",
-      "bots": "Bots",
-      "channels": "Channels",
-      "games": "Games",
-      "groups": "Groups",
-      "home": "Home",
-      "stickers": "Stickers",
-      "themes": "Themes"
-    },
-    "others": "Others"
+  "Title_1": "Telegram",
+  "Title_2": "onic",
+  "LandingPage": {
+    "heroText": "Welcome to Telegramonic",
+    "subHeroText": "Boilerplate description text goes here.",
+    "searchPlaceholder": "Search..."
   },
   "Footer": {
-    "copyRight": "© 2024 Telegramonic.com. All rights reserved.",
-    "disclaimer": "Disclaimer: All channels, groups, stickers and bots posted on website are public, none of them are owned by us. We are not responsible for the content on their media, join at your own risk. If you have any issue, please contact us here:",
-    "media": {
-      "bots": "Bots",
-      "channels": "Channels",
-      "groups": "Groups",
-      "title": "Media",
-      "top": "Top 100"
-    },
-    "reachUs": {
-      "about": "About us",
-      "contact": "Contact us",
-      "feature": "Feature media",
-      "title": "Reach us"
-    },
-    "social": {
-      "facebook": "Facebook",
-      "instagram": "Instagram",
-      "twitter": "Twitter"
-    },
-    "staticOthers": {
-      "faq": "FAQ",
-      "privacy": "Privacy policy ",
-      "terms": "Terms and conditions",
-      "title": "Others"
-    },
-    "websiteText": "This website is not affiliated with Telegram. Visual content shown here might be copyrighted by rightful owners. No infringement intended."
+    "copyrightText": "© {{year}} telegramonic.com | All rights reserved"
   },
-  "Search": {
-    "searchButton": "Search",
-    "searchCategory": {
-      "options": {
-        "all": "All",
-        "bots": "Bots",
-        "channels": "Channels",
-        "groups": "Groups",
-        "stickers": "Stickers",
-        "themes": "Themes",
-        "games": "Games"
-      },
-      "placeholder": "Select category"
-    },
-    "searchInputPlaceholder": "Search for channels, groups, bots, stickers, themes, games and more..."
-  },
-  "MainHomeScreen": {
-    "browseOurCategories": "Browse our categories"
+  "NavigationBar": {
+    "Home": "Home",
+    "About": "About",
+    "Contact": "Contact"
   }
 }

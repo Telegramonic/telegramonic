@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Top screen should render correctly 1`] = `
-<div>
-  <div>
-    Top
-  </div>
-</div>
-`;

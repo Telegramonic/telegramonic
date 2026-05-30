@@ -1,52 +1,26 @@
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-} from '@chakra-ui/react';
+import { Dialog } from '@chakra-ui/react';
 import { ModalProps } from './types';
-import { useTranslation } from 'react-i18next';
+import { SearchModal } from './Modals';
+import { ModalID } from '@uiStore';
 
-const ModalComponent = ({
-  isOpen,
-  title,
-  message,
-  onModalClose,
-  primaryButtonLabel,
-  onPrimaryButtonClick,
-}: ModalProps) => {
-  const { t } = useTranslation();
-
+const ModalComponent = ({ isOpen, modalID, onModalClose }: ModalProps) => {
   return (
-    <>
-      <Modal isOpen={isOpen} onClose={onModalClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>{title}</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>{message}</ModalBody>
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onPrimaryButtonClick}>
-              {primaryButtonLabel}
-            </Button>
-            <Button
-              variant="ghost"
-              colorScheme="red"
-              onClick={() => {
-                onModalClose();
-              }}
-            >
-              {t('close')}
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
+    <Dialog.Root open={isOpen} onOpenChange={(details: { open: boolean }) => { if (!details.open) onModalClose(); }}>
+      <Dialog.Backdrop />
+      <Dialog.Content>
+        <ModalToShow modalID={modalID} />
+      </Dialog.Content>
+    </Dialog.Root>
   );
+};
+
+const ModalToShow = ({ modalID }: { modalID: ModalID }) => {
+  switch (modalID) {
+    case ModalID.SEARCH:
+      return <SearchModal />;
+    default:
+      return <></>;
+  }
 };
 
 export default ModalComponent;
