@@ -9,10 +9,6 @@ export const NAVIGATION_LINKS: {
     link: '/features',
   },
   {
-    name: 'Pricing',
-    link: '/pricing',
-  },
-  {
     name: 'Security',
     link: '/security',
   },

@@ -1,30 +1,63 @@
 {
-  "Title_1": "Telegram",
-  "Title_2": "onic",
+  "Title": "Telegramonic",
   "LandingPage": {
+    "heroBadge": "Secure & Limitless Cloud Storage",
     "heroText": "Vast Cloud Storage",
     "poweredBy": "Powered by Telegram",
-    "subHeroText": "Experience unlimited cloud storage built on top of the world's most secure and lightning-fast messaging infrastructure.",
+    "subHeroText": "Access limitless cloud storage directly through Telegram's MTProto API. Upload, manage, and share your files instantly with zero middleman databases, no file sizes caps, and complete ownership of your data.",
     "getStarted": "Get Started",
     "exploreFeatures": "Explore Features",
+    "tags": {
+      "encrypted": "MTProto Encrypted",
+      "fileSize": "Up to 4GB/File",
+      "direct": "Direct-to-API"
+    },
+    "driveWidget": {
+      "title": "My Telegramonic Drive",
+      "uploading": "Uploading…",
+      "hoursAgo": "2 hours ago",
+      "yesterday": "Yesterday",
+      "dropzoneTitle": "Drag and drop files to upload",
+      "dropzoneSubtitle": "Syncs immediately directly with Telegram API"
+    },
     "features": {
       "title": "Engineered for Performance",
       "subtitle": "Everything you need to manage your digital life with minimal friction.",
       "infinite": {
         "title": "Infinite Storage",
-        "description": "Break free from restrictive quotas. Leverage Telegram's limitless infrastructure to store documents, media, and archives without ever worrying about running out of space."
+        "description": "Break free from restrictive quotas. Leverage Telegram's limitless infrastructure to store documents, media, and archives without ever worrying about running out of space.",
+        "stat": "Unlimited",
+        "statLabel": "Storage cap"
       },
       "security": {
         "title": "Bank-Grade Security",
-        "description": "Your files are protected by MTProto encryption. Only you hold the keys to your data, ensuring absolute privacy."
+        "description": "Your files are protected by MTProto 2.0 encryption — the same protocol securing 900M+ Telegram users. Only you hold the decryption keys.",
+        "stat": "256-bit",
+        "statLabel": "AES encryption"
       },
       "transfers": {
         "title": "Turbocharged Transfers",
-        "description": "Experience unmatched upload and download speeds optimized across global distributed servers."
+        "description": "Experience unmatched upload and download speeds optimized across global distributed servers.",
+        "stat": "Up to 4 GB",
+        "statLabel": "Per file"
       },
       "sync": {
         "title": "Seamless Sync across Devices",
-        "description": "Access your files instantly from your desktop, tablet, or phone. Changes sync in real-time across the ecosystem."
+        "description": "Access your files instantly from your desktop, tablet, or phone. Changes sync in real-time across the ecosystem.",
+        "stat": "Real-time",
+        "statLabel": "Cross-device sync"
+      },
+      "search": {
+        "title": "Instant Smart Search",
+        "description": "Find any file in milliseconds with full-text search across filenames, types, and metadata. No more endless scrolling.",
+        "stat": "<50 ms",
+        "statLabel": "Average search time"
+      },
+      "share": {
+        "title": "One-Click Sharing",
+        "description": "Generate secure shareable links instantly. Set expiry times, password-protect links, and revoke access at any time.",
+        "stat": "Zero",
+        "statLabel": "Third-party servers"
       }
     }
   },
@@ -36,6 +69,39 @@
   "NavigationBar": {
     "Home": "Home",
     "About": "About",
-    "Contact": "Contact"
+    "Contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "about-us": "About Us",
+    "contact-us": "Contact Us",
+    "faq": "FAQs",
+    "disclaimer": "Disclaimer"
+  },
+  "MdPage": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "badge": "Legal"
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "badge": "Legal"
+    },
+    "contactUs": {
+      "title": "Contact Us",
+      "badge": "Support"
+    },
+    "aboutUs": {
+      "title": "About Us",
+      "badge": "Company"
+    },
+    "faq": {
+      "title": "FAQs",
+      "badge": "Help"
+    },
+    "disclaimer": {
+      "title": "Disclaimer",
+      "badge": "Legal"
+    },
+    "lastUpdated": "Last updated: May 30, 2026"
   }
 }

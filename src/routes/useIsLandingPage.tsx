@@ -3,12 +3,15 @@ import { useLocation } from 'react-router-dom';
 
 const STATIC_SCREENS = [
   '/',
+  '/privacy',
   '/privacy-policy',
+  '/terms',
+  '/terms-and-conditions',
   '/about-us',
   '/contact-us',
   '/company',
-  '/terms-and-conditions',
   '/faq',
+  '/disclaimer',
   '/team',
   '/coming-soon',
 ];

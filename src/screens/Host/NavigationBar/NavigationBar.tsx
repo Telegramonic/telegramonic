@@ -7,23 +7,14 @@ import {
   Menu,
   Text,
 } from '@chakra-ui/react';
-import { ThemeIcon } from '@components';
-import { Logo } from '@assets';
+import { Icon, IconType } from '@assets';
+
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { isEmpty } from 'lodash';
 
 import { usePaddingForScreen } from '../../hooks';
 import { NAVIGATION_LINKS } from './constants';
-
-const IconMenu = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg fill="none" viewBox="0 0 24 24" height="1em" width="1em" {...props}>
-    <path
-      fill="currentColor"
-      d="M2 6a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1zM2 12.032a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1zM3 17.064a1 1 0 100 2h18a1 1 0 000-2H3z"
-    />
-  </svg>
-);
 
 const NavigationBar = () => {
   const { t } = useTranslation();
@@ -61,14 +52,11 @@ const NavigationBar = () => {
             alignItems="center"
             justifyContent="center"
           >
-            <Logo />
+            <Icon type={IconType.LOGO} />
           </Box>
           <Box display="flex">
             <Heading size={'md'} color={'primary'} fontWeight="bold">
-              {t('Title_1')}
-            </Heading>
-            <Heading size={'md'} fontWeight="bold">
-              {t('Title_2')}
+              {t('Title')}
             </Heading>
           </Box>
         </Link>
@@ -122,7 +110,7 @@ const NavigationBar = () => {
                 size="sm"
               >
                 Menu
-                <IconMenu />
+                <Icon type={IconType.MENU} />
               </Button>
             </Menu.Trigger>
             <Menu.Content
@@ -151,8 +139,8 @@ const NavigationBar = () => {
             </Menu.Content>
           </Menu.Root>
         </Box>
-        <ThemeIcon />
       </HStack>
+
     </HStack>
   );
 };

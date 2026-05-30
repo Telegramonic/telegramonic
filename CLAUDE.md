@@ -17,6 +17,10 @@ For comprehensive technical documentation, architectural decisions, file convent
 
 👉 **[AGENT.md](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/AGENT.md)**
 
+## 💻 Code Style Guidelines
+
+- **React Components**: Avoid using `React.FC` or `React.FunctionComponent` to define functional components. Instead, type props directly in the function arguments: `const MyComponent = ({ prop1 }: Props) => { ... }`.
+
 ## Essential Commands
 
 These are the most common commands for development:
