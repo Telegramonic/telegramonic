@@ -2,12 +2,36 @@
   "Title_1": "Telegram",
   "Title_2": "onic",
   "LandingPage": {
-    "heroText": "Welcome to Telegramonic",
-    "subHeroText": "Boilerplate description text goes here.",
-    "searchPlaceholder": "Search..."
+    "heroText": "Vast Cloud Storage",
+    "poweredBy": "Powered by Telegram",
+    "subHeroText": "Experience unlimited cloud storage built on top of the world's most secure and lightning-fast messaging infrastructure.",
+    "getStarted": "Get Started",
+    "exploreFeatures": "Explore Features",
+    "features": {
+      "title": "Engineered for Performance",
+      "subtitle": "Everything you need to manage your digital life with minimal friction.",
+      "infinite": {
+        "title": "Infinite Storage",
+        "description": "Break free from restrictive quotas. Leverage Telegram's limitless infrastructure to store documents, media, and archives without ever worrying about running out of space."
+      },
+      "security": {
+        "title": "Bank-Grade Security",
+        "description": "Your files are protected by MTProto encryption. Only you hold the keys to your data, ensuring absolute privacy."
+      },
+      "transfers": {
+        "title": "Turbocharged Transfers",
+        "description": "Experience unmatched upload and download speeds optimized across global distributed servers."
+      },
+      "sync": {
+        "title": "Seamless Sync across Devices",
+        "description": "Access your files instantly from your desktop, tablet, or phone. Changes sync in real-time across the ecosystem."
+      }
+    }
   },
   "Footer": {
-    "copyrightText": "© {{year}} telegramonic.com | All rights reserved"
+    "copyrightText": "© {{year}} telegramonic.com | All rights reserved",
+    "tagline": "Unlimited cloud storage, secure, fast, and completely powered by Telegram.",
+    "madeWith": "Made with ❤️ for the cloud."
   },
   "NavigationBar": {
     "Home": "Home",

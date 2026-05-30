@@ -8,7 +8,9 @@ describe('ModalProvider', () => {
     const { result } = renderHook(() => appStore());
 
     result.current.Modal.resetModalState();
-    const { container } = renderWithProviders(<ModalProvider>App</ModalProvider>);
+    const { container } = renderWithProviders(
+      <ModalProvider>App</ModalProvider>,
+    );
 
     jest.runAllTimersAsync();
 

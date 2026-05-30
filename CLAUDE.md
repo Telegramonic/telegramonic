@@ -4,12 +4,12 @@ This file provides a high-level entry point for Claude-based tools working in th
 
 ## Overview
 
-This is a **React Web Application** built with Create React App (using Craco for configuration).
+This is a **React Web Application** built with Create React App (using Craco for configuration) representing the Telegramonic cloud storage solution.
 
 - **Framework**: React 18.3+
-- **Styling**: Chakra UI, Tailwind CSS
+- **Styling**: Chakra UI (Inter typography, Telegram Blue brand colors) and Tailwind CSS
 - **State Management**: Zustand, React Query
-- **Icons**: Custom SVG icons via `@assets/icons`
+- **Icons**: Local SVG components defined inline within components
 
 ## 📘 Primary Documentation
 
@@ -39,3 +39,12 @@ Advanced agent instructions are modularized in the `.claude/skills/` directory.
 - [Pull Request Skill](file:///.claude/skills/pr/SKILL.md)
 - [Frontend Design](file:///.claude/skills/frontend-design/SKILL.md)
 - [Web Development](file:///.claude/skills/web/SKILL.md)
+
+## 🌐 Localization Guidelines
+
+All user-facing copy strings (headings, paragraphs, labels, button texts, tooltips, placeholders, etc.) MUST be defined in the localization JSON files located in `src/localization/locales/` (e.g. `main.json`) and retrieved dynamically in code using the `useTranslation` hook (`t('key')`). Never hardcode text strings directly in component files.
+
+## 🧪 Testing Guidelines
+
+Always add or update the unit tests (and their snapshots) to align with the requested feature implementations or changes. Run the test suite using `yarn test` or `yarn test -u` to verify that all changes are fully covered, correct, and pass successfully.
+

@@ -3,7 +3,7 @@
 exports[`LandingPage should render correctly 1`] = `
 <div>
   <div
-    class="css-4cm927"
+    class="css-1ofqig9"
   >
     <div>
       <title>
@@ -11,76 +11,563 @@ exports[`LandingPage should render correctly 1`] = `
       </title>
     </div>
     <div
-      class="chakra-stack css-1y8eamp"
+      class="chakra-stack css-4c3t7q"
     >
-      <h2
-        class="chakra-heading css-jye50z"
-      >
-        Welcome to Telegramonic
-      </h2>
-      <p
-        class="css-emxdng"
-      >
-        Boilerplate description text goes here.
-      </p>
       <div
-        class="chakra-group css-1jr4y88"
+        class="css-1kvs8dy"
+      />
+      <div
+        class="css-k8uknu"
+      />
+      <div
+        class="chakra-stack css-1xnk8s8"
       >
-        <input
-          class="chakra-input css-1d145ln"
-          data-first=""
-          data-group-item=""
-          placeholder="Search..."
-          style="--group-count: 2; --group-index: 0;"
-          value=""
-        />
         <div
-          class="css-p8g6xm"
-          data-group-item=""
-          data-last=""
-          style="--group-count: 2; --group-index: 1;"
+          class="css-6kzdtx"
         >
-          <button
-            aria-label="Close"
-            class="chakra-button css-wtfbkt"
-            type="button"
+          <svg
+            class="telegramonic-icon "
+            height="100%"
+            viewBox="0 0 85 85"
+            width="100%"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <svg
-              class="css-kqzqgg"
-              viewBox="0 0 24 24"
+            <defs>
+              <lineargradient
+                id="blueGrad"
+                x1="0%"
+                x2="0%"
+                y1="0%"
+                y2="100%"
+              >
+                <stop
+                  offset="0%"
+                  stop-color="#0088cc"
+                />
+                <stop
+                  offset="100%"
+                  stop-color="#007bb9"
+                />
+              </lineargradient>
+              <lineargradient
+                id="blueGradDark"
+                x1="0%"
+                x2="0%"
+                y1="0%"
+                y2="100%"
+              >
+                <stop
+                  offset="0%"
+                  stop-color="#007bb9"
+                />
+                <stop
+                  offset="100%"
+                  stop-color="#006193"
+                />
+              </lineargradient>
+            </defs>
+            <g
+              transform="translate(-1, -9) scale(1.2)"
+            >
+              <rect
+                fill="rgba(0,0,0,0.15)"
+                height="18"
+                rx="4"
+                width="56"
+                x="7"
+                y="60"
+              />
+              <rect
+                fill="rgba(0,0,0,0.15)"
+                height="18"
+                rx="4"
+                width="56"
+                x="7"
+                y="38"
+              />
+              <rect
+                fill="rgba(0,0,0,0.15)"
+                height="18"
+                rx="4"
+                width="56"
+                x="7"
+                y="16"
+              />
+              <rect
+                fill="url(#blueGrad)"
+                height="18"
+                rx="4"
+                width="56"
+                x="5"
+                y="56"
+              />
+              <rect
+                fill="url(#blueGradDark)"
+                height="8"
+                rx="4"
+                width="56"
+                x="5"
+                y="66"
+              />
+              <circle
+                cx="52"
+                cy="65"
+                fill="#00ffcc"
+                r="2"
+              />
+               
+              <rect
+                fill="#006193"
+                height="2"
+                rx="1"
+                width="30"
+                x="12"
+                y="64"
+              />
+               
+              <rect
+                fill="url(#blueGrad)"
+                height="18"
+                rx="4"
+                width="56"
+                x="5"
+                y="34"
+              />
+              <rect
+                fill="url(#blueGradDark)"
+                height="8"
+                rx="4"
+                width="56"
+                x="5"
+                y="44"
+              />
+              <circle
+                cx="52"
+                cy="43"
+                fill="#00ffcc"
+                r="2"
+              />
+              <rect
+                fill="#006193"
+                height="2"
+                rx="1"
+                width="30"
+                x="12"
+                y="42"
+              />
+              <rect
+                fill="url(#blueGrad)"
+                height="18"
+                rx="4"
+                width="56"
+                x="5"
+                y="12"
+              />
+              <rect
+                fill="url(#blueGradDark)"
+                height="8"
+                rx="4"
+                width="56"
+                x="5"
+                y="22"
+              />
+              <circle
+                cx="52"
+                cy="21"
+                fill="#00ffcc"
+                r="2"
+              />
+              <rect
+                fill="#006193"
+                height="2"
+                rx="1"
+                width="30"
+                x="12"
+                y="20"
+              />
+            </g>
+            <g
+              transform="translate(29.1, 16.5) scale(1.68)"
             >
               <path
-                clip-rule="evenodd"
-                d="M18.7071 6.70711C19.0976 6.31658 19.0976 5.68342 18.7071 5.29289C18.3166 4.90237 17.6834 4.90237 17.2929 5.29289L12 10.5858L6.70711 5.29289C6.31658 4.90237 5.68342 4.90237 5.29289 5.29289C4.90237 5.68342 4.90237 6.31658 5.29289 6.70711L10.5858 12L5.29289 17.2929C4.90237 17.6834 4.90237 18.3166 5.29289 18.7071C5.68342 19.0976 6.31658 19.0976 6.70711 18.7071L12 13.4142L17.2929 18.7071C17.6834 19.0976 18.3166 19.0976 18.7071 18.7071C19.0976 18.3166 19.0976 17.6834 18.7071 17.2929L13.4142 12L18.7071 6.70711Z"
-                fill-rule="evenodd"
+                d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882 L27.338,3.713 Z"
+                fill="#0088cc"
               />
-            </svg>
+              <path
+                d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882L27.338,3.713 M30.285,0L0.984,14.678 l8.174,5.128l3.749,11.464l4.789-5.779l5.616,3.586L30.285,0L30.285,0z"
+                fill="#ffffff"
+              />
+            </g>
+          </svg>
+        </div>
+        <h2
+          class="chakra-heading css-10wt3dj"
+        >
+          Vast Cloud Storage
+          <br />
+          <span
+            class="css-1plvz19"
+          >
+            Powered by Telegram
+          </span>
+        </h2>
+        <p
+          class="css-1rz7zvh"
+        >
+          Experience unlimited cloud storage built on top of the world's most secure and lightning-fast messaging infrastructure.
+        </p>
+        <div
+          class="chakra-stack css-1i1duxm"
+        >
+          <button
+            class="chakra-button css-9cft7l"
+            type="button"
+          >
+            Get Started
+          </button>
+          <button
+            class="chakra-button css-1q3ek2r"
+            type="button"
+          >
+            Explore Features
           </button>
         </div>
       </div>
+    </div>
+    <div
+      class="css-110grf2"
+    >
       <div
-        class="chakra-collapsible__root"
-        data-part="root"
-        data-scope="collapsible"
-        data-state="closed"
-        dir="ltr"
-        id="collapsible::r0:"
-        style="width: 50%;"
+        class="css-x3bf94"
       >
         <div
-          class="chakra-collapsible__content css-15cdg8i"
-          data-collapsible=""
-          data-part="content"
-          data-scope="collapsible"
-          data-state="closed"
-          dir="ltr"
-          hidden=""
-          id="collapsible::r0::content"
-          style="--height: 0px; --width: 0px;"
+          class="css-11old5t"
+        >
+          <img
+            alt="Telegramonic Dashboard Preview"
+            class="chakra-image css-bh4wo8"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmZcBkur3CsmMPaGhR0W13Slx0eJNohmGuC665cYbAt1uhiUXbdcjXZIhGABzcAmkr0eheScF3RS0k1fz8qmq7YP1EKEnnUR3nUcEWV9oZwQEev9xIkGmrdc-_eT0U9Qn-aN6y0MXegEDf7pgUHxVAdKXVXTN3b5dnPd_A18yCa6ndpbxFFxvdi2ze0yLV3uFML1in12s_rlK-mrIiJpfj0n0WvRfOLEnN5HfgytBqzpFQh3TJIOJvLuAem85WaRuUAkwtn6CyIwg"
+          />
+          <div
+            class="css-153y4sy"
+          />
+        </div>
+        <div
+          class="css-1j0onbf"
         >
           <div
-            class="chakra-stack css-d38cy"
-          />
+            class="css-euahea"
+          >
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path
+                d="M22 12A10 10 0 1 1 12 2v4a6 6 0 1 0 6 6z"
+              />
+              <path
+                d="m19 5.07-4.3 4.29"
+              />
+            </svg>
+          </div>
+          <p
+            class="css-12rxb4e"
+          >
+            Turbocharged Transfers
+          </p>
+          <p
+            class="css-knt9ic"
+          >
+            Utilizing Telegram's MTProto for encrypted, multi-threaded data streams that saturate your bandwidth.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-1onjgng"
+      id="features"
+    >
+      <div
+        class="css-2lfxhj"
+      >
+        <p
+          class="css-7y3roa"
+        >
+          Engineered for Performance
+        </p>
+        <p
+          class="css-19oco2h"
+        >
+          Everything you need to manage your digital life with minimal friction.
+        </p>
+      </div>
+      <div
+        class="css-m2djmm"
+      >
+        <div
+          class="css-1hbkjh5"
+        >
+          <div>
+            <div
+              class="css-1jql487"
+            >
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+              >
+                <path
+                  d="M17.5 19A3.5 3.5 0 0 0 21 15.5c0-2.79-2.54-4.5-5-4.5-.54-1.92-2.18-3.5-4.5-3.5C8 7.5 5 10 5 13.5c-1.5.5-2.5 2-2.5 3.5A3.5 3.5 0 0 0 6 20.5h11.5"
+                />
+                <path
+                  d="m9 13 2 2 4-4"
+                />
+              </svg>
+            </div>
+            <p
+              class="css-1m9slp5"
+            >
+              Infinite Storage
+            </p>
+            <p
+              class="css-knt9ic"
+            >
+              Break free from restrictive quotas. Leverage Telegram's limitless infrastructure to store documents, media, and archives without ever worrying about running out of space.
+            </p>
+          </div>
+        </div>
+        <div
+          class="css-r41mx4"
+          id="security"
+        >
+          <div
+            class="css-1bd6ui5"
+          >
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path
+                d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+              />
+              <rect
+                height="5"
+                rx="1"
+                width="6"
+                x="9"
+                y="11"
+              />
+              <path
+                d="M10 11V9a2 2 0 0 1 4 0v2"
+              />
+            </svg>
+          </div>
+          <p
+            class="css-1m9slp5"
+          >
+            Bank-Grade Security
+          </p>
+          <p
+            class="css-knt9ic"
+          >
+            Your files are protected by MTProto encryption. Only you hold the keys to your data, ensuring absolute privacy.
+          </p>
+        </div>
+        <div
+          class="css-r41mx4"
+        >
+          <div
+            class="css-soaivv"
+          >
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+            >
+              <path
+                d="M13 2 L3 14 h9 l-1 8 L21 10 h-9 Z"
+              />
+            </svg>
+          </div>
+          <p
+            class="css-1m9slp5"
+          >
+            Turbocharged Transfers
+          </p>
+          <p
+            class="css-knt9ic"
+          >
+            Experience unmatched upload and download speeds optimized across global distributed servers.
+          </p>
+        </div>
+        <div
+          class="css-l2kxss"
+        >
+          <div
+            class="css-aa37jl"
+          >
+            <div
+              class="css-w9id53"
+            >
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+              >
+                <path
+                  d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"
+                />
+                <path
+                  d="M3 3v5h5"
+                />
+                <path
+                  d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"
+                />
+                <path
+                  d="M16 16h5v5"
+                />
+              </svg>
+            </div>
+            <p
+              class="css-1m9slp5"
+            >
+              Seamless Sync across Devices
+            </p>
+            <p
+              class="css-knt9ic"
+            >
+              Access your files instantly from your desktop, tablet, or phone. Changes sync in real-time across the ecosystem.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-1fs8t8g"
+    >
+      <div
+        class="css-11nu1wd"
+      >
+        <div
+          class="css-143qpkj"
+        >
+          <div
+            class="css-44c6y4"
+          >
+            <p
+              class="css-vnufqw"
+            >
+              800M+
+            </p>
+            <p
+              class="css-18n5tmu"
+            >
+              Telegram Users
+            </p>
+          </div>
+          <div
+            class="css-44c6y4"
+          >
+            <p
+              class="css-vnufqw"
+            >
+              2GB+
+            </p>
+            <p
+              class="css-18n5tmu"
+            >
+              Single File Limit
+            </p>
+          </div>
+          <div
+            class="css-44c6y4"
+          >
+            <p
+              class="css-vnufqw"
+            >
+              0$
+            </p>
+            <p
+              class="css-18n5tmu"
+            >
+              Monthly Cost
+            </p>
+          </div>
+          <div
+            class="css-44c6y4"
+          >
+            <p
+              class="css-vnufqw"
+            >
+              99.9%
+            </p>
+            <p
+              class="css-18n5tmu"
+            >
+              Uptime Record
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="css-1onjgng"
+    >
+      <div
+        class="css-vtf7iz"
+      >
+        <div
+          class="css-1r91smo"
+        />
+        <div
+          class="css-1elnnoq"
+        />
+        <div
+          class="css-1115ety"
+        >
+          <p
+            class="css-qlxg8c"
+          >
+            Ready to upgrade your storage?
+          </p>
+          <p
+            class="css-1xrb4mn"
+          >
+            Join thousands of users who have moved their entire digital life to the cloud without paying a dime.
+          </p>
+          <button
+            class="chakra-button css-19tm9i1"
+            type="button"
+          >
+            Create Your Drive
+          </button>
         </div>
       </div>
     </div>

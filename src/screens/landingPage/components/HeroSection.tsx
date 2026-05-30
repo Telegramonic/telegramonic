@@ -2,137 +2,125 @@ import {
   VStack,
   Stack,
   Heading,
-  Input,
   Text,
-  Collapsible,
-  CloseButton,
-  Group,
-  InputAddon,
+  Button,
+  Box,
 } from '@chakra-ui/react';
-import { fuse } from '@data';
-import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Logo } from '@assets';
 
 const HeroSection = () => {
   const { t } = useTranslation();
-  const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearchText] = useState<string>('');
-  const [list, setList] = useState<any[]>([]);
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      const result = fuse.search(search);
-      setList(result.map((item) => item.item));
-    }, 500);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [search]);
-
-  useEffect(() => {
-    setIsOpen(list.length > 0);
-  }, [list.length, search]);
 
   return (
     <Stack
-      paddingTop={10}
       alignItems={'center'}
+      justifyContent={'center'}
       width={'100%'}
-      bg={'green.800'}
-      rowGap={2}
-      py={5}
-      height={'fit-content'}
+      minHeight={'80vh'}
+      bgGradient="radial(circle at 50% -20%, #e6f4ff, bg.default 70%)"
+      py={16}
+      px={6}
+      position="relative"
+      overflow="hidden"
       zIndex={1}
     >
-      <Heading
-        textAlign={'center'}
-        size={{ base: 'md', md: 'lg' }}
-        color={'white'}
-        filter={'drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.75))'}
-      >
-        {t('LandingPage.heroText')}
-      </Heading>
-      <Text
-        textAlign={'center'}
-        fontSize={{ base: 'medium', md: 'large' }}
-        color={'neutral.100'}
-      >
-        {t('LandingPage.subHeroText')}
-      </Text>
-      <Group
-        width={{ base: '80%', md: '50%' }}
-        attached
-      >
-        <Input
-          bg={'white'}
-          borderRadius={'full'}
-          paddingStart={{ base: 3, md: 5 }}
-          value={search}
-          _active={{
-            borderColor: 'green.800',
-          }}
-          _focus={{
-            borderColor: 'green.800',
-          }}
-          placeholder={t('LandingPage.searchPlaceholder')}
-          onChange={(e) => {
-            setSearchText(e.target.value);
-          }}
-          color={'green.800'}
-          borderColor={'green.800'}
-        />
-        <InputAddon
-          _hover={{
-            cursor: 'pointer',
-          }}
-          onClick={() => {
-            setSearchText('');
-          }}
-          bg={'white'}
-          borderEndRadius={'full'}
-          px={2}
+      {/* Decorative blurred blobs */}
+      <Box
+        position="absolute"
+        top="5rem"
+        left="5%"
+        width="16rem"
+        height="16rem"
+        bg="primary"
+        opacity={0.15}
+        borderRadius="full"
+        filter="blur(60px)"
+        pointerEvents="none"
+        zIndex={-1}
+      />
+      <Box
+        position="absolute"
+        bottom="5rem"
+        right="5%"
+        width="24rem"
+        height="24rem"
+        bg="success.300"
+        opacity={0.12}
+        borderRadius="full"
+        filter="blur(80px)"
+        pointerEvents="none"
+        zIndex={-1}
+      />
+
+      <VStack gap={6} maxW="4xl" mx="auto" textAlign="center" zIndex={2}>
+        {/* Telegramonic Large Logo placeholder / Icon */}
+        <Box
+          color="white"
+          width="6rem"
+          height="6rem"
+          borderRadius="2xl"
+          mb={4}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
         >
-          <CloseButton size={'md'} color={'green'} />
-        </InputAddon>
-      </Group>
-      <Collapsible.Root
-        open={isOpen}
-        style={{ width: '50%' }}
-      >
-        <Collapsible.Content>
-          <VStack
-            width={'100%'}
-            zIndex={10}
-            py={2}
-            height={'40vh'}
-            bg={'white'}
-            borderRadius={10}
-            boxShadow={'md'}
-            overflow={'auto'}
+          <Logo size="100%" />
+        </Box>
+
+        <Heading
+          size={{ base: 'xl', md: '2xl' }}
+          color={'fg'}
+          lineHeight="tight"
+          fontWeight="extrabold"
+          maxW="3xl"
+        >
+          {t('LandingPage.heroText')}
+          <br />
+          <Text as="span" color="primary">
+            {t('LandingPage.poweredBy')}
+          </Text>
+        </Heading>
+
+        <Text
+          fontSize={{ base: 'md', md: 'lg' }}
+          color={'fg.muted'}
+          maxW="2xl"
+          lineHeight="relaxed"
+        >
+          {t('LandingPage.subHeroText')}
+        </Text>
+
+        <Stack direction={{ base: 'column', sm: 'row' }} gap={4} mt={4}>
+          <Button
+            size="lg"
+            bg="primary"
+            color="white"
+            borderRadius="xl"
+            px={8}
+            py={6}
+            fontWeight="semibold"
+            shadow="md"
+            _hover={{ bg: 'primary/90' }}
           >
-            {list.map((item) => (
-              <Text
-                width={'100%'}
-                fontSize={{ base: 'medium', md: 'large' }}
-                key={item.title}
-                color={'green.800'}
-                asChild
-                paddingX={5}
-                textAlign={'left'}
-              >
-                <Link
-                  to={item.path}
-                  style={{ display: 'block', width: '100%' }}
-                >
-                  {item.title}
-                </Link>
-              </Text>
-            ))}
-          </VStack>
-        </Collapsible.Content>
-      </Collapsible.Root>
+            {t('LandingPage.getStarted')}
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            borderColor="border"
+            color="fg"
+            borderRadius="xl"
+            px={8}
+            py={6}
+            fontWeight="semibold"
+            bg="bg.panel"
+            _hover={{ bg: 'bg.hover' }}
+          >
+            {t('LandingPage.exploreFeatures')}
+          </Button>
+        </Stack>
+      </VStack>
     </Stack>
   );
 };
