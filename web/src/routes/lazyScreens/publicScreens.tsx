@@ -72,3 +72,16 @@ export const LazyDocsPage = () => (
 );
 
 // [End]-------- DocsPage screen --------
+
+// [Start]-------- ProductPage screen --------
+
+const ProductPage = lazy(() => import('@screens/ProductPage/ProductPage'));
+
+export const LazyProductPage = () => (
+  <LazyProvider>
+    <ProductPage />
+  </LazyProvider>
+);
+
+// [End]-------- ProductPage screen --------
+
