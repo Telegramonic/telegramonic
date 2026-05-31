@@ -17,7 +17,6 @@ import { appStore, selectApiCredentials, useShallow } from '@appStore';
 import { Icon, IconType } from '@assets';
 import { apiClient, FileMetadata, DriveStats } from '@services';
 
-
 const formatSize = (bytes: number): string => {
   if (bytes === 0) return '0 Bytes';
   const k = 1024;
@@ -83,7 +82,7 @@ const Dashboard = () => {
     };
 
     fetchDashboardData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchQuery]);
 
   const handleDisconnect = async () => {
@@ -174,7 +173,8 @@ const Dashboard = () => {
                 {stats ? `${stats.file_count} Files` : '0 Files'}
               </Heading>
               <Text fontSize="2xs" color="fg.muted">
-                Direct-to-API secure chunks (Folders: {stats?.folder_count || 0})
+                Direct-to-API secure chunks (Folders: {stats?.folder_count || 0}
+                )
               </Text>
             </VStack>
           </Box>
@@ -306,7 +306,8 @@ const Dashboard = () => {
                           {file.name}
                         </Text>
                         <Text fontSize="10px" color="fg.muted">
-                          {formatSize(file.size)} • {formatTime(file.created_at)}
+                          {formatSize(file.size)} •{' '}
+                          {formatTime(file.created_at)}
                         </Text>
                       </VStack>
                     </HStack>

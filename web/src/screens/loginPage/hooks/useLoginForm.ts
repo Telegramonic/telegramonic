@@ -64,7 +64,7 @@ export const useLoginForm = () => {
     const phone = form.getFieldValue('phone');
     const apiId = form.getFieldValue('apiId');
     const apiHash = form.getFieldValue('apiHash');
-    
+
     const newErrors: Record<string, string> = {};
     if (!phone) newErrors.phone = t('LoginPage.phone.errorEmpty');
 

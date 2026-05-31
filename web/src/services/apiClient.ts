@@ -1,5 +1,12 @@
 import { TELEGRAM_API_ROUTES } from './const';
-import { AuthState, AuthResult, FileMetadata, FolderMetadata, DriveStats, Drive } from './types';
+import {
+  AuthState,
+  AuthResult,
+  FileMetadata,
+  FolderMetadata,
+  DriveStats,
+  Drive,
+} from './types';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:8080';
 
@@ -15,7 +22,9 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
-    throw new Error(errorBody.error || `HTTP error! status: ${response.status}`);
+    throw new Error(
+      errorBody.error || `HTTP error! status: ${response.status}`,
+    );
   }
 
   return response.json();
@@ -24,8 +33,8 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 export const apiClient = {
   // Auth API
   getAuthState: () => request<AuthState>('/auth/state'),
-  
-  sendCode: (phone: string, apiId: string, apiHash: string) => 
+
+  sendCode: (phone: string, apiId: string, apiHash: string) =>
     request<AuthResult>(TELEGRAM_API_ROUTES.AUTH.SEND_CODE, {
       method: 'POST',
       body: JSON.stringify({ phone, api_id: apiId, api_hash: apiHash }),
@@ -50,20 +59,25 @@ export const apiClient = {
 
   // Drive API
   getStats: () => request<DriveStats>(TELEGRAM_API_ROUTES.DRIVE.GET_STATS),
-  
+
   getDrives: () => request<Drive[]>(TELEGRAM_API_ROUTES.DRIVE.GET_DRIVES),
 
   getFolders: (parentId?: number) => {
     const query = parentId ? `?parent_id=${parentId}` : '';
-    return request<FolderMetadata[]>(`${TELEGRAM_API_ROUTES.DRIVE.GET_FOLDERS}${query}`);
+    return request<FolderMetadata[]>(
+      `${TELEGRAM_API_ROUTES.DRIVE.GET_FOLDERS}${query}`,
+    );
   },
 
   getFiles: (folderId?: number, q?: string) => {
     const params = new URLSearchParams();
-    if (folderId !== undefined && folderId !== null) params.append('folder_id', folderId.toString());
+    if (folderId !== undefined && folderId !== null)
+      params.append('folder_id', folderId.toString());
     if (q) params.append('q', q);
     const query = params.toString() ? `?${params.toString()}` : '';
-    return request<FileMetadata[]>(`${TELEGRAM_API_ROUTES.DRIVE.GET_FILES}${query}`);
+    return request<FileMetadata[]>(
+      `${TELEGRAM_API_ROUTES.DRIVE.GET_FILES}${query}`,
+    );
   },
 
   createFolder: (name: string, parentId?: number) =>

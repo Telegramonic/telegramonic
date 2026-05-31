@@ -19,11 +19,25 @@ const mockGetStats = jest.fn().mockResolvedValue({
 
 const mockGetFiles = jest.fn().mockImplementation((folderId, q) => {
   const allFiles = [
-    { id: 1, name: 'Video_Tutorial.mp4', size: 1024*1024*10, created_at: new Date().toISOString(), icon_type: 'video' },
-    { id: 2, name: 'Invoice_May.pdf', size: 245*1024, created_at: new Date().toISOString(), icon_type: 'file' },
+    {
+      id: 1,
+      name: 'Video_Tutorial.mp4',
+      size: 1024 * 1024 * 10,
+      created_at: new Date().toISOString(),
+      icon_type: 'video',
+    },
+    {
+      id: 2,
+      name: 'Invoice_May.pdf',
+      size: 245 * 1024,
+      created_at: new Date().toISOString(),
+      icon_type: 'file',
+    },
   ];
   if (q) {
-    return Promise.resolve(allFiles.filter(f => f.name.toLowerCase().includes(q.toLowerCase())));
+    return Promise.resolve(
+      allFiles.filter((f) => f.name.toLowerCase().includes(q.toLowerCase())),
+    );
   }
   return Promise.resolve(allFiles);
 });
@@ -50,7 +64,9 @@ describe('Dashboard', () => {
   it('should render the dashboard layout with mock file statistics', async () => {
     renderWithRouter(<Dashboard />);
 
-    expect(await screen.findByText('Telegram Drive Dashboard')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Telegram Drive Dashboard'),
+    ).toBeInTheDocument();
     expect(
       screen.getByText(/MTProto active connection: API ID 123456/),
     ).toBeInTheDocument();
@@ -68,13 +84,15 @@ describe('Dashboard', () => {
   it('should filter mock files by search query', async () => {
     renderWithRouter(<Dashboard />);
 
-    expect(await screen.findByText('Telegram Drive Dashboard')).toBeInTheDocument();
-    
+    expect(
+      await screen.findByText('Telegram Drive Dashboard'),
+    ).toBeInTheDocument();
+
     // Wait for initial files to load
     expect(await screen.findByText('Video_Tutorial.mp4')).toBeInTheDocument();
 
     const searchInput = screen.getByPlaceholderText('Search files...');
-    
+
     // Change search value
     fireEvent.change(searchInput, { target: { value: 'Invoice' } });
 
@@ -86,8 +104,10 @@ describe('Dashboard', () => {
     mockGetFiles.mockResolvedValueOnce([]); // Simulate empty response
     renderWithRouter(<Dashboard />);
 
-    expect(await screen.findByText('Telegram Drive Dashboard')).toBeInTheDocument();
-    
+    expect(
+      await screen.findByText('Telegram Drive Dashboard'),
+    ).toBeInTheDocument();
+
     const searchInput = screen.getByPlaceholderText('Search files...');
     fireEvent.change(searchInput, { target: { value: 'nonexistentfile' } });
 
@@ -97,7 +117,9 @@ describe('Dashboard', () => {
   it('should clear credentials and navigate to login on disconnect button click', async () => {
     renderWithRouter(<Dashboard />);
 
-    expect(await screen.findByText('Telegram Drive Dashboard')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Telegram Drive Dashboard'),
+    ).toBeInTheDocument();
     const disconnectButton = screen.getByRole('button', {
       name: 'Disconnect Drive',
     });
