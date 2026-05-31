@@ -10,5 +10,10 @@ export { default as ZipIcon } from './icons/ZipIcon';
 export { default as CheckIcon } from './icons/CheckIcon';
 export { default as CloudUploadIcon } from './icons/CloudUploadIcon';
 export { default as MenuIcon } from './icons/MenuIcon';
+export { default as AppleLogo } from './icons/AppleLogo';
+export { default as WindowsLogo } from './icons/WindowsLogo';
+export { default as LinuxLogo } from './icons/LinuxLogo';
+export { default as AndroidLogo } from './icons/AndroidLogo';
 export * from './types';
 export * from './iconUtils';
+
