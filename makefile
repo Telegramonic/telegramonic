@@ -1,8 +1,8 @@
 .PHONY: coverage
 coverage:
 	echo "Running coverage tests"
-	yarn test:cov
-	open -a "Google Chrome" coverage/lcov-report/index.html
+	yarn workspace telegramonic-web test:cov
+	open -a "Google Chrome" web/coverage/lcov-report/index.html
 
 .PHONY: branch-clean
 branch-clean:

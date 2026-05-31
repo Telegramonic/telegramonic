@@ -1,0 +1,10 @@
+{
+  "name": "telegramonic-server",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "cargo run",
+    "build": "cargo build",
+    "test": "cargo test"
+  }
+}

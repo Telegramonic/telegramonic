@@ -1,0 +1,189 @@
+# CLAUDE.md
+
+This file provides a high-level entry point for Claude-based tools working in the **Telegramonic** repository.
+
+## Overview
+
+This is a **React Web Application** (using Craco for configuration) and **Axum Rust Server** representing the Telegramonic cloud storage solution.
+
+- **Web Framework**: React 18.3+
+- **Styling**: Chakra UI (Inter typography, brand colors) and Tailwind CSS
+- **State Management**: Zustand, React Query
+- **Backend**: Axum with Tokio runtime and Grammers MTProto client
+
+## 📘 Primary Documentation
+
+For comprehensive technical documentation, architectural decisions, file conventions, and agent-specific skills, always refer to the Agent Guide section:
+
+👉 **[Agent Guide](#AGENT)**
+
+## 💻 Code Style Guidelines
+
+- **React Components**: Avoid using `React.FC` or `React.FunctionComponent` to define functional components. Instead, type props directly in the function arguments: `const MyComponent = ({ prop1 }: Props) => { ... }`.
+
+## Essential Commands
+
+These are the most common commands for development:
+
+```bash
+yarn install                   # Install all dependencies across workspaces
+
+# Web App Workspace
+yarn web:start                 # Start web local development server
+yarn web:dev                   # Start web local development server (alias)
+yarn web:build                 # Create production build for web
+yarn web:test                  # Run Jest tests for web
+yarn workspace telegramonic-web run lint:fix # Run ESLint and fix web issues
+
+# Common UI & Logic Workspace
+yarn common:test               # Run Jest tests specifically for common workspace
+
+# Rust Server Workspace
+yarn server:start              # Run the Rust server (cargo run)
+yarn server:build              # Build the Rust server (cargo build)
+yarn server:test               # Test the Rust server (cargo test)
+
+# Desktop App Workspace
+yarn desktop:start             # Run the Electron desktop app
+yarn desktop:build             # Build placeholder for desktop
+
+make commit                    # Conventional commit helper
+```
+
+## Antigravity Skills
+
+Advanced agent instructions are modularized in the `.claude/skills/` directory.
+
+- [Commit Workflow](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/commit/SKILL.md)
+- [Jira Management](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/jira/SKILL.md)
+- [Pull Request Skill](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/pr/SKILL.md)
+- [Frontend Design](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/frontend-design/SKILL.md)
+- [Web Development](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/web/SKILL.md)
+
+## 🌐 Localization Guidelines
+
+All user-facing copy strings (headings, paragraphs, labels, button texts, tooltips, placeholders, etc.) MUST be defined in the localization JSON files located in `web/src/localization/locales/` (e.g. `main.json`) and retrieved dynamically in code using the `useTranslation` hook (`t('key')`). Never hardcode text strings directly in component files.
+
+## 🧪 Testing Guidelines
+
+Always add or update the unit tests (and their snapshots) to align with the requested feature implementations or changes. Run the test suite using `yarn web:test` or `yarn web:test -u` to verify that all changes are fully covered, correct, and pass successfully.
+
+---
+
+# AGENT
+
+This section serves as the primary source of truth for AI agents working on the **Telegramonic** project. It provides architectural context, directory structures, and established development patterns.
+
+## 1. Project Overview
+
+| Core Stack           | Technology                                        |
+| :------------------- | :------------------------------------------------ |
+| **Framework (Web)**  | [React 18.3+](https://react.dev/)                 |
+| **UI Library**       | [Chakra UI v3](https://chakra-ui.com/)            |
+| **State Management** | [Zustand v5](https://zustand.docs.pmnd.rs/)       |
+| **Routing**          | [React Router v7](https://reactrouter.com/)       |
+| **Styling**          | Vanilla CSS + Chakra UI v3 (Panda CSS)            |
+| **Language**         | [TypeScript 5.x](https://www.typescriptlang.org/) & [Rust](https://www.rust-lang.org/) |
+| **Testing**          | Jest + React Testing Library (v16+) + Cypress     |
+| **Backend (Server)** | [Axum v0.7](https://github.com/tokio-rs/axum) (Tokio Runtime) |
+| **Telegram MTProto** | [Grammers v0.7](https://github.com/Lonami/grammers) |
+| **Package Manager**  | [Yarn 4 (Berry)](https://yarnpkg.com/)            |
+| **Aesthetic**        | Utilitarian Minimalism / Terminal-Luxury          |
+| **Brand Colors**     | Charcoal (#15111e) & Violet (#8b5cf6)             |
+
+## 2. Design & Product Identity
+
+### Visual Language
+
+- **Theme**: Dark mode by default. High contrast with subtle grain textures and glassmorphic overlays.
+- **Typography**: Geist (Sans-serif) for primary UI, Geist Mono for technical data and code.
+- **Components**: Crisp border-based separation and interactive micro-animations.
+
+### Resource Taxonomy
+
+The platform organizes resources into 13 primary verticals:
+
+1. **AI & ML** | 2. **Privacy & Adblocking** | 3. **Streaming & Media** | 4. **Gaming & Emulation** | 5. **Education** | 6. **OS Specific (Linux/macOS/Mobile)** | 7. **Miscellaneous**.
+
+## 3. Directory Structure
+
+```text
+/
+├── .claude/                # Agent skills and settings
+├── .github/                # CI/CD Workflows (Main, Deploy, Release)
+├── common/                 # Shared UI components and assets (Yarn Workspace)
+│   ├── src/
+│   │   ├── assets/         # Reusable SVG icons & logo
+│   │   ├── components/     # Reusable UI components & theme
+│   │   ├── localization/   # i18next translation json files
+│   │   └── testUtils/      # Common testing wrappers
+│   └── package.json
+├── web/                    # React frontend application (Yarn Workspace)
+│   ├── public/             # Static assets and index.html
+│   ├── src/
+│   │   ├── data/           # Static Markdown data files
+│   │   ├── providers/      # Context Providers
+│   │   ├── routes/         # Route definitions and lazy screens
+│   │   ├── screens/        # Page-level screen components
+│   │   ├── services/       # apiClient & endpoints logic
+│   │   ├── store/          # Zustand state stores
+│   │   ├── App.tsx         # Main application entry point
+│   │   └── index.tsx       # React DOM bootstrap
+│   └── package.json
+├── server/                 # Axum Rust backend (Yarn Workspace / Cargo)
+│   ├── src/                # Rust server source code
+│   └── Cargo.toml
+├── desktop/                # Electron desktop application boilerplate
+│   └── package.json
+├── scripts/                # Task-specific helper scripts
+├── package.json            # Root workspace configuration
+└── .yarnrc.yml             # Yarn 4 configuration
+```
+
+## 4. Development Patterns & Rules
+
+### State Management (Zustand v5)
+
+- **Selectors**: Always use `useShallow` when selecting multiple state variables to prevent unnecessary re-renders.
+- **Testing**: State updates within tests MUST be wrapped in `act()` from `@testing-library/react`.
+- **Resetting**: Stores should implement a `reset` pattern for test isolation (see `web/__mocks__/zustand.ts`).
+
+### UI & Styling (Chakra v3)
+
+- **Compound Components**: Use the standard v3 pattern (e.g., `<Dialog.Root>`, `<Menu.Content>`).
+- **Icons**: Use inline SVGs or define local custom SVG components directly within the files where they are needed.
+- **Theme**: Tokens are managed in `web/src/components/Theme/theme.ts`. Avoid hardcoded colors.
+
+### Routing (React Router v7)
+
+- Use standard `<Link>` and `useNavigate`.
+- Note: `TextEncoder` and `TextDecoder` polyfills in `web/jest.js` are required for RRv7 compatibility in JSDOM environments.
+
+### TypeScript
+
+- All files use `.ts` or `.tsx`.
+- Strictly adhere to path aliases defined in `web/tsconfig.path.json` (e.g., `@screens`, `@components`, `@store`).
+
+### Rust Backend (Axum)
+
+- **Architecture**: Modular setup divided into HTTP `handlers/`, business logic `services/` (mock and Grammers MTProto clients), and environment `config.rs`.
+- **Handlers**: Write Axum handlers that return JSON payloads (`Json<T>`) or explicit statuses.
+- **Testing**: Write unit/integration tests and run using `cargo test` (or `yarn server:test` at root). Use `services/mock.rs` to mock Telegram connections.
+
+## 5. Testing & Verification
+
+- **Unit/Integration**: `yarn web:test`
+  - Snapshots are located in `__snapshots__` directories adjacent to tests.
+  - RTL `renderHook` is natively imported from `@testing-library/react`.
+- **E2E**: `yarn workspace telegramonic-web cy:open`
+- **Build**: `yarn web:build` (Always verify build compatibility after dependency updates).
+
+## 6. Agent Workflow
+
+1.  **Understand**: Review this file and `.claude/CLAUDE.md`.
+2.  **Verify**: Always run `yarn workspace telegramonic-web lint` and `yarn web:test` before declaring a task complete.
+3.  **Governance**: Follow Conventional Commits and link all changes to the **Telegramonic** Jira project using `prefix/TEL-XXX` branch naming.
+
+---
+
+© 2026 Telegramonic | Confidential and Proprietary

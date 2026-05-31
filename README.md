@@ -39,36 +39,53 @@ yarn install
 ### Development
 
 ```bash
-yarn start
+# Run web React application
+yarn web:start
+
+# Run Rust server backend
+yarn server:start
+
+# Run Electron desktop app
+yarn desktop:start
 ```
 
 ### Build
 
 ```bash
-yarn build
+# Build web React application
+yarn web:build
+
+# Build Rust server backend
+yarn server:build
 ```
 
 ### Testing
 
 ```bash
-# Run all tests
-yarn test --no-watchman
+# Run Jest tests for web
+yarn web:test
 
-# Run tests with coverage
-yarn test:cov
+# Run Jest tests specifically for common workspace
+yarn common:test
+
+# Run Cargo tests for Rust server
+yarn server:test
+
+# Run tests with coverage for web
+yarn workspace telegramonic-web test:cov
 
 # Open Cypress for E2E testing
-yarn cy:open
+yarn workspace telegramonic-web cy:open
 ```
 
 ### Linting & Formatting
 
 ```bash
-# Run ESLint
-yarn lint
+# Run ESLint for web
+yarn workspace telegramonic-web lint
 
 # Format code with Prettier
-yarn healthier
+yarn workspace telegramonic-web run prettier:write
 ```
 
 ## Infrastructure
