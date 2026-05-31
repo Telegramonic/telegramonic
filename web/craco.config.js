@@ -6,8 +6,8 @@ module.exports = {
       '@assets': path.resolve(__dirname, '../common/src/assets'),
       '@assets/*': path.resolve(__dirname, '../common/src/assets/*'),
       '@components': path.resolve(__dirname, '../common/src/components'),
-      '@data': path.resolve(__dirname, './src/data'),
-      '@data/*': path.resolve(__dirname, './src/data/*'),
+      '@data': path.resolve(__dirname, '../docs'),
+      '@data/*': path.resolve(__dirname, '../docs/*'),
       '@providers': path.resolve(__dirname, './src/providers'),
       '@localization': path.resolve(__dirname, '../common/src/localization'),
       '@routes': path.resolve(__dirname, './src/routes'),
@@ -22,7 +22,8 @@ module.exports = {
       // Remove ModuleScopePlugin to allow importing from common/ workspace
       if (webpackConfig.resolve && webpackConfig.resolve.plugins) {
         const scopePluginIndex = webpackConfig.resolve.plugins.findIndex(
-          ({ constructor }) => constructor && constructor.name === 'ModuleScopePlugin'
+          ({ constructor }) =>
+            constructor && constructor.name === 'ModuleScopePlugin',
         );
         if (scopePluginIndex !== -1) {
           webpackConfig.resolve.plugins.splice(scopePluginIndex, 1);
@@ -44,15 +45,13 @@ module.exports = {
       // Find all babel-loaders and redirect their cache directories
       const babelLoaders = webpackConfig.module.rules
         .flatMap((rule) => (rule.oneOf ? rule.oneOf : [rule]))
-        .filter(
-          (rule) => rule.loader && rule.loader.includes('babel-loader'),
-        );
+        .filter((rule) => rule.loader && rule.loader.includes('babel-loader'));
 
       babelLoaders.forEach((loader, index) => {
         if (loader.options) {
           loader.options.cacheDirectory = path.resolve(
             __dirname,
-            `../node_modules/.cache/babel-loader-${index}`
+            `../node_modules/.cache/babel-loader-${index}`,
           );
         }
       });
@@ -63,36 +62,50 @@ module.exports = {
         const include = Array.isArray(mainBabelLoader.include)
           ? mainBabelLoader.include
           : [mainBabelLoader.include];
-        mainBabelLoader.include = include.concat([path.resolve(__dirname, '../common')]);
+        mainBabelLoader.include = include.concat([
+          path.resolve(__dirname, '../common'),
+        ]);
       }
 
       // Redirect Webpack persistent cache
       if (webpackConfig.cache && webpackConfig.cache.type === 'filesystem') {
-        webpackConfig.cache.cacheDirectory = path.resolve(__dirname, '../node_modules/.cache');
+        webpackConfig.cache.cacheDirectory = path.resolve(
+          __dirname,
+          '../node_modules/.cache',
+        );
       }
 
       // Redirect ForkTsCheckerWebpackPlugin cache (tsconfig.tsbuildinfo)
       const forkTsPlugin = webpackConfig.plugins.find(
-        (plugin) => plugin.constructor && plugin.constructor.name === 'ForkTsCheckerWebpackPlugin'
+        (plugin) =>
+          plugin.constructor &&
+          plugin.constructor.name === 'ForkTsCheckerWebpackPlugin',
       );
-      if (forkTsPlugin && forkTsPlugin.options && forkTsPlugin.options.typescript) {
+      if (
+        forkTsPlugin &&
+        forkTsPlugin.options &&
+        forkTsPlugin.options.typescript
+      ) {
         const ts = forkTsPlugin.options.typescript;
         ts.configOverwrite = ts.configOverwrite || {};
-        ts.configOverwrite.compilerOptions = ts.configOverwrite.compilerOptions || {};
+        ts.configOverwrite.compilerOptions =
+          ts.configOverwrite.compilerOptions || {};
         ts.configOverwrite.compilerOptions.tsBuildInfoFile = path.resolve(
           __dirname,
-          '../node_modules/.cache/tsconfig.tsbuildinfo'
+          '../node_modules/.cache/tsconfig.tsbuildinfo',
         );
       }
 
       // Redirect ESLintWebpackPlugin cache (.eslintcache)
       const eslintPlugin = webpackConfig.plugins.find(
-        (plugin) => plugin.constructor && plugin.constructor.name === 'ESLintWebpackPlugin'
+        (plugin) =>
+          plugin.constructor &&
+          plugin.constructor.name === 'ESLintWebpackPlugin',
       );
       if (eslintPlugin && eslintPlugin.options) {
         eslintPlugin.options.cacheLocation = path.resolve(
           __dirname,
-          '../node_modules/.cache/.eslintcache'
+          '../node_modules/.cache/.eslintcache',
         );
       }
 
