@@ -1,0 +1,13 @@
+{
+  "name": "telegramonic-desktop",
+  "version": "0.0.1",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "echo 'Desktop build placeholder'"
+  },
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}
