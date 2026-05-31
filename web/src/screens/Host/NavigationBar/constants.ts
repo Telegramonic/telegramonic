@@ -5,11 +5,11 @@ export const NAVIGATION_LINKS: {
   link: string;
 }[] = [
   {
-    name: 'Features',
-    link: '/features',
+    name: 'Docs',
+    link: '/docs',
   },
   {
-    name: 'Security',
-    link: '/security',
+    name: 'Product',
+    link: '/product',
   },
 ];

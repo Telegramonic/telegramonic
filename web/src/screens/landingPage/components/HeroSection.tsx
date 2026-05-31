@@ -277,7 +277,11 @@ const HeroSection = () => {
       justifyContent="center"
       width="100%"
       minHeight={{ base: 'auto', md: '90vh' }}
-      bgGradient="radial(circle at 50% -20%, #e6f4ff, bg.default 80%)"
+      bgGradient={{
+        base: 'radial(circle at 50% -20%, #e6f4ff, bg.default 80%)',
+        _dark:
+          'radial(circle at 50% -20%, rgba(139, 92, 246, 0.15), bg.default 80%)',
+      }}
       py={{ base: 12, md: 24 }}
       px={{ base: 6, md: 16 }}
       position="relative"
