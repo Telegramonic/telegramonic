@@ -133,9 +133,11 @@
       "hashLabel": "API Hash",
       "hashPlaceholder": "e.g., d58a9e...",
       "hashError": "API Hash is required.",
-      "button": "Configure & Connect"
+      "button": "Continue"
     },
     "loading": "Establishing connection...",
-    "success": "Connected successfully! Redirecting..."
+    "success": "Connected successfully! Redirecting...",
+    "successConfigured": "Successfully configured Telegramonic.",
+    "redirecting": "Redirecting to dashboard..."
   }
 }
