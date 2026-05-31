@@ -1,23 +1,7 @@
 {
-  "extends": "./tsconfig.path.json",
-  "compilerOptions": {
-    "target": "es2022",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx",
-    "ignoreDeprecations": "6.0",
-    "rootDir": "."
-  },
-  "include": ["src", "cypress", "cypress.config.ts", "__mocks__"]
+  "files": [],
+  "references": [
+    { "path": "./web/tsconfig.json" },
+    { "path": "./common/tsconfig.json" },
+  ]
 }
