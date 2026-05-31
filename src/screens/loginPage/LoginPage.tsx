@@ -38,11 +38,10 @@ const LoginPage = () => {
     form,
     step,
     isLoading,
-    isSuccess,
     errors,
+    handleCredentialsSubmit,
     handlePhoneSubmit,
     handleCodeSubmit,
-    handleFinalSubmit,
     clearFieldError,
     dialCode,
     setDialCode,
@@ -103,40 +102,9 @@ const LoginPage = () => {
             </Center>
           )}
 
-          {/* Success Overlay */}
-          {isSuccess && (
-            <Center
-              position="absolute"
-              inset={0}
-              bg="bg.panel/90"
-              backdropFilter="blur(8px)"
-              zIndex={10}
-            >
-              <VStack gap={3} textAlign="center" p={6}>
-                <Box
-                  w={12}
-                  h={12}
-                  borderRadius="full"
-                  bg="success.100"
-                  color="success.400"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  fontSize="2xl"
-                  fontWeight="bold"
-                >
-                  ✓
-                </Box>
-                <Heading size="md" color="fg" fontWeight="bold">
-                  {t('LoginPage.success')}
-                </Heading>
-              </VStack>
-            </Center>
-          )}
-
           {/* Step Progress Stepper */}
           <HStack gap={4} justify="center" mb={8}>
-            {[1, 2, 3].map((s) => (
+            {[1, 2, 3, 4].map((s) => (
               <HStack key={s} gap={2} alignItems="center">
                 <Center
                   w={7}
@@ -160,7 +128,7 @@ const LoginPage = () => {
                 >
                   {step > s ? '✓' : s}
                 </Center>
-                {s < 3 && (
+                {s < 4 && (
                   <Box
                     w={10}
                     h="2px"
@@ -177,6 +145,122 @@ const LoginPage = () => {
             {step === 1 && (
               <motion.div
                 key="step1"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+              >
+                <form onSubmit={handleCredentialsSubmit}>
+                  <VStack gap={5} align="stretch">
+                    <VStack align="start" gap={1}>
+                      <Heading size="xs" fontWeight="bold" color="fg">
+                        {t('LoginPage.api.title')}
+                      </Heading>
+                      <Text fontSize="11px" color="fg.muted">
+                        {t('LoginPage.api.description')}
+                      </Text>
+                    </VStack>
+
+                    <form.Field
+                      name="apiId"
+                      children={(field) => (
+                        <VStack align="stretch" gap={1.5}>
+                          <Text
+                            fontSize="xs"
+                            fontWeight="bold"
+                            color="fg.muted"
+                          >
+                            {t('LoginPage.api.idLabel')}
+                          </Text>
+                          <Input
+                            placeholder={t('LoginPage.api.idPlaceholder')}
+                            value={field.state.value}
+                            onChange={(e) => {
+                              field.handleChange(e.target.value);
+                              clearFieldError('apiId');
+                            }}
+                            onBlur={field.handleBlur}
+                            border="1px solid"
+                            borderColor="border"
+                            borderRadius="xl"
+                            size="lg"
+                            px={4}
+                            _focus={{
+                              borderColor: 'primary',
+                              ring: '1px',
+                              ringColor: 'primary',
+                            }}
+                            _placeholder={{ fontSize: 'xs' }}
+                          />
+                          {errors.apiId && (
+                            <Text fontSize="2xs" color="error.400" mt={0.5}>
+                              {errors.apiId}
+                            </Text>
+                          )}
+                        </VStack>
+                      )}
+                    />
+
+                    <form.Field
+                      name="apiHash"
+                      children={(field) => (
+                        <VStack align="stretch" gap={1.5}>
+                          <Text
+                            fontSize="xs"
+                            fontWeight="bold"
+                            color="fg.muted"
+                          >
+                            {t('LoginPage.api.hashLabel')}
+                          </Text>
+                          <Input
+                            placeholder={t('LoginPage.api.hashPlaceholder')}
+                            value={field.state.value}
+                            onChange={(e) => {
+                              field.handleChange(e.target.value);
+                              clearFieldError('apiHash');
+                            }}
+                            onBlur={field.handleBlur}
+                            border="1px solid"
+                            borderColor="border"
+                            borderRadius="xl"
+                            size="lg"
+                            px={4}
+                            _focus={{
+                              borderColor: 'primary',
+                              ring: '1px',
+                              ringColor: 'primary',
+                            }}
+                            _placeholder={{ fontSize: 'xs' }}
+                          />
+                          {errors.apiHash && (
+                            <Text fontSize="2xs" color="error.400" mt={0.5}>
+                              {errors.apiHash}
+                            </Text>
+                          )}
+                        </VStack>
+                      )}
+                    />
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      bg="primary"
+                      color="white"
+                      borderRadius="xl"
+                      fontWeight="bold"
+                      mt={2}
+                      _hover={{ bg: 'primary/90' }}
+                    >
+                      {t('LoginPage.api.button')}
+                    </Button>
+                  </VStack>
+                </form>
+              </motion.div>
+            )}
+
+            {step === 2 && (
+              <motion.div
+                key="step2"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
@@ -330,9 +414,9 @@ const LoginPage = () => {
               </motion.div>
             )}
 
-            {step === 2 && (
+            {step === 3 && (
               <motion.div
-                key="step2"
+                key="step3"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
@@ -405,117 +489,36 @@ const LoginPage = () => {
               </motion.div>
             )}
 
-            {step === 3 && (
+            {step === 4 && (
               <motion.div
-                key="step3"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
+                key="step4"
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
               >
-                <form onSubmit={handleFinalSubmit}>
-                  <VStack gap={5} align="stretch">
-                    <VStack align="start" gap={1}>
-                      <Heading size="xs" fontWeight="bold" color="fg">
-                        {t('LoginPage.api.title')}
-                      </Heading>
-                      <Text fontSize="11px" color="fg.muted">
-                        {t('LoginPage.api.description')}
-                      </Text>
-                    </VStack>
-
-                    <form.Field
-                      name="apiId"
-                      children={(field) => (
-                        <VStack align="stretch" gap={1.5}>
-                          <Text
-                            fontSize="xs"
-                            fontWeight="bold"
-                            color="fg.muted"
-                          >
-                            {t('LoginPage.api.idLabel')}
-                          </Text>
-                          <Input
-                            placeholder={t('LoginPage.api.idPlaceholder')}
-                            value={field.state.value}
-                            onChange={(e) => {
-                              field.handleChange(e.target.value);
-                              clearFieldError('apiId');
-                            }}
-                            onBlur={field.handleBlur}
-                            border="1px solid"
-                            borderColor="border"
-                            borderRadius="xl"
-                            size="lg"
-                            px={4}
-                            _focus={{
-                              borderColor: 'primary',
-                              ring: '1px',
-                              ringColor: 'primary',
-                            }}
-                          />
-                          {errors.apiId && (
-                            <Text fontSize="2xs" color="error.400" mt={0.5}>
-                              {errors.apiId}
-                            </Text>
-                          )}
-                        </VStack>
-                      )}
-                    />
-
-                    <form.Field
-                      name="apiHash"
-                      children={(field) => (
-                        <VStack align="stretch" gap={1.5}>
-                          <Text
-                            fontSize="xs"
-                            fontWeight="bold"
-                            color="fg.muted"
-                          >
-                            {t('LoginPage.api.hashLabel')}
-                          </Text>
-                          <Input
-                            placeholder={t('LoginPage.api.hashPlaceholder')}
-                            value={field.state.value}
-                            onChange={(e) => {
-                              field.handleChange(e.target.value);
-                              clearFieldError('apiHash');
-                            }}
-                            onBlur={field.handleBlur}
-                            border="1px solid"
-                            borderColor="border"
-                            borderRadius="xl"
-                            size="lg"
-                            px={4}
-                            _focus={{
-                              borderColor: 'primary',
-                              ring: '1px',
-                              ringColor: 'primary',
-                            }}
-                          />
-                          {errors.apiHash && (
-                            <Text fontSize="2xs" color="error.400" mt={0.5}>
-                              {errors.apiHash}
-                            </Text>
-                          )}
-                        </VStack>
-                      )}
-                    />
-
-                    <Button
-                      type="submit"
-                      size="lg"
-                      bg="primary"
-                      color="white"
-                      borderRadius="xl"
-                      fontWeight="bold"
-                      mt={2}
-                      _hover={{ bg: 'primary/90' }}
-                    >
-                      {t('LoginPage.api.button')}
-                    </Button>
-                  </VStack>
-                </form>
+                <VStack gap={4} textAlign="center" py={6}>
+                  <Box
+                    w={12}
+                    h={12}
+                    borderRadius="full"
+                    bg="success.100"
+                    color="success.400"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    fontSize="2xl"
+                    fontWeight="bold"
+                  >
+                    ✓
+                  </Box>
+                  <Heading size="md" color="fg" fontWeight="bold">
+                    {t('LoginPage.successConfigured')}
+                  </Heading>
+                  <Text fontSize="sm" color="fg.muted">
+                    {t('LoginPage.redirecting')}
+                  </Text>
+                </VStack>
               </motion.div>
             )}
           </AnimatePresence>

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -10,70 +11,47 @@ import {
   HStack,
   SimpleGrid,
   Separator,
+  Spinner,
 } from '@chakra-ui/react';
-import { useNavigate } from 'react-router-dom';
 import { appStore, selectApiCredentials, useShallow } from '@appStore';
 import { Icon, IconType } from '@assets';
+import { apiClient, FileMetadata, DriveStats } from '@services';
 
-interface MockFile {
-  id: number;
-  name: string;
-  size: string;
-  fileExt: string;
-  createdAt: string;
-  iconType: IconType;
-}
 
-const MOCK_FILES: MockFile[] = [
-  {
-    id: 1,
-    name: 'Video_Tutorial.mp4',
-    size: '1.2 GB',
-    fileExt: 'mp4',
-    createdAt: '2 hours ago',
-    iconType: IconType.VIDEO,
-  },
-  {
-    id: 2,
-    name: 'Invoice_May.pdf',
-    size: '245 KB',
-    fileExt: 'pdf',
-    createdAt: '5 hours ago',
-    iconType: IconType.FILE,
-  },
-  {
-    id: 3,
-    name: 'Family_Photos.zip',
-    size: '450 MB',
-    fileExt: 'zip',
-    createdAt: 'Yesterday',
-    iconType: IconType.ZIP,
-  },
-  {
-    id: 4,
-    name: 'Design_Assets.fig',
-    size: '89 MB',
-    fileExt: 'fig',
-    createdAt: '2 days ago',
-    iconType: IconType.FILE,
-  },
-  {
-    id: 5,
-    name: 'Budget_2026.xlsx',
-    size: '1.4 MB',
-    fileExt: 'xlsx',
-    createdAt: '3 days ago',
-    iconType: IconType.FILE,
-  },
-  {
-    id: 6,
-    name: 'Presentation_Pitch.pptx',
-    size: '12 MB',
-    fileExt: 'pptx',
-    createdAt: '5 days ago',
-    iconType: IconType.FILE,
-  },
-];
+const formatSize = (bytes: number): string => {
+  if (bytes === 0) return '0 Bytes';
+  const k = 1024;
+  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+};
+
+const formatTime = (isoString: string): string => {
+  try {
+    const date = new Date(isoString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 1) return 'just now';
+    if (diffMins < 60) return `${diffMins} mins ago`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours} hours ago`;
+    return date.toLocaleDateString();
+  } catch {
+    return 'recently';
+  }
+};
+
+const getIconType = (backendType: string): IconType => {
+  switch (backendType) {
+    case 'video':
+      return IconType.VIDEO;
+    case 'archive':
+      return IconType.ZIP;
+    default:
+      return IconType.FILE;
+  }
+};
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -81,15 +59,41 @@ const Dashboard = () => {
     useShallow(selectApiCredentials),
   );
   const [searchQuery, setSearchQuery] = useState('');
+  const [files, setFiles] = useState<FileMetadata[]>([]);
+  const [stats, setStats] = useState<DriveStats | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleDisconnect = () => {
+  const fetchDashboardData = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const [statsData, filesData] = await Promise.all([
+        apiClient.getStats(),
+        apiClient.getFiles(undefined, searchQuery || undefined),
+      ]);
+      setStats(statsData);
+      setFiles(filesData);
+    } catch (err: any) {
+      setError(err.message || 'Failed to load dashboard data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, [searchQuery]);
+
+  const handleDisconnect = async () => {
+    try {
+      await apiClient.logOut();
+    } catch (e) {
+      console.error('Failed to log out from server:', e);
+    }
     clearApiCredentials();
     navigate('/login');
   };
-
-  const filteredFiles = MOCK_FILES.filter((file) =>
-    file.name.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
 
   return (
     <Box minH="90vh" py={10} px={{ base: 4, md: 8 }} bg="bg.default">
@@ -123,6 +127,14 @@ const Dashboard = () => {
           </Button>
         </HStack>
 
+        {error && (
+          <Box p={4} bg="error.100" color="error.500" borderRadius="xl">
+            <Text fontSize="sm" fontWeight="bold">
+              {error}
+            </Text>
+          </Box>
+        )}
+
         {/* Stats Row */}
         <SimpleGrid columns={{ base: 1, md: 3 }} gap={6}>
           <Box
@@ -138,7 +150,7 @@ const Dashboard = () => {
                 Total Storage
               </Text>
               <Heading size="lg" fontWeight="extrabold" color="primary">
-                Limitless
+                {stats ? formatSize(stats.total_space) : 'Limitless'}
               </Heading>
               <Text fontSize="2xs" color="fg.muted">
                 Powered by Telegram Cloud Infrastructure
@@ -155,13 +167,13 @@ const Dashboard = () => {
           >
             <VStack align="start" gap={1}>
               <Text fontSize="xs" fontWeight="bold" color="fg.muted">
-                Active Uploads
+                Active Files
               </Text>
               <Heading size="lg" fontWeight="extrabold" color="fg">
-                {MOCK_FILES.length} Files
+                {stats ? `${stats.file_count} Files` : '0 Files'}
               </Heading>
               <Text fontSize="2xs" color="fg.muted">
-                Direct-to-API secure chunks
+                Direct-to-API secure chunks (Folders: {stats?.folder_count || 0})
               </Text>
             </VStack>
           </Box>
@@ -227,21 +239,25 @@ const Dashboard = () => {
 
           <Separator bg="border" />
 
-          {/* Files List */}
-          {filteredFiles.length === 0 ? (
+          {/* Files List / Loading State */}
+          {isLoading ? (
+            <Center py={10}>
+              <Spinner size="lg" color="primary" />
+            </Center>
+          ) : files.length === 0 ? (
             <Center py={10}>
               <VStack gap={2}>
                 <Text fontSize="sm" color="fg.muted" fontWeight="bold">
                   No files found
                 </Text>
                 <Text fontSize="xs" color="fg.muted">
-                  Try adjusting your search query.
+                  Try uploading files or adjusting your search query.
                 </Text>
               </VStack>
             </Center>
           ) : (
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} gap={5}>
-              {filteredFiles.map((file) => (
+              {files.map((file) => (
                 <Box
                   key={file.id}
                   p={4}
@@ -261,22 +277,22 @@ const Dashboard = () => {
                       <Box
                         p={2.5}
                         bg={
-                          file.iconType === IconType.VIDEO
+                          getIconType(file.icon_type) === IconType.VIDEO
                             ? 'primary/10'
-                            : file.iconType === IconType.ZIP
+                            : getIconType(file.icon_type) === IconType.ZIP
                               ? 'warning/10'
                               : 'success/10'
                         }
                         color={
-                          file.iconType === IconType.VIDEO
+                          getIconType(file.icon_type) === IconType.VIDEO
                             ? 'primary'
-                            : file.iconType === IconType.ZIP
+                            : getIconType(file.icon_type) === IconType.ZIP
                               ? 'warning.400'
                               : 'success.400'
                         }
                         borderRadius="lg"
                       >
-                        <Icon type={file.iconType} />
+                        <Icon type={getIconType(file.icon_type)} />
                       </Box>
                       <VStack align="start" gap={0}>
                         <Text
@@ -289,7 +305,7 @@ const Dashboard = () => {
                           {file.name}
                         </Text>
                         <Text fontSize="10px" color="fg.muted">
-                          {file.size} • {file.createdAt}
+                          {formatSize(file.size)} • {formatTime(file.created_at)}
                         </Text>
                       </VStack>
                     </HStack>

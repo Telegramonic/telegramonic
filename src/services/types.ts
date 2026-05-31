@@ -32,3 +32,10 @@ export interface Drive {
   name: string;
   icon?: string | null;
 }
+
+export interface DriveStats {
+  total_space: number;
+  used_space: number;
+  file_count: number;
+  folder_count: number;
+}
