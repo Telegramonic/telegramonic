@@ -76,6 +76,12 @@
     "contact-us": "Contact Us",
     "faq": "FAQs",
     "disclaimer": "Disclaimer",
+    "docs": "Documentation",
+    "product": "Product",
+    "introduction": "Introduction",
+    "quickstart": "Quick Start",
+    "mtproto": "MTProto Protocol",
+    "direct-storage": "Direct Storage",
     "Login": "Login"
   },
   "MdPage": {
@@ -139,5 +145,42 @@
     "success": "Connected successfully! Redirecting...",
     "successConfigured": "Successfully configured Telegramonic.",
     "redirecting": "Redirecting to dashboard..."
+  },
+  "ProductPage": {
+    "heroTitle": "Get Telegramonic",
+    "heroSubtitle": "Run Telegramonic on all your devices. Enjoy high-speed cloud storage powered securely by the MTProto network.",
+    "desktopHeading": "Desktop Applications",
+    "mobileHeading": "Mobile Applications",
+    "recommended": "Recommended",
+    "macos": {
+      "title": "macOS",
+      "description": "Native macOS application. Supports Apple Silicon and Intel Macs.",
+      "buttonArm": "Apple Silicon (M1/M2/M3)",
+      "buttonIntel": "Intel Chip"
+    },
+    "windows": {
+      "title": "Windows",
+      "description": "Installer or portable builds for Windows 10/11 (64-bit).",
+      "buttonExe": "Download Installer (.exe)",
+      "buttonZip": "Portable Zip (.zip)"
+    },
+    "linux": {
+      "title": "Linux",
+      "description": "Standard AppImage or compiled binary packages for Linux.",
+      "buttonAppImage": "Download AppImage",
+      "buttonTar": "Tarball (.tar.gz)"
+    },
+    "ios": {
+      "title": "iOS / iPadOS",
+      "description": "Get the official app on the Apple App Store or join the TestFlight.",
+      "buttonAppStore": "Download on App Store",
+      "buttonTestFlight": "Join TestFlight Beta"
+    },
+    "android": {
+      "title": "Android",
+      "description": "Download the direct installer package or get it on Google Play.",
+      "buttonApk": "Direct APK Download",
+      "buttonPlayStore": "Get it on Google Play"
+    }
   }
 }
