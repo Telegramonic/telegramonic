@@ -209,31 +209,31 @@ exports[`NavigationBar should render standard navigation bar correctly 1`] = `
         class="chakra-stack css-j91dj4"
       >
         <a
-          aria-label="/features-nav-link"
+          aria-label="/docs-nav-link"
           class="chakra-button css-mlkoou"
           data-discover="true"
-          href="/features"
+          href="/docs"
           style="display: flex; align-items: center;"
           type="button"
         >
           <p
             class="css-nh0ii3"
           >
-            Features
+            Docs
           </p>
         </a>
         <a
-          aria-label="/security-nav-link"
+          aria-label="/product-nav-link"
           class="chakra-button css-mlkoou"
           data-discover="true"
-          href="/security"
+          href="/product"
           style="display: flex; align-items: center;"
           type="button"
         >
           <p
             class="css-nh0ii3"
           >
-            Security
+            Product
           </p>
         </a>
       </div>

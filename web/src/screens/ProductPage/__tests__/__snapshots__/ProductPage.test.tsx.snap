@@ -1,0 +1,328 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProductPage should render all platform cards and download options by default 1`] = `
+<div>
+  <div
+    class="css-1tgt5i1"
+  >
+    <div>
+      <title>
+        Product
+      </title>
+    </div>
+    <style>
+      
+        @keyframes recommendedGlow {
+          0%, 100% { border-color: var(--chakra-colors-primary); box-shadow: 0 0 15px rgba(139, 92, 246, 0.15); }
+          50% { border-color: var(--chakra-colors-primary); box-shadow: 0 0 25px rgba(139, 92, 246, 0.35); }
+        }
+        .recommended-card {
+          animation: recommendedGlow 3s ease-in-out infinite;
+        }
+      
+    </style>
+    <div
+      class="css-1m701w"
+    >
+      <div
+        class="chakra-stack css-c4e2fj"
+      >
+        <h1
+          class="chakra-heading css-j3fgci"
+        >
+          Get Telegramonic
+        </h1>
+        <p
+          class="css-sljd0s"
+        >
+          Run Telegramonic on all your devices. Enjoy high-speed cloud storage powered securely by the MTProto network.
+        </p>
+      </div>
+      <div
+        class="css-287hsr"
+      >
+        <h2
+          class="chakra-heading css-1hy2c0p"
+        >
+          Desktop Applications
+        </h2>
+        <div
+          class="css-m2djmm"
+        >
+          <div
+            class="css-3ptjvt"
+            data-testid="platform-card-macos"
+          >
+            <div
+              class="chakra-stack css-1vjyyyu"
+            >
+              <div
+                class="chakra-stack css-1w1yo2v"
+              >
+                <svg
+                  fill="currentColor"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  width="28"
+                >
+                  <path
+                    d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-.96.04-2.13.64-2.82 1.45-.6.69-1.12 1.83-.98 2.94.1.08.2.12.3.12.87 0 1.95-.57 2.51-1.45z"
+                  />
+                </svg>
+                <h3
+                  class="chakra-heading css-2v6thg"
+                >
+                  macOS
+                </h3>
+              </div>
+              <p
+                class="css-11t69yy"
+              >
+                Native macOS application. Supports Apple Silicon and Intel Macs.
+              </p>
+              <div
+                class="chakra-stack css-ka3lke"
+              >
+                <a
+                  class="chakra-button css-13mivnp"
+                  href="#download-macos-arm"
+                  type="button"
+                >
+                  Apple Silicon (M1/M2/M3)
+                </a>
+                <a
+                  class="chakra-button css-ckiwh"
+                  href="#download-macos-intel"
+                  type="button"
+                >
+                  Intel Chip
+                </a>
+              </div>
+            </div>
+          </div>
+          <div
+            class="recommended-card css-3ptjvt"
+            data-testid="platform-card-windows"
+          >
+            <span
+              class="chakra-badge css-yrjleo"
+            >
+              Recommended
+            </span>
+            <div
+              class="chakra-stack css-1vjyyyu"
+            >
+              <div
+                class="chakra-stack css-1w1yo2v"
+              >
+                <svg
+                  fill="currentColor"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  width="28"
+                >
+                  <path
+                    d="M0 3.449L9.75 2.1v9.45H0V3.449zM0 12.45h9.75v9.45L0 20.551v-8.1zM10.95 1.95L24 0v11.55H10.95V1.95zM10.95 12.45H24v11.55l-13.05-1.95v-9.6z"
+                  />
+                </svg>
+                <h3
+                  class="chakra-heading css-2v6thg"
+                >
+                  Windows
+                </h3>
+              </div>
+              <p
+                class="css-11t69yy"
+              >
+                Installer or portable builds for Windows 10/11 (64-bit).
+              </p>
+              <div
+                class="chakra-stack css-ka3lke"
+              >
+                <a
+                  class="chakra-button css-13mivnp"
+                  href="#download-windows-exe"
+                  type="button"
+                >
+                  Download Installer (.exe)
+                </a>
+                <a
+                  class="chakra-button css-ckiwh"
+                  href="#download-windows-zip"
+                  type="button"
+                >
+                  Portable Zip (.zip)
+                </a>
+              </div>
+            </div>
+          </div>
+          <div
+            class="css-3ptjvt"
+            data-testid="platform-card-linux"
+          >
+            <div
+              class="chakra-stack css-1vjyyyu"
+            >
+              <div
+                class="chakra-stack css-1w1yo2v"
+              >
+                <svg
+                  fill="currentColor"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  width="28"
+                >
+                  <path
+                    d="M12 2a5 5 0 0 0-5 5c0 1.25.43 2.4 1.15 3.32C6.82 11.23 6 12.63 6 14.5c0 3.04 2.69 5.5 6 5.5s6-2.46 6-5.5c0-1.87-.82-3.27-2.15-4.18C16.57 9.4 17 8.25 17 7a5 5 0 0 0-5-5m0 2a3 3 0 0 1 3 3c0 1.66-1.34 3-3 3a3 3 0 0 1-3-3 3 3 0 0 1 3-3m0 9c1.66 0 3 .84 3 2.5 0 .5-.45.5-1 .5H10c-.55 0-1 0-1-.5 0-1.66 1.34-2.5 3-2.5z"
+                  />
+                </svg>
+                <h3
+                  class="chakra-heading css-2v6thg"
+                >
+                  Linux
+                </h3>
+              </div>
+              <p
+                class="css-11t69yy"
+              >
+                Standard AppImage or compiled binary packages for Linux.
+              </p>
+              <div
+                class="chakra-stack css-ka3lke"
+              >
+                <a
+                  class="chakra-button css-13mivnp"
+                  href="#download-linux-appimage"
+                  type="button"
+                >
+                  Download AppImage
+                </a>
+                <a
+                  class="chakra-button css-ckiwh"
+                  href="#download-linux-tar"
+                  type="button"
+                >
+                  Tarball (.tar.gz)
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2
+          class="chakra-heading css-1hy2c0p"
+        >
+          Mobile Applications
+        </h2>
+        <div
+          class="css-1u80289"
+        >
+          <div
+            class="css-3ptjvt"
+            data-testid="platform-card-ios"
+          >
+            <div
+              class="chakra-stack css-1vjyyyu"
+            >
+              <div
+                class="chakra-stack css-1w1yo2v"
+              >
+                <svg
+                  fill="currentColor"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  width="28"
+                >
+                  <path
+                    d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.66-.81 1.11-1.93.99-3.06-.96.04-2.13.64-2.82 1.45-.6.69-1.12 1.83-.98 2.94.1.08.2.12.3.12.87 0 1.95-.57 2.51-1.45z"
+                  />
+                </svg>
+                <h3
+                  class="chakra-heading css-2v6thg"
+                >
+                  iOS / iPadOS
+                </h3>
+              </div>
+              <p
+                class="css-11t69yy"
+              >
+                Get the official app on the Apple App Store or join the TestFlight.
+              </p>
+              <div
+                class="chakra-stack css-ka3lke"
+              >
+                <a
+                  class="chakra-button css-13mivnp"
+                  href="#download-ios-appstore"
+                  type="button"
+                >
+                  Download on App Store
+                </a>
+                <a
+                  class="chakra-button css-ckiwh"
+                  href="#download-ios-testflight"
+                  type="button"
+                >
+                  Join TestFlight Beta
+                </a>
+              </div>
+            </div>
+          </div>
+          <div
+            class="css-3ptjvt"
+            data-testid="platform-card-android"
+          >
+            <div
+              class="chakra-stack css-1vjyyyu"
+            >
+              <div
+                class="chakra-stack css-1w1yo2v"
+              >
+                <svg
+                  fill="currentColor"
+                  height="28"
+                  viewBox="0 0 24 24"
+                  width="28"
+                >
+                  <path
+                    d="M6 18c0 .55.45 1 1 1h1v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h2v3.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5V19h1c.55 0 1-.45 1-1V8H6v10zM3.5 8C2.67 8 2 8.67 2 9.5v7c0 .83.67 1.5 1.5 1.5S5 17.33 5 16.5v-7C5 8.67 4.33 8 3.5 8zm17 0c-.83 0-1.5.67-1.5 1.5v7c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-7c0-.83-.67-1.5-1.5-1.5zm-8.5-4.5c2.33 0 4.3 1.46 5.11 3.5H6.89c.81-2.04 2.78-3.5 5.11-3.5zm3.5-1.5l1-1.5.8.5-1 1.5h-1.6zm-7.6-1l.8-.5 1 1.5h-1.6l-1.2-1z"
+                  />
+                </svg>
+                <h3
+                  class="chakra-heading css-2v6thg"
+                >
+                  Android
+                </h3>
+              </div>
+              <p
+                class="css-11t69yy"
+              >
+                Download the direct installer package or get it on Google Play.
+              </p>
+              <div
+                class="chakra-stack css-ka3lke"
+              >
+                <a
+                  class="chakra-button css-13mivnp"
+                  href="#download-android-apk"
+                  type="button"
+                >
+                  Direct APK Download
+                </a>
+                <a
+                  class="chakra-button css-ckiwh"
+                  href="#download-android-playstore"
+                  type="button"
+                >
+                  Get it on Google Play
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

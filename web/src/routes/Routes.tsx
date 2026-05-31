@@ -11,6 +11,8 @@ import {
   LazyPublicHost,
   LazyLoginPage,
   LazyDashboardPage,
+  LazyDocsPage,
+  LazyProductPage,
 } from './lazyScreens/publicScreens';
 import { appStore, selectIsAuthenticated } from '@appStore';
 
@@ -39,6 +41,11 @@ export const getAppRouter = (isUserLogin: boolean) => {
         <Route element={<ProtectedRoute />}>
           <Route path="dashboard" element={<LazyDashboardPage />} />
         </Route>
+
+        <Route path="docs" element={<LazyDocsPage />} />
+        <Route path="docs/:docId" element={<LazyDocsPage />} />
+
+        <Route path="product" element={<LazyProductPage />} />
 
         <Route path="privacy" element={<LazyMdPage />} />
         <Route path="terms" element={<LazyMdPage />} />

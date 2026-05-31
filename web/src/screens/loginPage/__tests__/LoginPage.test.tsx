@@ -5,15 +5,21 @@ import { renderWithRouter } from '@testUtils';
 import { appStore } from '@appStore';
 
 // Mock apiClient
-const mockSendCode = jest.fn().mockResolvedValue({ success: true, next_step: 'code' });
-const mockSignIn = jest.fn().mockResolvedValue({ success: true, next_step: 'dashboard' });
+const mockSendCode = jest
+  .fn()
+  .mockResolvedValue({ success: true, next_step: 'code' });
+const mockSignIn = jest
+  .fn()
+  .mockResolvedValue({ success: true, next_step: 'dashboard' });
 const mockCheckPassword = jest.fn().mockResolvedValue({ success: true });
 
 jest.mock('@services', () => ({
   ...jest.requireActual('@services'),
   apiClient: {
-    sendCode: (phone: string, apiId: string, apiHash: string) => mockSendCode(phone, apiId, apiHash),
-    signIn: (phone: string, code: string, phoneCodeHash?: string) => mockSignIn(phone, code, phoneCodeHash),
+    sendCode: (phone: string, apiId: string, apiHash: string) =>
+      mockSendCode(phone, apiId, apiHash),
+    signIn: (phone: string, code: string, phoneCodeHash?: string) =>
+      mockSignIn(phone, code, phoneCodeHash),
     checkPassword: (password: string) => mockCheckPassword(password),
   },
 }));
@@ -47,19 +53,25 @@ describe('LoginPage', () => {
     renderWithRouter(<LoginPage />);
     expect(screen.getByText('Connect Telegram Drive')).toBeInTheDocument();
     expect(screen.getByText('API Configuration')).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText('e.g., 123456'),
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('e.g., 123456')).toBeInTheDocument();
   });
 
   it('should render country select dropdown with default value +1', async () => {
     renderWithRouter(<LoginPage />);
     // Step 1: Submit Credentials
-    fireEvent.change(screen.getByPlaceholderText('e.g., 123456'), { target: { value: '12345' } });
-    fireEvent.change(screen.getByPlaceholderText('e.g., d58a9e...'), { target: { value: 'abc123' } });
+    fireEvent.change(screen.getByPlaceholderText('e.g., 123456'), {
+      target: { value: '12345' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('e.g., d58a9e...'), {
+      target: { value: 'abc123' },
+    });
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
 
-    expect(await screen.findByPlaceholderText('Enter phone number without country code')).toBeInTheDocument();
+    expect(
+      await screen.findByPlaceholderText(
+        'Enter phone number without country code',
+      ),
+    ).toBeInTheDocument();
     const countrySelect = screen.getByLabelText('Select Country Code');
     expect(countrySelect).toBeInTheDocument();
     expect(countrySelect).toHaveValue('+1');
@@ -69,11 +81,19 @@ describe('LoginPage', () => {
     renderWithRouter(<LoginPage />);
 
     // Step 1: Submit API Credentials
-    fireEvent.change(screen.getByPlaceholderText('e.g., 123456'), { target: { value: '12345' } });
-    fireEvent.change(screen.getByPlaceholderText('e.g., d58a9e...'), { target: { value: 'abc123' } });
+    fireEvent.change(screen.getByPlaceholderText('e.g., 123456'), {
+      target: { value: '12345' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('e.g., d58a9e...'), {
+      target: { value: 'abc123' },
+    });
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
 
-    expect(await screen.findByPlaceholderText('Enter phone number without country code')).toBeInTheDocument();
+    expect(
+      await screen.findByPlaceholderText(
+        'Enter phone number without country code',
+      ),
+    ).toBeInTheDocument();
 
     const countrySelect = screen.getByLabelText('Select Country Code');
     fireEvent.change(countrySelect, { target: { value: '+91' } });
@@ -90,16 +110,18 @@ describe('LoginPage', () => {
       await Promise.resolve();
     });
 
-    expect(mockSendCode).toHaveBeenCalledWith('+919876543210', '12345', 'abc123');
+    expect(mockSendCode).toHaveBeenCalledWith(
+      '+919876543210',
+      '12345',
+      'abc123',
+    );
   });
 
   it('should show error when API credentials are empty on step 1', async () => {
     renderWithRouter(<LoginPage />);
     const continueButton = screen.getByRole('button', { name: 'Continue' });
     fireEvent.click(continueButton);
-    expect(
-      await screen.findByText('API ID is required.'),
-    ).toBeInTheDocument();
+    expect(await screen.findByText('API ID is required.')).toBeInTheDocument();
     expect(
       await screen.findByText('API Hash is required.'),
     ).toBeInTheDocument();
@@ -108,12 +130,20 @@ describe('LoginPage', () => {
   it('should show error when phone number is empty on step 2', async () => {
     renderWithRouter(<LoginPage />);
     // Step 1: Submit Credentials
-    fireEvent.change(screen.getByPlaceholderText('e.g., 123456'), { target: { value: '12345' } });
-    fireEvent.change(screen.getByPlaceholderText('e.g., d58a9e...'), { target: { value: 'abc123' } });
+    fireEvent.change(screen.getByPlaceholderText('e.g., 123456'), {
+      target: { value: '12345' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('e.g., d58a9e...'), {
+      target: { value: 'abc123' },
+    });
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
 
     // Now on Step 2
-    expect(await screen.findByPlaceholderText('Enter phone number without country code')).toBeInTheDocument();
+    expect(
+      await screen.findByPlaceholderText(
+        'Enter phone number without country code',
+      ),
+    ).toBeInTheDocument();
     const continueButton = screen.getByRole('button', { name: 'Continue' });
     fireEvent.click(continueButton);
     expect(
@@ -126,12 +156,20 @@ describe('LoginPage', () => {
 
     // Step 1: Submit API credentials
     expect(screen.getByText('API Configuration')).toBeInTheDocument();
-    fireEvent.change(screen.getByPlaceholderText('e.g., 123456'), { target: { value: '654321' } });
-    fireEvent.change(screen.getByPlaceholderText('e.g., d58a9e...'), { target: { value: 'hash_abc' } });
+    fireEvent.change(screen.getByPlaceholderText('e.g., 123456'), {
+      target: { value: '654321' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('e.g., d58a9e...'), {
+      target: { value: 'hash_abc' },
+    });
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
 
     // Step 2: Submit Phone Number
-    expect(await screen.findByPlaceholderText('Enter phone number without country code')).toBeInTheDocument();
+    expect(
+      await screen.findByPlaceholderText(
+        'Enter phone number without country code',
+      ),
+    ).toBeInTheDocument();
     const phoneInput = screen.getByPlaceholderText(
       'Enter phone number without country code',
     );
@@ -144,7 +182,9 @@ describe('LoginPage', () => {
     });
 
     // Now it should be on Step 3 (Verification Code)
-    expect(await screen.findByText('Enter Verification Code')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Enter Verification Code'),
+    ).toBeInTheDocument();
     const codeInput = screen.getByPlaceholderText('Enter 5-digit code');
     expect(codeInput).toBeInTheDocument();
 
@@ -165,9 +205,7 @@ describe('LoginPage', () => {
     expect(
       await screen.findByText('Successfully configured Telegramonic.'),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText('Redirecting to dashboard...'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Redirecting to dashboard...')).toBeInTheDocument();
 
     // Advance fake timers to trigger final redirect (1.5 seconds)
     act(() => {

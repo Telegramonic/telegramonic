@@ -36,9 +36,7 @@ const FeatureCard = ({
     flexDirection="column"
     justifyContent="space-between"
     gap={6}
-    style={
-      { '--glow': glowColor, willChange: 'transform' } as CSSProperties
-    }
+    style={{ '--glow': glowColor, willChange: 'transform' } as CSSProperties}
     className="feat-card"
     role="group"
   >

@@ -15,6 +15,10 @@ export enum IconType {
   LOCK = 'LOCK',
   SEARCH = 'SEARCH',
   SHARE = 'SHARE',
+  APPLE = 'APPLE',
+  WINDOWS = 'WINDOWS',
+  LINUX = 'LINUX',
+  ANDROID = 'ANDROID',
 }
 
 export enum IconSize {

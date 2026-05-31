@@ -93,7 +93,3 @@ yarn workspace telegramonic-web run prettier:write
 - **CI/CD**: GitHub Actions for automated building, linting, testing, and FTP deployment.
 - **Localization**: Internationalization support via `i18next`.
 - **Theme**: Robust dark/light mode support with system preference detection and Telegramonic design tokens.
-
----
-
-© {{year}} telegramonic.com | All rights reserved

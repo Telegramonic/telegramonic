@@ -1,0 +1,187 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DocsPage should render the documentation layout with sidebar and TOC 1`] = `
+<div>
+  <div
+    class="css-1t9em1n"
+  >
+    <div>
+      <title>
+        Docs - Introduction
+      </title>
+    </div>
+    <style>
+      
+        [id] {
+          scroll-margin-top: 80px;
+        }
+        @keyframes docPulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.4; }
+        }
+      
+    </style>
+    <div
+      class="css-1gsxbfr"
+    >
+      <div
+        class="css-bxsxei"
+      >
+        <div
+          class="chakra-stack css-1l03m6c"
+        >
+          <div>
+            <p
+              class="css-1503jht"
+            >
+              Getting Started
+            </p>
+            <div
+              class="chakra-stack css-1gzt2am"
+            >
+              <div
+                class="css-58wz5d"
+              >
+                <p
+                  class="css-1itkogl"
+                >
+                  Introduction
+                </p>
+              </div>
+              <div
+                class="css-196g1ez"
+              >
+                <p
+                  class="css-nh0ii3"
+                >
+                  Quick Start
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p
+              class="css-1503jht"
+            >
+              Architecture
+            </p>
+            <div
+              class="chakra-stack css-1gzt2am"
+            >
+              <div
+                class="css-196g1ez"
+              >
+                <p
+                  class="css-nh0ii3"
+                >
+                  MTProto Protocol
+                </p>
+              </div>
+              <div
+                class="css-196g1ez"
+              >
+                <p
+                  class="css-nh0ii3"
+                >
+                  Direct Storage
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="css-1q243j6"
+      >
+        <div
+          class="css-76qxh2"
+        >
+          <button
+            aria-expanded="false"
+            aria-haspopup="menu"
+            class="chakra-button chakra-menu__trigger css-yoivw2"
+            data-controls="menu::r0::content"
+            data-part="trigger"
+            data-scope="menu"
+            data-state="closed"
+            data-uid=":r0:"
+            dir="ltr"
+            id="menu::r0::trigger"
+            type="button"
+          >
+            <div
+              class="css-14fyjnu"
+            >
+              <svg
+                fill="none"
+                height="16px"
+                viewBox="0 0 24 24"
+                width="16px"
+              >
+                <path
+                  d="M2 6a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1zM2 12.032a1 1 0 011-1h18a1 1 0 110 2H3a1 1 0 01-1-1zM3 17.064a1 1 0 100 2h18a1 1 0 000-2H3z"
+                  fill="currentColor"
+                />
+              </svg>
+              <p
+                class="css-1dvhur2"
+              >
+                Introduction
+              </p>
+            </div>
+            <p
+              class="css-o5o4qy"
+            >
+              Switch
+            </p>
+          </button>
+        </div>
+        <div
+          class="css-1ki54i"
+        >
+          <div
+            data-testid="markdown-preview"
+          >
+            # Introduction
+## Installation Guide
+### API Credentials
+## Storing Data
+          </div>
+        </div>
+      </div>
+      <div
+        class="css-oiq5js"
+      >
+        <div
+          class="chakra-stack css-1ym5udh"
+        >
+          <p
+            class="css-1x8gz7y"
+          >
+            In this Page
+          </p>
+          <div
+            class="chakra-stack css-1iapwb6"
+          >
+            <p
+              class="css-y0c7eo"
+            >
+              Installation Guide
+            </p>
+            <p
+              class="css-fxn20l"
+            >
+              API Credentials
+            </p>
+            <p
+              class="css-y0c7eo"
+            >
+              Storing Data
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -60,3 +60,28 @@ export const LazyDashboardPage = () => (
 );
 
 // [End]-------- Dashboard screen --------
+
+// [Start]-------- DocsPage screen --------
+
+const DocsPage = lazy(() => import('@screens/DocsPage/DocsPage'));
+
+export const LazyDocsPage = () => (
+  <LazyProvider>
+    <DocsPage />
+  </LazyProvider>
+);
+
+// [End]-------- DocsPage screen --------
+
+// [Start]-------- ProductPage screen --------
+
+const ProductPage = lazy(() => import('@screens/ProductPage/ProductPage'));
+
+export const LazyProductPage = () => (
+  <LazyProvider>
+    <ProductPage />
+  </LazyProvider>
+);
+
+// [End]-------- ProductPage screen --------
+

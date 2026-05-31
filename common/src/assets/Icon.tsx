@@ -13,6 +13,10 @@ import MenuIcon from './icons/MenuIcon';
 import LockIcon from './icons/LockIcon';
 import SearchIcon from './icons/SearchIcon';
 import ShareIcon from './icons/ShareIcon';
+import AppleLogo from './icons/AppleLogo';
+import WindowsLogo from './icons/WindowsLogo';
+import LinuxLogo from './icons/LinuxLogo';
+import AndroidLogo from './icons/AndroidLogo';
 
 interface GenericIconProps extends IconProps {
   type: IconType;
@@ -48,6 +52,14 @@ const Icon = ({ type, ...props }: GenericIconProps) => {
       return <SearchIcon {...props} />;
     case IconType.SHARE:
       return <ShareIcon {...props} />;
+    case IconType.APPLE:
+      return <AppleLogo {...props} />;
+    case IconType.WINDOWS:
+      return <WindowsLogo {...props} />;
+    case IconType.LINUX:
+      return <LinuxLogo {...props} />;
+    case IconType.ANDROID:
+      return <AndroidLogo {...props} />;
     default:
       return null;
   }
