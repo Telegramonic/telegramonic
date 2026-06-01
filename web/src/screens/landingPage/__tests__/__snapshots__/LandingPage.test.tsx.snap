@@ -55,7 +55,7 @@ exports[`LandingPage should render correctly for guest user 1`] = `
             <a
               class="chakra-button css-1hp9x0"
               data-discover="true"
-              href="/login"
+              href="/docs"
               type="button"
             >
               Get Started

@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Modal selector should return modal selector state and actions 1`] = `
+{
+  "openModal": [Function],
+}
+`;
+
+exports[`Modal selector should return modal state on modal data set using openModal 1`] = `
+{
+  "modalID": "search",
+  "onModalClose": [MockFunction],
+  "openState": "OPEN",
+  "resetModalState": [Function],
+}
+`;
+
+exports[`Modal selector should return modal state with initial value 1`] = `
+{
+  "openModal": [Function],
+}
+`;

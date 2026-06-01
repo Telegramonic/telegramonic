@@ -7,7 +7,6 @@ import {
   lineHeight,
   zIndices,
 } from './fonts';
-import '@fontsource/bungee-shade';
 
 const customConfig = defineConfig({
   theme: {

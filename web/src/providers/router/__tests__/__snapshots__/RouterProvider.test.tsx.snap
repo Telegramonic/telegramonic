@@ -476,14 +476,6 @@ exports[`RouterProvider should render router provider correctly 2`] = `
             </p>
           </a>
         </div>
-        <a
-          class="chakra-button css-14ajgaz"
-          data-discover="true"
-          href="/login"
-          type="button"
-        >
-          Login
-        </a>
         <div
           class="css-19r7uti"
         >

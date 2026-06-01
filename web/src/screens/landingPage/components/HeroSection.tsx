@@ -10,7 +10,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Icon, IconType } from '@assets';
-import { appStore, selectIsAuthenticated } from '@appStore';
 
 // ---------------------------------------------------------------------------
 // DriveWidget — Glassmorphic mock-drive card shown in the Hero right column
@@ -269,7 +268,6 @@ const DriveWidget = () => {
 // ---------------------------------------------------------------------------
 const HeroSection = () => {
   const { t } = useTranslation();
-  const isAuthenticated = appStore(selectIsAuthenticated);
 
   return (
     <Stack
@@ -400,47 +398,25 @@ const HeroSection = () => {
             width={{ base: '100%', sm: 'auto' }}
             mt={2}
           >
-            {isAuthenticated ? (
-              <Button
-                asChild
-                size="lg"
-                bg="primary"
-                color="white"
-                borderRadius="xl"
-                px={8}
-                py={6}
-                fontWeight="bold"
-                shadow="lg"
-                _hover={{
-                  bg: 'primary/90',
-                  transform: 'translateY(-2px)',
-                  shadow: 'xl',
-                }}
-                transition="all 0.2s"
-              >
-                <Link to="/dashboard">Go to Dashboard</Link>
-              </Button>
-            ) : (
-              <Button
-                asChild
-                size="lg"
-                bg="primary"
-                color="white"
-                borderRadius="xl"
-                px={8}
-                py={6}
-                fontWeight="bold"
-                shadow="lg"
-                _hover={{
-                  bg: 'primary/90',
-                  transform: 'translateY(-2px)',
-                  shadow: 'xl',
-                }}
-                transition="all 0.2s"
-              >
-                <Link to="/login">{t('LandingPage.getStarted')}</Link>
-              </Button>
-            )}
+            <Button
+              asChild
+              size="lg"
+              bg="primary"
+              color="white"
+              borderRadius="xl"
+              px={8}
+              py={6}
+              fontWeight="bold"
+              shadow="lg"
+              _hover={{
+                bg: 'primary/90',
+                transform: 'translateY(-2px)',
+                shadow: 'xl',
+              }}
+              transition="all 0.2s"
+            >
+              <Link to="/docs">{t('LandingPage.getStarted')}</Link>
+            </Button>
             <Button
               size="lg"
               variant="outline"

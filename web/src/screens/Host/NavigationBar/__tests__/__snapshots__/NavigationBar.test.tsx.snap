@@ -237,14 +237,6 @@ exports[`NavigationBar should render standard navigation bar correctly 1`] = `
           </p>
         </a>
       </div>
-      <a
-        class="chakra-button css-14ajgaz"
-        data-discover="true"
-        href="/login"
-        type="button"
-      >
-        Login
-      </a>
       <div
         class="css-19r7uti"
       >
