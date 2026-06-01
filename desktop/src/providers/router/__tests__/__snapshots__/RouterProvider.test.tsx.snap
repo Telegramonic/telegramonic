@@ -1,0 +1,563 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RouterProvider should render router provider correctly 1`] = `
+<div>
+  <div
+    class="css-c6xn9e"
+  >
+    <div
+      class="css-9xynfp"
+    />
+    <div
+      class="css-wzg920"
+    />
+    <div
+      class="css-s5xaig"
+    />
+    <div
+      class="css-hyln0r"
+    />
+    <div
+      class="css-ocuih8"
+    >
+      <div
+        class="css-1x4i8xv"
+      />
+      <div
+        class="css-tw4vmx"
+      >
+        <svg
+          class="telegramonic-icon "
+          height="80"
+          viewBox="0 0 85 85"
+          width="80"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <lineargradient
+              id="blueGrad"
+              x1="0%"
+              x2="0%"
+              y1="0%"
+              y2="100%"
+            >
+              <stop
+                offset="0%"
+                stop-color="#0088cc"
+              />
+              <stop
+                offset="100%"
+                stop-color="#007bb9"
+              />
+            </lineargradient>
+            <lineargradient
+              id="blueGradDark"
+              x1="0%"
+              x2="0%"
+              y1="0%"
+              y2="100%"
+            >
+              <stop
+                offset="0%"
+                stop-color="#007bb9"
+              />
+              <stop
+                offset="100%"
+                stop-color="#006193"
+              />
+            </lineargradient>
+          </defs>
+          <g
+            transform="translate(-1, -9) scale(1.2)"
+          >
+            <rect
+              fill="rgba(0,0,0,0.15)"
+              height="18"
+              rx="4"
+              width="56"
+              x="7"
+              y="60"
+            />
+            <rect
+              fill="rgba(0,0,0,0.15)"
+              height="18"
+              rx="4"
+              width="56"
+              x="7"
+              y="38"
+            />
+            <rect
+              fill="rgba(0,0,0,0.15)"
+              height="18"
+              rx="4"
+              width="56"
+              x="7"
+              y="16"
+            />
+            <rect
+              fill="url(#blueGrad)"
+              height="18"
+              rx="4"
+              width="56"
+              x="5"
+              y="56"
+            />
+            <rect
+              fill="url(#blueGradDark)"
+              height="8"
+              rx="4"
+              width="56"
+              x="5"
+              y="66"
+            />
+            <circle
+              cx="52"
+              cy="65"
+              fill="#00ffcc"
+              r="2"
+            />
+             
+            <rect
+              fill="#006193"
+              height="2"
+              rx="1"
+              width="30"
+              x="12"
+              y="64"
+            />
+             
+            <rect
+              fill="url(#blueGrad)"
+              height="18"
+              rx="4"
+              width="56"
+              x="5"
+              y="34"
+            />
+            <rect
+              fill="url(#blueGradDark)"
+              height="8"
+              rx="4"
+              width="56"
+              x="5"
+              y="44"
+            />
+            <circle
+              cx="52"
+              cy="43"
+              fill="#00ffcc"
+              r="2"
+            />
+            <rect
+              fill="#006193"
+              height="2"
+              rx="1"
+              width="30"
+              x="12"
+              y="42"
+            />
+            <rect
+              fill="url(#blueGrad)"
+              height="18"
+              rx="4"
+              width="56"
+              x="5"
+              y="12"
+            />
+            <rect
+              fill="url(#blueGradDark)"
+              height="8"
+              rx="4"
+              width="56"
+              x="5"
+              y="22"
+            />
+            <circle
+              cx="52"
+              cy="21"
+              fill="#00ffcc"
+              r="2"
+            />
+            <rect
+              fill="#006193"
+              height="2"
+              rx="1"
+              width="30"
+              x="12"
+              y="20"
+            />
+          </g>
+          <g
+            transform="translate(29.1, 16.5) scale(1.68)"
+          >
+            <path
+              d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882 L27.338,3.713 Z"
+              fill="#0088cc"
+            />
+            <path
+              d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882L27.338,3.713 M30.285,0L0.984,14.678 l8.174,5.128l3.749,11.464l4.789-5.779l5.616,3.586L30.285,0L30.285,0z"
+              fill="#ffffff"
+            />
+          </g>
+        </svg>
+      </div>
+    </div>
+    <p
+      class="css-19z886v"
+    >
+      Telegramonic
+    </p>
+    <p
+      class="css-bmioxu"
+    >
+      CLOUD STORAGE CLIENT
+    </p>
+    <div
+      class="css-167mtov"
+    >
+      <div
+        class="css-1fylyis"
+      />
+    </div>
+    <div
+      class="css-1ttgzt0"
+    >
+      <p
+        class="css-v7jnhe"
+      >
+        &gt; 
+        INITIALIZING SECURE SESSION...
+      </p>
+      <p
+        class="css-1bq43kb"
+      />
+    </div>
+  </div>
+</div>
+`;
+
+exports[`RouterProvider should render router provider correctly 2`] = `
+<div>
+  <div
+    class="css-1ksz11"
+  >
+    <div
+      class="chakra-stack css-qngkry"
+    >
+      <div
+        class="chakra-stack css-dky9e1"
+      >
+        <div
+          class="css-1uu8sdj"
+        >
+          <svg
+            class="telegramonic-icon "
+            height="100%"
+            viewBox="0 0 85 85"
+            width="100%"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <lineargradient
+                id="blueGrad"
+                x1="0%"
+                x2="0%"
+                y1="0%"
+                y2="100%"
+              >
+                <stop
+                  offset="0%"
+                  stop-color="#0088cc"
+                />
+                <stop
+                  offset="100%"
+                  stop-color="#007bb9"
+                />
+              </lineargradient>
+              <lineargradient
+                id="blueGradDark"
+                x1="0%"
+                x2="0%"
+                y1="0%"
+                y2="100%"
+              >
+                <stop
+                  offset="0%"
+                  stop-color="#007bb9"
+                />
+                <stop
+                  offset="100%"
+                  stop-color="#006193"
+                />
+              </lineargradient>
+            </defs>
+            <g
+              transform="translate(-1, -9) scale(1.2)"
+            >
+              <rect
+                fill="rgba(0,0,0,0.15)"
+                height="18"
+                rx="4"
+                width="56"
+                x="7"
+                y="60"
+              />
+              <rect
+                fill="rgba(0,0,0,0.15)"
+                height="18"
+                rx="4"
+                width="56"
+                x="7"
+                y="38"
+              />
+              <rect
+                fill="rgba(0,0,0,0.15)"
+                height="18"
+                rx="4"
+                width="56"
+                x="7"
+                y="16"
+              />
+              <rect
+                fill="url(#blueGrad)"
+                height="18"
+                rx="4"
+                width="56"
+                x="5"
+                y="56"
+              />
+              <rect
+                fill="url(#blueGradDark)"
+                height="8"
+                rx="4"
+                width="56"
+                x="5"
+                y="66"
+              />
+              <circle
+                cx="52"
+                cy="65"
+                fill="#00ffcc"
+                r="2"
+              />
+               
+              <rect
+                fill="#006193"
+                height="2"
+                rx="1"
+                width="30"
+                x="12"
+                y="64"
+              />
+               
+              <rect
+                fill="url(#blueGrad)"
+                height="18"
+                rx="4"
+                width="56"
+                x="5"
+                y="34"
+              />
+              <rect
+                fill="url(#blueGradDark)"
+                height="8"
+                rx="4"
+                width="56"
+                x="5"
+                y="44"
+              />
+              <circle
+                cx="52"
+                cy="43"
+                fill="#00ffcc"
+                r="2"
+              />
+              <rect
+                fill="#006193"
+                height="2"
+                rx="1"
+                width="30"
+                x="12"
+                y="42"
+              />
+              <rect
+                fill="url(#blueGrad)"
+                height="18"
+                rx="4"
+                width="56"
+                x="5"
+                y="12"
+              />
+              <rect
+                fill="url(#blueGradDark)"
+                height="8"
+                rx="4"
+                width="56"
+                x="5"
+                y="22"
+              />
+              <circle
+                cx="52"
+                cy="21"
+                fill="#00ffcc"
+                r="2"
+              />
+              <rect
+                fill="#006193"
+                height="2"
+                rx="1"
+                width="30"
+                x="12"
+                y="20"
+              />
+            </g>
+            <g
+              transform="translate(29.1, 16.5) scale(1.68)"
+            >
+              <path
+                d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882 L27.338,3.713 Z"
+                fill="#0088cc"
+              />
+              <path
+                d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882L27.338,3.713 M30.285,0L0.984,14.678 l8.174,5.128l3.749,11.464l4.789-5.779l5.616,3.586L30.285,0L30.285,0z"
+                fill="#ffffff"
+              />
+            </g>
+          </svg>
+        </div>
+        <h2
+          class="chakra-heading css-1fn9q2y"
+        >
+          Connect Telegram Drive
+        </h2>
+        <p
+          class="css-1gwx093"
+        >
+          Access your unlimited cloud storage space via MTProto 2.0 secure API connection.
+        </p>
+      </div>
+      <div
+        class="css-ey0ahs"
+      >
+        <div
+          class="chakra-stack css-a10vpc"
+        >
+          <div
+            class="chakra-stack css-1x0y7ph"
+          >
+            <div
+              class="css-151yyo4"
+            >
+              1
+            </div>
+            <div
+              class="css-kow2l5"
+            />
+          </div>
+          <div
+            class="chakra-stack css-1x0y7ph"
+          >
+            <div
+              class="css-z50irs"
+            >
+              2
+            </div>
+            <div
+              class="css-kow2l5"
+            />
+          </div>
+          <div
+            class="chakra-stack css-1x0y7ph"
+          >
+            <div
+              class="css-z50irs"
+            >
+              3
+            </div>
+            <div
+              class="css-kow2l5"
+            />
+          </div>
+          <div
+            class="chakra-stack css-1x0y7ph"
+          >
+            <div
+              class="css-z50irs"
+            >
+              4
+            </div>
+          </div>
+        </div>
+        <div
+          style="opacity: 0; transform: translateX(20px);"
+        >
+          <form>
+            <div
+              class="chakra-stack css-16p0ebk"
+            >
+              <div
+                class="chakra-stack css-1jqo7jp"
+              >
+                <h2
+                  class="chakra-heading css-7s810c"
+                >
+                  API Configuration
+                </h2>
+                <p
+                  class="css-dhdf1a"
+                >
+                  Provide your custom Telegram API credentials. Obtain these securely from my.telegram.org.
+                </p>
+              </div>
+              <div
+                class="chakra-stack css-1gzt2am"
+              >
+                <p
+                  class="css-1t542ad"
+                >
+                  API ID
+                </p>
+                <input
+                  class="chakra-input css-l626ka"
+                  placeholder="e.g., 123456"
+                  value=""
+                />
+              </div>
+              <div
+                class="chakra-stack css-1gzt2am"
+              >
+                <p
+                  class="css-1t542ad"
+                >
+                  API Hash
+                </p>
+                <input
+                  class="chakra-input css-l626ka"
+                  placeholder="e.g., d58a9e..."
+                  value=""
+                />
+              </div>
+              <button
+                class="chakra-button css-tncwgp"
+                type="submit"
+              >
+                Continue
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <style>
+      
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .spinner-rotation {
+          animation: spin 0.8s linear infinite;
+        }
+      
+    </style>
+  </div>
+</div>
+`;

@@ -12,7 +12,7 @@ const ModalComponent = ({ isOpen, modalID, onModalClose }: ModalProps) => {
       }}
     >
       <Dialog.Backdrop />
-      <Dialog.Content>
+      <Dialog.Content {...({} as any)}>
         <ModalToShow modalID={modalID} />
       </Dialog.Content>
     </Dialog.Root>

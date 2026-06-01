@@ -8,10 +8,14 @@ node_modules
 /server/target
 # testing
 web/coverage
+desktop/coverage
+common/coverage
 
 # production
 web/build
 desktop/build
+desktop/dist
+common/build
 
 # misc
 .DS_Store

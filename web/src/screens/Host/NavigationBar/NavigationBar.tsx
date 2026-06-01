@@ -15,18 +15,16 @@ import { isEmpty } from 'lodash';
 
 import { usePaddingForScreen } from '../../hooks';
 import { NAVIGATION_LINKS } from './constants';
-import { appStore, selectIsAuthenticated } from '@appStore';
 
 const NavigationBar = () => {
   const { t } = useTranslation();
   const padding = usePaddingForScreen();
   const titleKey = useLocation().pathname.split('/').pop();
-  const excludeKeys = ['login', 'dashboard'];
+  const excludeKeys: string[] = [];
   const title =
     titleKey && !excludeKeys.includes(titleKey)
       ? t(`NavigationBar.${titleKey}`)
       : '';
-  const isAuthenticated = appStore(selectIsAuthenticated);
   return (
     <HStack
       paddingX={padding}
@@ -104,33 +102,6 @@ const NavigationBar = () => {
             </Button>
           ))}
         </HStack>
-        {isAuthenticated ? (
-          <Button
-            asChild
-            variant="solid"
-            bg="primary"
-            color="white"
-            size="sm"
-            px={4}
-            borderRadius="lg"
-            _hover={{ bg: 'primary/90' }}
-          >
-            <Link to="/dashboard">Dashboard</Link>
-          </Button>
-        ) : (
-          <Button
-            asChild
-            variant="solid"
-            bg="primary"
-            color="white"
-            size="sm"
-            px={4}
-            borderRadius="lg"
-            _hover={{ bg: 'primary/90' }}
-          >
-            <Link to="/login">{t('NavigationBar.Login')}</Link>
-          </Button>
-        )}
         <Box display={{ base: 'flex', md: 'none' }}>
           <Menu.Root>
             <Menu.Trigger asChild>

@@ -1,0 +1,74 @@
+{
+  "extends": null,
+  "electronVersion": "31.0.0",
+  "appId": "com.telegramonic.app",
+  "productName": "Telegramonic",
+  "directories": {
+    "output": "dist",
+    "buildResources": "public"
+  },
+  "files": [
+    "build/**/*",
+    "main.js",
+    "preload.js",
+    "package.json"
+  ],
+  "mac": {
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "icon": "public/icon.png",
+    "category": "public.app-category.productivity"
+  },
+  "dmg": {
+    "icon": "public/icon.png",
+    "iconSize": 100,
+    "contents": [
+      {
+        "x": 380,
+        "y": 180,
+        "type": "link",
+        "path": "/Applications"
+      },
+      {
+        "x": 130,
+        "y": 180,
+        "type": "file"
+      }
+    ]
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      },
+      {
+        "target": "zip",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "public/icon.png"
+  },
+  "linux": {
+    "target": [
+      {
+        "target": "AppImage",
+        "arch": ["x64", "arm64"]
+      },
+      {
+        "target": "deb",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "icon": "public/icon.png",
+    "category": "Productivity"
+  }
+}
