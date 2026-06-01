@@ -93,7 +93,7 @@ When creating a PR using the `github-mcp-server` tool, ensure:
 4. The `head` branch strictly follows the naming convention: `{username}/{ticket-number}/{short-description}`.
 5. The `base` branch is `main`.
 6. Always set the PR **Assignee** to `ar1603` (Amit Raikwar).
-7. Apply platform-specific **Labels** (`Web` or `Core`) to the PR.
+7. Apply platform-specific **Labels** (`Web`, `Core`, or `Desktop`) to the PR.
 
 ## 5. Best Practices
 

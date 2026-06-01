@@ -57,6 +57,12 @@ yarn web:build
 
 # Build Rust server backend
 yarn server:build
+
+# Build and package Electron desktop application
+yarn desktop:dist:mac          # Generate macOS installer packages (DMG & Zip)
+yarn desktop:dist:win          # Generate Windows installer packages (NSIS & Zip)
+yarn desktop:dist:linux        # Generate Linux packages (deb & AppImage)
+yarn desktop:dist:all          # Package for all desktop platforms concurrently
 ```
 
 ### Testing

@@ -44,8 +44,12 @@ yarn server:build              # Build the Rust server (cargo build)
 yarn server:test               # Test the Rust server (cargo test)
 
 # Desktop App Workspace
-yarn desktop:start             # Run the Electron desktop app
-yarn desktop:build             # Build placeholder for desktop
+yarn desktop:start             # Run the Electron desktop app in development
+yarn desktop:build             # Compile the React production bundle for desktop
+yarn desktop:dist:mac          # Generate macOS installer packages (DMG & Zip)
+yarn desktop:dist:win          # Generate Windows installer packages (NSIS & Zip)
+yarn desktop:dist:linux        # Generate Linux packages (deb & AppImage)
+yarn desktop:dist:all          # Package for all desktop platforms concurrently
 
 make commit                    # Conventional commit helper
 ```
@@ -79,6 +83,8 @@ This section serves as the primary source of truth for AI agents working on the 
 | Core Stack           | Technology                                        |
 | :------------------- | :------------------------------------------------ |
 | **Framework (Web)**  | [React 18.3+](https://react.dev/)                 |
+| **Desktop Shell**    | [Electron v31](https://www.electronjs.org/)       |
+| **Desktop Packager** | [electron-builder](https://www.electron.build/)   |
 | **UI Library**       | [Chakra UI v3](https://chakra-ui.com/)            |
 | **State Management** | [Zustand v5](https://zustand.docs.pmnd.rs/)       |
 | **Routing**          | [React Router v7](https://reactrouter.com/)       |
@@ -133,8 +139,12 @@ The platform organizes resources into 13 primary verticals:
 ├── server/                 # Axum Rust backend (Yarn Workspace / Cargo)
 │   ├── src/                # Rust server source code
 │   └── Cargo.toml
-├── desktop/                # Electron desktop application boilerplate
-│   └── package.json
+├── desktop/                # Electron desktop application
+│   ├── main.js             # Electron main entry script (80% workarea scale, frameless setup)
+│   ├── preload.js          # Secure contextBridge exposing API / diagnostics
+│   ├── electron-builder.json # Configuration for packaging macOS, Windows, Linux targets
+│   ├── package.json        # Workspace configuration and scripts
+│   └── src/                # React UI code (slate-blue dashboard, dynamic themes)
 ├── scripts/                # Task-specific helper scripts
 ├── package.json            # Root workspace configuration
 └── .yarnrc.yml             # Yarn 4 configuration
@@ -169,6 +179,14 @@ The platform organizes resources into 13 primary verticals:
 - **Architecture**: Modular setup divided into HTTP `handlers/`, business logic `services/` (mock and Grammers MTProto clients), and environment `config.rs`.
 - **Handlers**: Write Axum handlers that return JSON payloads (`Json<T>`) or explicit statuses.
 - **Testing**: Write unit/integration tests and run using `cargo test` (or `yarn server:test` at root). Use `services/mock.rs` to mock Telegram connections.
+
+### Desktop Application (Electron)
+
+- **Process Isolation**: Securely expose APIs via `desktop/preload.js` contextBridge. Do not enable nodeIntegration in renderer processes.
+- **Window Dimensions**: The desktop main process dynamically initializes at **80%** of the user's available screen width and height.
+- **Diagnostics**: Polling status indicator queries the local diagnostics server (`127.0.0.1:8080`) every 5 seconds. Runs silently in the background.
+- **Theme Defaulting**: Defaults automatically to system theme settings (`prefers-color-scheme`) using Chakra UI / NextThemes, with no theme-override controls in UI.
+- **Packaging (electron-builder)**: Uses `desktop/electron-builder.json` to generate builds. Ensure DMG layout remains clean and system files (`.background.tiff`, `.VolumeIcon.icns`) are not declared inside `dmg.contents` to prevent rendering them to users.
 
 ## 5. Testing & Verification
 

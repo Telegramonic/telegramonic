@@ -34,6 +34,7 @@ This ruleset defines the standard patterns for interacting with Atlassian resour
 - **TEL-2**: `[Web] Web app feature`
 - **TEL-3**: `[Design] Visual Excellence`
 - **TEL-4**: `[Core] Localization & Accessibility`
+- **TEL-12**: `[Desktop] Desktop Core Experience & Platform Distribution`
 
 ## 4. Issue Types & Templates
 
@@ -86,9 +87,9 @@ Use for high-level project goals or features.
 
 ## 5. Labeling
 
-> [!IMPORTANT] > **Every ticket MUST have at least one platform-specific label (`Web`, `Design`, `Packages`, or `Core`).**
+> [!IMPORTANT] > **Every ticket MUST have at least one platform-specific label (`Web`, `Design`, `Packages`, `Core`, or `Desktop`).**
 
-- Apply platform-specific labels (`Web`, `Design`, `Packages`, `Core`) to every issue for easy filtering.
+- Apply platform-specific labels (`Web`, `Design`, `Packages`, `Core`, `Desktop`) to every issue for easy filtering.
 - Link all stories and tasks to their corresponding **Epic**.
 
 ## 6. Workflow & Statuses
