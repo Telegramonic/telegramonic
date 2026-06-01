@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#15111e" />
+    <meta name="description" content="Telegramonic projects website" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Telegramonic</title>
+    <!-- Google Fonts for Inter and Geist Mono replacement -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Splash/Loading Screen Styles */
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      #initial-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100vw;
+        height: 100vh;
+        z-index: 9999;
+        overflow: hidden;
+        background-color: #15111e;
+        color: #ffffff;
+        font-family:
+          'Inter',
+          -apple-system,
+          BlinkMacSystemFont,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+        /* Custom background mesh */
+        background-image: radial-gradient(
+            circle at center,
+            rgba(139, 92, 246, 0.15) 0%,
+            rgba(21, 17, 30, 1) 75%
+          ),
+          linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.015) 1px,
+            transparent 1px
+          );
+        background-size:
+          100% 100%,
+          24px 24px,
+          24px 24px;
+        position: relative;
+      }
+
+      /* Logo Container & Glow */
+      .loader-logo-container {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
+        animation: float 4s ease-in-out infinite;
+      }
+
+      .loader-logo-glow {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(
+          circle,
+          rgba(139, 92, 246, 0.4) 0%,
+          transparent 70%
+        );
+        filter: blur(8px);
+        animation: pulse-glow 2s ease-in-out infinite alternate;
+      }
+
+      .loader-logo {
+        position: relative;
+        width: 80px;
+        height: 80px;
+        z-index: 2;
+      }
+
+      /* Brand Title */
+      .loader-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: 0.35em;
+        text-transform: uppercase;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+      }
+
+      .loader-subtitle {
+        font-family: 'Geist Mono', monospace;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.4);
+        margin-bottom: 2rem;
+        letter-spacing: 0.1em;
+      }
+
+      /* Progress Bar */
+      .loader-progress-track {
+        width: 200px;
+        height: 3px;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .loader-progress-bar {
+        width: 40%;
+        height: 100%;
+        background: linear-gradient(90deg, #0088cc, #8b5cf6);
+        border-radius: 10px;
+        position: absolute;
+        animation: loading-bar 1.8s cubic-bezier(0.65, 0.05, 0.36, 1) infinite;
+      }
+
+      /* Terminal Logs for luxury aesthetic */
+      .loader-terminal {
+        font-family: 'Geist Mono', monospace;
+        font-size: 0.7rem;
+        color: rgba(0, 136, 204, 0.75);
+        margin-top: 1.5rem;
+        min-height: 1.2rem;
+        letter-spacing: 0.05em;
+      }
+
+      .loader-terminal::after {
+        content: '▋';
+        animation: blink 1s step-end infinite;
+      }
+
+      /* Animations */
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-8px);
+        }
+      }
+
+      @keyframes pulse-glow {
+        0% {
+          transform: scale(0.95);
+          opacity: 0.6;
+        }
+        100% {
+          transform: scale(1.15);
+          opacity: 1;
+        }
+      }
+
+      @keyframes loading-bar {
+        0% {
+          left: -40%;
+          width: 30%;
+        }
+        50% {
+          width: 50%;
+        }
+        100% {
+          left: 110%;
+          width: 20%;
+        }
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <!-- Better loading lazy loading indicator -->
+      <div id="initial-loader">
+        <div class="loader-logo-container">
+          <div class="loader-logo-glow"></div>
+          <!-- Clean SVG representing the brand: 3D-ish Hard drive + Paper plane concept -->
+          <svg
+            class="loader-logo"
+            viewBox="0 0 85 85"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g transform="translate(-1, -9) scale(1.2)">
+              <!-- Bottom Drive -->
+              <rect x="5" y="56" width="56" height="18" rx="4" fill="#0088cc" />
+              <rect x="5" y="66" width="56" height="8" rx="4" fill="#006193" />
+              <circle cx="52" cy="65" r="2" fill="#00ffcc" />
+              <!-- Middle Drive -->
+              <rect x="5" y="34" width="56" height="18" rx="4" fill="#0088cc" />
+              <rect x="5" y="44" width="56" height="8" rx="4" fill="#006193" />
+              <circle cx="52" cy="43" r="2" fill="#00ffcc" />
+              <!-- Top Drive -->
+              <rect x="5" y="12" width="56" height="18" rx="4" fill="#0088cc" />
+              <rect x="5" y="22" width="56" height="8" rx="4" fill="#006193" />
+              <circle cx="52" cy="21" r="2" fill="#00ffcc" />
+            </g>
+            <!-- Paper Plane -->
+            <g transform="translate(29.1, 16.5) scale(1.68)">
+              <path
+                d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882 L27.338,3.713 Z"
+                fill="#0088cc"
+              />
+              <path
+                d="M27.338,3.713l-5.316,22.166l-8.651-5.492l9.699-11.854L9.456,17.781l-4.45-2.882L27.338,3.713 M30.285,0L0.984,14.678 l8.174,5.128l3.749,11.464l4.789-5.779l5.616,3.586L30.285,0L30.285,0z"
+                fill="#ffffff"
+              />
+            </g>
+          </svg>
+        </div>
+        <div class="loader-title">Telegramonic</div>
+        <div class="loader-subtitle">CLOUD STORAGE FOR DIGITAL CRAFTSMEN</div>
+        <div class="loader-progress-track">
+          <div class="loader-progress-bar"></div>
+        </div>
+        <div class="loader-terminal">CONNECTING TO GATEWAY</div>
+      </div>
+    </div>
+
+    <script>
+      // Simple rotating terminal text to entertain the user during initial load
+      const logs = [
+        'CONNECTING TO MTPROTO GATEWAY...',
+        'SECURE SESSION ESTABLISHED...',
+        'AUTHENTICATING HANDSHAKE...',
+        'LOADING DATA LAYERS...',
+        'DECRYPTING SECURE STORAGE...',
+        'LAUNCHING CRAFTSMAN CONTAINER...',
+        'MOUNTING VIRTUAL SYSTEMS...',
+      ];
+      let logIndex = 0;
+      const terminalEl = document.querySelector('.loader-terminal');
+      if (terminalEl) {
+        setInterval(() => {
+          logIndex = (logIndex + 1) % logs.length;
+          terminalEl.textContent = logs[logIndex];
+        }, 800);
+      }
+    </script>
+  </body>
+</html>
