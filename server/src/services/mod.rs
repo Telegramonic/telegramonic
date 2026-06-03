@@ -1,15 +1,19 @@
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
-pub mod mock;
 pub mod telegram;
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(tag = "status", content = "data")]
 pub enum AuthState {
     LoggedOut,
-    AwaitingCode { phone: String, phone_code_hash: String },
-    AwaitingPassword { phone: String },
+    AwaitingCode {
+        phone: String,
+        phone_code_hash: String,
+    },
+    AwaitingPassword {
+        phone: String,
+    },
     LoggedIn,
 }
 
@@ -65,13 +69,22 @@ pub struct TelegramUser {
     pub phone: Option<String>,
 }
 
-
 // Global thread-safe service trait
 #[axum::async_trait]
 pub trait TelegramService: Send + Sync {
     // Auth operations
-    async fn send_code(&self, phone: &str, api_id: i32, api_hash: &str) -> Result<AuthResult, String>;
-    async fn sign_in(&self, phone: &str, phone_code_hash: &str, code: &str) -> Result<AuthResult, String>;
+    async fn send_code(
+        &self,
+        phone: &str,
+        api_id: i32,
+        api_hash: &str,
+    ) -> Result<AuthResult, String>;
+    async fn sign_in(
+        &self,
+        phone: &str,
+        phone_code_hash: &str,
+        code: &str,
+    ) -> Result<AuthResult, String>;
     async fn check_password(&self, password: &str) -> Result<AuthResult, String>;
     async fn log_out(&self) -> Result<bool, String>;
     async fn reset_authorization(&self) -> Result<bool, String>;
@@ -81,22 +94,44 @@ pub trait TelegramService: Send + Sync {
     async fn get_me(&self) -> Result<TelegramUser, String>;
     async fn get_users(&self) -> Result<Vec<TelegramUser>, String>;
     async fn get_full_user(&self, user_id: i64) -> Result<TelegramUser, String>;
-    async fn update_profile(&self, first_name: &str, last_name: Option<&str>) -> Result<bool, String>;
+    async fn update_profile(
+        &self,
+        first_name: &str,
+        last_name: Option<&str>,
+    ) -> Result<bool, String>;
     async fn update_status(&self, offline: bool) -> Result<bool, String>;
     async fn update_username(&self, username: &str) -> Result<bool, String>;
-
 
     // Drive & Files operations
     async fn get_drives(&self) -> Result<Vec<Drive>, String>;
     async fn get_stats(&self) -> Result<DriveStats, String>;
     async fn get_folders(&self, parent_id: Option<i64>) -> Result<Vec<FolderMetadata>, String>;
-    async fn get_files(&self, folder_id: Option<i64>, search_query: Option<&str>) -> Result<Vec<FileMetadata>, String>;
-    async fn create_folder(&self, name: &str, parent_id: Option<i64>) -> Result<FolderMetadata, String>;
+    async fn get_files(
+        &self,
+        folder_id: Option<i64>,
+        search_query: Option<&str>,
+    ) -> Result<Vec<FileMetadata>, String>;
+    async fn create_folder(
+        &self,
+        name: &str,
+        parent_id: Option<i64>,
+    ) -> Result<FolderMetadata, String>;
     async fn delete_folder(&self, id: i64) -> Result<bool, String>;
-    
+
     // File upload/download
-    async fn upload_part(&self, file_id: i64, part_index: i32, bytes: Vec<u8>) -> Result<bool, String>;
-    async fn save_file(&self, file_id: i64, name: &str, size: i64, folder_id: Option<i64>) -> Result<FileMetadata, String>;
+    async fn upload_part(
+        &self,
+        file_id: i64,
+        part_index: i32,
+        bytes: Vec<u8>,
+    ) -> Result<bool, String>;
+    async fn save_file(
+        &self,
+        file_id: i64,
+        name: &str,
+        size: i64,
+        folder_id: Option<i64>,
+    ) -> Result<FileMetadata, String>;
     async fn download_file(&self, file_id: i64) -> Result<Vec<u8>, String>;
 }
 

@@ -1,12 +1,12 @@
+use crate::services::DynTelegramService;
 use axum::{
     body::Bytes,
-    extract::{State, Query},
-    http::{header, StatusCode, HeaderMap},
+    extract::{Query, State},
+    http::{header, HeaderMap, StatusCode},
     response::IntoResponse,
     Json,
 };
 use serde::Deserialize;
-use crate::services::DynTelegramService;
 
 #[derive(Debug, Deserialize)]
 pub struct UploadPartQuery {
@@ -54,8 +54,15 @@ pub async fn upload_part(
     Query(query): Query<UploadPartQuery>,
     body: Bytes,
 ) -> impl IntoResponse {
-    match service.upload_part(query.file_id, query.part_index, body.to_vec()).await {
-        Ok(success) => (StatusCode::OK, Json(serde_json::json!({ "success": success }))).into_response(),
+    match service
+        .upload_part(query.file_id, query.part_index, body.to_vec())
+        .await
+    {
+        Ok(success) => (
+            StatusCode::OK,
+            Json(serde_json::json!({ "success": success })),
+        )
+            .into_response(),
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(serde_json::json!({ "success": false, "error": err })),
@@ -68,7 +75,15 @@ pub async fn save_file(
     State(service): State<DynTelegramService>,
     Json(payload): Json<SaveFilePayload>,
 ) -> impl IntoResponse {
-    match service.save_file(payload.file_id, &payload.name, payload.size, payload.folder_id).await {
+    match service
+        .save_file(
+            payload.file_id,
+            &payload.name,
+            payload.size,
+            payload.folder_id,
+        )
+        .await
+    {
         Ok(file) => (StatusCode::OK, Json(file)).into_response(),
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
@@ -85,10 +100,15 @@ pub async fn download_file(
     match service.download_file(query.file_id).await {
         Ok(bytes) => {
             let mut headers = HeaderMap::new();
-            headers.insert(header::CONTENT_TYPE, "application/octet-stream".parse().unwrap());
+            headers.insert(
+                header::CONTENT_TYPE,
+                "application/octet-stream".parse().unwrap(),
+            );
             headers.insert(
                 header::CONTENT_DISPOSITION,
-                format!("attachment; filename=\"file_{}\"", query.file_id).parse().unwrap(),
+                format!("attachment; filename=\"file_{}\"", query.file_id)
+                    .parse()
+                    .unwrap(),
             );
             (StatusCode::OK, headers, bytes).into_response()
         }
@@ -100,9 +120,7 @@ pub async fn download_file(
     }
 }
 
-pub async fn get_drives(
-    State(service): State<DynTelegramService>,
-) -> impl IntoResponse {
+pub async fn get_drives(State(service): State<DynTelegramService>) -> impl IntoResponse {
     match service.get_drives().await {
         Ok(drives) => (StatusCode::OK, Json(drives)).into_response(),
         Err(err) => (
@@ -113,9 +131,7 @@ pub async fn get_drives(
     }
 }
 
-pub async fn get_stats(
-    State(service): State<DynTelegramService>,
-) -> impl IntoResponse {
+pub async fn get_stats(State(service): State<DynTelegramService>) -> impl IntoResponse {
     match service.get_stats().await {
         Ok(stats) => (StatusCode::OK, Json(stats)).into_response(),
         Err(err) => (
@@ -158,7 +174,10 @@ pub async fn create_folder(
     State(service): State<DynTelegramService>,
     Json(payload): Json<CreateFolderPayload>,
 ) -> impl IntoResponse {
-    match service.create_folder(&payload.name, payload.parent_id).await {
+    match service
+        .create_folder(&payload.name, payload.parent_id)
+        .await
+    {
         Ok(folder) => (StatusCode::OK, Json(folder)).into_response(),
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
@@ -173,7 +192,11 @@ pub async fn delete_folder(
     Json(payload): Json<DeleteFolderPayload>,
 ) -> impl IntoResponse {
     match service.delete_folder(payload.id).await {
-        Ok(success) => (StatusCode::OK, Json(serde_json::json!({ "success": success }))).into_response(),
+        Ok(success) => (
+            StatusCode::OK,
+            Json(serde_json::json!({ "success": success })),
+        )
+            .into_response(),
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(serde_json::json!({ "success": false, "error": err })),
