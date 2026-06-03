@@ -1,6 +1,6 @@
-use super::{
-    AuthState, AuthResult, Drive, DriveStats, FileMetadata, FolderMetadata,
-    TelegramService, TelegramUser,
+use crate::services::{
+    AuthResult, AuthState, Drive, DriveStats, FileMetadata, FolderMetadata, TelegramService,
+    TelegramUser,
 };
 use chrono::Utc;
 use std::collections::HashMap;
@@ -23,11 +23,35 @@ pub struct MockTelegramService {
 
 impl MockTelegramService {
     pub fn new() -> Self {
+        Self::new_with_state(AuthState::LoggedOut)
+    }
+
+    pub fn new_logged_in() -> Self {
+        Self::new_with_state(AuthState::LoggedIn)
+    }
+
+    pub fn new_with_state(auth_state: AuthState) -> Self {
         let initial_folders = vec![
-            FolderMetadata { id: 1, parent_id: None, name: "Documents".to_string() },
-            FolderMetadata { id: 2, parent_id: None, name: "Images".to_string() },
-            FolderMetadata { id: 3, parent_id: None, name: "Backups".to_string() },
-            FolderMetadata { id: 4, parent_id: Some(1), name: "Invoices".to_string() },
+            FolderMetadata {
+                id: 1,
+                parent_id: None,
+                name: "Documents".to_string(),
+            },
+            FolderMetadata {
+                id: 2,
+                parent_id: None,
+                name: "Images".to_string(),
+            },
+            FolderMetadata {
+                id: 3,
+                parent_id: None,
+                name: "Backups".to_string(),
+            },
+            FolderMetadata {
+                id: 4,
+                parent_id: Some(1),
+                name: "Invoices".to_string(),
+            },
         ];
 
         let initial_files = vec![
@@ -35,7 +59,7 @@ impl MockTelegramService {
                 id: 101,
                 folder_id: None,
                 name: "resume.pdf".to_string(),
-                size: 1024 * 350,
+                size: 358400,
                 mime_type: Some("application/pdf".to_string()),
                 file_ext: Some("pdf".to_string()),
                 created_at: Utc::now().to_rfc3339(),
@@ -45,7 +69,7 @@ impl MockTelegramService {
                 id: 102,
                 folder_id: Some(2),
                 name: "profile_pic.jpg".to_string(),
-                size: 1024 * 850,
+                size: 870400,
                 mime_type: Some("image/jpeg".to_string()),
                 file_ext: Some("jpg".to_string()),
                 created_at: Utc::now().to_rfc3339(),
@@ -55,7 +79,7 @@ impl MockTelegramService {
                 id: 103,
                 folder_id: Some(3),
                 name: "database_dump.sql.gz".to_string(),
-                size: 1024 * 1024 * 45,
+                size: 47185920,
                 mime_type: Some("application/gzip".to_string()),
                 file_ext: Some("gz".to_string()),
                 created_at: Utc::now().to_rfc3339(),
@@ -77,7 +101,7 @@ impl MockTelegramService {
         ];
 
         let db = MockDb {
-            auth_state: AuthState::LoggedOut,
+            auth_state,
             folders: initial_folders,
             files: initial_files,
             drives: initial_drives,
@@ -97,7 +121,12 @@ impl TelegramService for MockTelegramService {
         db.auth_state.clone()
     }
 
-    async fn send_code(&self, phone: &str, _api_id: i32, _api_hash: &str) -> Result<AuthResult, String> {
+    async fn send_code(
+        &self,
+        phone: &str,
+        _api_id: i32,
+        _api_hash: &str,
+    ) -> Result<AuthResult, String> {
         let mut db = self.db.lock().await;
         if phone.is_empty() {
             return Err("Phone number cannot be empty".to_string());
@@ -115,9 +144,14 @@ impl TelegramService for MockTelegramService {
         })
     }
 
-    async fn sign_in(&self, phone: &str, _phone_code_hash: &str, code: &str) -> Result<AuthResult, String> {
+    async fn sign_in(
+        &self,
+        phone: &str,
+        _phone_code_hash: &str,
+        code: &str,
+    ) -> Result<AuthResult, String> {
         let mut db = self.db.lock().await;
-        
+
         // Simulating different login outcomes based on code input
         if code == "2fa" || code == "22222" {
             db.auth_state = AuthState::AwaitingPassword {
@@ -146,7 +180,7 @@ impl TelegramService for MockTelegramService {
 
     async fn check_password(&self, password: &str) -> Result<AuthResult, String> {
         let mut db = self.db.lock().await;
-        
+
         if password == "password" || password == "admin" {
             db.auth_state = AuthState::LoggedIn;
             Ok(AuthResult {
@@ -218,7 +252,11 @@ impl TelegramService for MockTelegramService {
         }
     }
 
-    async fn update_profile(&self, _first_name: &str, _last_name: Option<&str>) -> Result<bool, String> {
+    async fn update_profile(
+        &self,
+        _first_name: &str,
+        _last_name: Option<&str>,
+    ) -> Result<bool, String> {
         Ok(true)
     }
 
@@ -230,7 +268,6 @@ impl TelegramService for MockTelegramService {
         Ok(true)
     }
 
-
     async fn get_drives(&self) -> Result<Vec<Drive>, String> {
         let db = self.db.lock().await;
         Ok(db.drives.clone())
@@ -240,7 +277,7 @@ impl TelegramService for MockTelegramService {
         let db = self.db.lock().await;
         let total_size: i64 = db.files.iter().map(|f| f.size).sum();
         Ok(DriveStats {
-            total_space: 1024 * 1024 * 1024 * 1024 * 10, // 10 TB simulated capacity
+            total_space: 10995116277760, // 10 TB simulated capacity
             used_space: total_size,
             file_count: db.files.len() as i64,
             folder_count: db.folders.len() as i64,
@@ -258,7 +295,11 @@ impl TelegramService for MockTelegramService {
         Ok(filtered)
     }
 
-    async fn get_files(&self, folder_id: Option<i64>, search_query: Option<&str>) -> Result<Vec<FileMetadata>, String> {
+    async fn get_files(
+        &self,
+        folder_id: Option<i64>,
+        search_query: Option<&str>,
+    ) -> Result<Vec<FileMetadata>, String> {
         let db = self.db.lock().await;
         let mut filtered: Vec<FileMetadata> = db
             .files
@@ -275,7 +316,11 @@ impl TelegramService for MockTelegramService {
         Ok(filtered)
     }
 
-    async fn create_folder(&self, name: &str, parent_id: Option<i64>) -> Result<FolderMetadata, String> {
+    async fn create_folder(
+        &self,
+        name: &str,
+        parent_id: Option<i64>,
+    ) -> Result<FolderMetadata, String> {
         let mut db = self.db.lock().await;
         if name.is_empty() {
             return Err("Folder name cannot be empty".to_string());
@@ -296,7 +341,7 @@ impl TelegramService for MockTelegramService {
         let mut db = self.db.lock().await;
         let initial_len = db.folders.len();
         db.folders.retain(|f| f.id != id);
-        
+
         // Cascade delete or un-parent files/folders
         for folder in db.folders.iter_mut() {
             if folder.parent_id == Some(id) {
@@ -312,19 +357,30 @@ impl TelegramService for MockTelegramService {
         Ok(db.folders.len() < initial_len)
     }
 
-    async fn upload_part(&self, file_id: i64, part_index: i32, bytes: Vec<u8>) -> Result<bool, String> {
+    async fn upload_part(
+        &self,
+        file_id: i64,
+        part_index: i32,
+        bytes: Vec<u8>,
+    ) -> Result<bool, String> {
         let mut db = self.db.lock().await;
         let parts = db.uploaded_chunks.entry(file_id).or_insert_with(Vec::new);
         parts.push((part_index, bytes));
         Ok(true)
     }
 
-    async fn save_file(&self, file_id: i64, name: &str, size: i64, folder_id: Option<i64>) -> Result<FileMetadata, String> {
+    async fn save_file(
+        &self,
+        file_id: i64,
+        name: &str,
+        size: i64,
+        folder_id: Option<i64>,
+    ) -> Result<FileMetadata, String> {
         let mut db = self.db.lock().await;
-        
+
         // Deduce file extension
         let file_ext = name.split('.').last().map(|s| s.to_string());
-        
+
         // Determine icon_type
         let icon_type = match file_ext.as_deref() {
             Some("pdf") => "pdf".to_string(),
@@ -352,12 +408,12 @@ impl TelegramService for MockTelegramService {
 
     async fn download_file(&self, file_id: i64) -> Result<Vec<u8>, String> {
         let db = self.db.lock().await;
-        
+
         // Reassemble file parts
         if let Some(parts) = db.uploaded_chunks.get(&file_id) {
             let mut sorted_parts = parts.clone();
             sorted_parts.sort_by_key(|p| p.0);
-            
+
             let mut full_file = Vec::new();
             for (_, chunk) in sorted_parts {
                 full_file.extend(chunk);

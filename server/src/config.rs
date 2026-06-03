@@ -4,9 +4,6 @@ use std::env;
 pub struct AppConfig {
     pub host: String,
     pub port: u16,
-    pub mock_mode: bool,
-    pub api_id: Option<i32>,
-    pub api_hash: Option<String>,
 }
 
 impl AppConfig {
@@ -19,23 +16,6 @@ impl AppConfig {
             .and_then(|p| p.parse().ok())
             .unwrap_or(8080);
 
-        let mock_mode = env::var("MOCK_MODE")
-            .ok()
-            .and_then(|m| m.parse().ok())
-            .unwrap_or(false); // Default: real mode. Set MOCK_MODE=true for local development without credentials.
-
-        let api_id = env::var("TELEGRAM_API_ID")
-            .ok()
-            .and_then(|id| id.parse().ok());
-
-        let api_hash = env::var("TELEGRAM_API_HASH").ok();
-
-        Self {
-            host,
-            port,
-            mock_mode,
-            api_id,
-            api_hash,
-        }
+        Self { host, port }
     }
 }

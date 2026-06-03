@@ -1,11 +1,6 @@
-use axum::{
-    extract::State,
-    http::StatusCode,
-    response::IntoResponse,
-    Json,
-};
-use serde::Deserialize;
 use crate::services::DynTelegramService;
+use axum::{extract::State, http::StatusCode, response::IntoResponse, Json};
+use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct SendCodePayload {
@@ -26,9 +21,7 @@ pub struct CheckPasswordPayload {
     pub password: String,
 }
 
-pub async fn get_auth_state(
-    State(service): State<DynTelegramService>,
-) -> impl IntoResponse {
+pub async fn get_auth_state(State(service): State<DynTelegramService>) -> impl IntoResponse {
     let state = service.get_auth_state().await;
     Json(state)
 }
@@ -52,7 +45,10 @@ pub async fn send_code(
         }
     };
 
-    match service.send_code(&payload.phone, api_id_parsed, &payload.api_hash).await {
+    match service
+        .send_code(&payload.phone, api_id_parsed, &payload.api_hash)
+        .await
+    {
         Ok(result) => (StatusCode::OK, Json(result)).into_response(),
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
@@ -91,11 +87,13 @@ pub async fn check_password(
     }
 }
 
-pub async fn log_out(
-    State(service): State<DynTelegramService>,
-) -> impl IntoResponse {
+pub async fn log_out(State(service): State<DynTelegramService>) -> impl IntoResponse {
     match service.log_out().await {
-        Ok(success) => (StatusCode::OK, Json(serde_json::json!({ "success": success }))).into_response(),
+        Ok(success) => (
+            StatusCode::OK,
+            Json(serde_json::json!({ "success": success })),
+        )
+            .into_response(),
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(serde_json::json!({ "success": false, "error": err })),
@@ -104,11 +102,13 @@ pub async fn log_out(
     }
 }
 
-pub async fn reset_authorization(
-    State(service): State<DynTelegramService>,
-) -> impl IntoResponse {
+pub async fn reset_authorization(State(service): State<DynTelegramService>) -> impl IntoResponse {
     match service.reset_authorization().await {
-        Ok(success) => (StatusCode::OK, Json(serde_json::json!({ "success": success }))).into_response(),
+        Ok(success) => (
+            StatusCode::OK,
+            Json(serde_json::json!({ "success": success })),
+        )
+            .into_response(),
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(serde_json::json!({ "success": false, "error": err })),

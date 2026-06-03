@@ -19,3 +19,6 @@ tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
 grammers-client = "0.7.0"
 grammers-session = "0.7.0"
 grammers-tl-types = "0.7.0"
+
+[dev-dependencies]
+tower = { version = "0.4.13", features = ["util"] }

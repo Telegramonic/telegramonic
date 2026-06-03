@@ -4,10 +4,8 @@ This is a highly reliable, robust, and asynchronous Rust backend application bui
 
 ## Core Features
 
-- **Dual-Mode Architecture**:
-  - **Mock Mode (Default/Fallback)**: In-memory simulation of Telegram sessions, folder/file storage management, and a complete multi-step login state machine (requires no Telegram API credentials).
-  - **Real Mode**: Uses the async **Grammers** library to establish binary MTProto TCP connections to official Telegram Data Centers (DCs).
-- **CORS Support**: Permissive headers configuration enabling smooth local communication with the React frontend server.
+- **MTProto Real Mode**: Uses the async **Grammers** library to establish binary MTProto TCP connections to official Telegram Data Centers (DCs).
+- **CORS Support**: Permissive headers configuration enabling smooth communication with the React frontend server.
 - **Structured Tracing**: Uses `tracing-subscriber` for clean, structured console outputs.
 
 ---
@@ -27,46 +25,32 @@ _After installation, restart your shell or run `source $HOME/.cargo/env` to add 
 
 ### 2. Run the Server
 
-By default, the server runs in **Mock Mode** on `127.0.0.1:8080`.
-
-To build and start the server:
+To build and start the server in Real Mode, you **must** supply your Telegram Developer API ID and API Hash:
 
 ```bash
 # Navigate to the server folder
 cd server
 
-# Run the server
-cargo run
+# Run the server with credentials
+TELEGRAM_API_ID=<your_id> TELEGRAM_API_HASH=<your_hash> cargo run
 ```
+
+Get your credentials at [my.telegram.org/apps](https://my.telegram.org/apps).
 
 ### 3. Environment Variables
 
 You can configure the server using environment variables or a `.env` file in the `server/` directory:
 
-| Environment Variable | Description                                                          | Default     |
-| :------------------- | :------------------------------------------------------------------- | :---------- |
-| `PORT`               | Listening port for the HTTP server                                   | `8080`      |
-| `HOST`               | Bind address                                                         | `127.0.0.1` |
-| `MOCK_MODE`          | Set to `true` to run simulation; `false` to connect to real Telegram | `true`      |
-| `TELEGRAM_API_ID`    | Your Telegram Developer API ID (required if `MOCK_MODE=false`)       | _None_      |
-| `TELEGRAM_API_HASH`  | Your Telegram Developer API Hash (required if `MOCK_MODE=false`)     | _None_      |
+| Environment Variable | Description                                                     | Default     |
+| :------------------- | :-------------------------------------------------------------- | :---------- |
+| `PORT`               | Listening port for the HTTP server                              | `8080`      |
+| `HOST`               | Bind address                                                    | `127.0.0.1` |
+| `TELEGRAM_API_ID`    | Your Telegram Developer API ID (Mandatory)                     | _None_      |
+| `TELEGRAM_API_HASH`  | Your Telegram Developer API Hash (Mandatory)                   | _None_      |
 
 ---
 
-## 🛠️ API Endpoints & Testing in Mock Mode
-
-When running in **Mock Mode**, you can simulate the full MTProto login flow using these predefined inputs:
-
-### Authentication State Machine
-
-- **Phase 1: Phone Validation (`/auth/send-code`)**:
-  - Submitting any phone number transitions the server state to `AwaitingCode`.
-- **Phase 2: Code verification (`/auth/sign-in`)**:
-  - Submitting the code **`12345`** transitions the state directly to `LoggedIn` (success).
-  - Submitting the code **`2fa`** transitions the state to `AwaitingPassword` (simulates active Two-Step verification).
-  - Submitting any other code returns a `400 Bad Request` auth error.
-- **Phase 3: 2FA Password validation (`/auth/check-password`)**:
-  - Submitting the password **`password`** transitions the state to `LoggedIn` (success).
+## 🛠️ API Endpoints
 
 ### Endpoint Index (Matches Frontend Constants)
 
@@ -91,7 +75,7 @@ When running in **Mock Mode**, you can simulate the full MTProto login flow usin
 #### Drive Files Explorer Handlers:
 
 - `GET /drive/list` - Lists channels representing drives.
-- `GET /drive/stats` - Retrives storage statistics (used vs total cap).
+- `GET /drive/stats` - Retrieves storage statistics (used vs total cap).
 - `GET /drive/folders` - Lists directory folders (`parent_id` parameter supported).
 - `GET /drive/files` - Lists directory files (`folder_id` and search parameter `q` supported).
 - `POST /drive/folders/create` - Creates folder.
