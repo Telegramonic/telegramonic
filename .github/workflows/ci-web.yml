@@ -1,0 +1,49 @@
+name: Web CI
+
+on:
+  push:
+    branches:
+      - development
+    paths:
+      - 'web/**'
+      - 'common/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.github/workflows/ci-web.yml'
+  pull_request:
+    branches:
+      - development
+    paths:
+      - 'web/**'
+      - 'common/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.github/workflows/ci-web.yml'
+
+jobs:
+  web-ci:
+    name: Lint, Build and Test Web
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Lint
+        run: yarn web:lint
+
+      - name: Build
+        run: yarn web:build
+
+      - name: Test
+        run: yarn web:test --watchAll=false --passWithNoTests

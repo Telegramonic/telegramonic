@@ -33,6 +33,10 @@ async fn require_login(
     }
 }
 
+async fn health_check() -> impl IntoResponse {
+    (StatusCode::OK, Json(serde_json::json!({ "status": "ok" })))
+}
+
 pub fn create_router(service: DynTelegramService) -> Router {
     // Setup CORS layer allowing local development requests
     let cors = CorsLayer::new()
@@ -80,6 +84,8 @@ pub fn create_router(service: DynTelegramService) -> Router {
         ));
 
     Router::new()
+        // Health check endpoint
+        .route("/health", get(health_check))
         // Public Auth routes
         .route("/auth/state", get(auth::get_auth_state))
         .route("/auth/send-code", post(auth::send_code))

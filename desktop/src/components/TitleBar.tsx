@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Box, HStack, Text, Spinner } from '@chakra-ui/react';
 import { Logo } from '@assets';
+import { useServerHealth } from '@services';
 
 interface ElectronAPI {
   platform: string;
@@ -18,28 +19,14 @@ declare global {
 
 const TitleBar = () => {
   const [platform, setPlatform] = useState<string>('unknown');
-  const [latency, setLatency] = useState<number | null>(null);
-  const [status, setStatus] = useState<'idle' | 'checking' | 'connected' | 'error'>('idle');
+  const { data, isFetching, refetch } = useServerHealth();
 
-  const checkConnection = async (showSpinner = true) => {
-    if (!window.electronAPI) return;
-    if (showSpinner) {
-      setStatus('checking');
-    }
-    try {
-      const res = await window.electronAPI.checkConnection();
-      if (res.status === 'connected') {
-        setStatus('connected');
-        setLatency(res.latency);
-      } else {
-        setStatus('error');
-        setLatency(null);
-      }
-    } catch (e) {
-      setStatus('error');
-      setLatency(null);
-    }
-  };
+  const status = isFetching
+    ? 'checking'
+    : data?.status === 'connected'
+      ? 'connected'
+      : 'error';
+  const latency = data?.latency ?? null;
 
   useEffect(() => {
     let currentPlatform = 'unknown';
@@ -80,16 +67,6 @@ const TitleBar = () => {
         console.error('Failed to load icon.png for macOS dock padding:', err);
       };
     }
-
-    // Perform initial check
-    checkConnection(true);
-
-    // Poll connection status every 5 seconds in the background
-    const interval = setInterval(() => {
-      checkConnection(false);
-    }, 5000);
-
-    return () => clearInterval(interval);
   }, []);
 
   const isMac = platform === 'darwin';
@@ -137,7 +114,7 @@ const TitleBar = () => {
         <HStack
           gap={2}
           cursor="pointer"
-          onClick={() => checkConnection(true)}
+          onClick={() => refetch()}
           px={2.5}
           py={0.5}
           borderRadius="full"

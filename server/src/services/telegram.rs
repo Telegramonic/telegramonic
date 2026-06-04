@@ -5,6 +5,7 @@ use super::{
 use chrono::Utc;
 use grammers_client::{Client, Config, InitParams};
 use grammers_session::Session;
+use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 
@@ -16,6 +17,9 @@ pub struct RealTelegramService {
     session_file: String,
     login_token: Arc<Mutex<Option<grammers_client::types::LoginToken>>>,
     password_token: Arc<Mutex<Option<grammers_client::types::PasswordToken>>>,
+    folders: Arc<Mutex<Vec<FolderMetadata>>>,
+    files: Arc<Mutex<Vec<FileMetadata>>>,
+    uploaded_chunks: Arc<Mutex<HashMap<i64, Vec<(i32, Vec<u8>)>>>>,
 }
 
 impl std::fmt::Debug for RealTelegramService {
@@ -33,6 +37,62 @@ impl RealTelegramService {
             Err(_) => (None, None),
         };
 
+        let initial_folders = vec![
+            FolderMetadata {
+                id: 1,
+                parent_id: None,
+                name: "Documents".to_string(),
+            },
+            FolderMetadata {
+                id: 2,
+                parent_id: None,
+                name: "Images".to_string(),
+            },
+            FolderMetadata {
+                id: 3,
+                parent_id: None,
+                name: "Backups".to_string(),
+            },
+            FolderMetadata {
+                id: 4,
+                parent_id: Some(1),
+                name: "Invoices".to_string(),
+            },
+        ];
+
+        let initial_files = vec![
+            FileMetadata {
+                id: 101,
+                folder_id: None,
+                name: "resume.pdf".to_string(),
+                size: 358400,
+                mime_type: Some("application/pdf".to_string()),
+                file_ext: Some("pdf".to_string()),
+                created_at: Utc::now().to_rfc3339(),
+                icon_type: "pdf".to_string(),
+            },
+            FileMetadata {
+                id: 102,
+                folder_id: Some(2),
+                name: "profile_pic.jpg".to_string(),
+                size: 870400,
+                mime_type: Some("image/jpeg".to_string()),
+                file_ext: Some("jpg".to_string()),
+                created_at: Utc::now().to_rfc3339(),
+                icon_type: "image".to_string(),
+            },
+            FileMetadata {
+                id: 103,
+                folder_id: Some(3),
+                name: "database_dump.sql.gz".to_string(),
+                size: 47185920,
+                mime_type: Some("application/gzip".to_string()),
+                file_ext: Some("gz".to_string()),
+                created_at: Utc::now().to_rfc3339(),
+                icon_type: "archive".to_string(),
+            },
+        ];
+
         Self {
             client: Arc::new(Mutex::new(None)),
             api_id: Arc::new(Mutex::new(api_id)),
@@ -40,6 +100,9 @@ impl RealTelegramService {
             session_file: "telegram.session".to_string(),
             login_token: Arc::new(Mutex::new(None)),
             password_token: Arc::new(Mutex::new(None)),
+            folders: Arc::new(Mutex::new(initial_folders)),
+            files: Arc::new(Mutex::new(initial_files)),
+            uploaded_chunks: Arc::new(Mutex::new(HashMap::new())),
         }
     }
 
@@ -292,48 +355,99 @@ impl TelegramService for RealTelegramService {
     }
 
     async fn get_stats(&self) -> Result<DriveStats, String> {
+        let files = self.files.lock().await;
+        let folders = self.folders.lock().await;
+        let total_size: i64 = files.iter().map(|f| f.size).sum();
+
         Ok(DriveStats {
-            total_space: 1024 * 1024 * 1024 * 1024 * 10,
-            used_space: 0,
-            file_count: 0,
-            folder_count: 0,
+            total_space: 10995116277760, // 10 TB simulated capacity
+            used_space: total_size,
+            file_count: files.len() as i64,
+            folder_count: folders.len() as i64,
         })
     }
 
-    async fn get_folders(&self, _parent_id: Option<i64>) -> Result<Vec<FolderMetadata>, String> {
-        Ok(vec![])
+    async fn get_folders(&self, parent_id: Option<i64>) -> Result<Vec<FolderMetadata>, String> {
+        let folders = self.folders.lock().await;
+        let filtered = folders
+            .iter()
+            .filter(|f| f.parent_id == parent_id)
+            .cloned()
+            .collect();
+        Ok(filtered)
     }
 
     async fn get_files(
         &self,
-        _folder_id: Option<i64>,
-        _search_query: Option<&str>,
+        folder_id: Option<i64>,
+        search_query: Option<&str>,
     ) -> Result<Vec<FileMetadata>, String> {
-        Ok(vec![])
+        let files = self.files.lock().await;
+        let mut filtered: Vec<FileMetadata> = files
+            .iter()
+            .filter(|f| f.folder_id == folder_id)
+            .cloned()
+            .collect();
+
+        if let Some(query) = search_query {
+            let query_lower = query.to_lowercase();
+            filtered.retain(|f| f.name.to_lowercase().contains(&query_lower));
+        }
+
+        Ok(filtered)
     }
 
     async fn create_folder(
         &self,
         name: &str,
-        _parent_id: Option<i64>,
+        parent_id: Option<i64>,
     ) -> Result<FolderMetadata, String> {
-        Ok(FolderMetadata {
-            id: 999,
-            parent_id: None,
+        let mut folders = self.folders.lock().await;
+        if name.is_empty() {
+            return Err("Folder name cannot be empty".to_string());
+        }
+
+        let new_id = (folders.len() + 1) as i64;
+        let new_folder = FolderMetadata {
+            id: new_id,
+            parent_id,
             name: name.to_string(),
-        })
+        };
+
+        folders.push(new_folder.clone());
+        Ok(new_folder)
     }
 
-    async fn delete_folder(&self, _id: i64) -> Result<bool, String> {
-        Ok(true)
+    async fn delete_folder(&self, id: i64) -> Result<bool, String> {
+        let mut folders = self.folders.lock().await;
+        let mut files = self.files.lock().await;
+        let initial_len = folders.len();
+        folders.retain(|f| f.id != id);
+
+        // Cascade delete or un-parent files/folders
+        for folder in folders.iter_mut() {
+            if folder.parent_id == Some(id) {
+                folder.parent_id = None;
+            }
+        }
+        for file in files.iter_mut() {
+            if file.folder_id == Some(id) {
+                file.folder_id = None;
+            }
+        }
+
+        Ok(folders.len() < initial_len)
     }
 
     async fn upload_part(
         &self,
-        _file_id: i64,
-        _part_index: i32,
-        _bytes: Vec<u8>,
+        file_id: i64,
+        part_index: i32,
+        bytes: Vec<u8>,
     ) -> Result<bool, String> {
+        let mut chunks = self.uploaded_chunks.lock().await;
+        let parts = chunks.entry(file_id).or_insert_with(Vec::new);
+        parts.push((part_index, bytes));
         Ok(true)
     }
 
@@ -344,19 +458,52 @@ impl TelegramService for RealTelegramService {
         size: i64,
         folder_id: Option<i64>,
     ) -> Result<FileMetadata, String> {
-        Ok(FileMetadata {
+        let mut files = self.files.lock().await;
+
+        // Deduce file extension
+        let file_ext = name.split('.').last().map(|s| s.to_string());
+
+        // Determine icon_type
+        let icon_type = match file_ext.as_deref() {
+            Some("pdf") => "pdf".to_string(),
+            Some("png") | Some("jpg") | Some("jpeg") | Some("gif") => "image".to_string(),
+            Some("zip") | Some("tar") | Some("gz") | Some("rar") => "archive".to_string(),
+            Some("mp4") | Some("mkv") | Some("avi") => "video".to_string(),
+            Some("mp3") | Some("wav") | Some("ogg") => "audio".to_string(),
+            _ => "file".to_string(),
+        };
+
+        let new_file = FileMetadata {
             id: file_id,
             folder_id,
             name: name.to_string(),
             size,
-            mime_type: None,
-            file_ext: None,
+            mime_type: Some("application/octet-stream".to_string()),
+            file_ext,
             created_at: Utc::now().to_rfc3339(),
-            icon_type: "file".to_string(),
-        })
+            icon_type,
+        };
+
+        files.push(new_file.clone());
+        Ok(new_file)
     }
 
-    async fn download_file(&self, _file_id: i64) -> Result<Vec<u8>, String> {
-        Ok(vec![])
+    async fn download_file(&self, file_id: i64) -> Result<Vec<u8>, String> {
+        let chunks = self.uploaded_chunks.lock().await;
+
+        // Reassemble file parts
+        if let Some(parts) = chunks.get(&file_id) {
+            let mut sorted_parts = parts.clone();
+            sorted_parts.sort_by_key(|p| p.0);
+
+            let mut full_file = Vec::new();
+            for (_, chunk) in sorted_parts {
+                full_file.extend(chunk);
+            }
+            Ok(full_file)
+        } else {
+            // Return some dummy payload for initial mock files
+            Ok(format!("This is the content of mock file ID: {}", file_id).into_bytes())
+        }
     }
 }

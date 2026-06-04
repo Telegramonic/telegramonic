@@ -1,0 +1,84 @@
+name: Build & Publish Web App
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'Version Bump Type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  check-branch:
+    name: Validate Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assert development branch
+        run: |
+          echo "Triggered branch: ${{ github.ref_name }}"
+          if [ "${{ github.ref_name }}" != "development" ]; then
+            echo "Error: This workflow can only be manually run on the 'development' branch."
+            exit 1
+          fi
+
+  build-web:
+    name: Build Web App
+    needs: check-branch
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PA_TOKEN }}
+
+      - name: Setup Git User
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump Version
+        run: |
+          cd web
+          npm version ${{ inputs.version_bump }} --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          cd ..
+          git add web/package.json
+          git commit -m "chore(web): bump version to $NEW_VERSION"
+          git push
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Build Web App
+        run: yarn web:build
+
+      - name: Upload Web Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: web/build/
+          retention-days: 7
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ftp.telegramonic.com
+          username: u392139545.github_deploy
+          password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
+          local-dir: web/build/
+          server-dir: ./

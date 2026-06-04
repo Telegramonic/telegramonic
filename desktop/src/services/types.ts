@@ -39,3 +39,16 @@ export interface DriveStats {
   file_count: number;
   folder_count: number;
 }
+
+export interface TelegramUser {
+  id: number;
+  first_name: string;
+  last_name?: string | null;
+  username?: string | null;
+  phone?: string | null;
+}
+
+export interface ServerHealthResponse {
+  status: 'connected' | 'error';
+  latency: number | null;
+}

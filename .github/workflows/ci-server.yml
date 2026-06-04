@@ -1,0 +1,38 @@
+name: Server CI
+
+on:
+  push:
+    branches:
+      - development
+    paths:
+      - 'server/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.github/workflows/ci-server.yml'
+  pull_request:
+    branches:
+      - development
+    paths:
+      - 'server/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.github/workflows/ci-server.yml'
+
+jobs:
+  server-ci:
+    name: Test and Build Server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Rust Toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      - name: Run Tests
+        run: cargo test
+        working-directory: server
+
+      - name: Build Server
+        run: cargo build
+        working-directory: server

@@ -26,6 +26,8 @@
     "desktop:dist:win": "yarn workspace telegramonic-desktop dist:win",
     "desktop:dist:linux": "yarn workspace telegramonic-desktop dist:linux",
     "desktop:dist:all": "yarn workspace telegramonic-desktop dist:all",
+    "build:all": "yarn web:build && yarn desktop:build",
+    "dist:all": "yarn web:build && yarn desktop:dist:all",
     "prettier:staged": "yarn workspace telegramonic-web run prettier:staged",
     "lint:staged": "yarn workspace telegramonic-web run lint:staged",
     "run-staged-tests": "./scripts/run-staged-tests.sh",
