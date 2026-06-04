@@ -45,6 +45,7 @@ jobs:
           version-file: 'desktop/package.json'
           git-path: 'desktop/package.json'
           tag-prefix: 'desktop-v'
+          skip-on-empty: 'false'
 
   build-frontend:
     name: Build Frontend
