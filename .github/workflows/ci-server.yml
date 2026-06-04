@@ -19,8 +19,8 @@ on:
       - '.github/workflows/ci-server.yml'
 
 jobs:
-  test:
-    name: Test Rust Server
+  server-ci:
+    name: Test and Build Server
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -32,16 +32,6 @@ jobs:
       - name: Run Tests
         run: cargo test
         working-directory: server
-
-  build:
-    name: Build Rust Server
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup Rust Toolchain
-        uses: actions-rust-lang/setup-rust-toolchain@v1
 
       - name: Build Server
         run: cargo build
