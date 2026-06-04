@@ -501,12 +501,12 @@ exports[`RouterProvider should render router provider correctly 2`] = `
                 <h2
                   class="chakra-heading css-7s810c"
                 >
-                  API Configuration
+                  Phone Number
                 </h2>
                 <p
                   class="css-dhdf1a"
                 >
-                  Provide your custom Telegram API credentials. Obtain these securely from my.telegram.org.
+                  Enter the phone number associated with your Telegram account.
                 </p>
               </div>
               <div
@@ -515,27 +515,195 @@ exports[`RouterProvider should render router provider correctly 2`] = `
                 <p
                   class="css-1t542ad"
                 >
-                  API ID
+                  Phone Number
                 </p>
-                <input
-                  class="chakra-input css-l626ka"
-                  placeholder="e.g., 123456"
-                  value=""
-                />
-              </div>
-              <div
-                class="chakra-stack css-1gzt2am"
-              >
-                <p
-                  class="css-1t542ad"
+                <div
+                  class="chakra-stack css-1x0y7ph"
                 >
-                  API Hash
-                </p>
-                <input
-                  class="chakra-input css-l626ka"
-                  placeholder="e.g., d58a9e..."
-                  value=""
-                />
+                  <div
+                    class="css-6sc8lq"
+                  >
+                    <select
+                      aria-label="Select Country Code"
+                      style="appearance: none; background: transparent; outline: none; width: 100%; height: 100%; font-size: 14px; font-family: inherit; cursor: pointer; padding-right: 18px;"
+                    >
+                      <option
+                        value="+1"
+                      >
+                        🇺🇸
+                         
+                        US
+                         (
+                        +1
+                        )
+                      </option>
+                      <option
+                        value="+1"
+                      >
+                        🇨🇦
+                         
+                        CA
+                         (
+                        +1
+                        )
+                      </option>
+                      <option
+                        value="+44"
+                      >
+                        🇬🇧
+                         
+                        GB
+                         (
+                        +44
+                        )
+                      </option>
+                      <option
+                        value="+91"
+                      >
+                        🇮🇳
+                         
+                        IN
+                         (
+                        +91
+                        )
+                      </option>
+                      <option
+                        value="+49"
+                      >
+                        🇩🇪
+                         
+                        DE
+                         (
+                        +49
+                        )
+                      </option>
+                      <option
+                        value="+33"
+                      >
+                        🇫🇷
+                         
+                        FR
+                         (
+                        +33
+                        )
+                      </option>
+                      <option
+                        value="+61"
+                      >
+                        🇦🇺
+                         
+                        AU
+                         (
+                        +61
+                        )
+                      </option>
+                      <option
+                        value="+55"
+                      >
+                        🇧🇷
+                         
+                        BR
+                         (
+                        +55
+                        )
+                      </option>
+                      <option
+                        value="+81"
+                      >
+                        🇯🇵
+                         
+                        JP
+                         (
+                        +81
+                        )
+                      </option>
+                      <option
+                        value="+86"
+                      >
+                        🇨🇳
+                         
+                        CN
+                         (
+                        +86
+                        )
+                      </option>
+                      <option
+                        value="+65"
+                      >
+                        🇸🇬
+                         
+                        SG
+                         (
+                        +65
+                        )
+                      </option>
+                      <option
+                        value="+7"
+                      >
+                        🇷🇺
+                         
+                        RU
+                         (
+                        +7
+                        )
+                      </option>
+                      <option
+                        value="+39"
+                      >
+                        🇮🇹
+                         
+                        IT
+                         (
+                        +39
+                        )
+                      </option>
+                      <option
+                        value="+34"
+                      >
+                        🇪🇸
+                         
+                        ES
+                         (
+                        +34
+                        )
+                      </option>
+                      <option
+                        value="+31"
+                      >
+                        🇳🇱
+                         
+                        NL
+                         (
+                        +31
+                        )
+                      </option>
+                    </select>
+                    <div
+                      class="css-1qnp24v"
+                    >
+                      <svg
+                        aria-hidden="true"
+                        fill="none"
+                        height="10"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        viewBox="0 0 10 6"
+                        width="10"
+                      >
+                        <path
+                          d="M1 1l4 4 4-4"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <input
+                    class="chakra-input css-l626ka"
+                    placeholder="Enter phone number without country code"
+                    value=""
+                  />
+                </div>
               </div>
               <button
                 class="chakra-button css-tncwgp"

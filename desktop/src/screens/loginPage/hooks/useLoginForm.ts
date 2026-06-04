@@ -4,13 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { appStore, selectApiCredentials, useShallow } from '@appStore';
 import { apiClient } from '@services';
-
-export interface LoginFormValues {
-  phone: string;
-  code: string;
-  apiId: string;
-  apiHash: string;
-}
+import { LoginFormValues } from '../types';
 
 export const useLoginForm = () => {
   const { t } = useTranslation();
@@ -18,7 +12,7 @@ export const useLoginForm = () => {
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [dialCode, setDialCode] = useState('+1');
+  const [dialCode, setDialCode] = useState('+91');
   const [phoneCodeHash, setPhoneCodeHash] = useState('');
   const [currentPhone, setCurrentPhone] = useState('');
   const { setApiCredentials } = appStore(useShallow(selectApiCredentials));
@@ -36,10 +30,30 @@ export const useLoginForm = () => {
     if (step === 4) {
       const timer = setTimeout(() => {
         navigate('/dashboard');
-      }, 1500);
+      }, 3000);
       return () => clearTimeout(timer);
     }
   }, [step, navigate]);
+
+  const handlePhoneSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const phone = form.getFieldValue('phone');
+
+    const newErrors: Record<string, string> = {};
+    if (!phone) newErrors.phone = t('LoginPage.phone.errorEmpty');
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    const fullPhoneNumber = phone.startsWith('+')
+      ? phone
+      : `${dialCode}${phone}`;
+    setCurrentPhone(fullPhoneNumber);
+    setErrors({});
+    setStep(2);
+  };
 
   const handleCredentialsSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -55,41 +69,19 @@ export const useLoginForm = () => {
       return;
     }
 
-    setErrors({});
-    setStep(2);
-  };
-
-  const handlePhoneSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    const phone = form.getFieldValue('phone');
-    const apiId = form.getFieldValue('apiId');
-    const apiHash = form.getFieldValue('apiHash');
-
-    const newErrors: Record<string, string> = {};
-    if (!phone) newErrors.phone = t('LoginPage.phone.errorEmpty');
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    const fullPhoneNumber = phone.startsWith('+')
-      ? phone
-      : `${dialCode}${phone}`;
-    setCurrentPhone(fullPhoneNumber);
     setIsLoading(true);
     setErrors({});
 
     try {
-      const res = await apiClient.sendCode(fullPhoneNumber, apiId, apiHash);
+      const res = await apiClient.sendCode(currentPhone, apiId, apiHash);
       if (res.success) {
         setPhoneCodeHash(res.next_step || 'mock_hash');
         setStep(3);
       } else {
-        setErrors({ phone: res.error || 'Failed to send code' });
+        setErrors({ apiId: res.error || 'Failed to send code' });
       }
     } catch (err: any) {
-      setErrors({ phone: err.message || 'Server connection error' });
+      setErrors({ apiId: err.message || 'Server connection error' });
     } finally {
       setIsLoading(false);
     }
@@ -124,6 +116,14 @@ export const useLoginForm = () => {
     }
   };
 
+  const handleBack = () => {
+    if (step === 2) {
+      setStep(1);
+    } else if (step === 3) {
+      setStep(2);
+    }
+  };
+
   const clearFieldError = (fieldName: keyof LoginFormValues) => {
     setErrors((prev) => {
       const copy = { ...prev };
@@ -143,6 +143,7 @@ export const useLoginForm = () => {
     handleCredentialsSubmit,
     handlePhoneSubmit,
     handleCodeSubmit,
+    handleBack,
     clearFieldError,
     dialCode,
     setDialCode,

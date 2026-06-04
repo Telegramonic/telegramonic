@@ -7,29 +7,13 @@ import {
   Text,
   VStack,
   HStack,
+  IconButton,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Logo } from '@assets';
 import { useLoginForm } from './hooks/useLoginForm';
 import { motion, AnimatePresence } from 'framer-motion';
-
-const COUNTRIES = [
-  { name: 'United States', code: 'US', dialCode: '+1', flag: '🇺🇸' },
-  { name: 'Canada', code: 'CA', dialCode: '+1', flag: '🇨🇦' },
-  { name: 'United Kingdom', code: 'GB', dialCode: '+44', flag: '🇬🇧' },
-  { name: 'India', code: 'IN', dialCode: '+91', flag: '🇮🇳' },
-  { name: 'Germany', code: 'DE', dialCode: '+49', flag: '🇩🇪' },
-  { name: 'France', code: 'FR', dialCode: '+33', flag: '🇫🇷' },
-  { name: 'Australia', code: 'AU', dialCode: '+61', flag: '🇦🇺' },
-  { name: 'Brazil', code: 'BR', dialCode: '+55', flag: '🇧🇷' },
-  { name: 'Japan', code: 'JP', dialCode: '+81', flag: '🇯🇵' },
-  { name: 'China', code: 'CN', dialCode: '+86', flag: '🇨🇳' },
-  { name: 'Singapore', code: 'SG', dialCode: '+65', flag: '🇸🇬' },
-  { name: 'Russia', code: 'RU', dialCode: '+7', flag: '🇷🇺' },
-  { name: 'Italy', code: 'IT', dialCode: '+39', flag: '🇮🇹' },
-  { name: 'Spain', code: 'ES', dialCode: '+34', flag: '🇪🇸' },
-  { name: 'Netherlands', code: 'NL', dialCode: '+31', flag: '🇳🇱' },
-];
+import { COUNTRIES } from './const';
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -41,6 +25,7 @@ const LoginPage = () => {
     handleCredentialsSubmit,
     handlePhoneSubmit,
     handleCodeSubmit,
+    handleBack,
     clearFieldError,
     dialCode,
     setDialCode,
@@ -74,6 +59,39 @@ const LoginPage = () => {
           position="relative"
           overflow="hidden"
         >
+          {/* Back Button */}
+          {step > 1 && step < 4 && (
+            <IconButton
+              onClick={handleBack}
+              variant="ghost"
+              size="xs"
+              position="absolute"
+              left={{ base: 4, md: 6 }}
+              top={{ base: 4, md: 6 }}
+              color="fg.muted"
+              _hover={{ color: 'fg', bg: 'bg.subtle' }}
+              zIndex={5}
+              aria-label="Go Back"
+              borderRadius="full"
+            >
+              <svg
+                viewBox="0 0 6 10"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                width="6"
+                height="10"
+                aria-hidden="true"
+              >
+                <path
+                  d="M5 9L1 5l4-4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </IconButton>
+          )}
+
           {/* Loading Glassmorphic Overlay */}
           {isLoading && (
             <Center
@@ -95,7 +113,11 @@ const LoginPage = () => {
                   className="spinner-rotation"
                 />
                 <Text fontSize="sm" fontWeight="bold" color="fg">
-                  {step === 3 ? t('LoginPage.loading') : 'Loading...'}
+                  {step === 2
+                    ? t('LoginPage.loading')
+                    : step === 3
+                      ? 'Verifying...'
+                      : 'Loading...'}
                 </Text>
               </VStack>
             </Center>
@@ -144,122 +166,6 @@ const LoginPage = () => {
             {step === 1 && (
               <motion.div
                 key="step1"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.2 }}
-              >
-                <form onSubmit={handleCredentialsSubmit}>
-                  <VStack gap={5} align="stretch">
-                    <VStack align="start" gap={1}>
-                      <Heading size="xs" fontWeight="bold" color="fg">
-                        {t('LoginPage.api.title')}
-                      </Heading>
-                      <Text fontSize="11px" color="fg.muted">
-                        {t('LoginPage.api.description')}
-                      </Text>
-                    </VStack>
-
-                    <form.Field
-                      name="apiId"
-                      children={(field) => (
-                        <VStack align="stretch" gap={1.5}>
-                          <Text
-                            fontSize="xs"
-                            fontWeight="bold"
-                            color="fg.muted"
-                          >
-                            {t('LoginPage.api.idLabel')}
-                          </Text>
-                          <Input
-                            placeholder={t('LoginPage.api.idPlaceholder')}
-                            value={field.state.value}
-                            onChange={(e) => {
-                              field.handleChange(e.target.value);
-                              clearFieldError('apiId');
-                            }}
-                            onBlur={field.handleBlur}
-                            border="1px solid"
-                            borderColor="border"
-                            borderRadius="xl"
-                            size="lg"
-                            px={4}
-                            _focus={{
-                              borderColor: 'primary',
-                              ring: '1px',
-                              ringColor: 'primary',
-                            }}
-                            _placeholder={{ fontSize: 'xs' }}
-                          />
-                          {errors.apiId && (
-                            <Text fontSize="2xs" color="error.400" mt={0.5}>
-                              {errors.apiId}
-                            </Text>
-                          )}
-                        </VStack>
-                      )}
-                    />
-
-                    <form.Field
-                      name="apiHash"
-                      children={(field) => (
-                        <VStack align="stretch" gap={1.5}>
-                          <Text
-                            fontSize="xs"
-                            fontWeight="bold"
-                            color="fg.muted"
-                          >
-                            {t('LoginPage.api.hashLabel')}
-                          </Text>
-                          <Input
-                            placeholder={t('LoginPage.api.hashPlaceholder')}
-                            value={field.state.value}
-                            onChange={(e) => {
-                              field.handleChange(e.target.value);
-                              clearFieldError('apiHash');
-                            }}
-                            onBlur={field.handleBlur}
-                            border="1px solid"
-                            borderColor="border"
-                            borderRadius="xl"
-                            size="lg"
-                            px={4}
-                            _focus={{
-                              borderColor: 'primary',
-                              ring: '1px',
-                              ringColor: 'primary',
-                            }}
-                            _placeholder={{ fontSize: 'xs' }}
-                          />
-                          {errors.apiHash && (
-                            <Text fontSize="2xs" color="error.400" mt={0.5}>
-                              {errors.apiHash}
-                            </Text>
-                          )}
-                        </VStack>
-                      )}
-                    />
-
-                    <Button
-                      type="submit"
-                      size="lg"
-                      bg="primary"
-                      color="white"
-                      borderRadius="xl"
-                      fontWeight="bold"
-                      mt={2}
-                      _hover={{ bg: 'primary/90' }}
-                    >
-                      {t('LoginPage.api.button')}
-                    </Button>
-                  </VStack>
-                </form>
-              </motion.div>
-            )}
-
-            {step === 2 && (
-              <motion.div
-                key="step2"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
@@ -413,6 +319,122 @@ const LoginPage = () => {
               </motion.div>
             )}
 
+            {step === 2 && (
+              <motion.div
+                key="step2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+              >
+                <form onSubmit={handleCredentialsSubmit}>
+                  <VStack gap={5} align="stretch">
+                    <VStack align="start" gap={1}>
+                      <Heading size="xs" fontWeight="bold" color="fg">
+                        {t('LoginPage.api.title')}
+                      </Heading>
+                      <Text fontSize="11px" color="fg.muted">
+                        {t('LoginPage.api.description')}
+                      </Text>
+                    </VStack>
+
+                    <form.Field
+                      name="apiId"
+                      children={(field) => (
+                        <VStack align="stretch" gap={1.5}>
+                          <Text
+                            fontSize="xs"
+                            fontWeight="bold"
+                            color="fg.muted"
+                          >
+                            {t('LoginPage.api.idLabel')}
+                          </Text>
+                          <Input
+                            placeholder={t('LoginPage.api.idPlaceholder')}
+                            value={field.state.value}
+                            onChange={(e) => {
+                                field.handleChange(e.target.value);
+                                clearFieldError('apiId');
+                            }}
+                            onBlur={field.handleBlur}
+                            border="1px solid"
+                            borderColor="border"
+                            borderRadius="xl"
+                            size="lg"
+                            px={4}
+                            _focus={{
+                              borderColor: 'primary',
+                              ring: '1px',
+                              ringColor: 'primary',
+                            }}
+                            _placeholder={{ fontSize: 'xs' }}
+                          />
+                          {errors.apiId && (
+                            <Text fontSize="2xs" color="error.400" mt={0.5}>
+                              {errors.apiId}
+                            </Text>
+                          )}
+                        </VStack>
+                      )}
+                    />
+
+                    <form.Field
+                      name="apiHash"
+                      children={(field) => (
+                        <VStack align="stretch" gap={1.5}>
+                          <Text
+                            fontSize="xs"
+                            fontWeight="bold"
+                            color="fg.muted"
+                          >
+                            {t('LoginPage.api.hashLabel')}
+                          </Text>
+                          <Input
+                            placeholder={t('LoginPage.api.hashPlaceholder')}
+                            value={field.state.value}
+                            onChange={(e) => {
+                                field.handleChange(e.target.value);
+                                clearFieldError('apiHash');
+                            }}
+                            onBlur={field.handleBlur}
+                            border="1px solid"
+                            borderColor="border"
+                            borderRadius="xl"
+                            size="lg"
+                            px={4}
+                            _focus={{
+                              borderColor: 'primary',
+                              ring: '1px',
+                              ringColor: 'primary',
+                            }}
+                            _placeholder={{ fontSize: 'xs' }}
+                          />
+                          {errors.apiHash && (
+                            <Text fontSize="2xs" color="error.400" mt={0.5}>
+                              {errors.apiHash}
+                            </Text>
+                          )}
+                        </VStack>
+                      )}
+                    />
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      bg="primary"
+                      color="white"
+                      borderRadius="xl"
+                      fontWeight="bold"
+                      mt={2}
+                      _hover={{ bg: 'primary/90' }}
+                    >
+                      {t('LoginPage.api.button')}
+                    </Button>
+                  </VStack>
+                </form>
+              </motion.div>
+            )}
+
             {step === 3 && (
               <motion.div
                 key="step3"
@@ -491,26 +513,35 @@ const LoginPage = () => {
             {step === 4 && (
               <motion.div
                 key="step4"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
               >
-                <VStack gap={4} textAlign="center" py={6}>
-                  <Box
-                    w={12}
-                    h={12}
-                    borderRadius="full"
-                    bg="success.100"
-                    color="success.400"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    fontSize="2xl"
-                    fontWeight="bold"
+                <VStack gap={5} textAlign="center" py={6}>
+                  <motion.div
+                    initial={{ scale: 0, rotate: -180 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 200,
+                      damping: 15,
+                      delay: 0.1,
+                    }}
                   >
-                    ✓
-                  </Box>
+                    <Center
+                      w={16}
+                      h={16}
+                      borderRadius="full"
+                      bg="success.100"
+                      color="success.400"
+                      fontSize="3xl"
+                      fontWeight="bold"
+                      boxShadow="0 0 20px rgba(72, 187, 120, 0.4)"
+                    >
+                      ✓
+                    </Center>
+                  </motion.div>
                   <Heading size="md" color="fg" fontWeight="bold">
                     {t('LoginPage.successConfigured')}
                   </Heading>
