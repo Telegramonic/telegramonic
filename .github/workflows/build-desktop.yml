@@ -92,16 +92,21 @@ jobs:
             artifact-path: desktop/dist/
             artifact-name: desktop-build-macos
             server-binary: server/target/release/telegramonic-server
+            release-assets: desktop/dist/*.dmg
           - os: windows-latest
             platform: win
             artifact-path: desktop/dist/
             artifact-name: desktop-build-windows
             server-binary: server/target/release/telegramonic-server.exe
+            release-assets: desktop/dist/*.exe
           - os: ubuntu-latest
             platform: linux
             artifact-path: desktop/dist/
             artifact-name: desktop-build-linux
             server-binary: server/target/release/telegramonic-server
+            release-assets: |
+              desktop/dist/*.AppImage
+              desktop/dist/*.deb
 
     steps:
       - name: Checkout Code
@@ -136,18 +141,20 @@ jobs:
         run: cargo build --release
         working-directory: server
 
-      # Package using electron-builder and publish to GitHub Releases
+      # Package using electron-builder
       - name: Build & Package Desktop App
-        run: npx electron-builder --${{ matrix.platform }} --publish always
+        run: npx electron-builder --${{ matrix.platform }} --publish never
         working-directory: desktop
         env:
           GH_TOKEN: ${{ secrets.PA_TOKEN }}
 
-      - name: Publish Server Binary to GitHub Release
+      - name: Publish Release Assets to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ needs.bump-version.outputs.tag }}
-          files: ${{ matrix.server-binary }}
+          tag_name: ${{ needs.bump-version.outputs.tag }}-${{ matrix.platform }}
+          files: |
+            ${{ matrix.server-binary }}
+            ${{ matrix.release-assets }}
           draft: false
           prerelease: false
         env:
