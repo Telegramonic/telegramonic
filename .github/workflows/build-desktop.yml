@@ -76,20 +76,20 @@ jobs:
         run: |
           MATRIX_ITEMS="[]"
           if [ "${{ inputs.build-mac }}" = "true" ]; then
-            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq '. + [{"os": "macos-latest", "platform": "mac", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-macos", "server-binary": "server/target/release/telegramonic-server", "release-assets": "desktop/dist/*.dmg"}]')
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "macos-latest", "platform": "mac", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-macos", "server-binary": "server/target/release/telegramonic-server", "release-assets": "desktop/dist/*.dmg"}]')
           fi
           if [ "${{ inputs.build-windows }}" = "true" ]; then
-            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq '. + [{"os": "windows-latest", "platform": "win", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-windows", "server-binary": "server/target/release/telegramonic-server.exe", "release-assets": "desktop/dist/*.exe"}]')
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "windows-latest", "platform": "win", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-windows", "server-binary": "server/target/release/telegramonic-server.exe", "release-assets": "desktop/dist/*.exe"}]')
           fi
           if [ "${{ inputs.build-linux }}" = "true" ]; then
-            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq '. + [{"os": "ubuntu-latest", "platform": "linux", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-linux", "server-binary": "server/target/release/telegramonic-server", "release-assets": "desktop/dist/*.AppImage\ndesktop/dist/*.deb"}]')
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "ubuntu-latest", "platform": "linux", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-linux", "server-binary": "server/target/release/telegramonic-server", "release-assets": "desktop/dist/*.AppImage\ndesktop/dist/*.deb"}]')
           fi
-          
+
           HAS_TARGETS="false"
           if [ "$MATRIX_ITEMS" != "[]" ]; then
             HAS_TARGETS="true"
           fi
-          
+
           echo "matrix={\"include\":$MATRIX_ITEMS}" >> $GITHUB_OUTPUT
           echo "has-targets=$HAS_TARGETS" >> $GITHUB_OUTPUT
 
