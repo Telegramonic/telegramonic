@@ -3,6 +3,13 @@
   "electronVersion": "31.0.0",
   "appId": "com.telegramonic.app",
   "productName": "Telegramonic",
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "telegramonic",
+      "repo": "telegramonic"
+    }
+  ],
   "directories": {
     "output": "dist",
     "buildResources": "public"

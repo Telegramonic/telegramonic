@@ -1,0 +1,81 @@
+name: Desktop CI
+
+on:
+  push:
+    paths:
+      - 'desktop/**'
+      - 'common/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.github/workflows/ci-desktop.yml'
+  pull_request:
+    paths:
+      - 'desktop/**'
+      - 'common/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.github/workflows/ci-desktop.yml'
+
+jobs:
+  lint:
+    name: Lint Desktop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Lint
+        run: yarn desktop:lint
+
+  test:
+    name: Test Desktop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Test
+        run: yarn desktop:test --watchAll=false --passWithNoTests
+
+  build:
+    name: Build Desktop Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Build Frontend
+        run: yarn desktop:build

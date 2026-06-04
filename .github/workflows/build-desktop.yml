@@ -1,0 +1,122 @@
+name: Build & Publish Desktop App
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_bump:
+        description: 'Version Bump Type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  check-branch:
+    name: Validate Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assert development branch
+        run: |
+          echo "Triggered branch: ${{ github.ref_name }}"
+          if [ "${{ github.ref_name }}" != "development" ]; then
+            echo "Error: This workflow can only be manually run on the 'development' branch."
+            exit 1
+          fi
+
+  bump-version:
+    name: Bump Version
+    needs: check-branch
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PA_TOKEN }}
+
+      - name: Setup Git User
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump Version
+        run: |
+          cd desktop
+          npm version ${{ inputs.version_bump }} --no-git-tag-version
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          cd ..
+          git add desktop/package.json
+          git commit -m "chore(desktop): bump version to $NEW_VERSION"
+          git push
+
+  build-desktop:
+    name: Build Desktop App (${{ matrix.os }})
+    needs: [check-branch, bump-version]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            platform: mac
+            artifact-path: desktop/dist/
+            artifact-name: desktop-build-macos
+            server-binary: server/target/release/telegramonic-server
+          - os: windows-latest
+            platform: win
+            artifact-path: desktop/dist/
+            artifact-name: desktop-build-windows
+            server-binary: server/target/release/telegramonic-server.exe
+          - os: ubuntu-latest
+            platform: linux
+            artifact-path: desktop/dist/
+            artifact-name: desktop-build-linux
+            server-binary: server/target/release/telegramonic-server
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      # Setup Rust toolchain for server build
+      - name: Setup Rust Toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+
+      # Build Rust Server Backend in Release mode
+      - name: Build Rust Server
+        run: cargo build --release
+        working-directory: server
+
+      # Build Desktop React frontend
+      - name: Build Desktop React App
+        run: yarn workspace telegramonic-desktop build
+
+      # Package using electron-builder and publish to GitHub Releases
+      - name: Build & Package Desktop App
+        run: npx electron-builder --${{ matrix.platform }} --publish always
+        working-directory: desktop
+        env:
+          GH_TOKEN: ${{ secrets.PA_TOKEN }}
+
+      - name: Upload Desktop Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: |
+            desktop/dist/
+            ${{ matrix.server-binary }}
+          retention-days: 7
