@@ -2,6 +2,22 @@ name: Build & Publish Desktop App
 
 on:
   workflow_dispatch:
+    inputs:
+      build-mac:
+        description: 'Build macOS App'
+        required: false
+        type: boolean
+        default: true
+      build-windows:
+        description: 'Build Windows App'
+        required: false
+        type: boolean
+        default: true
+      build-linux:
+        description: 'Build Linux App'
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -47,10 +63,40 @@ jobs:
           tag-prefix: 'desktop-v'
           skip-on-empty: 'false'
 
+  setup-matrix:
+    name: Setup Build Matrix
+    needs: check-branch
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      has-targets: ${{ steps.set-matrix.outputs.has-targets }}
+    steps:
+      - name: Generate Matrix JSON
+        id: set-matrix
+        run: |
+          MATRIX_ITEMS="[]"
+          if [ "${{ inputs.build-mac }}" = "true" ]; then
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq '. + [{"os": "macos-latest", "platform": "mac", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-macos", "server-binary": "server/target/release/telegramonic-server", "release-assets": "desktop/dist/*.dmg"}]')
+          fi
+          if [ "${{ inputs.build-windows }}" = "true" ]; then
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq '. + [{"os": "windows-latest", "platform": "win", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-windows", "server-binary": "server/target/release/telegramonic-server.exe", "release-assets": "desktop/dist/*.exe"}]')
+          fi
+          if [ "${{ inputs.build-linux }}" = "true" ]; then
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq '. + [{"os": "ubuntu-latest", "platform": "linux", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-linux", "server-binary": "server/target/release/telegramonic-server", "release-assets": "desktop/dist/*.AppImage\ndesktop/dist/*.deb"}]')
+          fi
+          
+          HAS_TARGETS="false"
+          if [ "$MATRIX_ITEMS" != "[]" ]; then
+            HAS_TARGETS="true"
+          fi
+          
+          echo "matrix={\"include\":$MATRIX_ITEMS}" >> $GITHUB_OUTPUT
+          echo "has-targets=$HAS_TARGETS" >> $GITHUB_OUTPUT
+
   build-frontend:
     name: Build Frontend
-    needs: [check-branch, bump-version]
-    if: ${{ needs.bump-version.outputs.skipped == 'false' }}
+    needs: [check-branch, bump-version, setup-matrix]
+    if: ${{ needs.bump-version.outputs.skipped == 'false' && needs.setup-matrix.outputs.has-targets == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -82,32 +128,12 @@ jobs:
 
   build-desktop:
     name: Build Desktop App (${{ matrix.os }})
-    needs: [check-branch, bump-version, build-frontend]
+    needs: [check-branch, bump-version, setup-matrix, build-frontend]
+    if: ${{ needs.bump-version.outputs.skipped == 'false' && needs.setup-matrix.outputs.has-targets == 'true' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
-      matrix:
-        include:
-          - os: macos-latest
-            platform: mac
-            artifact-path: desktop/dist/
-            artifact-name: desktop-build-macos
-            server-binary: server/target/release/telegramonic-server
-            release-assets: desktop/dist/*.dmg
-          - os: windows-latest
-            platform: win
-            artifact-path: desktop/dist/
-            artifact-name: desktop-build-windows
-            server-binary: server/target/release/telegramonic-server.exe
-            release-assets: desktop/dist/*.exe
-          - os: ubuntu-latest
-            platform: linux
-            artifact-path: desktop/dist/
-            artifact-name: desktop-build-linux
-            server-binary: server/target/release/telegramonic-server
-            release-assets: |
-              desktop/dist/*.AppImage
-              desktop/dist/*.deb
+      matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
 
     steps:
       - name: Checkout Code
