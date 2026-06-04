@@ -2,12 +2,16 @@ name: Server CI
 
 on:
   push:
+    branches:
+      - development
     paths:
       - 'server/**'
       - 'package.json'
       - 'yarn.lock'
       - '.github/workflows/ci-server.yml'
   pull_request:
+    branches:
+      - development
     paths:
       - 'server/**'
       - 'package.json'

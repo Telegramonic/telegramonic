@@ -2,6 +2,8 @@ name: Web CI
 
 on:
   push:
+    branches:
+      - development
     paths:
       - 'web/**'
       - 'common/**'
@@ -9,6 +11,8 @@ on:
       - 'yarn.lock'
       - '.github/workflows/ci-web.yml'
   pull_request:
+    branches:
+      - development
     paths:
       - 'web/**'
       - 'common/**'

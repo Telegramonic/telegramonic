@@ -2,6 +2,8 @@ name: Desktop CI
 
 on:
   push:
+    branches:
+      - development
     paths:
       - 'desktop/**'
       - 'common/**'
@@ -9,6 +11,8 @@ on:
       - 'yarn.lock'
       - '.github/workflows/ci-desktop.yml'
   pull_request:
+    branches:
+      - development
     paths:
       - 'desktop/**'
       - 'common/**'
