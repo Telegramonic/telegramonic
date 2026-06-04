@@ -18,6 +18,15 @@ describe('ProductPage', () => {
     originalUserAgent = window.navigator.userAgent;
   });
 
+  beforeEach(() => {
+    // Mock userAgent to a fixed default (Windows) to keep snapshots consistent across platforms
+    Object.defineProperty(window.navigator, 'userAgent', {
+      value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+      writable: true,
+      configurable: true,
+    });
+  });
+
   afterEach(() => {
     // Reset userAgent mock
     Object.defineProperty(window.navigator, 'userAgent', {
