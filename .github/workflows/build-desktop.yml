@@ -46,10 +46,42 @@ jobs:
           git-path: 'desktop/package.json'
           tag-prefix: 'desktop-v'
 
-  build-desktop:
-    name: Build Desktop App (${{ matrix.os }})
+  build-frontend:
+    name: Build Frontend
     needs: [check-branch, bump-version]
     if: ${{ needs.bump-version.outputs.skipped == 'false' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PA_TOKEN }}
+          ref: ${{ needs.bump-version.outputs.tag }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Build Desktop React App
+        run: yarn workspace telegramonic-desktop build
+
+      - name: Upload Frontend Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-frontend-build
+          path: desktop/build/
+          retention-days: 1
+
+  build-desktop:
+    name: Build Desktop App (${{ matrix.os }})
+    needs: [check-branch, bump-version, build-frontend]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -75,7 +107,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.PA_TOKEN }}
           ref: ${{ needs.bump-version.outputs.tag }}
+
+      - name: Download Frontend Build
+        uses: actions/download-artifact@v4
+        with:
+          name: desktop-frontend-build
+          path: desktop/build
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -96,10 +135,6 @@ jobs:
       - name: Build Rust Server
         run: cargo build --release
         working-directory: server
-
-      # Build Desktop React frontend
-      - name: Build Desktop React App
-        run: yarn workspace telegramonic-desktop build
 
       # Package using electron-builder and publish to GitHub Releases
       - name: Build & Package Desktop App
