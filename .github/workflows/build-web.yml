@@ -37,7 +37,7 @@ jobs:
         uses: TriPSs/conventional-changelog-action@latest
         with:
           github-token: ${{ secrets.PA_TOKEN }}
-          git-user-name: 'Hourcoding bot'
+          git-user-name: 'Telegramonic bot'
           output-file: false
           version-file: 'web/package.json'
           git-path: 'web/package.json'
