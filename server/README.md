@@ -25,14 +25,14 @@ _After installation, restart your shell or run `source $HOME/.cargo/env` to add 
 
 ### 2. Run the Server
 
-To build and start the server in Real Mode, you **must** supply your Telegram Developer API ID and API Hash:
+To build and start the server:
 
 ```bash
 # Navigate to the server folder
 cd server
 
-# Run the server with credentials
-TELEGRAM_API_ID=<your_id> TELEGRAM_API_HASH=<your_hash> cargo run
+# Run the server (credentials will be supplied dynamically at login from the client)
+cargo run
 ```
 
 Get your credentials at [my.telegram.org/apps](https://my.telegram.org/apps).
@@ -43,10 +43,8 @@ You can configure the server using environment variables or a `.env` file in the
 
 | Environment Variable | Description                                                     | Default     |
 | :------------------- | :-------------------------------------------------------------- | :---------- |
-| `PORT`               | Listening port for the HTTP server                              | `8080`      |
+| `PORT`               | Listening port for the HTTP server                              | `50065`     |
 | `HOST`               | Bind address                                                    | `127.0.0.1` |
-| `TELEGRAM_API_ID`    | Your Telegram Developer API ID (Mandatory)                     | _None_      |
-| `TELEGRAM_API_HASH`  | Your Telegram Developer API Hash (Mandatory)                   | _None_      |
 
 ---
 

@@ -21,9 +21,9 @@ Since the server runs exclusively in **Real Mode** using official MTProto connec
 
 #### Usage:
 
-1. **Start the server in Real Mode**:
+1. **Start the server**:
    ```bash
-   TELEGRAM_API_ID=<your_api_id> TELEGRAM_API_HASH=<your_api_hash> cargo run
+   cargo run
    ```
 2. **Run the interactive test**:
    ```bash

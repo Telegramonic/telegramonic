@@ -1,10 +1,13 @@
 ### Localization
 
-Localization is build using the `i18next` library. The localization files are located in the `src/localization` directory. The `i18next` library is used to load the localization files and provide the translations to the application. The `i18next` library is initialized in the `src/index.js` file.
+Localization is built using the `i18next` library. The localization files are located in the `common/src/localization` directory. The `i18next` library is used to load the localization files and provide translations to the application. It is initialized by importing `@localization/config` (mapped to `common/src/localization/config.ts`) inside the app's `LocalizationProvider.tsx`.
 
 ### Adding a new language
 
-To add a new language, create a new file in the `src/localization/locales` directory with the language code as the file name. For example, to add a new language with the language code `es`, create a new file named `es.json` under a folder`src/localization/locales/es` directory. The file should contain the translations for the new language. For example:
+To add a new language (e.g. Spanish `es`):
+
+1. Create a new directory under `common/src/localization/locales/es/`.
+2. Create `main.json`, `common.json`, and `error.json` containing the translation namespaces. For example:
 
 ```json
 {
@@ -13,25 +16,22 @@ To add a new language, create a new file in the `src/localization/locales` direc
 }
 ```
 
-Then, import the new language file in the `src/localization/config.ts` file and add it to the `resources` object. For example:
+3. Import the new language files and merge them inside `common/src/localization/config.ts`:
 
 ```typescript
-import es from './locales/es/es.json';
+import commonEs from './locales/es/common.json';
+import errorEs from './locales/es/error.json';
+import mainEs from './locales/es/main.json';
 
-const resources = {
+// In the resources config block:
+resources: {
   en: {
-    translation: en,
+    translation: { ...main, ...common, ...error }
   },
   es: {
-    translation: es,
-  },
-};
-```
-
-Finally, update the `src/localization/config.ts` file to include the new language in the `supportedLanguages` array. For example:
-
-```typescript
-export const supportedLanguages = ['en', 'es'];
+    translation: { ...mainEs, ...commonEs, ...errorEs }
+  }
+}
 ```
 
 ### Using localization
