@@ -2,16 +2,9 @@ name: Build & Publish Desktop App
 
 on:
   workflow_dispatch:
-    inputs:
-      version_bump:
-        description: 'Version Bump Type'
-        required: true
-        default: 'patch'
-        type: choice
-        options:
-          - patch
-          - minor
-          - major
+
+permissions:
+  contents: write
 
 jobs:
   check-branch:
@@ -32,30 +25,31 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    outputs:
+      skipped: ${{ steps.changelog.outputs.skipped }}
+      tag: ${{ steps.changelog.outputs.tag }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PA_TOKEN }}
+          fetch-depth: 0
 
-      - name: Setup Git User
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Bump Version
-        run: |
-          cd desktop
-          npm version ${{ inputs.version_bump }} --no-git-tag-version
-          NEW_VERSION=$(node -p "require('./package.json').version")
-          cd ..
-          git add desktop/package.json
-          git commit -m "chore(desktop): bump version to $NEW_VERSION"
-          git push
+      - name: Conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@latest
+        with:
+          github-token: ${{ secrets.PA_TOKEN }}
+          git-user-name: 'Hourcoding bot'
+          output-file: false
+          version-file: 'desktop/package.json'
+          git-path: 'desktop/package.json'
+          tag-prefix: 'desktop-v'
 
   build-desktop:
     name: Build Desktop App (${{ matrix.os }})
     needs: [check-branch, bump-version]
+    if: ${{ needs.bump-version.outputs.skipped == 'false' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -80,6 +74,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.bump-version.outputs.tag }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
