@@ -21,34 +21,36 @@ This project is a modernized React application focused on providing a fast, secu
 
 ## Architecture Overview
 
-The monorepo is organized into three workspaces:
+The monorepo is organized into four workspaces:
 
 ```
 telegramonic/
-├── common/          # Shared utilities (test helpers, design tokens)
-├── desktop/         # Electron + React desktop application
+├── common/          # Shared utilities (design tokens, icons, translations, test utils)
+├── desktop/         # Electron desktop app containing core file management and login
+│   ├── main.js      # Electron main entry script (frameless, 80% screen dimensions)
+│   ├── preload.js   # Secure API/diagnostics bridge
 │   └── src/
-│       ├── components/         # Shared UI atoms (Icon, Logo)
+│       ├── components/         # Desktop-specific components (Icon, Logo)
 │       ├── providers/          # App-level providers (Chakra, Router, Query, Modal)
-│       ├── routes/             # Routing and lazy-loaded screens
+│       ├── routes/             # Desktop routing and lazy-loaded screens
 │       ├── screens/
-│       │   ├── dashboard/      # Main file-management UI
-│       │   │   ├── types.ts    # DashboardItem, ActiveTab, ToastType
-│       │   │   ├── Dashboard.tsx
-│       │   │   └── components/ # TopNavBar, SideNavBar, Breadcrumbs, FilesTable,
-│       │   │       │             SuggestedSection, UploadProgressBanner
-│       │   │       ├── types.ts  # All component prop interfaces
-│       │   │       └── const.ts  # formatSize, formatDate, getFileType, helpers
-│       │   └── loginPage/      # Multi-step Telegram login flow
-│       │       ├── types.ts    # LoginFormValues
-│       │       └── const.ts    # COUNTRIES dial-code list
+│       │   ├── dashboard/      # Decomposed file explorer UI
+│       │   └── loginPage/      # Multi-step login flow wizard
 │       ├── services/
 │       │   ├── apiClient.ts    # HTTP client for Rust server (port 50065)
-│       │   ├── hooks.ts        # TanStack Query hooks (useCurrentUser, useStats, …)
-│       │   ├── types.ts        # Shared API types (FileMetadata, FolderMetadata, …)
-│       │   └── const.ts        # API route constants (TELEGRAM_API_ROUTES)
+│       │   ├── hooks.ts        # TanStack Query custom hooks for backend integration
+│       │   ├── types.ts        # API type definitions
+│       │   └── const.ts        # API routes constants
 │       └── store/              # Zustand stores (app credentials, UI modals)
-└── server/          # Rust/Axum HTTP server (MTProto bridge)
+├── web/             # React web application (marketing portal, download page, docs viewer)
+│   └── src/
+│       ├── providers/          # UI-level providers (Theme, Localization, Query)
+│       ├── routes/             # Routing and lazy-loaded screen paths
+│       └── screens/
+│           ├── landingPage/    # Main landing and OS-detection download screen
+│           ├── DocsPage/       # Documentation viewer with sidebar navigation
+│           └── MdPage/         # Legal page renderer (privacy, terms, disclaimer)
+└── server/          # Rust/Axum HTTP server (MTProto gateway, default port: 50065)
 ```
 
 ## Design System
@@ -131,6 +133,12 @@ yarn workspace telegramonic-web test:cov
 
 # Open Cypress for E2E testing
 yarn workspace telegramonic-web cy:open
+
+# Run tests on staged git changes (pre-commit)
+yarn run-staged-tests
+
+# Run tests on committed/pushed git changes (CI)
+yarn run-pushed-files-tests
 ```
 
 #### Test Structure
