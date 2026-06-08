@@ -4,7 +4,20 @@ This document tracks release updates, major features, optimizations, and bug fix
 
 ---
 
-## [v0.1.3] - Current Release
+## [v0.2.0] - Current Release
+
+- **Desktop Version**: `0.2.0`
+- **Server Version**: `0.1.0`
+
+### 🌟 New Features
+
+- **Mermaid Diagram Support**: Integrated ESM-based Mermaid rendering support for markdown blocks (`language-mermaid`) within the Markdown Preview components, natively adjusting styles to dark/light themes.
+- **Layout & Typographical Visibility**: Enabled overflow-visible properties on SVG containers, foreignObjects, and node labels to prevent clipping. Refactored container size calculations with unified 16px typography.
+- **Media & Image Showcase**: Added preview screenshots demonstrating the application interface in action under the Showcase section in project README documents.
+
+---
+
+## [v0.1.3]
 
 - **Desktop Version**: `0.1.3`
 - **Server Version**: `0.1.0`
