@@ -57,6 +57,15 @@ exports[`DocsPage should render the documentation layout with sidebar and TOC 1`
                   Quick Start
                 </p>
               </div>
+              <div
+                class="css-196g1ez"
+              >
+                <p
+                  class="css-nh0ii3"
+                >
+                  Version History
+                </p>
+              </div>
             </div>
           </div>
           <div>
@@ -74,6 +83,15 @@ exports[`DocsPage should render the documentation layout with sidebar and TOC 1`
                 <p
                   class="css-nh0ii3"
                 >
+                  System Design
+                </p>
+              </div>
+              <div
+                class="css-196g1ez"
+              >
+                <p
+                  class="css-nh0ii3"
+                >
                   MTProto Protocol
                 </p>
               </div>
@@ -84,6 +102,26 @@ exports[`DocsPage should render the documentation layout with sidebar and TOC 1`
                   class="css-nh0ii3"
                 >
                   Direct Storage
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p
+              class="css-1503jht"
+            >
+              Reference
+            </p>
+            <div
+              class="chakra-stack css-1gzt2am"
+            >
+              <div
+                class="css-196g1ez"
+              >
+                <p
+                  class="css-nh0ii3"
+                >
+                  API Gateway Reference
                 </p>
               </div>
             </div>
