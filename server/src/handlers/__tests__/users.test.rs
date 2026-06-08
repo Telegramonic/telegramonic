@@ -11,7 +11,7 @@ mod tests {
         // 1. Get Me (/users/me)
         let (status_me, body_me) = get_json(app.clone(), "/users/me").await;
         assert_eq!(status_me, StatusCode::OK);
-        assert_eq!(body_me["id"], 123456789);
+        assert_eq!(body_me["id"], "123456789");
         assert_eq!(body_me["first_name"], "Mock");
         assert_eq!(body_me["username"], "mock_telegram_user");
 
@@ -21,18 +21,18 @@ mod tests {
         assert!(body_users.is_array());
         let users_arr = body_users.as_array().unwrap();
         assert_eq!(users_arr.len(), 2);
-        assert_eq!(users_arr[0]["id"], 123456789);
-        assert_eq!(users_arr[1]["id"], 987654321);
+        assert_eq!(users_arr[0]["id"], "123456789");
+        assert_eq!(users_arr[1]["id"], "987654321");
 
         // 3. Get Full User (/users/get-full-user?id=123456789)
         let (status_full1, body_full1) =
             get_json(app.clone(), "/users/get-full-user?id=123456789").await;
         assert_eq!(status_full1, StatusCode::OK);
-        assert_eq!(body_full1["id"], 123456789);
+        assert_eq!(body_full1["id"], "123456789");
 
         let (status_full2, body_full2) = get_json(app.clone(), "/users/get-full-user?id=999").await;
         assert_eq!(status_full2, StatusCode::OK);
-        assert_eq!(body_full2["id"], 999);
+        assert_eq!(body_full2["id"], "999");
         assert_eq!(body_full2["first_name"], "External");
     }
 
