@@ -63,6 +63,7 @@ Advanced agent instructions are modularized in the `.claude/skills/` directory.
 - [Pull Request Skill](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/pr/SKILL.md)
 - [Frontend Design](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/frontend-design/SKILL.md)
 - [Web Development](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/web/SKILL.md)
+- [README Guidelines](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/readme/SKILL.md)
 
 ## 🌐 Localization Guidelines
 
@@ -179,6 +180,7 @@ The platform organizes resources into 13 primary verticals:
 - **Architecture**: Modular setup divided into HTTP `handlers/`, business logic `services/` (mock and Grammers MTProto clients), and environment `config.rs`.
 - **Handlers**: Write Axum handlers that return JSON payloads (`Json<T>`) or explicit statuses.
 - **Testing**: Write unit/integration tests and run using `cargo test` (or `yarn server:test` at root). Use `services/mock.rs` to mock Telegram connections.
+- **README Maintenance**: Any change made to files inside `server/` (new endpoints, changed payloads, new dependencies, new environment variables, new files, behaviour changes) **MUST** also update [`server/README.md`](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/server/README.md) to keep it accurate, following the rules in the [readme skill](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/readme/SKILL.md). This includes but is not limited to: adding/removing routes in `handlers/mod.rs`, changing request/response types in handlers, changing `TelegramService` trait methods, adding new Cargo dependencies, and modifying `config.rs`.
 
 ### Desktop Application (Electron)
 
@@ -201,7 +203,8 @@ The platform organizes resources into 13 primary verticals:
 
 1.  **Understand**: Review this file and `.claude/CLAUDE.md`.
 2.  **Verify**: Always run `yarn workspace telegramonic-web lint` and `yarn web:test` before declaring a task complete.
-3.  **Governance**: Follow Conventional Commits and link all changes to the **Telegramonic** Jira project using `prefix/TEL-XXX` branch naming.
+3.  **Documentation**: Always check if a README update is required for any modified components. If so, update the corresponding `README.md` following the guidelines in the [readme skill](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/readme/SKILL.md).
+4.  **Governance**: Follow Conventional Commits and link all changes to the **Telegramonic** Jira project using `prefix/TEL-XXX` branch naming.
 
 ---
 

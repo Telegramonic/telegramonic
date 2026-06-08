@@ -1,8 +1,54 @@
 # Telegramonic
 
-Telegramonic is a high-performance, minimalist cloud storage solution designed for digital craftsmen, developers, and tech professionals.
+**Telegramonic** is a high-performance, minimalist cloud storage solution for digital craftsmen, developers, and tech professionals. The platform provides a fast, secure, and ergonomic workspace to organize and manage digital assets.
 
-This project is a modernized React application focused on providing a fast, secure, and ergonomic workspace for managing and organizing digital assets.
+## System Architecture
+
+```mermaid
+graph TD
+    %% Styling
+    classDef client fill:#eef2ff,stroke:#6366f1,stroke-width:2px,color:#1e1b4b;
+    classDef common fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#451a03;
+    classDef server fill:#fdf2f8,stroke:#ec4899,stroke-width:2px,color:#500724;
+    classDef telegram fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#052e16;
+
+    subgraph Frontends ["Client Interfaces"]
+        Desktop["Desktop Application<br/>(Electron + React)"]:::client
+        Web["Web Portal<br/>(Browser React)"]:::client
+    end
+
+    subgraph Shared ["Shared Monorepo Resources"]
+        Common["common/<br/>(Tokens, SVGs, Localization)"]:::common
+    end
+
+    subgraph BackendGateway ["Backend Gateway"]
+        Server["Axum Rust Server<br/>(localhost:50065)"]:::server
+    end
+
+    subgraph TelegramCloud ["Telegram Storage Platform"]
+        TelegramDC["Telegram Data Centers<br/>(MTProto Protocol)"]:::telegram
+    end
+
+    %% Connections
+    Desktop & Web -.-> Common
+    Desktop -- "HTTP & Native IPC" --> Server
+    Web -- "HTTP REST & SSE" --> Server
+    Server -- "MTProto / Grammers" --> TelegramDC
+```
+
+---
+
+## Table of Contents
+
+- [Core Technology Stack](#core-technology-stack)
+- [Monorepo Structure](#monorepo-structure)
+- [Design System](#design-system)
+- [Getting Started](#getting-started)
+- [Authentication Wizard](#authentication-wizard)
+- [Direct File Streaming](#direct-file-streaming)
+- [Infrastructure](#infrastructure)
+
+---
 
 ## Core Technology Stack
 
@@ -19,9 +65,11 @@ This project is a modernized React application focused on providing a fast, secu
 - **Desktop Shell**: [Electron](https://www.electronjs.org/)
 - **Package Manager**: [Yarn 4.x (Berry)](https://yarnpkg.com/)
 
-## Architecture Overview
+---
 
-The monorepo is organized into four workspaces:
+## Monorepo Structure
+
+The monorepo contains four distinct workspaces:
 
 ```
 telegramonic/
@@ -53,22 +101,32 @@ telegramonic/
 └── server/          # Rust/Axum HTTP server (MTProto gateway, default port: 50065)
 ```
 
+For detailed setup, configuration, features, and API routing of each workspace, see the module-specific README documentation:
+
+- 🖥️ **[Desktop Application README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/desktop/README.md)**: Electron shell configurations, preload API interfaces, streaming direct-to-disk downloads, and platform packaging scripts.
+- 🌐 **[Web Portal README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/web/README.md)**: Browser-only client setup, localized string files, routes, and browser E2E test commands.
+- ⚙️ **[Rust Backend Server README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/server/README.md)**: Axum endpoint details, MTProto integration details via Grammers, in-memory caches, and mock-based testing suites.
+
+---
+
 ## Design System
 
-The application utilizes a custom **Modern Corporate / Utility Minimalism** design system powered by **Inter**:
+The application implements a custom **Modern Corporate / Utility Minimalism** design system using the `Inter` typeface:
 
-- **Branding**: Telegram Blue (`#0088CC`) as primary accent, Deep Charcoal (`#212529`) for typography.
-- **Surfaces**: Tiered neutral system with soft gray background (`#F8F9FA`) and pure white container cards (`#FFFFFF`) defined by thin borders (`#E9ECEF`).
-- **Shapes**: Rounded element edges with 8px radius for controls and 16px radius for large modals/panels.
-- **Dark Mode**: Full dark mode support with system preference detection.
+- **Colors**: Telegram Blue (`#0088CC`) accent and Deep Charcoal (`#212529`) typography.
+- **Surfaces**: Tiered gray canvas (`#F8F9FA`) with white container cards (`#FFFFFF`) and thin boundaries (`#E9ECEF`).
+- **Radius**: 8px borders for buttons/inputs and 16px borders for modals/panels.
+- **Themes**: Automatic dark and light mode synchronization based on system settings.
+
+---
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js (Latest LTS recommended)
+- Node.js (Latest LTS)
 - Yarn 4.x
-- Rust toolchain (for server development)
+- Rust toolchain (stable, for server)
 
 ### Installation
 
@@ -89,7 +147,7 @@ yarn server:start
 yarn web:start
 ```
 
-> The desktop app connects to the Rust server at **`http://localhost:50065`**. Start the server before using the app.
+> **Note:** The desktop and web apps connect to the Rust server at `http://localhost:50065`. Ensure the server is running.
 
 ### Build
 
@@ -145,14 +203,14 @@ yarn run-pushed-files-tests
 
 Tests are co-located with their source in `__tests__/` folders:
 
-| Folder | What's tested |
-|---|---|
-| `screens/dashboard/__tests__/` | `Dashboard` integration test |
+| Folder                                    | What's tested                                                                                                       |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `screens/dashboard/__tests__/`            | `Dashboard` integration test                                                                                        |
 | `screens/dashboard/components/__tests__/` | `TopNavBar`, `SideNavBar`, `Breadcrumbs`, `FilesTable`, `SuggestedSection`, `UploadProgressBanner`, `const` helpers |
-| `screens/loginPage/__tests__/` | `LoginPage` flow, `COUNTRIES` constant |
-| `services/` | `apiClient`, `hooks` |
-| `store/app/`, `store/ui/` | Zustand selectors and slices |
-| `providers/` | Each provider wrapper |
+| `screens/loginPage/__tests__/`            | `LoginPage` flow, `COUNTRIES` constant                                                                              |
+| `services/`                               | `apiClient`, `hooks`                                                                                                |
+| `store/app/`, `store/ui/`                 | Zustand selectors and slices                                                                                        |
+| `providers/`                              | Each provider wrapper                                                                                               |
 
 ### Linting & Formatting
 
@@ -164,31 +222,36 @@ yarn workspace telegramonic-web lint
 yarn workspace telegramonic-web run prettier:write
 ```
 
-## Login Flow
+---
 
-The desktop login is a 4-step wizard:
+## Authentication Wizard
 
-1. **Phone Number** — Enter your phone with country code selector (defaults to India +91)
-2. **API Credentials** — Enter your Telegram `api_id` and `api_hash` from [my.telegram.org](https://my.telegram.org)
-3. **OTP Verification** — Enter the 5-digit code sent to your Telegram account
-4. **Success** — 3-second animation then redirect to the Dashboard
+The desktop login workflow is structured as a 4-step wizard:
 
-A back button (icon) allows returning to the previous step from steps 2 and 3.
+1. **Phone Number**: Enter your mobile number (includes country code selector).
+2. **API Credentials**: Submit your Telegram `api_id` and `api_hash` (from [my.telegram.org](https://my.telegram.org)).
+3. **OTP Verification**: Enter the 5-digit code received via Telegram.
+4. **Success**: Displays a brief completion animation before loading the dashboard.
 
-## Native File Downloads & Temporary File Fix
+Navigation icons allow users to return to previous steps during inputs.
 
-In the desktop Electron shell, downloads bypass Chromium's default download manager. This resolves issues where temporary quarantine files (e.g., `.com.github.Electron.xxxxx`) were left behind in the Downloads directory.
+---
 
-1. **Secure IPC Stream**: When a download is requested, the renderer calls the main process via `ipcRenderer.invoke('download-file-directly')`.
-2. **Native Save Dialog**: The main process displays a native `showSaveDialog` letting the user choose the target save path.
-3. **Streaming to Disk**: The file is streamed chunk-by-chunk from the local Axum server directly to the disk write stream, preventing memory leaks and high memory usage.
-4. **Error Cleanup**: If a download fails or is canceled midway, the partial file is automatically deleted.
-5. **Web Fallback**: Standard `URL.createObjectURL(blob)` and simulated click downloads remain active in standard web browser contexts.
+## Direct File Streaming
+
+The desktop client bypasses Chromium's standard download manager to avoid leaving temporary system quarantine files (e.g. `.com.github.Electron.xxxxx`) in local directories:
+
+1. **IPC Invocation**: The React renderer invokes `download-file-directly` via `contextBridge`.
+2. **Save Dialog**: The Electron process prompts the user with a native file-save modal.
+3. **Stream-to-Disk**: Chunks are piped directly from the Rust backend to the disk target, avoiding memory bottlenecks.
+4. **Cleanup**: Incomplete downloads due to failure or cancellation are immediately deleted.
+5. **Web Fallback**: The standard browser web portal falls back to standard simulated-click blobs.
+
+---
 
 ## Infrastructure
 
-- **CI/CD**: GitHub Actions for automated building, linting, testing, and FTP deployment.
-- **Localization**: Internationalization support via `i18next`.
-- **Theme**: Robust dark/light mode support with system preference detection and Telegramonic design tokens.
-- **Server Health**: TanStack Query polls `/health` every 5 seconds; the title bar reflects connectivity status.
-- **Caching**: All API requests are cached via TanStack Query with configurable `staleTime` to prevent server flooding.
+- **Deployment**: Automated build, test, lint, and FTP deployment via GitHub Actions.
+- **Localization**: Dynamic translation handling via `i18next` localized schemas.
+- **Connectivity**: Automated health polls to `/health` every 5 seconds to show active connection states.
+- **State Caching**: Query caching via TanStack Query prevents duplicate server calls.
