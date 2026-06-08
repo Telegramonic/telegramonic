@@ -85,7 +85,7 @@ exports[`ProductPage should render all platform cards and download options by de
               >
                 <a
                   class="chakra-button css-13mivnp"
-                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-mac"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.0-mac"
                   rel="noopener noreferrer"
                   target="_blank"
                   type="button"
@@ -94,7 +94,7 @@ exports[`ProductPage should render all platform cards and download options by de
                 </a>
                 <a
                   class="chakra-button css-ckiwh"
-                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-mac"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.0-mac"
                   rel="noopener noreferrer"
                   target="_blank"
                   type="button"
@@ -145,7 +145,7 @@ exports[`ProductPage should render all platform cards and download options by de
               >
                 <a
                   class="chakra-button css-13mivnp"
-                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-win"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.0-win"
                   rel="noopener noreferrer"
                   target="_blank"
                   type="button"
@@ -154,7 +154,7 @@ exports[`ProductPage should render all platform cards and download options by de
                 </a>
                 <a
                   class="chakra-button css-ckiwh"
-                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-win"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.0-win"
                   rel="noopener noreferrer"
                   target="_blank"
                   type="button"
@@ -200,7 +200,7 @@ exports[`ProductPage should render all platform cards and download options by de
               >
                 <a
                   class="chakra-button css-13mivnp"
-                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-linux"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.0-linux"
                   rel="noopener noreferrer"
                   target="_blank"
                   type="button"
@@ -209,7 +209,7 @@ exports[`ProductPage should render all platform cards and download options by de
                 </a>
                 <a
                   class="chakra-button css-ckiwh"
-                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-linux"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.0-linux"
                   rel="noopener noreferrer"
                   target="_blank"
                   type="button"
