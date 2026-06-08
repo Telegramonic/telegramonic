@@ -69,8 +69,11 @@ pub fn create_router(service: DynTelegramService) -> Router {
         // Files namespace
         .route("/files/upload-part", post(files::upload_part))
         .route("/files/save-file", post(files::save_file))
+        .route("/files/upload-progress", get(files::get_upload_progress))
+        .route("/files/upload-progress/stream", get(files::get_upload_progress_stream))
         .route("/files/download", get(files::download_file))
         .route("/files/get-file", get(files::download_file)) // Map get-file to download handler
+        .route("/files/delete", post(files::delete_file))
         // Drive namespace
         .route("/drive/list", get(files::get_drives))
         .route("/drive/stats", get(files::get_stats))

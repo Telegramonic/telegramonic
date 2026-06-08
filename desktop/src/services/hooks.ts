@@ -49,7 +49,7 @@ export const useStats = () => {
   });
 };
 
-export const useFolders = (parentId?: number) => {
+export const useFolders = (parentId?: string) => {
   return useQuery<FolderMetadata[]>({
     queryKey: ['folders', parentId],
     queryFn: () => apiClient.getFolders(parentId).catch(() => []),
@@ -57,10 +57,10 @@ export const useFolders = (parentId?: number) => {
   });
 };
 
-export const useFiles = (folderId?: number, q?: string) => {
+export const useFiles = (folderId?: string | null, q?: string, all?: boolean) => {
   return useQuery<FileMetadata[]>({
-    queryKey: ['files', folderId, q],
-    queryFn: () => apiClient.getFiles(folderId, q).catch(() => []),
+    queryKey: ['files', folderId, q, all],
+    queryFn: () => apiClient.getFiles(folderId, q, all).catch(() => []),
     staleTime: 5000, // cache for 5 seconds
   });
 };

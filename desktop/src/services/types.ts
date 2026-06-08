@@ -11,24 +11,25 @@ export interface AuthResult {
 }
 
 export interface FileMetadata {
-  id: number;
-  folder_id?: number | null;
+  id: string;
+  folder_id?: string | null;
   name: string;
   size: number;
   mime_type?: string | null;
   file_ext?: string | null;
   created_at: string;
   icon_type: string;
+  telegram_message_id?: number | null;
 }
 
 export interface FolderMetadata {
-  id: number;
-  parent_id?: number | null;
+  id: string;
+  parent_id?: string | null;
   name: string;
 }
 
 export interface Drive {
-  chat_id: number;
+  chat_id: string;
   name: string;
   icon?: string | null;
 }
@@ -41,7 +42,7 @@ export interface DriveStats {
 }
 
 export interface TelegramUser {
-  id: number;
+  id: string;
   first_name: string;
   last_name?: string | null;
   username?: string | null;

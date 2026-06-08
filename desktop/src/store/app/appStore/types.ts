@@ -1,10 +1,20 @@
 import { StateCreator } from 'zustand';
 
+export interface SavedAccount {
+  phone: string;
+  apiId: string;
+  apiHash: string;
+}
+
 export interface AppStoreState {
-  apiId: string | null;
-  apiHash: string | null;
-  setApiCredentials: (apiId: string, apiHash: string) => void;
+  currentAccount: SavedAccount | null;
+  savedAccounts: SavedAccount[];
+  authError: string | null;
+  setCurrentAccount: (account: SavedAccount | null) => void;
+  saveAccount: (phone: string, apiId: string, apiHash: string) => void;
+  removeAccount: (phone: string) => void;
   clearApiCredentials: () => void;
+  setAuthError: (error: string | null) => void;
 }
 
 export type AppStoreSlice<T> = StateCreator<

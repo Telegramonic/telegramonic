@@ -15,7 +15,7 @@ export const Breadcrumbs = ({
         color={!currentFolderId ? 'fg' : 'fg.muted'}
         onClick={() => setCurrentFolderId(null)}
       >
-        All Files
+        In my drive
       </Text>
       {breadcrumbs.map((crumb) => (
         <HStack key={crumb.id} gap={1.5}>

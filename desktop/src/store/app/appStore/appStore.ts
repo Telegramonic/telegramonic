@@ -7,17 +7,31 @@ import { AppStoreState } from './types';
 export const appStore = create<AppStoreState>()(
   persist(
     immer((set) => ({
-      apiId: null,
-      apiHash: null,
-      setApiCredentials: (apiId, apiHash) =>
+      currentAccount: null,
+      savedAccounts: [],
+      authError: null,
+      setCurrentAccount: (account) =>
         set((state) => {
-          state.apiId = apiId;
-          state.apiHash = apiHash;
+          state.currentAccount = account;
+        }),
+      saveAccount: (phone, apiId, apiHash) =>
+        set((state) => {
+          state.savedAccounts = [
+            ...state.savedAccounts.filter((acc) => acc.phone !== phone),
+            { phone, apiId, apiHash },
+          ];
+        }),
+      removeAccount: (phone) =>
+        set((state) => {
+          state.savedAccounts = state.savedAccounts.filter((acc) => acc.phone !== phone);
         }),
       clearApiCredentials: () =>
         set((state) => {
-          state.apiId = null;
-          state.apiHash = null;
+          state.currentAccount = null;
+        }),
+      setAuthError: (error) =>
+        set((state) => {
+          state.authError = error;
         }),
     })),
     {
@@ -25,6 +39,10 @@ export const appStore = create<AppStoreState>()(
       storage: createJSONStorage(() => localStorage),
       merge: (persistedState, currentState) =>
         deepMerge(currentState, persistedState as AppStoreState),
+      partialize: (state) => ({
+        currentAccount: state.currentAccount,
+        savedAccounts: state.savedAccounts,
+      }),
     },
   ),
 );
@@ -43,5 +61,7 @@ function deepMerge(
   return {
     ...currentState,
     ...persistedState,
+    currentAccount: persistedState?.currentAccount !== undefined ? persistedState.currentAccount : currentState.currentAccount,
+    savedAccounts: persistedState?.savedAccounts ?? currentState.savedAccounts ?? [],
   };
 }

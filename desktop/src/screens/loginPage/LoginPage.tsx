@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   Box,
   Button,
@@ -11,6 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { Logo } from '@assets';
+import { appStore } from '@appStore';
 import { useLoginForm } from './hooks/useLoginForm';
 import { motion, AnimatePresence } from 'framer-motion';
 import { COUNTRIES } from './const';
@@ -20,6 +22,7 @@ const LoginPage = () => {
   const {
     form,
     step,
+    setStep,
     isLoading,
     errors,
     handleCredentialsSubmit,
@@ -29,7 +32,28 @@ const LoginPage = () => {
     clearFieldError,
     dialCode,
     setDialCode,
+    savedAccounts,
+    handleSelectAccount,
+    handleRemoveAccount,
   } = useLoginForm();
+
+  const authError = appStore((state) => state.authError);
+  const setAuthError = appStore((state) => state.setAuthError);
+
+  useEffect(() => {
+    if (authError) {
+      const timer = setTimeout(() => {
+        setAuthError(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [authError, setAuthError]);
+
+  useEffect(() => {
+    return () => {
+      setAuthError(null);
+    };
+  }, [setAuthError]);
 
   return (
     <Center minH="calc(100vh - 4rem - 300px)" py={12} px={4}>
@@ -60,7 +84,8 @@ const LoginPage = () => {
           overflow="hidden"
         >
           {/* Back Button */}
-          {step > 1 && step < 4 && (
+          {((step > 1 && step < 4) ||
+            (step === 1 && savedAccounts.length > 0)) && (
             <IconButton
               onClick={handleBack}
               variant="ghost"
@@ -113,7 +138,7 @@ const LoginPage = () => {
                   className="spinner-rotation"
                 />
                 <Text fontSize="sm" fontWeight="bold" color="fg">
-                  {step === 2
+                  {step === 2 || step === 0
                     ? t('LoginPage.loading')
                     : step === 3
                       ? 'Verifying...'
@@ -124,45 +149,181 @@ const LoginPage = () => {
           )}
 
           {/* Step Progress Stepper */}
-          <HStack gap={4} justify="center" mb={8}>
-            {[1, 2, 3, 4].map((s) => (
-              <HStack key={s} gap={2} alignItems="center">
-                <Center
-                  w={7}
-                  h={7}
-                  borderRadius="full"
-                  bg={
-                    step === s
-                      ? 'primary'
-                      : step > s
-                        ? 'success.400'
-                        : 'bg.subtle'
-                  }
-                  color={step >= s ? 'white' : 'fg.muted'}
-                  fontSize="xs"
-                  fontWeight="bold"
-                  borderWidth="1px"
-                  borderColor={
-                    step === s ? 'primary' : step > s ? 'success.400' : 'border'
-                  }
-                  transition="all 0.3s"
-                >
-                  {step > s ? '✓' : s}
-                </Center>
-                {s < 4 && (
-                  <Box
-                    w={10}
-                    h="2px"
-                    bg={step > s ? 'success.400' : 'border'}
+          {step > 0 && (
+            <HStack gap={4} justify="center" mb={8}>
+              {[1, 2, 3, 4].map((s) => (
+                <HStack key={s} gap={2} alignItems="center">
+                  <Center
+                    w={7}
+                    h={7}
+                    borderRadius="full"
+                    bg={
+                      step === s
+                        ? 'primary'
+                        : step > s
+                          ? 'success.400'
+                          : 'bg.subtle'
+                    }
+                    color={step >= s ? 'white' : 'fg.muted'}
+                    fontSize="xs"
+                    fontWeight="bold"
+                    borderWidth="1px"
+                    borderColor={
+                      step === s
+                        ? 'primary'
+                        : step > s
+                          ? 'success.400'
+                          : 'border'
+                    }
                     transition="all 0.3s"
-                  />
-                )}
-              </HStack>
-            ))}
-          </HStack>
+                  >
+                    {step > s ? '✓' : s}
+                  </Center>
+                  {s < 4 && (
+                    <Box
+                      w={10}
+                      h="2px"
+                      bg={step > s ? 'success.400' : 'border'}
+                      transition="all 0.3s"
+                    />
+                  )}
+                </HStack>
+              ))}
+            </HStack>
+          )}
 
           {/* Form Multistep Transitions */}
           <AnimatePresence mode="wait">
+            {step === 0 && (
+              <motion.div
+                key="step0"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+              >
+                <VStack gap={5} align="stretch">
+                  <VStack align="start" gap={2}>
+                    <Heading size="xs" fontWeight="bold" color="fg">
+                      {t('LoginPage.savedAccounts.title')}
+                    </Heading>
+                    <Text fontSize="11px" color="fg.muted">
+                      {t('LoginPage.savedAccounts.description')}
+                    </Text>
+                  </VStack>
+
+                  {/* Scrollable item list with overflow-visible so hover
+                      transforms are never clipped by the container edge */}
+                  <Box
+                    maxH="240px"
+                    overflowY="auto"
+                    overflowX="visible"
+                    pr={1}
+                    py={2}
+                  >
+                    <VStack gap={3} align="stretch" pb={1}>
+                      {savedAccounts.map((account) => (
+                        <motion.div
+                          key={account.phone}
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.15 }}
+                          style={{ width: '100%' }}
+                        >
+                          <HStack
+                            p={3}
+                            bg="bg.subtle"
+                            border="1px solid"
+                            borderColor="border"
+                            borderRadius="xl"
+                            cursor="pointer"
+                            transition="all 0.2s"
+                            _hover={{
+                              bg: 'bg.muted',
+                              borderColor: 'primary',
+                              transform: 'translateY(-1px)',
+                              shadow: 'sm',
+                            }}
+                            onClick={() => handleSelectAccount(account)}
+                            justify="space-between"
+                          >
+                            <HStack gap={3}>
+                              <Center
+                                w={9}
+                                h={9}
+                                borderRadius="full"
+                                bgGradient="linear(to-br, primary, info)"
+                                color="white"
+                                fontWeight="bold"
+                                fontSize="xs"
+                              >
+                                {account.phone.slice(-2)}
+                              </Center>
+                              <VStack align="start" gap={0}>
+                                <Text
+                                  fontSize="sm"
+                                  fontWeight="bold"
+                                  color="fg"
+                                >
+                                  {account.phone}
+                                </Text>
+                                <Text fontSize="2xs" color="fg.muted">
+                                  API ID: {account.apiId.slice(0, 3)}***
+                                </Text>
+                              </VStack>
+                            </HStack>
+                            <IconButton
+                              aria-label="Remove Account"
+                              variant="ghost"
+                              size="xs"
+                              color="error.400"
+                              _hover={{
+                                bg: 'error.100/10',
+                                color: 'error.500',
+                              }}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleRemoveAccount(account.phone);
+                              }}
+                              borderRadius="full"
+                            >
+                              <svg
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                width="14"
+                                height="14"
+                              >
+                                <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                              </svg>
+                            </IconButton>
+                          </HStack>
+                        </motion.div>
+                      ))}
+                    </VStack>
+                  </Box>
+
+                  <Button
+                    onClick={() => setStep(1)}
+                    variant="outline"
+                    size="lg"
+                    borderStyle="dashed"
+                    borderColor="border"
+                    borderRadius="xl"
+                    fontWeight="bold"
+                    _hover={{
+                      borderColor: 'primary',
+                      color: 'primary',
+                      bg: 'transparent',
+                    }}
+                  >
+                    + {t('LoginPage.savedAccounts.addNew')}
+                  </Button>
+                </VStack>
+              </motion.div>
+            )}
+
             {step === 1 && (
               <motion.div
                 key="step1"
@@ -353,8 +514,8 @@ const LoginPage = () => {
                             placeholder={t('LoginPage.api.idPlaceholder')}
                             value={field.state.value}
                             onChange={(e) => {
-                                field.handleChange(e.target.value);
-                                clearFieldError('apiId');
+                              field.handleChange(e.target.value);
+                              clearFieldError('apiId');
                             }}
                             onBlur={field.handleBlur}
                             border="1px solid"
@@ -393,8 +554,8 @@ const LoginPage = () => {
                             placeholder={t('LoginPage.api.hashPlaceholder')}
                             value={field.state.value}
                             onChange={(e) => {
-                                field.handleChange(e.target.value);
-                                clearFieldError('apiHash');
+                              field.handleChange(e.target.value);
+                              clearFieldError('apiHash');
                             }}
                             onBlur={field.handleBlur}
                             border="1px solid"
@@ -554,6 +715,45 @@ const LoginPage = () => {
           </AnimatePresence>
         </Box>
       </VStack>
+
+      {/* Custom Toast Notifications for Auth Errors */}
+      <AnimatePresence>
+        {authError && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.2 }}
+            style={{
+              position: 'fixed',
+              bottom: '32px',
+              right: '32px',
+              zIndex: 2000,
+            }}
+          >
+            <HStack
+              bg={{ base: 'white', _dark: '#18202a' }}
+              borderWidth="1px"
+              borderColor="error.400"
+              borderRadius="xl"
+              px={5}
+              py={3.5}
+              shadow="2xl"
+              gap={3}
+            >
+              <Box
+                w={2}
+                h={2}
+                borderRadius="full"
+                bg="error.400"
+              />
+              <Text fontSize="sm" fontWeight="bold" color="fg">
+                {authError}
+              </Text>
+            </HStack>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <style>{`
         @keyframes spin {

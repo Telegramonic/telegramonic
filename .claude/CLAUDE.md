@@ -187,6 +187,7 @@ The platform organizes resources into 13 primary verticals:
 - **Diagnostics**: Polling status indicator queries the local diagnostics server (`127.0.0.1:8080`) every 5 seconds. Runs silently in the background.
 - **Theme Defaulting**: Defaults automatically to system theme settings (`prefers-color-scheme`) using Chakra UI / NextThemes, with no theme-override controls in UI.
 - **Packaging (electron-builder)**: Uses `desktop/electron-builder.json` to generate builds. Ensure DMG layout remains clean and system files (`.background.tiff`, `.VolumeIcon.icns`) are not declared inside `dmg.contents` to prevent rendering them to users.
+- **Native File Downloads**: Bypasses Chromium's standard download manager by using an IPC handler `download-file-directly` in `main.js`. It utilizes `dialog.showSaveDialog` to prompt the user, streams the download from the local Axum server directly to disk via Node.js `fs.createWriteStream`, and cleans up any partial/failed files.
 
 ## 5. Testing & Verification
 

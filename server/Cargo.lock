@@ -1387,6 +1387,7 @@ dependencies = [
  "grammers-client",
  "grammers-session",
  "grammers-tl-types",
+ "md5",
  "serde",
  "serde_json",
  "tokio",

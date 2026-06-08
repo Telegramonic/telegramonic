@@ -1,18 +1,16 @@
 #!/usr/bin/env bash
 # =============================================================================
-# test_real_api.sh — Interactive Real Mode API Test Suite for Telegramonic
+# test_real_api.sh — Comprehensive API Test Suite for Telegramonic Backend
 #
-# Connects to a running server in Real Mode and performs an actual login
-# sequence via the Telegram MTProto network.
-#
-# Usage:
-#   ./testing/test_real_api.sh
-#   BASE_URL=http://localhost:8080 ./testing/test_real_api.sh
+# Tests all public and protected server endpoints, verifies file and folder
+# listing, and ensures pass/fail tracking across all test steps.
 # =============================================================================
 
-set -euo pipefail
+# Disable exit-on-error globally so that failed assertions don't halt execution,
+# allowing us to print a comprehensive summary of all test cases.
+set -uo pipefail
 
-BASE_URL="${BASE_URL:-http://127.0.0.1:8080}"
+BASE_URL="${BASE_URL:-http://127.0.0.1:50065}"
 
 # ── Colour helpers ────────────────────────────────────────────────────────────
 RED='\033[0;31m'
@@ -22,29 +20,117 @@ CYAN='\033[0;36m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
+# ── Stats trackers ────────────────────────────────────────────────────────────
+TESTS_PASSED=0
+TESTS_FAILED=0
+TESTS_TOTAL=0
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 print_step() {
-  echo -e "\n${CYAN}${BOLD}▶ $1${RESET}"
+  echo -e "\n${CYAN}${BOLD}▶ $1${RESET}" >&2
 }
 
 print_success() {
-  echo -e "${GREEN}✓ $1${RESET}"
+  echo -e "${GREEN}✓ $1${RESET}" >&2
 }
 
 print_error() {
-  echo -e "${RED}✗ ERROR: $1${RESET}"
+  echo -e "${RED}✗ ERROR: $1${RESET}" >&2
 }
 
-post() {
-  curl -s -X POST "${BASE_URL}$1" \
-    -H "Content-Type: application/json" \
-    -d "${2:-{}}"
+# Low-level request helper
+# Returns a JSON string containing "status" and "body"
+request() {
+  local method="$1"
+  local path="$2"
+  local data="${3:-}"
+  
+  local response
+  if [ -n "$data" ]; then
+    response=$(curl -s -w "\n%{http_code}" -X "$method" \
+      -H "Content-Type: application/json" \
+      -d "$data" \
+      "${BASE_URL}${path}" || echo -e "\n000")
+  else
+    response=$(curl -s -w "\n%{http_code}" -X "$method" \
+      -H "Content-Type: application/json" \
+      "${BASE_URL}${path}" || echo -e "\n000")
+  fi
+  
+  local status_code
+  status_code=$(echo "$response" | tail -n 1 | tr -d '\r' | xargs)
+  
+  local body
+  body=$(echo "$response" | sed '$d')
+  
+  if [ -z "$status_code" ] || [ "$status_code" = "" ]; then
+    status_code="000"
+  fi
+  
+  # Return JSON structure
+  jq -n --arg code "$status_code" --arg body "$body" '{"status": ($code|tonumber), "body": $body}'
 }
 
-get() {
-  curl -s -X GET "${BASE_URL}$1" \
-    -H "Content-Type: application/json"
+# Custom helper for binary upload-part
+upload_part_api() {
+  local file_id="$1"
+  local part_index="$2"
+  local local_file="$3"
+  
+  local body_file
+  body_file=$(mktemp)
+  
+  local status_code
+  status_code=$(curl -s -X POST \
+    -w "%{http_code}" \
+    -o "$body_file" \
+    -H "Content-Type: application/octet-stream" \
+    --data-binary "@${local_file}" \
+    "${BASE_URL}/files/upload-part?file_id=${file_id}&part_index=${part_index}" || echo "000")
+  
+  local body=""
+  if [ -f "$body_file" ]; then
+    body=$(cat "$body_file")
+  fi
+  rm -f "$body_file"
+  
+  if [ -z "$status_code" ] || [ "$status_code" = "" ]; then
+    status_code="000"
+  fi
+  
+  jq -n --arg code "$status_code" --arg body "$body" '{"status": ($code|tonumber), "body": $body}'
 }
+
+# Run a test step and update statistics
+# Usage: run_api_test <method> <path> [payload_json] [expected_status]
+run_api_test() {
+  local method="$1"
+  local path="$2"
+  local payload="${3:-}"
+  local expected_status="${4:-200}"
+  
+  TESTS_TOTAL=$((TESTS_TOTAL + 1))
+  
+  local res
+  res=$(request "$method" "$path" "$payload")
+  local status
+  status=$(echo "$res" | jq -r '.status')
+  local body
+  body=$(echo "$res" | jq -r '.body')
+  
+  if [ "$status" -eq "$expected_status" ]; then
+    TESTS_PASSED=$((TESTS_PASSED + 1))
+    print_success "$method $path -> HTTP $status (Expected $expected_status)"
+    echo "$body"
+    return 0
+  else
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    print_error "$method $path -> Got HTTP $status, Expected $expected_status"
+    echo "$body" >&2
+    return 1
+  fi
+}
+
 
 # ── Preflight Checks ──────────────────────────────────────────────────────────
 clear
@@ -56,12 +142,14 @@ echo -e "Target Server URL: ${CYAN}${BASE_URL}${RESET}"
 # Verify jq is installed
 if ! command -v jq &> /dev/null; then
   print_error "'jq' is required but not installed."
-  echo "Please install jq first (e.g. 'brew install jq' or 'sudo apt-get install jq')."
+  echo "Please install jq first (e.g. 'brew install jq')."
   exit 1
 fi
 
 # Verify server connectivity
-if ! curl -sf "${BASE_URL}/auth/state" > /dev/null 2>&1; then
+res=$(request GET "/auth/state")
+status_code=$(echo "$res" | jq -r '.status')
+if [ "$status_code" -eq 0 ]; then
   print_error "Cannot connect to Telegramonic backend server at ${BASE_URL}."
   echo "Ensure the server is running."
   echo "Remember to run the server in REAL mode using:"
@@ -72,34 +160,24 @@ fi
 print_success "Server is reachable."
 
 # Get initial auth state
-initial_state=$(get /auth/state)
+initial_state=$(echo "$res" | jq -r '.body')
 status=$(echo "$initial_state" | jq -r '.status')
 
 echo -e "Initial Server Auth State: ${YELLOW}${status}${RESET}"
 
+skip_login="false"
 if [ "$status" = "LoggedIn" ]; then
-  echo -e "\n${YELLOW}You are already logged in.${RESET}"
-  read -p "Would you like to log out first to run the login test? (y/n): " logout_choice
-  if [[ "$logout_choice" =~ ^[Yy]$ ]]; then
-    logout_res=$(post /auth/log-out '{}')
-    if echo "$logout_res" | jq -e '.success' >/dev/null; then
-      print_success "Logged out successfully."
-    else
-      print_error "Failed to log out. Proceeding anyway."
-    fi
-  else
-    print_step "Skipping login flow. Fetching profile info directly..."
-  fi
+  echo -e "\n${GREEN}You are already logged in. Skipping login flow and proceeding to test protected endpoints...${RESET}"
+  skip_login="true"
 fi
 
 # Refresh state
-status=$(get /auth/state | jq -r '.status')
+status=$(request GET "/auth/state" | jq -r '.body | fromjson | .status')
 
-if [ "$status" != "LoggedIn" ]; then
+if [ "$skip_login" = "false" ] && [ "$status" != "LoggedIn" ]; then
   # ── Step 1: Input Credentials ───────────────────────────────────────────────
   print_step "Step 1: Enter Telegram Credentials"
   echo "Please provide the phone number and API credentials."
-  echo "Note: The API ID/Hash must match the ones the server was started with."
   
   read -p "Phone Number (e.g. +15555551234): " PHONE
   if [ -z "$PHONE" ]; then
@@ -127,16 +205,20 @@ if [ "$status" != "LoggedIn" ]; then
     --arg api_hash "$API_HASH" \
     '{phone: $phone, api_id: $api_id, api_hash: $api_hash}')
 
-  send_code_res=$(post /auth/send-code "$payload")
+  # Test POST /auth/send-code
+  TESTS_TOTAL=$((TESTS_TOTAL + 1))
+  send_code_res=$(request POST "/auth/send-code" "$payload")
+  send_code_status=$(echo "$send_code_res" | jq -r '.status')
+  send_code_body=$(echo "$send_code_res" | jq -r '.body')
 
-  if ! echo "$send_code_res" | jq -e '.success' >/dev/null; then
-    err=$(echo "$send_code_res" | jq -r '.error // "Unknown error"')
-    print_error "Failed to send code: $err"
+  if [ "$send_code_status" -eq 200 ] && echo "$send_code_body" | jq -e '.success' >/dev/null; then
+    TESTS_PASSED=$((TESTS_PASSED + 1))
+    print_success "POST /auth/send-code -> HTTP 200"
+  else
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    print_error "Failed to send code: $send_code_body"
     exit 1
   fi
-
-  print_success "Login code requested successfully."
-  echo "Check your Telegram app or SMS for the verification code."
 
   # ── Step 3: Verify Login Code ───────────────────────────────────────────────
   print_step "Step 3: Verification"
@@ -151,14 +233,26 @@ if [ "$status" != "LoggedIn" ]; then
     --arg code "$CODE" \
     '{phone: $phone, code: $code}')
 
-  sign_in_res=$(post /auth/sign-in "$sign_in_payload")
+  # Test POST /auth/sign-in
+  TESTS_TOTAL=$((TESTS_TOTAL + 1))
+  sign_in_res=$(request POST "/auth/sign-in" "$sign_in_payload")
+  sign_in_status=$(echo "$sign_in_res" | jq -r '.status')
+  sign_in_body=$(echo "$sign_in_res" | jq -r '.body')
 
-  success=$(echo "$sign_in_res" | jq -r '.success')
-  next_step=$(echo "$sign_in_res" | jq -r '.next_step')
-
-  if [ "$success" != "true" ]; then
-    err=$(echo "$sign_in_res" | jq -r '.error // "Unknown error"')
-    print_error "Sign-in failed: $err"
+  if [ "$sign_in_status" -eq 200 ]; then
+    success=$(echo "$sign_in_body" | jq -r '.success')
+    next_step=$(echo "$sign_in_body" | jq -r '.next_step')
+    if [ "$success" = "true" ]; then
+      TESTS_PASSED=$((TESTS_PASSED + 1))
+      print_success "POST /auth/sign-in -> HTTP 200"
+    else
+      TESTS_FAILED=$((TESTS_FAILED + 1))
+      print_error "Sign-in failed: $sign_in_body"
+      exit 1
+    fi
+  else
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    print_error "Sign-in endpoint returned HTTP $sign_in_status: $sign_in_body"
     exit 1
   fi
 
@@ -169,60 +263,286 @@ if [ "$status" != "LoggedIn" ]; then
     echo "" # newline
 
     pwd_payload=$(jq -n --arg pwd "$PASSWORD" '{password: $pwd}')
-    pwd_res=$(post /auth/check-password "$pwd_payload")
+    
+    # Test POST /auth/check-password (Real Success Case)
+    TESTS_TOTAL=$((TESTS_TOTAL + 1))
+    pwd_res=$(request POST "/auth/check-password" "$pwd_payload")
+    pwd_status=$(echo "$pwd_res" | jq -r '.status')
+    pwd_body=$(echo "$pwd_res" | jq -r '.body')
 
-    pwd_success=$(echo "$pwd_res" | jq -r '.success')
-    if [ "$pwd_success" != "true" ]; then
-      err=$(echo "$pwd_res" | jq -r '.error // "Incorrect password"')
-      print_error "2FA password check failed: $err"
+    if [ "$pwd_status" -eq 200 ] && echo "$pwd_body" | jq -e '.success' >/dev/null; then
+      TESTS_PASSED=$((TESTS_PASSED + 1))
+      print_success "POST /auth/check-password -> HTTP 200"
+    else
+      TESTS_FAILED=$((TESTS_FAILED + 1))
+      print_error "2FA password check failed: $pwd_body"
       exit 1
     fi
-    print_success "2FA verification succeeded."
   fi
 fi
 
-print_success "Successfully authenticated!"
-
-# ── Step 5: Test Authenticated Endpoints ─────────────────────────────────────
-print_step "Step 5: Querying Account Profile"
-me_res=$(get /users/me)
-if echo "$me_res" | jq -e '.id' >/dev/null; then
-  first_name=$(echo "$me_res" | jq -r '.first_name')
-  last_name=$(echo "$me_res" | jq -r '.last_name // ""')
-  username=$(echo "$me_res" | jq -r '.username // "none"')
-  echo -e "User ID:    ${GREEN}$(echo "$me_res" | jq -r '.id')${RESET}"
-  echo -e "Name:       ${GREEN}${first_name} ${last_name}${RESET}"
-  echo -e "Username:   ${GREEN}@${username}${RESET}"
-else
-  print_error "Failed to retrieve profile: $me_res"
+# Ensure we are logged in before running protected endpoint tests
+status=$(request GET "/auth/state" | jq -r '.body | fromjson | .status')
+if [ "$status" != "LoggedIn" ]; then
+  print_error "Authentication failed. Exiting test suite."
+  exit 1
 fi
 
-print_step "Step 6: Querying Channels (Drives)"
-drives_res=$(get /drive/list)
-if echo "$drives_res" | jq -e 'type == "array"' >/dev/null; then
-  count=$(echo "$drives_res" | jq '. | length')
-  echo -e "Found ${GREEN}${count}${RESET} channels/drives."
-  if [ "$count" -gt 0 ]; then
-    echo "$drives_res" | jq -r '.[] | " - \(.name) (Chat ID: \(.chat_id))"'
+print_success "Successfully authenticated! Starting comprehensive endpoint checks..."
+
+# ── PUBLIC & STATE ENDPOINTS ──────────────────────────────────────────────────
+print_step "Checking Public / State Endpoints"
+run_api_test GET "/health" "" 200 >/dev/null
+run_api_test GET "/auth/state" "" 200 >/dev/null
+
+# Negative tests for auth when already logged in
+# POST /auth/sign-up (Maps to sign-in, we accept 200/400/500 to support mock/real state variations)
+TESTS_TOTAL=$((TESTS_TOTAL + 1))
+res_signup=$(request POST "/auth/sign-up" '{"phone": "invalid", "code": "invalid"}')
+status_signup=$(echo "$res_signup" | jq -r '.status')
+if [ "$status_signup" -eq 200 ] || [ "$status_signup" -eq 400 ] || [ "$status_signup" -eq 500 ]; then
+  TESTS_PASSED=$((TESTS_PASSED + 1))
+  print_success "POST /auth/sign-up -> HTTP $status_signup (Accepted 200/400/500)"
+else
+  TESTS_FAILED=$((TESTS_FAILED + 1))
+  print_error "POST /auth/sign-up -> HTTP $status_signup (Expected 200/400/500)"
+fi
+
+# POST /auth/check-password (Negative case, we accept 200/400/500 to support mock/real state variations)
+TESTS_TOTAL=$((TESTS_TOTAL + 1))
+res_pwd=$(request POST "/auth/check-password" '{"password": "wrong"}')
+status_pwd=$(echo "$res_pwd" | jq -r '.status')
+if [ "$status_pwd" -eq 200 ] || [ "$status_pwd" -eq 400 ] || [ "$status_pwd" -eq 500 ]; then
+  TESTS_PASSED=$((TESTS_PASSED + 1))
+  print_success "POST /auth/check-password -> HTTP $status_pwd (Accepted 200/400/500)"
+else
+  TESTS_FAILED=$((TESTS_FAILED + 1))
+  print_error "POST /auth/check-password -> HTTP $status_pwd (Expected 200/400/500)"
+fi
+
+# ── USERS & ACCOUNT ENDPOINTS ─────────────────────────────────────────────────
+print_step "Checking Users & Account Endpoints"
+
+# GET /users/me
+me_res=$(run_api_test GET "/users/me" "" 200)
+my_id=$(echo "$me_res" | jq -r '.id')
+my_first_name=$(echo "$me_res" | jq -r '.first_name')
+my_last_name=$(echo "$me_res" | jq -r '.last_name // ""')
+my_username=$(echo "$me_res" | jq -r '.username // ""')
+
+# GET /users/get-users
+run_api_test GET "/users/get-users" "" 200 >/dev/null
+
+# GET /users/get-full-user
+run_api_test GET "/users/get-full-user?id=${my_id}" "" 200 >/dev/null
+
+# GET /account/get-password
+run_api_test GET "/account/get-password" "" 200 >/dev/null
+
+# POST /account/update-profile
+profile_payload=$(jq -n \
+  --arg first "$my_first_name" \
+  --arg last "$my_last_name" \
+  '{first_name: $first, last_name: $last}')
+run_api_test POST "/account/update-profile" "$profile_payload" 200 >/dev/null
+
+# POST /account/update-status
+run_api_test POST "/account/update-status" '{"offline": false}' 200 >/dev/null
+
+# POST /account/update-username
+username_payload=$(jq -n --arg user "$my_username" '{username: $user}')
+run_api_test POST "/account/update-username" "$username_payload" 200 >/dev/null
+
+
+# ── CONTACTS ENDPOINTS (STUBS) ────────────────────────────────────────────────
+print_step "Checking Contacts Endpoints (Stubs)"
+run_api_test GET "/contacts/get-contacts" "" 200 >/dev/null
+run_api_test GET "/contacts/search?q=test" "" 200 >/dev/null
+run_api_test POST "/contacts/import-contacts" "{}" 200 >/dev/null
+
+
+# ── DRIVE & FILE QUERIES ──────────────────────────────────────────────────────
+print_step "Checking Drive Overview Endpoints"
+run_api_test GET "/drive/list" "" 200 >/dev/null
+run_api_test GET "/drive/stats" "" 200 >/dev/null
+
+# Query files at drive root
+run_api_test GET "/drive/files" "" 200 >/dev/null
+
+# ── LIST FILES IN CHANNELS/FOLDERS ───────────────────────────────────────────
+print_step "Listing Folders and Files in each Channel/Folder"
+
+folders_res=$(run_api_test GET "/drive/folders" "" 200)
+folder_count=$(echo "$folders_res" | jq '. | length')
+echo -e "\nFound ${GREEN}${folder_count}${RESET} channel folders:"
+
+for ((i=0; i<folder_count; i++)); do
+  folder_id=$(echo "$folders_res" | jq -r ".[$i].id")
+  folder_name=$(echo "$folders_res" | jq -r ".[$i].name")
+  
+  echo -e "\n📁 ${CYAN}${folder_name}${RESET} (ID: ${folder_id}):"
+  
+  # List files in this specific channel/folder
+  files_res=$(run_api_test GET "/drive/files?folder_id=${folder_id}" "" 200)
+  file_count=$(echo "$files_res" | jq '. | length')
+  
+  if [ "$file_count" -eq 0 ]; then
+    echo -e "   ${YELLOW}(No files found in this channel)${RESET}"
+  else
+    for ((j=0; j<file_count; j++)); do
+      f_name=$(echo "$files_res" | jq -r ".[$j].name")
+      f_size=$(echo "$files_res" | jq -r ".[$j].size")
+      f_id=$(echo "$files_res" | jq -r ".[$j].id")
+      f_ext=$(echo "$files_res" | jq -r ".[$j].file_ext // \"none\"")
+      echo -e "   📄 ${GREEN}${f_name}${RESET} (ID: ${f_id}, Size: ${f_size} bytes, Ext: ${f_ext})"
+    done
+  fi
+done
+
+
+# ── FOLDER LIFECYCLE ──────────────────────────────────────────────────────────
+print_step "Checking Folder Lifecycle (Create, Verify, Delete)"
+
+# Create folder
+create_folder_res=$(run_api_test POST "/drive/folders/create" '{"name": "Temp Test Folder", "parent_id": null}' 200)
+created_id=$(echo "$create_folder_res" | jq -r '.id')
+created_name=$(echo "$create_folder_res" | jq -r '.name')
+
+if [ -n "$created_id" ] && [ "$created_id" != "null" ]; then
+  print_success "Folder created: $created_name (ID: $created_id)"
+  
+  # Verify folder is listed
+  verify_folders=$(run_api_test GET "/drive/folders" "" 200)
+  if echo "$verify_folders" | jq -e ".[] | select(.id == ${created_id})" >/dev/null; then
+    print_success "Folder verification: Found created folder in listing."
+  else
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    print_error "Folder verification: Created folder NOT found in listing!"
+  fi
+  
+  # Delete folder
+  run_api_test POST "/drive/folders/delete" "{\"id\": ${created_id}}" 200 >/dev/null
+  
+  # Verify deleted
+  verify_deleted=$(run_api_test GET "/drive/folders" "" 200)
+  if echo "$verify_deleted" | jq -e ".[] | select(.id == ${created_id})" >/dev/null; then
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    print_error "Folder cleanup verification: Deleted folder is STILL in listing!"
+  else
+    print_success "Folder cleanup verification: Folder successfully removed."
   fi
 else
-  print_error "Failed to retrieve drives: $drives_res"
+  TESTS_FAILED=$((TESTS_FAILED + 1))
+  print_error "Folder creation did not return a valid folder ID: $create_folder_res"
 fi
 
-# ── Clean up option ───────────────────────────────────────────────────────────
-print_step "Step 7: Session Cleanup"
+
+# ── FILE LIFECYCLE (UPLOAD, SAVE, DOWNLOAD) ───────────────────────────────────
+print_step "Checking File Lifecycle (Upload Part, Save File, Download File)"
+
+# Generate a temporary local file with unique random string content
+temp_upload_file=$(mktemp)
+echo -n "Telegramonic file upload content - $(date) - $((RANDOM))" > "$temp_upload_file"
+orig_size=$(wc -c < "$temp_upload_file" | xargs) # Strip spaces portably
+file_id=$((100000 + RANDOM % 900000))
+
+# 1. upload-part
+TESTS_TOTAL=$((TESTS_TOTAL + 1))
+upload_res=$(upload_part_api "$file_id" 0 "$temp_upload_file")
+upload_status=$(echo "$upload_res" | jq -r '.status')
+upload_body=$(echo "$upload_res" | jq -r '.body')
+
+if [ "$upload_status" -eq 200 ] && echo "$upload_body" | jq -e '.success' >/dev/null; then
+  TESTS_PASSED=$((TESTS_PASSED + 1))
+  print_success "POST /files/upload-part -> HTTP 200"
+else
+  TESTS_FAILED=$((TESTS_FAILED + 1))
+  print_error "POST /files/upload-part failed: $upload_body"
+fi
+
+# 2. save-file
+save_payload=$(jq -n \
+  --argjson fid "$file_id" \
+  --arg name "api_test_upload_$file_id.txt" \
+  --argjson size "$orig_size" \
+  '{file_id: $fid, name: $name, size: $size, folder_id: null}')
+
+run_api_test POST "/files/save-file" "$save_payload" 200 >/dev/null
+
+# 3. Verify file exists in root file list
+verify_files=$(run_api_test GET "/drive/files" "" 200)
+if echo "$verify_files" | jq -e ".[] | select(.id == ${file_id})" >/dev/null; then
+  print_success "File verification: Created file found in root file list."
+else
+  TESTS_FAILED=$((TESTS_FAILED + 1))
+  print_error "File verification: Created file NOT found in root file list!"
+fi
+
+# 4. download / get-file verification
+temp_download_file1=$(mktemp)
+temp_download_file2=$(mktemp)
+
+# Test /files/download
+TESTS_TOTAL=$((TESTS_TOTAL + 1))
+dl1_status=$(curl -s -X GET "${BASE_URL}/files/download?file_id=${file_id}" -o "$temp_download_file1" -w "%{http_code}")
+if [ "$dl1_status" -eq 200 ]; then
+  if diff "$temp_upload_file" "$temp_download_file1" >/dev/null; then
+    TESTS_PASSED=$((TESTS_PASSED + 1))
+    print_success "GET /files/download -> HTTP 200 and file content matches exactly"
+  else
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    print_error "GET /files/download -> File content mismatch!"
+  fi
+else
+  TESTS_FAILED=$((TESTS_FAILED + 1))
+  print_error "GET /files/download -> Returned HTTP $dl1_status"
+fi
+
+# Test /files/get-file
+TESTS_TOTAL=$((TESTS_TOTAL + 1))
+dl2_status=$(curl -s -X GET "${BASE_URL}/files/get-file?file_id=${file_id}" -o "$temp_download_file2" -w "%{http_code}")
+if [ "$dl2_status" -eq 200 ]; then
+  if diff "$temp_upload_file" "$temp_download_file2" >/dev/null; then
+    TESTS_PASSED=$((TESTS_PASSED + 1))
+    print_success "GET /files/get-file -> HTTP 200 and file content matches exactly"
+  else
+    TESTS_FAILED=$((TESTS_FAILED + 1))
+    print_error "GET /files/get-file -> File content mismatch!"
+  fi
+else
+  TESTS_FAILED=$((TESTS_FAILED + 1))
+  print_error "GET /files/get-file -> Returned HTTP $dl2_status"
+fi
+
+# Local file cleanup
+rm -f "$temp_upload_file" "$temp_download_file1" "$temp_download_file2"
+
+
+# ── SESSION CLEANUP ───────────────────────────────────────────────────────────
+print_step "Session Cleanup"
 read -p "Keep session active? (y/n): " keep_session
 if [[ ! "$keep_session" =~ ^[Yy]$ ]]; then
-  logout_res=$(post /auth/log-out '{}')
-  if echo "$logout_res" | jq -e '.success' >/dev/null; then
-    print_success "Session terminated. Logged out successfully."
-  else
-    print_error "Failed to log out."
-  fi
+  # Test log-out & reset-authorization
+  run_api_test POST "/auth/log-out" "{}" 200 >/dev/null
+  run_api_test POST "/auth/reset-authorization" "{}" 200 >/dev/null
 else
   echo -e "${GREEN}Session kept active. You can open the client React app now!${RESET}"
 fi
 
+
+# ── FINAL SUMMARY ─────────────────────────────────────────────────────────────
 echo -e "\n${BOLD}====================================================${RESET}"
-echo -e "${GREEN}${BOLD}             Real Mode Test Complete!               ${RESET}"
+echo -e "${BOLD}             API Test Suite Summary                 ${RESET}"
 echo -e "${BOLD}====================================================${RESET}"
+echo -e "Total Tests Executed: ${CYAN}${TESTS_TOTAL}${RESET}"
+echo -e "Passed:               ${GREEN}${TESTS_PASSED}${RESET}"
+echo -e "Failed:               ${RED}${TESTS_FAILED}${RESET}"
+echo -e "${BOLD}====================================================${RESET}"
+
+if [ "$TESTS_FAILED" -eq 0 ]; then
+  echo -e "${GREEN}${BOLD}         ALL TESTS COMPLETED SUCCESSFULLY!          ${RESET}"
+  exit 0
+else
+  echo -e "${RED}${BOLD}         SOME TESTS ENCOUNTERED FAILURES.           ${RESET}"
+  exit 1
+fi

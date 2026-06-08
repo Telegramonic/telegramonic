@@ -28,7 +28,9 @@ pub struct AuthResult {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct FileMetadata {
+    #[serde(serialize_with = "serialize_i64_as_string", deserialize_with = "deserialize_i64_from_string_or_number")]
     pub id: i64,
+    #[serde(with = "serde_option_i64_string")]
     pub folder_id: Option<i64>,
     pub name: String,
     pub size: i64,
@@ -40,13 +42,16 @@ pub struct FileMetadata {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct FolderMetadata {
+    #[serde(serialize_with = "serialize_i64_as_string", deserialize_with = "deserialize_i64_from_string_or_number")]
     pub id: i64,
+    #[serde(with = "serde_option_i64_string")]
     pub parent_id: Option<i64>,
     pub name: String,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Drive {
+    #[serde(serialize_with = "serialize_i64_as_string", deserialize_with = "deserialize_i64_from_string_or_number")]
     pub chat_id: i64,
     pub name: String,
     pub icon: Option<String>,
@@ -62,6 +67,7 @@ pub struct DriveStats {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct TelegramUser {
+    #[serde(serialize_with = "serialize_i64_as_string", deserialize_with = "deserialize_i64_from_string_or_number")]
     pub id: i64,
     pub first_name: String,
     pub last_name: Option<String>,
@@ -117,6 +123,7 @@ pub trait TelegramService: Send + Sync {
         parent_id: Option<i64>,
     ) -> Result<FolderMetadata, String>;
     async fn delete_folder(&self, id: i64) -> Result<bool, String>;
+    async fn delete_file(&self, id: i64) -> Result<bool, String>;
 
     // File upload/download
     async fn upload_part(
@@ -133,6 +140,66 @@ pub trait TelegramService: Send + Sync {
         folder_id: Option<i64>,
     ) -> Result<FileMetadata, String>;
     async fn download_file(&self, file_id: i64) -> Result<Vec<u8>, String>;
+    async fn get_upload_progress(&self, file_id: i64) -> Result<i32, String>;
 }
 
 pub type DynTelegramService = Arc<dyn TelegramService>;
+
+pub fn serialize_i64_as_string<S>(val: &i64, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: serde::Serializer,
+{
+    serializer.serialize_str(&val.to_string())
+}
+
+pub fn deserialize_i64_from_string_or_number<'de, D>(deserializer: D) -> Result<i64, D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    #[derive(serde::Deserialize)]
+    #[serde(untagged)]
+    enum StringOrNumber {
+        String(String),
+        Number(i64),
+    }
+
+    match StringOrNumber::deserialize(deserializer)? {
+        StringOrNumber::String(s) => s.parse::<i64>().map_err(serde::de::Error::custom),
+        StringOrNumber::Number(n) => Ok(n),
+    }
+}
+
+pub mod serde_option_i64_string {
+    use serde::{Deserialize, Deserializer, Serializer};
+
+    pub fn serialize<S>(value: &Option<i64>, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        match value {
+            Some(v) => serializer.serialize_some(&v.to_string()),
+            None => serializer.serialize_none(),
+        }
+    }
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<Option<i64>, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        #[derive(Deserialize)]
+        #[serde(untagged)]
+        enum OptionStringOrNumber {
+            SomeString(String),
+            SomeNumber(i64),
+            None,
+        }
+
+        match OptionStringOrNumber::deserialize(deserializer)? {
+            OptionStringOrNumber::SomeString(s) => {
+                s.parse::<i64>().map(Some).map_err(serde::de::Error::custom)
+            }
+            OptionStringOrNumber::SomeNumber(n) => Ok(Some(n)),
+            OptionStringOrNumber::None => Ok(None),
+        }
+    }
+}
