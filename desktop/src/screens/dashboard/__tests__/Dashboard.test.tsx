@@ -125,7 +125,6 @@ describe('Dashboard', () => {
     renderWithProvidersAndRouter(<Dashboard />);
     expect(await screen.findByText('Telegramonic')).toBeInTheDocument();
     expect(screen.getAllByText('In my drive').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText('My Storage')).toBeInTheDocument();
     // Main list should show Marketing Assets folder
     expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
   });

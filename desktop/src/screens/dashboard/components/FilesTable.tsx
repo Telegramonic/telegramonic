@@ -419,7 +419,10 @@ const RowActions = ({
     {!item.isFolder && (
       <Box
         as="button"
-        onClick={(e: React.MouseEvent) => onDownload(item, e)}
+        onClick={(e: React.MouseEvent) => {
+          e.stopPropagation();
+          onDownload(item, e);
+        }}
         p={1.5}
         borderRadius="md"
         color="fg.muted"

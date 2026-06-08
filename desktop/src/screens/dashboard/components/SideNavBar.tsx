@@ -1,7 +1,6 @@
 import { Box, Text, VStack, HStack } from '@chakra-ui/react';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
-import { useStats } from '@services';
 import { SideNavBarProps } from './types';
 
 export const SideNavBar = ({
@@ -10,15 +9,6 @@ export const SideNavBar = ({
   setCurrentFolderId,
   onLogout,
 }: SideNavBarProps) => {
-  const { data: stats } = useStats();
-
-  const totalStorageGB = stats
-    ? parseFloat((stats.total_space / (1024 * 1024 * 1024 * 1024)).toFixed(1)) * 1024 // Convert TB to GB
-    : 100;
-  const currentUsageGB = stats
-    ? parseFloat((stats.used_space / (1024 * 1024 * 1024)).toFixed(3))
-    : 45.2;
-
   return (
     <VStack
       w="280px"
@@ -31,37 +21,6 @@ export const SideNavBar = ({
       flexShrink={0}
     >
       <VStack gap={4} align="stretch">
-        {/* Storage visualizer — without upgrade button */}
-        <Box p={4} borderRadius="2xl" bg={{ base: '#f4f6f8', _dark: '#131c26' }} borderWidth="1px" borderColor="border">
-          <HStack gap={3} mb={3}>
-            <Box p={2} bg="primary/10" borderRadius="lg" color="primary">
-              <Icon type={IconType.CLOUD} size={20} />
-            </Box>
-            <VStack align="start" gap={0}>
-              <Text fontSize="sm" fontWeight="bold" color="fg">
-                My Storage
-              </Text>
-              <Text fontSize="10px" color="fg.muted">
-                {currentUsageGB} GB of {totalStorageGB} GB used
-              </Text>
-            </VStack>
-          </HStack>
-
-          {/* Animated/Smooth storage bar */}
-          <Box w="full" bg={{ base: '#e2e8f0', _dark: '#18202a' }} h="6px" borderRadius="full" overflow="hidden">
-            <Box
-              bg="primary"
-              h="full"
-              style={{
-                width: `${Math.max(0.5, Math.min(100, (currentUsageGB / totalStorageGB) * 100))}%`,
-                transition: 'width 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-                boxShadow: '0 0 8px var(--chakra-colors-primary)',
-              }}
-              borderRadius="full"
-            />
-          </Box>
-        </Box>
-
         {/* Navigation links */}
         <VStack gap={1} align="stretch">
           {[
@@ -95,6 +54,13 @@ export const SideNavBar = ({
       {/* Bottom Sidebar navigation */}
       <VStack gap={1} align="stretch" borderTop="1px solid" borderColor="border" pt={4}>
         <HStack
+          onClick={() => {
+            if (window.electronAPI && window.electronAPI.openExternal) {
+              window.electronAPI.openExternal('https://telegramonic.com/docs');
+            } else {
+              window.open('https://telegramonic.com/docs', '_blank');
+            }
+          }}
           cursor="pointer"
           px={4}
           py={3}

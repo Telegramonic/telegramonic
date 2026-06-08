@@ -64,6 +64,7 @@ impl MockTelegramService {
                 file_ext: Some("pdf".to_string()),
                 created_at: Utc::now().to_rfc3339(),
                 icon_type: "pdf".to_string(),
+                telegram_message_id: None,
             },
             FileMetadata {
                 id: 102,
@@ -74,6 +75,7 @@ impl MockTelegramService {
                 file_ext: Some("jpg".to_string()),
                 created_at: Utc::now().to_rfc3339(),
                 icon_type: "image".to_string(),
+                telegram_message_id: Some(202),
             },
             FileMetadata {
                 id: 103,
@@ -84,6 +86,7 @@ impl MockTelegramService {
                 file_ext: Some("gz".to_string()),
                 created_at: Utc::now().to_rfc3339(),
                 icon_type: "archive".to_string(),
+                telegram_message_id: Some(303),
             },
         ];
 
@@ -299,12 +302,13 @@ impl TelegramService for MockTelegramService {
         &self,
         folder_id: Option<i64>,
         search_query: Option<&str>,
+        all: Option<bool>,
     ) -> Result<Vec<FileMetadata>, String> {
         let db = self.db.lock().await;
         let mut filtered: Vec<FileMetadata> = db
             .files
             .iter()
-            .filter(|f| f.folder_id == folder_id)
+            .filter(|f| all == Some(true) || f.folder_id == folder_id)
             .cloned()
             .collect();
 
@@ -408,6 +412,7 @@ impl TelegramService for MockTelegramService {
             file_ext,
             created_at: Utc::now().to_rfc3339(),
             icon_type,
+            telegram_message_id: Some(12345),
         };
 
         db.files.push(new_file.clone());

@@ -24,11 +24,6 @@ const defaultProps = {
 describe('SideNavBar', () => {
   beforeEach(() => jest.clearAllMocks());
 
-  it('renders "My Storage" heading', () => {
-    renderWithProvidersAndRouter(<SideNavBar {...defaultProps} />);
-    expect(screen.getByText('My Storage')).toBeInTheDocument();
-  });
-
   it('renders navigation tabs: In my drive, Pinned', () => {
     renderWithProvidersAndRouter(<SideNavBar {...defaultProps} />);
     expect(screen.getByText('In my drive')).toBeInTheDocument();
@@ -47,16 +42,5 @@ describe('SideNavBar', () => {
     renderWithProvidersAndRouter(<SideNavBar {...defaultProps} onLogout={onLogout} />);
     fireEvent.click(screen.getByText('Logout'));
     expect(onLogout).toHaveBeenCalledTimes(1);
-  });
-
-  it('does not render an Upgrade Storage button', () => {
-    renderWithProvidersAndRouter(<SideNavBar {...defaultProps} />);
-    expect(screen.queryByText('Upgrade Storage')).not.toBeInTheDocument();
-  });
-
-  it('displays storage stats after data resolves', async () => {
-    renderWithProvidersAndRouter(<SideNavBar {...defaultProps} />);
-    // Usage string "45.2 GB / 100.0 TB" or similar should appear
-    expect(await screen.findByText(/45\.2 GB/)).toBeInTheDocument();
   });
 });

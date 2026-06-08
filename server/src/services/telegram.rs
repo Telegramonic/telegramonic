@@ -442,12 +442,61 @@ impl TelegramService for RealTelegramService {
         &self,
         folder_id: Option<i64>,
         search_query: Option<&str>,
+        all: Option<bool>,
     ) -> Result<Vec<FileMetadata>, String> {
-        tracing::info!("get_files request: folder_id={:?}, search_query={:?}", folder_id, search_query);
+        tracing::info!("get_files request: folder_id={:?}, search_query={:?}, all={:?}", folder_id, search_query, all);
         let res = (|| async {
             let mut result = Vec::new();
 
-            if let Some(chat_id) = folder_id {
+            if all == Some(true) {
+                // Fetch files from ALL folders (channels)
+                let client = self.get_client().await?;
+                let mut dialogs_iter = client.iter_dialogs();
+                let mut chats = Vec::new();
+
+                while let Some(dialog) = dialogs_iter.next().await.map_err(|e| e.to_string())? {
+                    let chat = dialog.chat();
+                    if matches!(chat, grammers_client::types::Chat::Channel(_)) {
+                        chats.push((chat.id(), chat.pack()));
+                    }
+                }
+
+                for (chat_id, chat) in chats {
+                    let mut messages = client.iter_messages(chat);
+                    while let Some(msg) = messages.next().await.map_err(|e| e.to_string())? {
+                        if let Some(media) = msg.media() {
+                            if let grammers_client::types::Media::Document(doc) = media {
+                                let doc_name = doc.name().to_string();
+                                let file_ext = doc_name.split('.').last().map(|s| s.to_string());
+                                let icon_type = match file_ext.as_deref() {
+                                    Some("pdf") => "pdf".to_string(),
+                                    Some("png") | Some("jpg") | Some("jpeg") | Some("gif") => "image".to_string(),
+                                    Some("zip") | Some("tar") | Some("gz") | Some("rar") => "archive".to_string(),
+                                    Some("mp4") | Some("mkv") | Some("avi") => "video".to_string(),
+                                    Some("mp3") | Some("wav") | Some("ogg") => "audio".to_string(),
+                                    _ => "file".to_string(),
+                                };
+                                
+                                let created_at = doc.creation_date()
+                                    .map(|d| d.to_rfc3339())
+                                    .unwrap_or_else(|| Utc::now().to_rfc3339());
+
+                                result.push(FileMetadata {
+                                    id: doc.id(),
+                                    folder_id: Some(chat_id),
+                                    name: doc_name,
+                                    size: doc.size(),
+                                    mime_type: doc.mime_type().map(|s| s.to_string()),
+                                    file_ext,
+                                    created_at,
+                                    icon_type,
+                                    telegram_message_id: Some(msg.id()),
+                                });
+                            }
+                        }
+                    }
+                }
+            } else if let Some(chat_id) = folder_id {
                 // Fetch files from the Telegram channel (messages containing documents)
                 let client = self.get_client().await?;
                 let mut dialogs_iter = client.iter_dialogs();
@@ -490,6 +539,7 @@ impl TelegramService for RealTelegramService {
                                     file_ext,
                                     created_at,
                                     icon_type,
+                                    telegram_message_id: Some(msg.id()),
                                 });
                             }
                         }
@@ -505,7 +555,7 @@ impl TelegramService for RealTelegramService {
 
             let local_files = self.files.lock().await;
             for file in local_files.iter() {
-                if file.folder_id == folder_id {
+                if all == Some(true) || file.folder_id == folder_id {
                     file_map.insert(file.id, file.clone());
                 }
             }
@@ -829,6 +879,7 @@ impl TelegramService for RealTelegramService {
                 file_ext,
                 created_at,
                 icon_type,
+                telegram_message_id: Some(sent_message.id()),
             })
         } else {
             // Fallback to local storage (mock/test behavior)
@@ -857,6 +908,7 @@ impl TelegramService for RealTelegramService {
                 file_ext,
                 created_at: Utc::now().to_rfc3339(),
                 icon_type,
+                telegram_message_id: None,
             };
 
             files.push(new_file.clone());

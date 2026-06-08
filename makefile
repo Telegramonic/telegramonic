@@ -8,6 +8,14 @@ coverage:
 branch-clean:
 	git fetch -p && git branch -vv | awk '/: gone]/{print $1}' | xargs git branch -D
 
+.PHONY: clean
+clean:
+	@echo "Cleaning build, dist, and node_modules directories..."
+	rm -rf web/build web/dist web/node_modules
+	rm -rf desktop/build desktop/dist desktop/node_modules
+	rm -rf common/build common/dist common/node_modules
+	rm -rf server/target
+	rm -rf node_modules
 
 .PHONY: commit
 

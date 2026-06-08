@@ -9,6 +9,7 @@ interface ElectronAPI {
   checkConnection: () => Promise<{ status: string; latency: number | null }>;
   setDockIcon?: (dataUrl: string) => void;
   downloadFileDirectly?: (url: string, filename: string) => Promise<{ success: boolean; error?: string }>;
+  openExternal?: (url: string) => void;
 }
 
 interface Window {

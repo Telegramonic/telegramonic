@@ -5,6 +5,7 @@ const {
   nativeImage,
   screen,
   dialog,
+  shell,
 } = require('electron');
 const path = require('path');
 const fs = require('fs');
@@ -83,6 +84,14 @@ ipcMain.on('set-dock-icon', (event, dataUrl) => {
     } catch (err) {
       console.error('Failed to set dock icon from data URL:', err);
     }
+  }
+});
+
+ipcMain.on('open-external', (event, url) => {
+  try {
+    shell.openExternal(url);
+  } catch (err) {
+    console.error('Failed to open external URL:', err);
   }
 });
 

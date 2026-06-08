@@ -38,6 +38,8 @@ pub struct FileMetadata {
     pub file_ext: Option<String>,
     pub created_at: String,
     pub icon_type: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub telegram_message_id: Option<i32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -116,6 +118,7 @@ pub trait TelegramService: Send + Sync {
         &self,
         folder_id: Option<i64>,
         search_query: Option<&str>,
+        all: Option<bool>,
     ) -> Result<Vec<FileMetadata>, String>;
     async fn create_folder(
         &self,

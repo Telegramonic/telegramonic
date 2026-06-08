@@ -38,6 +38,7 @@ pub struct DriveFilesQuery {
     #[serde(default, deserialize_with = "serde_option_i64_string::deserialize")]
     pub folder_id: Option<i64>,
     pub q: Option<String>,
+    pub all: Option<bool>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -176,7 +177,7 @@ pub async fn get_files(
     State(service): State<DynTelegramService>,
     Query(query): Query<DriveFilesQuery>,
 ) -> impl IntoResponse {
-    match service.get_files(query.folder_id, query.q.as_deref()).await {
+    match service.get_files(query.folder_id, query.q.as_deref(), query.all).await {
         Ok(files) => (StatusCode::OK, Json(files)).into_response(),
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,

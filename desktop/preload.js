@@ -17,4 +17,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
   setDockIcon: (dataUrl) => ipcRenderer.send('set-dock-icon', dataUrl),
   downloadFileDirectly: (url, filename) =>
     ipcRenderer.invoke('download-file-directly', { url, filename }),
+  openExternal: (url) => ipcRenderer.send('open-external', url),
 });
