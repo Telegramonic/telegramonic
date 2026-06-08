@@ -37,22 +37,18 @@ graph TD
 
 ---
 
-## App showcase
+## Showcase
 
 ### 🖥️ Desktop Application
 
-<div align="center">
-  <img src="common/src/assets/images/desktop/Landing.png" width="48%" alt="Desktop Onboarding & Login Wizard" />
-  <img src="common/src/assets/images/desktop/Upload.png" width="48%" alt="Desktop Cloud Storage Dashboard & Uploads" />
-</div>
+![Desktop Onboarding & Login Wizard](common/src/assets/images/desktop/Landing.png)
+![Desktop Cloud Storage Dashboard & Uploads](common/src/assets/images/desktop/Upload.png)
 
 ### 🌐 Web Portal
 
-<div align="center">
-  <img src="common/src/assets/images/web/landing_page.png" width="31%" alt="Web Portal Landing Page" />
-  <img src="common/src/assets/images/web/doc.png" width="31%" alt="Documentation Viewer" />
-  <img src="common/src/assets/images/web/download.png" width="31%" alt="Downloads Interface" />
-</div>
+![Web Portal Landing Page](common/src/assets/images/web/landing_page.png)
+![Documentation Viewer](common/src/assets/images/web/doc.png)
+![Downloads Interface](common/src/assets/images/web/download.png)
 
 ---
 

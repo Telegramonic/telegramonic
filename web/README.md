@@ -50,15 +50,11 @@ graph TD
 - **Seamless Localisation**: Native support for multilingual translation toggling via `i18next` localized string configurations.
 - **System Theme Adaptability**: Automatic synchronization between user browser theme parameters (`prefers-color-scheme`) and app dark/light displays.
 
----
-
 ## Showcase
 
-<div align="center">
-  <img src="../common/src/assets/images/web/landing_page.png" width="31%" alt="Web Portal Landing Page" />
-  <img src="../common/src/assets/images/web/doc.png" width="31%" alt="Documentation Viewer" />
-  <img src="../common/src/assets/images/web/download.png" width="31%" alt="Downloads Interface" />
-</div>
+![Web Portal Landing Page](../common/src/assets/images/web/landing_page.png)
+![Documentation Viewer](../common/src/assets/images/web/doc.png)
+![Downloads Interface](../common/src/assets/images/web/download.png)
 
 ---
 

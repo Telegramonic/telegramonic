@@ -70,14 +70,10 @@ graph TD
 - **Automatic System Theme Sync**: An aesthetic interface that automatically adapts to your operating system's dark or light mode color preferences.
 - **Mac-Native Visual Polish**: Enjoy a borderless, integrated title bar design on macOS that blends with your native desktop environment.
 
----
-
 ## Showcase
 
-<div align="center">
-  <img src="../common/src/assets/images/desktop/Landing.png" width="48%" alt="Desktop Onboarding & Login Wizard" />
-  <img src="../common/src/assets/images/desktop/Upload.png" width="48%" alt="Desktop Cloud Storage Dashboard & Uploads" />
-</div>
+![Desktop Onboarding & Login Wizard](../common/src/assets/images/desktop/Landing.png)
+![Desktop Cloud Storage Dashboard & Uploads](../common/src/assets/images/desktop/Upload.png)
 
 ---
 
