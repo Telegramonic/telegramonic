@@ -1,5 +1,5 @@
-import { useState, useMemo, useRef } from 'react';
-import { Box, HStack, VStack, Text } from '@chakra-ui/react';
+import { useState, useMemo, useRef, useEffect } from 'react';
+import { Box, HStack, VStack, Text, Button } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { appStore, selectApiCredentials, useShallow } from '@appStore';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,6 +9,8 @@ import {
   useCurrentUser,
   useFolders,
   useFiles,
+  API_BASE_URL,
+  TELEGRAM_API_ROUTES,
 } from '@services';
 import { DashboardItem, ActiveTab, ToastType } from './types';
 // Subcomponents
@@ -16,8 +18,8 @@ import { TopNavBar } from './components/TopNavBar';
 import { SideNavBar } from './components/SideNavBar';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { UploadProgressBanner } from './components/UploadProgressBanner';
-import { SuggestedSection } from './components/SuggestedSection';
 import { FilesTable } from './components/FilesTable';
+import { getTelegramShareLink } from './components/const';
 
 const Dashboard = () => {
   const { clearApiCredentials } = appStore(useShallow(selectApiCredentials));
@@ -27,13 +29,40 @@ const Dashboard = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Navigation & Filter States
-  const [currentFolderId, setCurrentFolderId] = useState<number | null>(null);
+  const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<ActiveTab>('all');
+  const [lastSynced, setLastSynced] = useState<Date | null>(() => new Date());
 
-  // Local Starred & Trash persistence lists
-  const [starredIds, setStarredIds] = useState<string[]>([]);
-  const [trashIds, setTrashIds] = useState<string[]>([]);
+  // Local Pinned & Trash persistence lists
+  const [starredIds, setStarredIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('telegramonic_pinned_ids');
+      return saved ? JSON.parse(saved) : [];
+    } catch (_) {
+      return [];
+    }
+  });
+  const [trashIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('telegramonic_trash_ids');
+      return saved ? JSON.parse(saved) : [];
+    } catch (_) {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('telegramonic_pinned_ids', JSON.stringify(starredIds));
+    } catch (_) {}
+  }, [starredIds]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('telegramonic_trash_ids', JSON.stringify(trashIds));
+    } catch (_) {}
+  }, [trashIds]);
 
   // Custom Toast System state
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -45,9 +74,16 @@ const Dashboard = () => {
 
   // TanStack Query Hooks
   const { data: currentUser } = useCurrentUser();
-  const { data: folders = [] } = useFolders(currentFolderId || undefined);
-  const { data: files = [] } = useFiles(currentFolderId || undefined, searchQuery || undefined);
-  const { data: allFolders = [] } = useFolders(undefined);
+  const { data: folders = [], isFetching: isFetchingFolders } = useFolders(currentFolderId !== null ? currentFolderId : undefined);
+  const showAllFiles = activeTab === 'pinned';
+  const { data: files = [], isFetching: isFetchingFiles } = useFiles(
+    currentFolderId !== null ? currentFolderId : undefined,
+    searchQuery || undefined,
+    showAllFiles
+  );
+  const { data: allFolders = [], isFetching: isFetchingAllFolders } = useFolders(undefined);
+
+  const isSyncing = !!(isFetchingFolders || isFetchingFiles || isFetchingAllFolders);
 
   // Toast Helper
   const showToast = (msg: string, type: ToastType = 'success') => {
@@ -62,11 +98,11 @@ const Dashboard = () => {
   const breadcrumbs = useMemo(() => {
     if (!currentFolderId) return [];
     const path: FolderMetadata[] = [];
-    let currentId: number | null = currentFolderId;
-    const visited = new Set<number>();
+    let currentId: string | null = currentFolderId;
+    const visited = new Set<string>();
     while (currentId !== null && !visited.has(currentId)) {
       visited.add(currentId);
-      const targetId: number = currentId;
+      const targetId: string = currentId;
       const folder = allFolders.find((f) => f.id === targetId);
       if (folder) {
         path.unshift(folder);
@@ -84,17 +120,12 @@ const Dashboard = () => {
       : 'Me';
   }, [currentUser]);
 
-  // Dynamically calculate suggested files: top 3 newest files (excluding trashed files)
-  const suggestedFiles = useMemo(() => {
-    return [...files]
-      .filter((file) => !trashIds.includes(`file-${file.id}`))
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-      .slice(0, 3);
-  }, [files, trashIds]);
+
 
   // Unified list mapping files and folders together
   const dashboardItems = useMemo(() => {
-    const folderItems: DashboardItem[] = folders.map((f) => {
+    const foldersToUse = activeTab === 'pinned' ? allFolders : folders;
+    const folderItems: DashboardItem[] = foldersToUse.map((f) => {
       const itemId = `folder-${f.id}`;
       return {
         id: itemId,
@@ -125,34 +156,46 @@ const Dashboard = () => {
         starred: starredIds.includes(itemId),
         inTrash: trashIds.includes(itemId),
         isFolder: false,
+        telegramMessageId: f.telegram_message_id,
+        folderId: f.folder_id,
       };
     });
 
     return [...folderItems, ...fileItems];
-  }, [folders, files, starredIds, trashIds, ownerName]);
+  }, [activeTab, folders, allFolders, files, starredIds, trashIds, ownerName]);
 
   // Filtering based on active tab
   const filteredItems = useMemo(() => {
     return dashboardItems.filter((item) => {
-      if (activeTab === 'trash') {
-        return item.inTrash;
-      }
+      // Never show trashed items in any tab
       if (item.inTrash) return false;
 
-      if (activeTab === 'starred') {
+      if (activeTab === 'pinned') {
         return item.starred;
       }
-      if (activeTab === 'recent') {
-        return (
-          item.lastModified.includes('ago') ||
-          item.lastModified.includes('now') ||
-          item.lastModified.includes('Today') ||
-          item.lastModified.includes('Jun 4') // Include mock test files
-        );
+      
+      // 'all' tab: At root of "In my drive", list ONLY folders
+      if (currentFolderId === null) {
+        return item.isFolder;
       }
+      
+      // Inside a folder, list all files/folders inside it
       return true;
     });
-  }, [dashboardItems, activeTab]);
+  }, [dashboardItems, activeTab, currentFolderId]);
+  const handleSync = async () => {
+    try {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ['folders'] }),
+        queryClient.invalidateQueries({ queryKey: ['files'] }),
+        queryClient.invalidateQueries({ queryKey: ['stats'] }),
+      ]);
+      setLastSynced(new Date());
+      showToast('Drive synced successfully', 'success');
+    } catch (err: any) {
+      showToast(`Sync failed: ${err.message}`, 'error');
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -162,17 +205,13 @@ const Dashboard = () => {
     showToast('Logged out successfully', 'info');
   };
 
-  const handleUpgradeStorage = () => {
-    showToast('Storage upgrade requested! (Simulated)', 'success');
-  };
-
   const handleShareFile = (item: DashboardItem, e: React.MouseEvent) => {
     e.stopPropagation();
-    const link = `https://telegramonic.cloud/share/${item.dbId}`;
+    const link = getTelegramShareLink(item.folderId, item.telegramMessageId);
     navigator.clipboard
       .writeText(link)
       .then(() => {
-        showToast(`Share link copied: ${item.name}`, 'success');
+        showToast(`Telegram message link copied: ${item.name}`, 'success');
       })
       .catch(() => {
         showToast(`Failed to copy link`, 'error');
@@ -185,53 +224,50 @@ const Dashboard = () => {
       prev.includes(item.id) ? prev.filter((id) => id !== item.id) : [...prev, item.id]
     );
     showToast(
-      item.starred ? `Removed star: ${item.name}` : `Starred: ${item.name}`,
+      item.starred ? `Unpinned: ${item.name}` : `Pinned: ${item.name}`,
       'success'
     );
   };
 
-  const handleToggleTrash = (item: DashboardItem, e: React.MouseEvent) => {
+  const handleDeleteFile = async (item: DashboardItem, e: React.MouseEvent) => {
     e.stopPropagation();
-    setTrashIds((prev) =>
-      prev.includes(item.id) ? prev.filter((id) => id !== item.id) : [...prev, item.id]
-    );
-    showToast(
-      item.inTrash ? `Restored: ${item.name}` : `Moved to trash: ${item.name}`,
-      'success'
-    );
+    try {
+      showToast(`Deleting ${item.name}...`, 'info');
+      await apiClient.deleteFile(item.dbId);
+      
+      // Invalidate queries to refresh files list and stats
+      queryClient.invalidateQueries({ queryKey: ['files'] });
+      queryClient.invalidateQueries({ queryKey: ['stats'] });
+      
+      showToast(`Deleted successfully: ${item.name}`, 'success');
+    } catch (err: any) {
+      showToast(`Failed to delete file: ${err.message}`, 'error');
+    }
   };
 
   // Trigger hidden file picker
   const triggerFileUpload = () => {
+    if (currentFolderId === null) {
+      showToast("Cannot upload files directly to the root 'In my drive'. Please enter a folder first.", 'error');
+      return;
+    }
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
-  // Real chunked upload implementation
+  // Streaming upload implementation
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-    const fileId = Math.floor(Math.random() * 9000000) + 1000000;
-    const chunkSize = 512 * 1024; // 512 KB
-    const totalParts = Math.ceil(file.size / chunkSize);
 
     setUploadingFile(file.name);
     setUploadProgress(0);
 
     try {
-      for (let partIndex = 0; partIndex < totalParts; partIndex++) {
-        const start = partIndex * chunkSize;
-        const end = Math.min(start + chunkSize, file.size);
-        const chunk = file.slice(start, end);
-        const arrayBuffer = await chunk.arrayBuffer();
-
-        await apiClient.uploadPart(fileId, partIndex, arrayBuffer);
-        setUploadProgress(Math.round(((partIndex + 1) / totalParts) * 100));
-      }
-
-      await apiClient.saveFile(fileId, file.name, file.size, currentFolderId);
+      await apiClient.uploadStream(file, currentFolderId, (percent) => {
+        setUploadProgress(percent);
+      });
       showToast(`Uploaded successfully: ${file.name}`, 'success');
       
       // Invalidate queries so TanStack query refetches fresh list and stats
@@ -247,13 +283,27 @@ const Dashboard = () => {
     }
   };
 
+  // Create Folder modal states
+  const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
+  const [newFolderName, setNewFolderName] = useState('');
+
   // Create real folder on server
-  const handleCreateFolder = async () => {
-    const name = window.prompt('Enter folder name:');
-    if (!name) return;
+  const handleCreateFolder = () => {
+    if (currentFolderId !== null) {
+      showToast("Nested folders are not supported. Folders can only be created at the root level.", 'error');
+      return;
+    }
+    setNewFolderName('');
+    setIsCreateFolderOpen(true);
+  };
+
+  const submitCreateFolder = async () => {
+    if (!newFolderName.trim()) return;
     try {
-      await apiClient.createFolder(name, currentFolderId || undefined);
-      showToast(`Created folder: ${name}`, 'success');
+      await apiClient.createFolder(newFolderName.trim(), currentFolderId || undefined);
+      showToast(`Created folder: ${newFolderName}`, 'success');
+      setIsCreateFolderOpen(false);
+      setNewFolderName('');
       
       // Invalidate queries to fetch new list and stats
       queryClient.invalidateQueries({ queryKey: ['folders'] });
@@ -264,7 +314,7 @@ const Dashboard = () => {
   };
 
   // Delete folder from server
-  const handleDeleteFolder = async (folderId: number, e: React.MouseEvent) => {
+  const handleDeleteFolder = async (folderId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const confirmed = window.confirm('Are you sure you want to permanently delete this folder?');
     if (!confirmed) return;
@@ -285,16 +335,34 @@ const Dashboard = () => {
     if (item.isFolder) return;
     try {
       showToast(`Downloading ${item.name}...`, 'info');
-      const blob = await apiClient.downloadFile(item.dbId);
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = item.name;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      showToast(`Downloaded successfully: ${item.name}`, 'success');
+      
+      if (window.electronAPI && window.electronAPI.downloadFileDirectly) {
+        // Use native Electron download stream flow to prevent macOS temp file leaks
+        const downloadUrl = `${API_BASE_URL}${TELEGRAM_API_ROUTES.FILES.DOWNLOAD}?file_id=${item.dbId}`;
+        const res = await window.electronAPI.downloadFileDirectly(downloadUrl, item.name);
+        if (res.success) {
+          showToast(`Downloaded successfully: ${item.name}`, 'success');
+        } else if (res.error !== 'Canceled') {
+          showToast(`Download failed: ${res.error}`, 'error');
+        }
+      } else {
+        // Fallback for browser web flow
+        const blob = await apiClient.downloadFile(item.dbId);
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = item.name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        // Delay revocation to ensure Chromium/Electron has completed the file save operation
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+        }, 1000);
+        
+        showToast(`Downloaded successfully: ${item.name}`, 'success');
+      }
     } catch (err: any) {
       showToast(`Download failed: ${err.message}`, 'error');
     }
@@ -325,6 +393,7 @@ const Dashboard = () => {
         setSearchQuery={setSearchQuery}
         onUploadClick={triggerFileUpload}
         onCreateFolderClick={handleCreateFolder}
+        currentFolderId={currentFolderId}
       />
 
       <HStack flex={1} alignItems="stretch" gap={0} overflow="hidden">
@@ -333,7 +402,6 @@ const Dashboard = () => {
           activeTab={activeTab}
           setActiveTab={setActiveTab}
           setCurrentFolderId={setCurrentFolderId}
-          onUpgradeStorage={handleUpgradeStorage}
           onLogout={handleLogout}
         />
 
@@ -353,20 +421,7 @@ const Dashboard = () => {
               uploadProgress={uploadProgress}
             />
 
-            {/* Suggested Section */}
-            <SuggestedSection
-              activeTab={activeTab}
-              currentFolderId={currentFolderId}
-              suggestedFiles={suggestedFiles}
-              ownerName={ownerName}
-              starredIds={starredIds}
-              trashIds={trashIds}
-              onItemClick={handleItemClick}
-              onShare={handleShareFile}
-              onUploadTrigger={triggerFileUpload}
-              onCreateFolderTrigger={handleCreateFolder}
-              onShowToast={showToast}
-            />
+
 
             {/* Detailed Files Table */}
             <FilesTable
@@ -375,47 +430,127 @@ const Dashboard = () => {
               onItemClick={handleItemClick}
               onToggleStar={handleToggleStar}
               onShare={handleShareFile}
+              onDownload={handleDownloadFile}
               onDeleteFolder={handleDeleteFolder}
-              onToggleTrash={handleToggleTrash}
+              onDeleteFile={handleDeleteFile}
+              onSync={handleSync}
+              lastSynced={lastSynced}
+              isSyncing={isSyncing}
             />
           </VStack>
         </Box>
       </HStack>
 
-      {/* 4. Footer */}
-      <HStack
-        h="48px"
-        bg={{ base: 'white', _dark: '#060f18' }}
-        borderTop="1px solid"
-        borderColor="border"
-        px={6}
-        justifyContent="space-between"
-        fontSize="xs"
-        color="fg.muted"
-        zIndex={40}
-      >
-        <HStack gap={6}>
-          <Text fontWeight="bold" color="fg.muted">
-            © 2026 Telegramonic Cloud
-          </Text>
-          <HStack gap={4} display={{ base: 'none', md: 'flex' }}>
-            <Text cursor="pointer" _hover={{ color: 'primary' }}>
-              Privacy Policy
-            </Text>
-            <Text cursor="pointer" _hover={{ color: 'primary' }}>
-              Terms of Service
-            </Text>
-            <Text cursor="pointer" _hover={{ color: 'primary' }}>
-              API Status
-            </Text>
-          </HStack>
-        </HStack>
 
-        <HStack gap={2}>
-          <Box w={2} h={2} borderRadius="full" bg="success.400" className="pulse-anim" />
-          <Text color="fg.muted">All Systems Operational</Text>
-        </HStack>
-      </HStack>
+      {/* Create Folder Dialog */}
+      <AnimatePresence>
+        {isCreateFolderOpen && (
+          <Box
+            position="fixed"
+            inset={0}
+            bg="black/60"
+            backdropFilter="blur(4px)"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            zIndex={1000}
+            onClick={() => setIsCreateFolderOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <VStack
+                w="400px"
+                bg={{ base: 'white', _dark: '#131c26' }}
+                borderWidth="1px"
+                borderColor="border"
+                borderRadius="2xl"
+                p={6}
+                gap={5}
+                shadow="2xl"
+                align="stretch"
+              >
+                <HStack justify="space-between">
+                  <Text fontWeight="extrabold" fontSize="md" color="fg">
+                    Create New Folder
+                  </Text>
+                  <Box
+                    as="button"
+                    onClick={() => setIsCreateFolderOpen(false)}
+                    color="fg.muted"
+                    _hover={{ color: 'fg' }}
+                    fontSize="sm"
+                    fontWeight="bold"
+                  >
+                    ✕
+                  </Box>
+                </HStack>
+
+                <VStack align="stretch" gap={1.5}>
+                  <Text fontSize="xs" fontWeight="bold" color="fg.muted">
+                    Folder Name
+                  </Text>
+                  <input
+                    type="text"
+                    value={newFolderName}
+                    onChange={(e) => setNewFolderName(e.target.value)}
+                    placeholder="Enter folder name..."
+                    autoFocus
+                    style={{
+                      width: '100%',
+                      height: '40px',
+                      backgroundColor: 'transparent',
+                      border: '1px solid var(--chakra-colors-border)',
+                      borderRadius: '12px',
+                      padding: '0 12px',
+                      fontSize: '14px',
+                      color: 'var(--chakra-colors-fg)',
+                      outline: 'none',
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        submitCreateFolder();
+                      }
+                    }}
+                  />
+                </VStack>
+
+                <HStack justify="flex-end" gap={3}>
+                  <Button
+                    onClick={() => setIsCreateFolderOpen(false)}
+                    variant="outline"
+                    borderColor="border"
+                    color="fg.muted"
+                    h="36px"
+                    borderRadius="xl"
+                    fontSize="xs"
+                    fontWeight="bold"
+                    _hover={{ bg: 'bg.hover' }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={submitCreateFolder}
+                    bg="primary"
+                    color="white"
+                    h="36px"
+                    borderRadius="xl"
+                    fontSize="xs"
+                    fontWeight="bold"
+                    _hover={{ filter: 'brightness(1.1)' }}
+                  >
+                    Create Folder
+                  </Button>
+                </HStack>
+              </VStack>
+            </motion.div>
+          </Box>
+        )}
+      </AnimatePresence>
 
       {/* 5. Custom Toast Notifications */}
       <AnimatePresence>
@@ -476,6 +611,13 @@ const Dashboard = () => {
         }
         .pulse-anim {
           animation: pulse 2s infinite ease-in-out;
+        }
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        .spin-anim {
+          animation: spin 1s linear infinite;
         }
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;

@@ -3,23 +3,49 @@ import { Box, HStack, Text, Spinner } from '@chakra-ui/react';
 import { Logo } from '@assets';
 import { useServerHealth } from '@services';
 
-interface ElectronAPI {
-  platform: string;
-  minimize: () => void;
-  close: () => void;
-  checkConnection: () => Promise<{ status: string; latency: number | null }>;
-  setDockIcon?: (dataUrl: string) => void;
-}
-
-declare global {
-  interface Window {
-    electronAPI?: ElectronAPI;
-  }
-}
-
 const TitleBar = () => {
   const [platform, setPlatform] = useState<string>('unknown');
   const { data, isFetching, refetch } = useServerHealth();
+  const [isOnline, setIsOnline] = useState<boolean>(() => navigator.onLine);
+  const [checkingInternet, setCheckingInternet] = useState<boolean>(false);
+
+  const checkInternet = async () => {
+    setCheckingInternet(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
+    try {
+      await fetch('https://clients3.google.com/generate_204', {
+        mode: 'no-cors',
+        cache: 'no-store',
+        signal: controller.signal,
+      });
+      setIsOnline(true);
+    } catch (_) {
+      setIsOnline(navigator.onLine);
+    } finally {
+      clearTimeout(timeoutId);
+      setCheckingInternet(false);
+    }
+  };
+
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOnline(true);
+      checkInternet();
+    };
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    // Initial check
+    checkInternet();
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   const status = isFetching
     ? 'checking'
@@ -108,8 +134,52 @@ const TitleBar = () => {
       {/* Middle Spacer: Draggable area that fills the center */}
       <Box flex={1} h="100%" style={{ WebkitAppRegion: 'drag' } as any} />
 
-      {/* Right side: Connection Indicator + Window Controls */}
+      {/* Right side: Connection Indicators + Window Controls */}
       <HStack gap={3} style={{ WebkitAppRegion: 'no-drag' } as any} alignItems="center">
+        {/* Internet Status Indicator */}
+        <HStack
+          gap={2}
+          cursor="pointer"
+          onClick={checkInternet}
+          px={2.5}
+          py={0.5}
+          borderRadius="full"
+          bg="bg.hover/40"
+          border="1px solid"
+          borderColor="border/20"
+          _hover={{ bg: 'bg.hover', borderColor: 'primary/30' }}
+          transition="all 0.2s"
+          title="Click to recheck Internet Connection"
+        >
+          <Box
+            w={2}
+            h={2}
+            borderRadius="full"
+            bg={
+              checkingInternet
+                ? 'yellow.400'
+                : isOnline
+                  ? 'success.400'
+                  : 'error.400'
+            }
+            className={checkingInternet ? 'pulse-anim' : ''}
+            style={
+              !checkingInternet && isOnline
+                ? { boxShadow: '0 0 8px var(--chakra-colors-success-400)' }
+                : !checkingInternet && !isOnline
+                  ? { boxShadow: '0 0 8px var(--chakra-colors-error-400)' }
+                  : {}
+            }
+          />
+          {checkingInternet ? (
+            <Spinner size="xs" color="primary" />
+          ) : (
+            <Text fontSize="10px" fontWeight="medium" color="fg.muted">
+              {isOnline ? 'Internet: Online' : 'Internet: Offline'}
+            </Text>
+          )}
+        </HStack>
+
         {/* Interactive Status Indicator */}
         <HStack
           gap={2}

@@ -29,10 +29,14 @@ export const TELEGRAM_API_ROUTES = {
   },
 
   FILES: {
-    UPLOAD_PART: '/files/upload-part',
-    SAVE_FILE: '/files/save-file',
+    UPLOAD_STREAM: '/files/upload-stream',
     GET_FILE: '/files/get-file',
     DOWNLOAD: '/files/download',
+    DELETE: '/files/delete',
+    SAVE_FILE: '/files/save-file',
+    UPLOAD_PART: '/files/upload-part',
+    UPLOAD_PROGRESS: '/files/upload-progress',
+    UPLOAD_PROGRESS_STREAM: '/files/upload-progress/stream',
   },
   DRIVE: {
     GET_DRIVES: '/drive/list',

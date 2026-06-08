@@ -4,8 +4,12 @@ const {
   ipcMain,
   nativeImage,
   screen,
+  dialog,
 } = require('electron');
 const path = require('path');
+const fs = require('fs');
+const { Readable } = require('stream');
+const { finished } = require('stream/promises');
 
 function createWindow() {
   const iconPath = path.join(__dirname, 'public/icon.png');
@@ -79,6 +83,41 @@ ipcMain.on('set-dock-icon', (event, dataUrl) => {
     } catch (err) {
       console.error('Failed to set dock icon from data URL:', err);
     }
+  }
+});
+
+ipcMain.handle('download-file-directly', async (event, { url, filename }) => {
+  const webContents = event.sender;
+  const win = BrowserWindow.fromWebContents(webContents);
+  if (!win) return { success: false, error: 'No window found' };
+
+  const { filePath, canceled } = await dialog.showSaveDialog(win, {
+    defaultPath: filename,
+    title: 'Save File',
+  });
+
+  if (canceled || !filePath) {
+    return { success: false, error: 'Canceled' };
+  }
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to download: ${response.statusText}`);
+    }
+    const fileStream = fs.createWriteStream(filePath);
+    await finished(Readable.fromWeb(response.body).pipe(fileStream));
+    return { success: true };
+  } catch (err) {
+    console.error('Failed to download file directly:', err);
+    if (fs.existsSync(filePath)) {
+      try {
+        fs.unlinkSync(filePath);
+      } catch (e) {
+        // ignore error deleting incomplete file
+      }
+    }
+    return { success: false, error: err.message };
   }
 });
 
