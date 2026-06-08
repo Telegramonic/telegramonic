@@ -11,12 +11,18 @@ import {
 import { useTranslation } from 'react-i18next';
 import { TitleBoxContainer, LinkButton } from '@components';
 import { AppleLogo, WindowsLogo, LinuxLogo, AndroidLogo } from '@assets';
+import desktopPackage from '../../../../desktop/package.json';
 
 type DetectedOS = 'macos' | 'windows' | 'linux' | 'android' | 'ios' | null;
 
 const ProductPage = () => {
   const { t } = useTranslation();
   const [detectedOS, setDetectedOS] = React.useState<DetectedOS>(null);
+
+  const version = desktopPackage.version;
+  const macLink = `https://github.com/telegramonic/telegramonic/releases/tag/desktop-v${version}-mac`;
+  const winLink = `https://github.com/telegramonic/telegramonic/releases/tag/desktop-v${version}-win`;
+  const linuxLink = `https://github.com/telegramonic/telegramonic/releases/tag/desktop-v${version}-linux`;
 
   React.useEffect(() => {
     const ua = window.navigator.userAgent;
@@ -142,7 +148,9 @@ const ProductPage = () => {
                 </Text>
                 <VStack width="100%" gap={3}>
                   <LinkButton
-                    href="#download-macos-arm"
+                    href={macLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     width="100%"
                     variant="solid"
                     bg="primary"
@@ -153,7 +161,9 @@ const ProductPage = () => {
                     {t('ProductPage.macos.buttonArm')}
                   </LinkButton>
                   <LinkButton
-                    href="#download-macos-intel"
+                    href={macLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     width="100%"
                     variant="outline"
                     borderColor="border"
@@ -216,7 +226,9 @@ const ProductPage = () => {
                 </Text>
                 <VStack width="100%" gap={3}>
                   <LinkButton
-                    href="#download-windows-exe"
+                    href={winLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     width="100%"
                     variant="solid"
                     bg="primary"
@@ -227,7 +239,9 @@ const ProductPage = () => {
                     {t('ProductPage.windows.buttonExe')}
                   </LinkButton>
                   <LinkButton
-                    href="#download-windows-zip"
+                    href={winLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     width="100%"
                     variant="outline"
                     borderColor="border"
@@ -290,7 +304,9 @@ const ProductPage = () => {
                 </Text>
                 <VStack width="100%" gap={3}>
                   <LinkButton
-                    href="#download-linux-appimage"
+                    href={linuxLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     width="100%"
                     variant="solid"
                     bg="primary"
@@ -301,7 +317,9 @@ const ProductPage = () => {
                     {t('ProductPage.linux.buttonAppImage')}
                   </LinkButton>
                   <LinkButton
-                    href="#download-linux-tar"
+                    href={linuxLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     width="100%"
                     variant="outline"
                     borderColor="border"
