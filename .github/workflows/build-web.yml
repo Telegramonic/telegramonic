@@ -40,8 +40,9 @@ jobs:
           git-user-name: 'Telegramonic bot'
           output-file: false
           version-file: 'web/package.json'
-          git-path: 'web/package.json'
+          git-path: 'web'
           tag-prefix: 'web-v'
+          skip-on-empty: 'false'
 
       - name: Setup Node.js
         if: ${{ steps.changelog.outputs.skipped == 'false' }}
