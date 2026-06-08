@@ -42,6 +42,7 @@ describe('DocsPage', () => {
     // Renders sidebar items
     expect(screen.getAllByText('Introduction')[0]).toBeInTheDocument();
     expect(screen.getByText('Quick Start')).toBeInTheDocument();
+    expect(screen.getByText('Version History')).toBeInTheDocument();
     expect(screen.getByText('MTProto Protocol')).toBeInTheDocument();
     expect(screen.getByText('Direct Storage')).toBeInTheDocument();
 
