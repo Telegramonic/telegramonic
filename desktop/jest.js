@@ -52,24 +52,56 @@ jest.mock('next-themes', () => ({
 }));
 
 /**
- * Mock @uiw/react-markdown-preview for test environment to avoid ESM import syntax errors
+ * Mock mermaid — it is ESM-only and cannot be parsed by Jest's CommonJS runner.
+ * Individual tests that need mermaid.render behaviour can override this mock.
+ */
+jest.mock('mermaid', () => ({
+  initialize: jest.fn(),
+  render: jest.fn().mockResolvedValue({
+    svg: '<svg data-testid="mock-mermaid">Mock Diagram</svg>',
+  }),
+}));
+
+/**
+ * Mock @uiw/react-markdown-preview for test environment to avoid ESM import syntax errors.
+ * Supports the `components` prop so custom renderers (e.g. mermaid) are exercised.
  */
 jest.mock('@uiw/react-markdown-preview', () => {
-  return jest.fn(({ source, className, style }) => {
+  return jest.fn(({ source, className, style, components }) => {
+    // Extract mermaid fenced code block: ```mermaid\n…\n```
+    const mermaidMatch =
+      typeof source === 'string' && source.match(/```mermaid\n([\s\S]*?)\n```/);
+    if (mermaidMatch && components && components.code) {
+      const MermaidBlock = () =>
+        components.code({
+          node: null,
+          inline: false,
+          className: 'language-mermaid',
+          children: mermaidMatch[1],
+        });
+      return (
+        <div data-testid="markdown-preview" className={className} style={style}>
+          <MermaidBlock />
+        </div>
+      );
+    }
+
+    // Extract markdown link: [text](url)
     if (typeof source === 'string') {
-      const match = source.match(/\[([^\]]+)\]\(([^)]+)\)/);
-      if (match) {
+      const linkMatch = source.match(/\[([^\]]+)\]\(([^)]+)\)/);
+      if (linkMatch) {
         return (
           <div
             data-testid="markdown-preview"
             className={className}
             style={style}
           >
-            <a href={match[2]}>{match[1]}</a>
+            <a href={linkMatch[2]}>{linkMatch[1]}</a>
           </div>
         );
       }
     }
+
     return (
       <div data-testid="markdown-preview" className={className} style={style}>
         {source}
