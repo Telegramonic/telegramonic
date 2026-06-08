@@ -175,6 +175,16 @@ The desktop login is a 4-step wizard:
 
 A back button (icon) allows returning to the previous step from steps 2 and 3.
 
+## Native File Downloads & Temporary File Fix
+
+In the desktop Electron shell, downloads bypass Chromium's default download manager. This resolves issues where temporary quarantine files (e.g., `.com.github.Electron.xxxxx`) were left behind in the Downloads directory.
+
+1. **Secure IPC Stream**: When a download is requested, the renderer calls the main process via `ipcRenderer.invoke('download-file-directly')`.
+2. **Native Save Dialog**: The main process displays a native `showSaveDialog` letting the user choose the target save path.
+3. **Streaming to Disk**: The file is streamed chunk-by-chunk from the local Axum server directly to the disk write stream, preventing memory leaks and high memory usage.
+4. **Error Cleanup**: If a download fails or is canceled midway, the partial file is automatically deleted.
+5. **Web Fallback**: Standard `URL.createObjectURL(blob)` and simulated click downloads remain active in standard web browser contexts.
+
 ## Infrastructure
 
 - **CI/CD**: GitHub Actions for automated building, linting, testing, and FTP deployment.
