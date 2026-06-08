@@ -36,3 +36,10 @@ yarn-error.log*
 !.yarn/sdks
 !.yarn/versions
 .pnp.*
+
+# Telegram credentials & sessions
+telegram.credentials
+telegram.session
+*.credentials
+*.session
+
