@@ -1,6 +1,6 @@
-# Telegramonic Web Frontend (`web/`)
+# Telegramonic Web Portal (`web/`)
 
-The web frontend for **Telegramonic**—a React-based web application designed for web browsers. It compiles and bundles using **Craco** and uses **Chakra UI v3** alongside **Tailwind CSS** for visual layout. It connects directly to the local Axum Rust server running on `localhost:50065` via standard web APIs to manage files and drives.
+The web portal for **Telegramonic**—a React-based web application designed for web browsers. It compiles and bundles using **Craco** and uses **Chakra UI v3** alongside **Tailwind CSS** for visual layout. It serves as the marketing landing page, product download center, and documentation viewer (the desktop application in `desktop/` handles server integration and file management).
 
 ## Architecture Diagram
 
@@ -9,7 +9,6 @@ graph TD
     %% Styling
     classDef browser fill:#eef2ff,stroke:#6366f1,stroke-width:2px,color:#1e1b4b;
     classDef renderer fill:#fdf2f8,stroke:#ec4899,stroke-width:2px,color:#500724;
-    classDef server fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#052e16;
 
     subgraph Browser ["User Browser"]
         DOM["DOM & Event Listeners"]:::browser
@@ -18,21 +17,14 @@ graph TD
 
     subgraph ReactApp ["React Web App (web/)"]
         App["App.tsx & React Router v7"]:::renderer
-        Screens["Screens (Login, Dashboard)"]:::renderer
+        Screens["Screens (LandingPage, ProductPage, DocsPage, MdPage)"]:::renderer
         Store["Zustand Stores"]:::renderer
-        Client["API Client (fetch calls)"]:::renderer
-    end
-
-    subgraph Backend ["Rust Backend"]
-        Server["Axum Server (localhost:50065)"]:::server
     end
 
     %% Connections
     DOM --> App
     App --> Screens
     Screens --> Store
-    Screens --> Client
-    Client -- "HTTP / SSE JSON" --> Server
     Storage <--> Store
 ```
 
@@ -51,11 +43,9 @@ graph TD
 
 ## Features
 
-- **Unlimited Telegram Cloud Drives**: Mount Telegram channels as custom drives, using them for storing, displaying, and managing files in the cloud.
-- **Visual Folder & File Board**: Create, rename, or delete directories and explore files using a layout optimized for browser interactions.
-- **Instant Search & Query Filters**: Quickly find drives and files using dynamic, real-time client-side search.
-- **Double View Layout**: Switch between dynamic grid cards for visual files and compact tables for structured metadata.
-- **Progressive Upload Indicator**: Interactive progress bars track file chunk buffer states directly in the web browser.
+- **Product Overview & Download Portal**: Detects user OS dynamically (macOS, Windows, Linux, iOS, Android) to recommend the appropriate installation package.
+- **Interactive Documentation Viewer**: Reads product, architecture, and configuration markdown documentation directly inside the web browser.
+- **Legal & Compliance Documents**: Fast rendering of privacy policy, terms of service, disclaimer, FAQ, etc.
 - **Smooth Animation Flow**: Fully integrated with Framer Motion for responsive UI element state changes and animations.
 - **Seamless Localisation**: Native support for multilingual translation toggling via `i18next` localized string configurations.
 - **System Theme Adaptability**: Automatic synchronization between user browser theme parameters (`prefers-color-scheme`) and app dark/light displays.
@@ -71,11 +61,9 @@ web/
 │   ├── index.tsx           # React DOM bootstrap file (React 18)
 │   ├── index.css           # Tailwind CSS directives and global typography
 │   ├── components/         # Common display modules and custom themes
-│   ├── data/               # Static dataset files
 │   ├── providers/          # React context wrappers (Query, Chakra, Localization)
 │   ├── routes/             # Route configurations and screen loaders
-│   ├── screens/            # Screen views (dashboard, loginPage)
-│   ├── services/           # HTTP API client fetch structures
+│   ├── screens/            # Screen views (LandingPage, ProductPage, DocsPage, MdPage)
 │   ├── store/              # Zustand global application state stores
 │   └── __tests__/          # Component, unit, and snapshot test suites
 ├── public/                 # Static html shell, favicons, and manifest files
@@ -94,7 +82,6 @@ web/
 | `react` / `react-dom` | ^18.3.1 | Core component rendering engine |
 | `react-router-dom` | ^7.15.0 | Web page routing and view navigation |
 | `@chakra-ui/react` | ^3.19.1 | UI library and components framework |
-| `@tanstack/react-query`| ^5.51.23| Remote query caching and resource synchronization |
 | `zustand` | ^5.0.13 | App-wide frontend state management |
 | `framer-motion` | ^11.3.2 | Component transition and micro-animations |
 | `tailwind-css` | 3.x | Visual styling tokens and layout classes |
@@ -107,13 +94,10 @@ web/
 ## How It Works
 
 ### React Render Loop & State
-The frontend mounts the root React node in [`index.tsx`](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/web/src/index.tsx). Global application variables (e.g. workspace settings, connection status) are managed by Zustand stores in the `store/` directory. API data caching is handled by React Query to prevent redundant network lookups.
+The frontend mounts the root React node in [`index.tsx`](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/web/src/index.tsx). Global UI states are managed by Zustand stores in the `store/` directory.
 
 ### Localized Layouts
-The app loads strings dynamically using `react-i18next` hooks to avoid hardcoding text inside pages. Localized copies reside in `web/src/localization/locales/` matching the user's preferred language.
-
-### Server Connection
-The client communicates directly with the local Axum Rust API server over standard HTTP. Communication is configured to bind to `127.0.0.1:50065`.
+The app loads strings dynamically using `react-i18next` hooks to avoid hardcoding text inside pages. Localized copies reside in `@localization/locales/` matching the user's preferred language.
 
 ---
 
@@ -126,9 +110,6 @@ The client communicates directly with the local Axum Rust API server over standa
 ### Run in Development
 
 ```bash
-# Start the Axum backend first in a separate terminal
-yarn server:start
-
 # Start the React web app from the monorepo root
 yarn web:start
 ```
@@ -160,3 +141,4 @@ yarn workspace telegramonic-web run test:cov
 # Open the interactive Cypress E2E test dashboard
 yarn workspace telegramonic-web cy:open
 ```
+

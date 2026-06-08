@@ -32,7 +32,6 @@ graph TD
     %% Connections
     Desktop & Web -.-> Common
     Desktop -- "HTTP & Native IPC" --> Server
-    Web -- "HTTP REST & SSE" --> Server
     Server -- "MTProto / Grammers" --> TelegramDC
 ```
 
@@ -147,7 +146,7 @@ yarn server:start
 yarn web:start
 ```
 
-> **Note:** The desktop and web apps connect to the Rust server at `http://localhost:50065`. Ensure the server is running.
+> **Note:** The desktop app connects to the Rust server at `http://localhost:50065`. Ensure the server is running when developing/running the desktop client.
 
 ### Build
 
@@ -245,7 +244,7 @@ The desktop client bypasses Chromium's standard download manager to avoid leavin
 2. **Save Dialog**: The Electron process prompts the user with a native file-save modal.
 3. **Stream-to-Disk**: Chunks are piped directly from the Rust backend to the disk target, avoiding memory bottlenecks.
 4. **Cleanup**: Incomplete downloads due to failure or cancellation are immediately deleted.
-5. **Web Fallback**: The standard browser web portal falls back to standard simulated-click blobs.
+5. **Web Limitation**: The browser-only web portal is a static marketing and documentation page and does not manage files or connect to the storage backend.
 
 ---
 
