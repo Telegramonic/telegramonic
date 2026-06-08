@@ -85,14 +85,18 @@ exports[`ProductPage should render all platform cards and download options by de
               >
                 <a
                   class="chakra-button css-13mivnp"
-                  href="#download-macos-arm"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-mac"
+                  rel="noopener noreferrer"
+                  target="_blank"
                   type="button"
                 >
                   Apple Silicon (M1/M2/M3)
                 </a>
                 <a
                   class="chakra-button css-ckiwh"
-                  href="#download-macos-intel"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-mac"
+                  rel="noopener noreferrer"
+                  target="_blank"
                   type="button"
                 >
                   Intel Chip
@@ -141,14 +145,18 @@ exports[`ProductPage should render all platform cards and download options by de
               >
                 <a
                   class="chakra-button css-13mivnp"
-                  href="#download-windows-exe"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-win"
+                  rel="noopener noreferrer"
+                  target="_blank"
                   type="button"
                 >
                   Download Installer (.exe)
                 </a>
                 <a
                   class="chakra-button css-ckiwh"
-                  href="#download-windows-zip"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-win"
+                  rel="noopener noreferrer"
+                  target="_blank"
                   type="button"
                 >
                   Portable Zip (.zip)
@@ -192,14 +200,18 @@ exports[`ProductPage should render all platform cards and download options by de
               >
                 <a
                   class="chakra-button css-13mivnp"
-                  href="#download-linux-appimage"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-linux"
+                  rel="noopener noreferrer"
+                  target="_blank"
                   type="button"
                 >
                   Download AppImage
                 </a>
                 <a
                   class="chakra-button css-ckiwh"
-                  href="#download-linux-tar"
+                  href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.1.3-linux"
+                  rel="noopener noreferrer"
+                  target="_blank"
                   type="button"
                 >
                   Tarball (.tar.gz)
