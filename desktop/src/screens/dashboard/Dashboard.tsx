@@ -19,7 +19,7 @@ import { SideNavBar } from './components/SideNavBar';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { UploadProgressBanner } from './components/UploadProgressBanner';
 import { FilesTable } from './components/FilesTable';
-import { getTelegramShareLink } from './components/const';
+import { getTelegramShareLink, formatSize, formatDate, getFileType } from './components/const';
 
 const Dashboard = () => {
   const { clearApiCredentials } = appStore(useShallow(selectApiCredentials));
@@ -71,6 +71,7 @@ const Dashboard = () => {
   // Uploading state
   const [uploadingFile, setUploadingFile] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // TanStack Query Hooks
   const { data: currentUser } = useCurrentUser();
@@ -261,25 +262,39 @@ const Dashboard = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setUploadingFile(file.name);
     setUploadProgress(0);
 
     try {
       await apiClient.uploadStream(file, currentFolderId, (percent) => {
         setUploadProgress(percent);
-      });
+      }, controller.signal);
       showToast(`Uploaded successfully: ${file.name}`, 'success');
       
       // Invalidate queries so TanStack query refetches fresh list and stats
       queryClient.invalidateQueries({ queryKey: ['files'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
     } catch (err: any) {
-      showToast(`Upload failed: ${err.message}`, 'error');
+      if (err.name === 'AbortError' || err.message === 'Upload cancelled') {
+        showToast(`Upload cancelled: ${file.name}`, 'info');
+      } else {
+        showToast(`Upload failed: ${err.message}`, 'error');
+      }
     } finally {
       setUploadingFile(null);
+      abortControllerRef.current = null;
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
+    }
+  };
+
+  const handleCancelUpload = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
     }
   };
 
@@ -419,6 +434,7 @@ const Dashboard = () => {
             <UploadProgressBanner
               uploadingFile={uploadingFile}
               uploadProgress={uploadProgress}
+              onCancelUpload={handleCancelUpload}
             />
 
 
@@ -634,43 +650,6 @@ const Dashboard = () => {
   );
 };
 
-// Helper Functions
-const formatSize = (bytes: number): string => {
-  if (bytes === 0) return '0 B';
-  const k = 1024;
-  const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-};
-
-const formatDate = (isoString: string): string => {
-  try {
-    const date = new Date(isoString);
-    const diffMs = Date.now() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
-    const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24) return `${diffHours}h ago`;
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    });
-  } catch (e) {
-    return 'Recent';
-  }
-};
-
-const getFileType = (ext: string): 'presentation' | 'code' | 'zip' | 'document' | 'video' | 'csv' | 'file' => {
-  const e = ext.toLowerCase();
-  if (['pdf', 'docx', 'doc', 'txt'].includes(e)) return 'document';
-  if (['png', 'jpg', 'jpeg', 'gif', 'svg'].includes(e)) return 'presentation';
-  if (['mp4', 'mkv', 'avi', 'mov'].includes(e)) return 'video';
-  if (['zip', 'tar', 'gz', 'rar'].includes(e)) return 'zip';
-  if (['js', 'ts', 'tsx', 'rs', 'py', 'json', 'css', 'html'].includes(e)) return 'code';
-  if (['csv', 'xlsx', 'xls'].includes(e)) return 'csv';
-  return 'file';
-};
+// Helpers are imported from './components/const'
 
 export default Dashboard;

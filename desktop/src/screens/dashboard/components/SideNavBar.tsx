@@ -1,4 +1,4 @@
-import { Box, Text, VStack, HStack } from '@chakra-ui/react';
+import { Text, VStack, HStack } from '@chakra-ui/react';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
 import { SideNavBarProps } from './types';
@@ -36,11 +36,21 @@ export const SideNavBar = ({
               cursor="pointer"
               px={4}
               py={3}
-              bg={activeTab === tab ? { base: 'primary/10', _dark: '#3f4a59/40' } : 'transparent'}
+              bg={
+                activeTab === tab
+                  ? { base: 'primary/10', _dark: '#3f4a59/40' }
+                  : 'transparent'
+              }
               color={activeTab === tab ? 'primary' : 'fg.muted'}
               borderRadius="xl"
               fontWeight={activeTab === tab ? 'bold' : 'medium'}
-              _hover={{ bg: activeTab === tab ? { base: 'primary/15', _dark: '#3f4a59/40' } : 'bg.hover', color: 'fg' }}
+              _hover={{
+                bg:
+                  activeTab === tab
+                    ? { base: 'primary/15', _dark: '#3f4a59/40' }
+                    : 'bg.hover',
+                color: 'fg',
+              }}
               transition="all 0.2s"
               gap={3}
             >
@@ -52,7 +62,13 @@ export const SideNavBar = ({
       </VStack>
 
       {/* Bottom Sidebar navigation */}
-      <VStack gap={1} align="stretch" borderTop="1px solid" borderColor="border" pt={4}>
+      <VStack
+        gap={1}
+        align="stretch"
+        borderTop="1px solid"
+        borderColor="border"
+        pt={4}
+      >
         <HStack
           onClick={() => {
             if (window.electronAPI && window.electronAPI.openExternal) {

@@ -64,7 +64,7 @@ const mockGetFiles = jest.fn().mockImplementation((folderId?: string | null, q?:
   return Promise.resolve(filtered);
 });
 
-const mockUploadStream = jest.fn().mockImplementation((_file: File, _folderId: string | null, onProgress?: (p: number) => void) => {
+const mockUploadStream = jest.fn().mockImplementation((_file: File, _folderId: string | null, onProgress?: (p: number) => void, _signal?: AbortSignal) => {
   if (onProgress) onProgress(100);
   return Promise.resolve({
     id: '999',
@@ -84,7 +84,7 @@ jest.mock('@services/apiClient', () => ({
     getDrives: () => mockGetDrives(),
     getFolders: (parentId?: string) => mockGetFolders(parentId),
     getFiles: (folderId?: string | null, q?: string, all?: boolean) => mockGetFiles(folderId, q, all),
-    uploadStream: (file: File, folderId: string | null, onProgress?: (p: number) => void) => mockUploadStream(file, folderId, onProgress),
+    uploadStream: (file: File, folderId: string | null, onProgress?: (p: number) => void, signal?: AbortSignal) => mockUploadStream(file, folderId, onProgress, signal),
     deleteFile: jest.fn().mockResolvedValue({ success: true }),
     deleteFolder: jest.fn().mockResolvedValue({ success: true }),
     downloadFile: jest.fn().mockResolvedValue(new Blob(['content'], { type: 'video/mp4' })),

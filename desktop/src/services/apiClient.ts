@@ -9,7 +9,8 @@ import {
   TelegramUser,
 } from './types';
 
-export const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:50065';
+export const API_BASE_URL =
+  process.env.REACT_APP_API_URL || 'http://127.0.0.1:50065';
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const url = `${API_BASE_URL}${path}`;
@@ -109,9 +110,12 @@ export const apiClient = {
     }),
 
   resetAuthorization: () =>
-    request<{ success: boolean }>(TELEGRAM_API_ROUTES.AUTH.RESET_AUTHORIZATION, {
-      method: 'POST',
-    }),
+    request<{ success: boolean }>(
+      TELEGRAM_API_ROUTES.AUTH.RESET_AUTHORIZATION,
+      {
+        method: 'POST',
+      },
+    ),
 
   // Users API
   getMe: () => request<TelegramUser>(TELEGRAM_API_ROUTES.USERS.GET_ME),
@@ -119,7 +123,9 @@ export const apiClient = {
   getUsers: () => request<TelegramUser[]>(TELEGRAM_API_ROUTES.USERS.GET_USERS),
 
   getFullUser: (id: number) =>
-    request<TelegramUser>(`${TELEGRAM_API_ROUTES.USERS.GET_FULL_USER}?id=${id}`),
+    request<TelegramUser>(
+      `${TELEGRAM_API_ROUTES.USERS.GET_FULL_USER}?id=${id}`,
+    ),
 
   // Account Settings API
   updateProfile: (firstName: string, lastName?: string) =>
@@ -153,10 +159,13 @@ export const apiClient = {
     request<TelegramUser[]>(`${TELEGRAM_API_ROUTES.CONTACTS.SEARCH}?q=${q}`),
 
   importContacts: (contacts: any[]) =>
-    request<{ success: boolean }>(TELEGRAM_API_ROUTES.CONTACTS.IMPORT_CONTACTS, {
-      method: 'POST',
-      body: JSON.stringify({ contacts }),
-    }),
+    request<{ success: boolean }>(
+      TELEGRAM_API_ROUTES.CONTACTS.IMPORT_CONTACTS,
+      {
+        method: 'POST',
+        body: JSON.stringify({ contacts }),
+      },
+    ),
 
   // Files API
   uploadPart: (
@@ -164,12 +173,31 @@ export const apiClient = {
     partIndex: number,
     bytes: ArrayBuffer | Uint8Array | Blob,
     onProgress?: (loaded: number) => void,
+    signal?: AbortSignal,
   ) => {
     return new Promise<{ success: boolean }>((resolve, reject) => {
+      if (signal?.aborted) {
+        return reject(new Error('Upload cancelled'));
+      }
       const xhr = new XMLHttpRequest();
       const url = `${API_BASE_URL}${TELEGRAM_API_ROUTES.FILES.UPLOAD_PART}?file_id=${fileId}&part_index=${partIndex}`;
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+
+      const onAbort = () => {
+        xhr.abort();
+        reject(new Error('Upload cancelled'));
+      };
+
+      if (signal) {
+        signal.addEventListener('abort', onAbort);
+      }
+
+      const cleanup = () => {
+        if (signal) {
+          signal.removeEventListener('abort', onAbort);
+        }
+      };
 
       if (onProgress && xhr.upload) {
         xhr.upload.onprogress = (event) => {
@@ -180,6 +208,7 @@ export const apiClient = {
       }
 
       xhr.onload = () => {
+        cleanup();
         if (xhr.status >= 200 && xhr.status < 300) {
           try {
             const res = JSON.parse(xhr.responseText);
@@ -193,7 +222,13 @@ export const apiClient = {
       };
 
       xhr.onerror = () => {
+        cleanup();
         reject(new Error('Network error during upload part'));
+      };
+
+      xhr.onabort = () => {
+        cleanup();
+        reject(new Error('Upload cancelled'));
       };
 
       xhr.send(bytes as any);
@@ -205,6 +240,7 @@ export const apiClient = {
     name: string,
     size: number,
     folderId?: string | null,
+    signal?: AbortSignal,
   ) =>
     request<FileMetadata>(TELEGRAM_API_ROUTES.FILES.SAVE_FILE, {
       method: 'POST',
@@ -214,6 +250,7 @@ export const apiClient = {
         size,
         folder_id: folderId,
       }),
+      signal,
     }),
 
   deleteFile: (id: number | string) =>
@@ -226,42 +263,84 @@ export const apiClient = {
     file: File,
     folderId: string | null,
     onProgress?: (percent: number) => void,
+    signal?: AbortSignal,
   ): Promise<FileMetadata> => {
     const fileId = Math.floor(Math.random() * 100000000);
     const chunkSize = 512 * 1024; // 512 KB chunks
     const totalParts = Math.ceil(file.size / chunkSize) || 1;
 
     for (let partIndex = 0; partIndex < totalParts; partIndex++) {
+      if (signal?.aborted) {
+        throw new Error('Upload cancelled');
+      }
       const start = partIndex * chunkSize;
       const end = Math.min(start + chunkSize, file.size);
       const chunk = file.slice(start, end);
-      
+
       const arrayBuffer = await new Promise<ArrayBuffer>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => resolve(reader.result as ArrayBuffer);
         reader.onerror = () => reject(reader.error);
+        if (signal) {
+          const onReaderAbort = () => {
+            reader.abort();
+            reject(new Error('Upload cancelled'));
+          };
+          signal.addEventListener('abort', onReaderAbort);
+          const origOnload = reader.onload;
+          reader.onload = (e) => {
+            signal.removeEventListener('abort', onReaderAbort);
+            if (origOnload) origOnload.call(reader, e);
+          };
+          const origOnerror = reader.onerror;
+          reader.onerror = (e) => {
+            signal.removeEventListener('abort', onReaderAbort);
+            if (origOnerror) origOnerror.call(reader, e);
+          };
+        }
         reader.readAsArrayBuffer(chunk);
       });
 
-      await apiClient.uploadPart(fileId, partIndex, arrayBuffer, (loaded) => {
-        if (onProgress) {
-          const totalUploadedBytes = partIndex * chunkSize + loaded;
-          // Local upload is very fast. Represent it as 0 to 10% of total upload.
-          const percent = Math.min(10, Math.round((totalUploadedBytes / file.size) * 10));
-          onProgress(percent);
-        }
-      });
+      await apiClient.uploadPart(
+        fileId,
+        partIndex,
+        arrayBuffer,
+        (loaded) => {
+          if (onProgress) {
+            const totalUploadedBytes = partIndex * chunkSize + loaded;
+            const percent = Math.min(
+              10,
+              Math.round((totalUploadedBytes / file.size) * 10),
+            );
+            onProgress(percent);
+          }
+        },
+        signal,
+      );
+    }
+
+    if (signal?.aborted) {
+      throw new Error('Upload cancelled');
     }
 
     // Connect to the Server-Sent Events stream for real-time Telegram upload progress
     let eventSource: EventSource | null = null;
+    const sseUrl = `${API_BASE_URL}${TELEGRAM_API_ROUTES.FILES.UPLOAD_PROGRESS_STREAM}?file_id=${fileId}`;
+
+    const onAbortStream = () => {
+      if (eventSource) {
+        eventSource.close();
+      }
+    };
+    if (signal) {
+      signal.addEventListener('abort', onAbortStream);
+    }
+
     if (onProgress) {
-      const sseUrl = `${API_BASE_URL}${TELEGRAM_API_ROUTES.FILES.UPLOAD_PROGRESS_STREAM}?file_id=${fileId}`;
       eventSource = new EventSource(sseUrl);
       eventSource.onmessage = (event) => {
         const percent = parseInt(event.data, 10);
         if (!isNaN(percent)) {
-          // Scale Telegram upload progress (0-100) to map from 10% to 99% of total progress
           const scaledPercent = Math.min(99, 10 + Math.round(percent * 0.89));
           onProgress(scaledPercent);
         }
@@ -274,27 +353,33 @@ export const apiClient = {
     }
 
     try {
-      const result = await apiClient.saveFile(fileId, file.name, file.size, folderId);
-      if (eventSource) {
-        eventSource.close();
-      }
+      const result = await apiClient.saveFile(
+        fileId,
+        file.name,
+        file.size,
+        folderId,
+        signal,
+      );
       if (onProgress) {
         onProgress(100);
       }
       return result;
-    } catch (error) {
+    } finally {
       if (eventSource) {
         eventSource.close();
       }
-      throw error;
+      if (signal) {
+        signal.removeEventListener('abort', onAbortStream);
+      }
     }
   },
 
   downloadFile: (fileId: number | string) =>
-    fetch(`${API_BASE_URL}${TELEGRAM_API_ROUTES.FILES.DOWNLOAD}?file_id=${fileId}`)
-      .then((res) => {
-        if (!res.ok) throw new Error(`Download failed: ${res.statusText}`);
-        return res.blob();
-      }),
+    fetch(
+      `${API_BASE_URL}${TELEGRAM_API_ROUTES.FILES.DOWNLOAD}?file_id=${fileId}`,
+    ).then((res) => {
+      if (!res.ok) throw new Error(`Download failed: ${res.statusText}`);
+      return res.blob();
+    }),
 };
 export type ApiClient = typeof apiClient;

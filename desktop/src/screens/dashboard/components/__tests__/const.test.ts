@@ -88,6 +88,8 @@ describe('getFileType', () => {
     ['py', 'code'],
     ['csv', 'csv'],
     ['xlsx', 'csv'],
+    ['mp3', 'audio'],
+    ['m4a', 'audio'],
     ['exe', 'file'],
     ['', 'file'],
   ])('maps .%s → %s', (ext, expected) => {
@@ -109,6 +111,22 @@ describe('getFileIconType', () => {
 
   it('returns ZIP for zip type', () => {
     expect(getFileIconType('zip')).toBe(IconType.ZIP);
+  });
+
+  it('returns CODE for code type', () => {
+    expect(getFileIconType('code')).toBe(IconType.CODE);
+  });
+
+  it('returns PRESENTATION for presentation type', () => {
+    expect(getFileIconType('presentation')).toBe(IconType.PRESENTATION);
+  });
+
+  it('returns CSV for csv type', () => {
+    expect(getFileIconType('csv')).toBe(IconType.CSV);
+  });
+
+  it('returns AUDIO for audio type', () => {
+    expect(getFileIconType('audio')).toBe(IconType.AUDIO);
   });
 
   it('returns FILE for document type', () => {
@@ -136,7 +154,7 @@ describe('getGradientForType', () => {
     expect(defaultGrad).toBe('linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)');
   });
 
-  it.each(['video', 'zip', 'code', 'presentation', 'document', 'csv'])(
+  it.each(['video', 'zip', 'code', 'presentation', 'document', 'csv', 'audio'])(
     'returns a non-empty gradient for "%s"',
     (type) => {
       expect(getGradientForType(type)).toBeTruthy();

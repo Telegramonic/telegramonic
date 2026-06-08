@@ -32,6 +32,34 @@ describe('Icon Wrapper', () => {
     expect(svgElement).toHaveAttribute('width', '20');
   });
 
+  it('renders CodeIcon correctly', () => {
+    const { container } = render(<Icon type={IconType.CODE} size={20} />);
+    const svgElement = container.querySelector('svg');
+    expect(svgElement).toBeInTheDocument();
+    expect(svgElement).toHaveAttribute('width', '20');
+  });
+
+  it('renders PresentationIcon correctly', () => {
+    const { container } = render(<Icon type={IconType.PRESENTATION} size={20} />);
+    const svgElement = container.querySelector('svg');
+    expect(svgElement).toBeInTheDocument();
+    expect(svgElement).toHaveAttribute('width', '20');
+  });
+
+  it('renders CsvIcon correctly', () => {
+    const { container } = render(<Icon type={IconType.CSV} size={20} />);
+    const svgElement = container.querySelector('svg');
+    expect(svgElement).toBeInTheDocument();
+    expect(svgElement).toHaveAttribute('width', '20');
+  });
+
+  it('renders AudioIcon correctly', () => {
+    const { container } = render(<Icon type={IconType.AUDIO} size={20} />);
+    const svgElement = container.querySelector('svg');
+    expect(svgElement).toBeInTheDocument();
+    expect(svgElement).toHaveAttribute('width', '20');
+  });
+
   it('returns null for unknown icon type', () => {
     // @ts-expect-error - testing invalid type
     const { container } = render(<Icon type="UNKNOWN" />);

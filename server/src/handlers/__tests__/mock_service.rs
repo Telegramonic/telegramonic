@@ -396,10 +396,12 @@ impl TelegramService for MockTelegramService {
         // Determine icon_type
         let icon_type = match file_ext.as_deref() {
             Some("pdf") => "pdf".to_string(),
-            Some("png") | Some("jpg") | Some("jpeg") | Some("gif") => "image".to_string(),
+            Some("png") | Some("jpg") | Some("jpeg") | Some("gif") | Some("svg") => "image".to_string(),
             Some("zip") | Some("tar") | Some("gz") | Some("rar") => "archive".to_string(),
-            Some("mp4") | Some("mkv") | Some("avi") => "video".to_string(),
-            Some("mp3") | Some("wav") | Some("ogg") => "audio".to_string(),
+            Some("mp4") | Some("mkv") | Some("avi") | Some("mov") => "video".to_string(),
+            Some("mp3") | Some("wav") | Some("ogg") | Some("m4a") | Some("flac") => "audio".to_string(),
+            Some("js") | Some("ts") | Some("tsx") | Some("rs") | Some("py") | Some("json") | Some("css") | Some("html") => "code".to_string(),
+            Some("csv") | Some("xlsx") | Some("xls") => "csv".to_string(),
             _ => "file".to_string(),
         };
 
