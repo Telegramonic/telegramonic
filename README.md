@@ -37,6 +37,21 @@ graph TD
 
 ---
 
+## Showcase
+
+### 🖥️ Desktop Application
+
+![Desktop Onboarding & Login Wizard](common/src/assets/images/desktop/Landing.png)
+![Desktop Cloud Storage Dashboard & Uploads](common/src/assets/images/desktop/Upload.png)
+
+### 🌐 Web Portal
+
+![Web Portal Landing Page](common/src/assets/images/web/landing_page.png)
+![Documentation Viewer](common/src/assets/images/web/doc.png)
+![Downloads Interface](common/src/assets/images/web/download.png)
+
+---
+
 ## Table of Contents
 
 - [Core Technology Stack](#core-technology-stack)
