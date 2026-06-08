@@ -20,6 +20,7 @@ const defaultProps = {
   setSearchQuery: jest.fn(),
   onUploadClick: jest.fn(),
   onCreateFolderClick: jest.fn(),
+  currentFolderId: null as number | null,
 };
 
 describe('TopNavBar', () => {
@@ -55,17 +56,29 @@ describe('TopNavBar', () => {
     expect(screen.getByText('+ New Folder')).toBeInTheDocument();
   });
 
-  it('calls onUploadClick when Upload File button is clicked', () => {
+  it('disables Upload File and enables New Folder at root level', () => {
+    renderWithProvidersAndRouter(<TopNavBar {...defaultProps} currentFolderId={null} />);
+    expect(screen.getByText('Upload File')).toBeDisabled();
+    expect(screen.getByText('+ New Folder')).not.toBeDisabled();
+  });
+
+  it('enables Upload File and disables New Folder inside a folder', () => {
+    renderWithProvidersAndRouter(<TopNavBar {...defaultProps} currentFolderId={123} />);
+    expect(screen.getByText('Upload File')).not.toBeDisabled();
+    expect(screen.getByText('+ New Folder')).toBeDisabled();
+  });
+
+  it('calls onUploadClick when Upload File button is clicked inside a folder', () => {
     const onUploadClick = jest.fn();
-    renderWithProvidersAndRouter(<TopNavBar {...defaultProps} onUploadClick={onUploadClick} />);
+    renderWithProvidersAndRouter(<TopNavBar {...defaultProps} currentFolderId={123} onUploadClick={onUploadClick} />);
     fireEvent.click(screen.getByText('Upload File'));
     expect(onUploadClick).toHaveBeenCalledTimes(1);
   });
 
-  it('calls onCreateFolderClick when + New Folder button is clicked', () => {
+  it('calls onCreateFolderClick when + New Folder button is clicked at root', () => {
     const onCreateFolderClick = jest.fn();
     renderWithProvidersAndRouter(
-      <TopNavBar {...defaultProps} onCreateFolderClick={onCreateFolderClick} />,
+      <TopNavBar {...defaultProps} currentFolderId={null} onCreateFolderClick={onCreateFolderClick} />,
     );
     fireEvent.click(screen.getByText('+ New Folder'));
     expect(onCreateFolderClick).toHaveBeenCalledTimes(1);

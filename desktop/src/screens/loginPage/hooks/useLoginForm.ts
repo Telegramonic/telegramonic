@@ -2,20 +2,32 @@ import { useState, useEffect, type FormEvent } from 'react';
 import { useForm } from '@tanstack/react-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { appStore, selectApiCredentials, useShallow } from '@appStore';
+import { appStore } from '@appStore';
 import { apiClient } from '@services';
-import { LoginFormValues } from '../types';
+import { LoginFormValues, SavedAccount } from '../types';
 
 export const useLoginForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  
+  const savedAccounts = appStore((state) => state.savedAccounts);
+  const saveAccount = appStore((state) => state.saveAccount);
+  const removeAccount = appStore((state) => state.removeAccount);
+  const setCurrentAccount = appStore((state) => state.setCurrentAccount);
+
+  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4>(() => {
+    const storedAccounts = appStore.getState().savedAccounts;
+    if (storedAccounts && storedAccounts.length > 0) {
+      return 0;
+    }
+    return 1;
+  });
+
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [dialCode, setDialCode] = useState('+91');
   const [phoneCodeHash, setPhoneCodeHash] = useState('');
   const [currentPhone, setCurrentPhone] = useState('');
-  const { setApiCredentials } = appStore(useShallow(selectApiCredentials));
 
   const form = useForm({
     defaultValues: {
@@ -87,6 +99,39 @@ export const useLoginForm = () => {
     }
   };
 
+  const handleSelectAccount = async (account: SavedAccount) => {
+    form.setFieldValue('phone', account.phone);
+    form.setFieldValue('apiId', account.apiId);
+    form.setFieldValue('apiHash', account.apiHash);
+    setCurrentPhone(account.phone);
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      const res = await apiClient.sendCode(account.phone, account.apiId, account.apiHash);
+      if (res.success) {
+        setPhoneCodeHash(res.next_step || 'mock_hash');
+        setStep(3);
+      } else {
+        setErrors({ apiId: res.error || 'Failed to send code' });
+        setStep(2);
+      }
+    } catch (err: any) {
+      setErrors({ apiId: err.message || 'Server connection error' });
+      setStep(2);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRemoveAccount = (phone: string) => {
+    removeAccount(phone);
+    const updated = appStore.getState().savedAccounts;
+    if (updated.length === 0 && step === 0) {
+      setStep(1);
+    }
+  };
+
   const handleCodeSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const value = form.getFieldValue('code');
@@ -104,7 +149,10 @@ export const useLoginForm = () => {
     try {
       const res = await apiClient.signIn(currentPhone, value, phoneCodeHash);
       if (res.success) {
-        setApiCredentials(apiId, apiHash);
+        // Save account and set as active current account on successful sign in
+        saveAccount(currentPhone, apiId, apiHash);
+        setCurrentAccount({ phone: currentPhone, apiId, apiHash });
+
         setStep(4);
       } else {
         setErrors({ code: res.error || 'Invalid code' });
@@ -117,7 +165,11 @@ export const useLoginForm = () => {
   };
 
   const handleBack = () => {
-    if (step === 2) {
+    if (step === 1) {
+      if (savedAccounts.length > 0) {
+        setStep(0);
+      }
+    } else if (step === 2) {
       setStep(1);
     } else if (step === 3) {
       setStep(2);
@@ -147,5 +199,8 @@ export const useLoginForm = () => {
     clearFieldError,
     dialCode,
     setDialCode,
+    savedAccounts,
+    handleSelectAccount,
+    handleRemoveAccount,
   };
 };

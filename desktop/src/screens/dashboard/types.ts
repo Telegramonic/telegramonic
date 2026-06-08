@@ -4,7 +4,7 @@
 
 export interface DashboardItem {
   id: string; // "file-101" or "folder-1"
-  dbId: number; // 101 or 1
+  dbId: string;
   name: string;
   type: 'folder' | 'presentation' | 'code' | 'zip' | 'document' | 'video' | 'csv' | 'file';
   owner: string;
@@ -15,8 +15,10 @@ export interface DashboardItem {
   starred: boolean;
   inTrash: boolean;
   isFolder: boolean;
+  telegramMessageId?: number | null;
+  folderId?: string | null;
 }
 
-export type ActiveTab = 'all' | 'recent' | 'starred' | 'trash';
+export type ActiveTab = 'all' | 'pinned';
 
 export type ToastType = 'success' | 'info' | 'error';

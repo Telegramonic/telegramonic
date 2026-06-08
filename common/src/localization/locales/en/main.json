@@ -144,7 +144,12 @@
     "loading": "Establishing connection...",
     "success": "Connected successfully! Redirecting...",
     "successConfigured": "Successfully configured Telegramonic.",
-    "redirecting": "Redirecting to dashboard..."
+    "redirecting": "Redirecting to dashboard...",
+    "savedAccounts": {
+      "title": "Saved Accounts",
+      "description": "Select an existing account to sign in directly, or set up a new one.",
+      "addNew": "Add New Account"
+    }
   },
   "ProductPage": {
     "heroTitle": "Get Telegramonic",

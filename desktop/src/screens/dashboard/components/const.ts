@@ -36,8 +36,9 @@ export const getFileIconType = (type: string): IconType => {
       return IconType.VIDEO;
     case 'zip':
       return IconType.ZIP;
-    case 'document':
     case 'folder':
+      return IconType.FOLDER;
+    case 'document':
     default:
       return IconType.FILE;
   }
@@ -96,7 +97,15 @@ export const formatDate = (isoString: string): string => {
 // ─── DashboardItem Builder ─────────────────────────────────────────────────
 
 export const buildDashboardItemFromFile = (
-  file: { id: number; name: string; size: number; file_ext?: string | null; created_at: string },
+  file: {
+    id: string;
+    name: string;
+    size: number;
+    file_ext?: string | null;
+    created_at: string;
+    telegram_message_id?: number | null;
+    folder_id?: string | null;
+  },
   ownerName: string,
   starredIds: string[],
   trashIds: string[],
@@ -114,5 +123,24 @@ export const buildDashboardItemFromFile = (
     starred: starredIds.includes(id),
     inTrash: trashIds.includes(id),
     isFolder: false,
+    telegramMessageId: file.telegram_message_id,
+    folderId: file.folder_id,
   };
+};
+
+export const getTelegramShareLink = (
+  folderId: string | null | undefined,
+  messageId: number | null | undefined,
+): string => {
+  if (!folderId || !messageId) {
+    return 'https://t.me';
+  }
+
+  // Clean up the folder ID to get the clean channel ID
+  let cleanId = folderId.replace('-', '');
+  if (cleanId.startsWith('100')) {
+    cleanId = cleanId.substring(3);
+  }
+
+  return `https://t.me/c/${cleanId}/${messageId}`;
 };

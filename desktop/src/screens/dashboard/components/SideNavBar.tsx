@@ -1,4 +1,4 @@
-import { Box, Button, Text, VStack, HStack } from '@chakra-ui/react';
+import { Box, Text, VStack, HStack } from '@chakra-ui/react';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
 import { useStats } from '@services';
@@ -8,7 +8,6 @@ export const SideNavBar = ({
   activeTab,
   setActiveTab,
   setCurrentFolderId,
-  onUpgradeStorage,
   onLogout,
 }: SideNavBarProps) => {
   const { data: stats } = useStats();
@@ -32,7 +31,7 @@ export const SideNavBar = ({
       flexShrink={0}
     >
       <VStack gap={4} align="stretch">
-        {/* Storage visualizer */}
+        {/* Storage visualizer — without upgrade button */}
         <Box p={4} borderRadius="2xl" bg={{ base: '#f4f6f8', _dark: '#131c26' }} borderWidth="1px" borderColor="border">
           <HStack gap={3} mb={3}>
             <Box p={2} bg="primary/10" borderRadius="lg" color="primary">
@@ -61,31 +60,13 @@ export const SideNavBar = ({
               borderRadius="full"
             />
           </Box>
-
-          <Button
-            onClick={onUpgradeStorage}
-            w="full"
-            mt={4}
-            variant="outline"
-            borderColor="primary/30"
-            color="primary"
-            h="32px"
-            fontSize="xs"
-            fontWeight="bold"
-            borderRadius="lg"
-            _hover={{ bg: 'primary/5' }}
-          >
-            Upgrade Storage
-          </Button>
         </Box>
 
         {/* Navigation links */}
         <VStack gap={1} align="stretch">
           {[
-            { tab: 'all', label: 'All Files', icon: IconType.CLOUD },
-            { tab: 'recent', label: 'Recent', icon: IconType.SYNC },
-            { tab: 'starred', label: 'Starred', icon: IconType.LOGO },
-            { tab: 'trash', label: 'Trash', icon: IconType.LOCK },
+            { tab: 'all', label: 'In my drive', icon: IconType.CLOUD },
+            { tab: 'pinned', label: 'Pinned', icon: IconType.PIN },
           ].map(({ tab, label, icon }) => (
             <HStack
               key={tab}

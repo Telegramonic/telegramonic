@@ -18,7 +18,6 @@ const defaultProps = {
   activeTab: 'all' as const,
   setActiveTab: jest.fn(),
   setCurrentFolderId: jest.fn(),
-  onUpgradeStorage: jest.fn(),
   onLogout: jest.fn(),
 };
 
@@ -30,33 +29,17 @@ describe('SideNavBar', () => {
     expect(screen.getByText('My Storage')).toBeInTheDocument();
   });
 
-  it('renders navigation tabs: All Files, Recent, Starred, Trash', () => {
+  it('renders navigation tabs: In my drive, Pinned', () => {
     renderWithProvidersAndRouter(<SideNavBar {...defaultProps} />);
-    expect(screen.getByText('All Files')).toBeInTheDocument();
-    expect(screen.getByText('Recent')).toBeInTheDocument();
-    expect(screen.getByText('Starred')).toBeInTheDocument();
-    expect(screen.getByText('Trash')).toBeInTheDocument();
+    expect(screen.getByText('In my drive')).toBeInTheDocument();
+    expect(screen.getByText('Pinned')).toBeInTheDocument();
   });
 
-  it('calls setActiveTab with "recent" when Recent is clicked', () => {
+  it('calls setActiveTab with "pinned" when Pinned is clicked', () => {
     const setActiveTab = jest.fn();
     renderWithProvidersAndRouter(<SideNavBar {...defaultProps} setActiveTab={setActiveTab} />);
-    fireEvent.click(screen.getByText('Recent'));
-    expect(setActiveTab).toHaveBeenCalledWith('recent');
-  });
-
-  it('calls setActiveTab with "starred" when Starred is clicked', () => {
-    const setActiveTab = jest.fn();
-    renderWithProvidersAndRouter(<SideNavBar {...defaultProps} setActiveTab={setActiveTab} />);
-    fireEvent.click(screen.getByText('Starred'));
-    expect(setActiveTab).toHaveBeenCalledWith('starred');
-  });
-
-  it('calls setActiveTab with "trash" when Trash is clicked', () => {
-    const setActiveTab = jest.fn();
-    renderWithProvidersAndRouter(<SideNavBar {...defaultProps} setActiveTab={setActiveTab} />);
-    fireEvent.click(screen.getByText('Trash'));
-    expect(setActiveTab).toHaveBeenCalledWith('trash');
+    fireEvent.click(screen.getByText('Pinned'));
+    expect(setActiveTab).toHaveBeenCalledWith('pinned');
   });
 
   it('calls onLogout when the Logout button is clicked', () => {
@@ -66,11 +49,9 @@ describe('SideNavBar', () => {
     expect(onLogout).toHaveBeenCalledTimes(1);
   });
 
-  it('calls onUpgradeStorage when the Upgrade button is clicked', () => {
-    const onUpgradeStorage = jest.fn();
-    renderWithProvidersAndRouter(<SideNavBar {...defaultProps} onUpgradeStorage={onUpgradeStorage} />);
-    fireEvent.click(screen.getByText('Upgrade Storage'));
-    expect(onUpgradeStorage).toHaveBeenCalledTimes(1);
+  it('does not render an Upgrade Storage button', () => {
+    renderWithProvidersAndRouter(<SideNavBar {...defaultProps} />);
+    expect(screen.queryByText('Upgrade Storage')).not.toBeInTheDocument();
   });
 
   it('displays storage stats after data resolves', async () => {

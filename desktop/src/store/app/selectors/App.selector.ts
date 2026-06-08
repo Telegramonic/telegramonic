@@ -1,12 +1,11 @@
 import { AppStoreState } from '../appStore/types';
 
 export const selectIsAuthenticated = (state: AppStoreState) => {
-  return !!(state.apiId && state.apiHash);
+  return !!state.currentAccount;
 };
 
 export const selectApiCredentials = (state: AppStoreState) => ({
-  apiId: state.apiId,
-  apiHash: state.apiHash,
-  setApiCredentials: state.setApiCredentials,
+  apiId: state.currentAccount?.apiId ?? null,
+  apiHash: state.currentAccount?.apiHash ?? null,
   clearApiCredentials: state.clearApiCredentials,
 });

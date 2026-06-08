@@ -25,6 +25,13 @@ describe('Icon Wrapper', () => {
     expect(svgElement).toHaveAttribute('width', '25');
   });
 
+  it('renders PinIcon correctly', () => {
+    const { container } = render(<Icon type={IconType.PIN} size={20} />);
+    const svgElement = container.querySelector('svg');
+    expect(svgElement).toBeInTheDocument();
+    expect(svgElement).toHaveAttribute('width', '20');
+  });
+
   it('returns null for unknown icon type', () => {
     // @ts-expect-error - testing invalid type
     const { container } = render(<Icon type="UNKNOWN" />);

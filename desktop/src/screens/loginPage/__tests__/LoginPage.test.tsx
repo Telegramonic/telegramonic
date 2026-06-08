@@ -44,15 +44,20 @@ jest.mock('framer-motion', () => {
 describe('LoginPage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    localStorage.clear();
     act(() => {
-      appStore.getState().clearApiCredentials();
+      appStore.setState({
+        savedAccounts: [],
+      });
     });
   });
 
   it('should render step 1 (Phone Number) by default', () => {
     renderWithRouter(<LoginPage />);
     expect(screen.getByText('Connect Telegram Drive')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Phone Number' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Phone Number' }),
+    ).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText('Enter phone number without country code'),
     ).toBeInTheDocument();
@@ -142,7 +147,9 @@ describe('LoginPage', () => {
     renderWithRouter(<LoginPage />);
 
     // Step 1: Submit Phone Number
-    expect(screen.getByRole('heading', { name: 'Phone Number' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Phone Number' }),
+    ).toBeInTheDocument();
     const phoneInput = screen.getByPlaceholderText(
       'Enter phone number without country code',
     );
@@ -220,7 +227,9 @@ describe('LoginPage', () => {
     fireEvent.click(backButton1);
 
     // Verify back on Step 1
-    expect(screen.getByRole('heading', { name: 'Phone Number' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Phone Number' }),
+    ).toBeInTheDocument();
 
     // Go back to Step 2
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
@@ -255,6 +264,113 @@ describe('LoginPage', () => {
     // Verify back on Step 2
     expect(
       await screen.findByPlaceholderText('e.g., 123456'),
+    ).toBeInTheDocument();
+  });
+
+  it('should render step 0 (Saved Accounts) if accounts exist in Zustand', () => {
+    act(() => {
+      appStore.setState({
+        savedAccounts: [{ phone: '+1234567890', apiId: '111', apiHash: 'aaa' }],
+      });
+    });
+
+    renderWithRouter(<LoginPage />);
+
+    expect(screen.getByText('Saved Accounts')).toBeInTheDocument();
+    expect(screen.getByText('+1234567890')).toBeInTheDocument();
+    expect(
+      screen.queryByPlaceholderText('Enter phone number without country code'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('should transition to step 1 when clicking Add New Account', () => {
+    act(() => {
+      appStore.setState({
+        savedAccounts: [{ phone: '+1234567890', apiId: '111', apiHash: 'aaa' }],
+      });
+    });
+
+    renderWithRouter(<LoginPage />);
+
+    const addNewButton = screen.getByRole('button', {
+      name: '+ Add New Account',
+    });
+    fireEvent.click(addNewButton);
+
+    expect(
+      screen.getByRole('heading', { name: 'Phone Number' }),
+    ).toBeInTheDocument();
+
+    // Go Back should return to Step 0
+    const backButton = screen.getByRole('button', { name: 'Go Back' });
+    fireEvent.click(backButton);
+    expect(screen.getByText('Saved Accounts')).toBeInTheDocument();
+  });
+
+  it('should navigate directly to step 3 when a saved account is selected', async () => {
+    act(() => {
+      appStore.setState({
+        savedAccounts: [{ phone: '+1234567890', apiId: '111', apiHash: 'aaa' }],
+      });
+    });
+
+    renderWithRouter(<LoginPage />);
+
+    const accountRow = screen.getByText('+1234567890');
+    fireEvent.click(accountRow);
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(mockSendCode).toHaveBeenCalledWith('+1234567890', '111', 'aaa');
+    expect(
+      await screen.findByText('Enter Verification Code'),
+    ).toBeInTheDocument();
+  });
+
+  it('should navigate to step 2 with error populated if sendCode fails for a saved account', async () => {
+    mockSendCode.mockResolvedValueOnce({
+      success: false,
+      error: 'Invalid API ID',
+    });
+
+    act(() => {
+      appStore.setState({
+        savedAccounts: [{ phone: '+1234567890', apiId: '111', apiHash: 'aaa' }],
+      });
+    });
+
+    renderWithRouter(<LoginPage />);
+
+    const accountRow = screen.getByText('+1234567890');
+    fireEvent.click(accountRow);
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(mockSendCode).toHaveBeenCalledWith('+1234567890', '111', 'aaa');
+    expect(await screen.findByText('Invalid API ID')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('111')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('aaa')).toBeInTheDocument();
+  });
+
+  it('should remove account from Zustand when delete is clicked', () => {
+    act(() => {
+      appStore.setState({
+        savedAccounts: [{ phone: '+1234567890', apiId: '111', apiHash: 'aaa' }],
+      });
+    });
+
+    renderWithRouter(<LoginPage />);
+
+    const deleteButton = screen.getByRole('button', { name: 'Remove Account' });
+    fireEvent.click(deleteButton);
+
+    expect(appStore.getState().savedAccounts).toEqual([]);
+    expect(
+      screen.getByRole('heading', { name: 'Phone Number' }),
     ).toBeInTheDocument();
   });
 });

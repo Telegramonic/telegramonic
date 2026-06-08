@@ -9,8 +9,11 @@ export const TopNavBar = ({
   setSearchQuery,
   onUploadClick,
   onCreateFolderClick,
+  currentFolderId,
 }: TopNavBarProps) => {
   const { data: currentUser } = useCurrentUser();
+
+  const isAtRoot = currentFolderId === null;
 
   return (
     <HStack
@@ -71,7 +74,10 @@ export const TopNavBar = ({
           px={5}
           fontSize="sm"
           fontWeight="bold"
-          _hover={{ filter: 'brightness(1.1)' }}
+          disabled={isAtRoot}
+          opacity={isAtRoot ? 0.5 : 1}
+          cursor={isAtRoot ? 'not-allowed' : 'pointer'}
+          _hover={{ filter: isAtRoot ? 'none' : 'brightness(1.1)' }}
           display="flex"
           gap={2}
         >
@@ -89,7 +95,10 @@ export const TopNavBar = ({
           px={4}
           fontSize="sm"
           fontWeight="bold"
-          _hover={{ bg: 'primary/5' }}
+          disabled={!isAtRoot}
+          opacity={!isAtRoot ? 0.5 : 1}
+          cursor={!isAtRoot ? 'not-allowed' : 'pointer'}
+          _hover={{ bg: !isAtRoot ? 'transparent' : 'primary/5' }}
         >
           + New Folder
         </Button>

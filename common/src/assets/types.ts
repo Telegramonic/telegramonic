@@ -8,6 +8,7 @@ export enum IconType {
   SPEED = 'SPEED',
   VIDEO = 'VIDEO',
   FILE = 'FILE',
+  FOLDER = 'FOLDER',
   ZIP = 'ZIP',
   CHECK = 'CHECK',
   CLOUD_UPLOAD = 'CLOUD_UPLOAD',
@@ -19,6 +20,7 @@ export enum IconType {
   WINDOWS = 'WINDOWS',
   LINUX = 'LINUX',
   ANDROID = 'ANDROID',
+  PIN = 'PIN',
 }
 
 export enum IconSize {
