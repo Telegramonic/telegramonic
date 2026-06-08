@@ -52,6 +52,16 @@ graph TD
 
 ---
 
+## Showcase
+
+<div align="center">
+  <img src="../common/src/assets/images/web/landing_page.png" width="31%" alt="Web Portal Landing Page" />
+  <img src="../common/src/assets/images/web/doc.png" width="31%" alt="Documentation Viewer" />
+  <img src="../common/src/assets/images/web/download.png" width="31%" alt="Downloads Interface" />
+</div>
+
+---
+
 ## Directory Structure
 
 ```
