@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, Navigate } from 'react-router-dom';
-import { Box, Container } from '@chakra-ui/react';
+import { Box, Container, Spinner } from '@chakra-ui/react';
 import { MdPreview, getMdFileDataInString } from '@components/MdPreview';
 import { MD_PAGE_CONFIG } from './const';
 
@@ -43,36 +43,19 @@ const MdPage = () => {
         {isLoading ? (
           <Box
             display="flex"
-            flexDirection="column"
-            gap={4}
+            justifyContent="center"
+            alignItems="center"
+            minH="300px"
+            width="full"
             aria-busy="true"
             aria-label="Loading document"
           >
-            {[...Array(6)].map((_, i) => (
-              <Box
-                key={i}
-                h={i % 3 === 0 ? '1.5rem' : '1rem'}
-                bg="bg.subtle"
-                borderRadius="md"
-                w={i % 3 === 0 ? '40%' : `${70 + (i % 3) * 10}%`}
-                style={{
-                  animation: 'pulse 1.6s ease-in-out infinite',
-                  animationDelay: `${i * 80}ms`,
-                }}
-              />
-            ))}
+            <Spinner size="xl" color="primary" />
           </Box>
         ) : (
           <MdPreview mdString={mdContent} />
         )}
       </Container>
-
-      <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
-      `}</style>
     </Box>
   );
 };

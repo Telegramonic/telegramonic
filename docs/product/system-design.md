@@ -24,23 +24,18 @@ To ensure security, the Desktop workspace strictly isolates native node tasks fr
 
 ```mermaid
 graph TD
-    %% Styling
-    classDef renderer fill:#eef2ff,stroke:#6366f1,stroke-width:2px,color:#1e1b4b;
-    classDef preload fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#052e16;
-    classDef main fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#451a03;
-
     subgraph RendererProcess ["Renderer Process"]
-        UI["React UI Component Tree<br/>(nodeIntegration: false)"]:::renderer
-        Zustand["Zustand State Stores"]:::renderer
+        UI["React UI Component Tree<br/>(nodeIntegration: false)"]
+        Zustand["Zustand State Stores"]
     end
 
     subgraph PreloadBridge ["Preload Bridge"]
-        API["contextBridge.exposeInMainWorld<br/>(window.electronAPI)"]:::preload
+        API["contextBridge.exposeInMainWorld<br/>(window.electronAPI)"]
     end
 
     subgraph MainProcess ["Electron Main Process"]
-        ElectronMain["main.js Window Manager<br/>(contextIsolation: true)"]:::main
-        IPCListener["IPC Main Listeners"]:::main
+        ElectronMain["main.js Window Manager<br/>(contextIsolation: true)"]
+        IPCListener["IPC Main Listeners"]
     end
 
     UI --> API

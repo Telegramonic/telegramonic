@@ -15,10 +15,6 @@ exports[`DocsPage should render the documentation layout with sidebar and TOC 1`
         [id] {
           scroll-margin-top: 80px;
         }
-        @keyframes docPulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
       
     </style>
     <div

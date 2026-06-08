@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import MdPreview from '../MdPreview';
 import { renderWithRouter } from '../../../testUtils/renderUtils';
 
@@ -19,5 +19,16 @@ describe('MdPreview', () => {
     const link = screen.getByText('Link') as HTMLAnchorElement;
     expect(link.target).toBe('_blank');
     expect(link.rel).toBe('noopener noreferrer');
+  });
+
+  it('should render mermaid diagram when language-mermaid block is provided', async () => {
+    renderWithRouter(
+      <MdPreview mdString={'```mermaid\ngraph TD;\nA-->B;\n```'} />,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('mock-mermaid')).toBeInTheDocument();
+    });
+    expect(screen.getByText('Mock Diagram')).toBeInTheDocument();
   });
 });

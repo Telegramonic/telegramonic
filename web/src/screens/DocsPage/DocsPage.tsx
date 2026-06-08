@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { Box, Flex, Text, VStack, Button, Menu } from '@chakra-ui/react';
+import { Box, Flex, Text, VStack, Button, Menu, Spinner } from '@chakra-ui/react';
 import { MdPreview, getMdFileDataInString } from '@components/MdPreview';
 import { TitleBoxContainer } from '@components';
 import { Icon, IconType } from '@assets';
@@ -96,10 +96,6 @@ const DocsPage = () => {
       <style>{`
         [id] {
           scroll-margin-top: 80px;
-        }
-        @keyframes docPulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
         }
       `}</style>
 
@@ -240,29 +236,18 @@ const DocsPage = () => {
             </Menu.Root>
           </Box>
 
-          {/* Skeletal Loader while loading markdown */}
+          {/* Circular Loader while loading markdown */}
           {isLoading ? (
-            <Box
-              display="flex"
-              flexDirection="column"
-              gap={4}
+            <Flex
+              justifyContent="center"
+              alignItems="center"
+              minH="300px"
+              width="full"
               aria-busy="true"
               aria-label="Loading documentation"
             >
-              {[...Array(6)].map((_, i) => (
-                <Box
-                  key={i}
-                  h={i % 3 === 0 ? '1.5rem' : '1rem'}
-                  bg="bg.subtle"
-                  borderRadius="md"
-                  w={i % 3 === 0 ? '40%' : `${70 + (i % 3) * 10}%`}
-                  style={{
-                    animation: 'docPulse 1.6s ease-in-out infinite',
-                    animationDelay: `${i * 80}ms`,
-                  }}
-                />
-              ))}
-            </Box>
+              <Spinner size="xl" color="primary" />
+            </Flex>
           ) : (
             <Box width="full">
               <MdPreview mdString={mdContent} />

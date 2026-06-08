@@ -12,23 +12,17 @@ Telegramonic is organized as a unified monorepo divided into four core workspace
 
 ```mermaid
 graph LR
-    %% Styling
-    classDef client fill:#eef2ff,stroke:#6366f1,stroke-width:2px,color:#1e1b4b;
-    classDef common fill:#fffbeb,stroke:#f59e0b,stroke-width:2px,color:#451a03;
-    classDef server fill:#fdf2f8,stroke:#ec4899,stroke-width:2px,color:#500724;
-    classDef telegram fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#052e16;
-
     subgraph UserInterface ["Interfaces"]
-        Desktop["Desktop Client<br/>(Electron App)"]:::client
-        Web["Web Portal<br/>(Static Landing/Docs)"]:::client
+        Desktop["Desktop Client<br/>(Electron App)"]
+        Web["Web Portal<br/>(Static Landing/Docs)"]
     end
 
     subgraph Gateway ["Backend Gateway"]
-        Server["Axum Rust Server<br/>(localhost:50065)"]:::server
+        Server["Axum Rust Server<br/>(localhost:50065)"]
     end
 
     subgraph Storage ["Storage Infrastructure"]
-        Telegram["Telegram DC<br/>(MTProto Protocol)"]:::telegram
+        Telegram["Telegram DC<br/>(MTProto Protocol)"]
     end
 
     Desktop --> Server
