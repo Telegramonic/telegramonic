@@ -82,6 +82,9 @@
     "quickstart": "Quick Start",
     "mtproto": "MTProto Protocol",
     "direct-storage": "Direct Storage",
+    "version-history": "Version History",
+    "system-design": "System Design",
+    "api-reference": "API Reference",
     "Login": "Login"
   },
   "MdPage": {
