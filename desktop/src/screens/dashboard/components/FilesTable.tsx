@@ -1,5 +1,14 @@
 import { useState, useMemo } from 'react';
-import { Box, Heading, Center, VStack, Text, Table, HStack, SimpleGrid } from '@chakra-ui/react';
+import {
+  Box,
+  Heading,
+  Center,
+  VStack,
+  Text,
+  Table,
+  HStack,
+  SimpleGrid,
+} from '@chakra-ui/react';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
 import { FilesTableProps } from './types';
@@ -30,15 +39,14 @@ export const FilesTable = ({
       // Always show folders before files
       if (a.isFolder && !b.isFolder) return -1;
       if (!a.isFolder && b.isFolder) return 1;
-      const cmp = a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+      const cmp = a.name.localeCompare(b.name, undefined, {
+        sensitivity: 'base',
+      });
       return sortMode === 'az' ? cmp : -cmp;
     });
   }, [filteredItems, sortMode]);
 
-  const sectionTitle =
-    activeTab === 'all'
-      ? ''
-      : 'Pinned';
+  const sectionTitle = activeTab === 'all' ? '' : 'Pinned';
 
   return (
     <Box>
@@ -104,7 +112,11 @@ export const FilesTable = ({
               px={2.5}
               py={1.5}
               borderRadius="md"
-              bg={viewMode === 'list' ? { base: 'white', _dark: '#18202a' } : 'transparent'}
+              bg={
+                viewMode === 'list'
+                  ? { base: 'white', _dark: '#18202a' }
+                  : 'transparent'
+              }
               color={viewMode === 'list' ? 'primary' : 'fg.muted'}
               transition="all 0.2s"
               title="List view"
@@ -114,7 +126,16 @@ export const FilesTable = ({
               alignItems="center"
               justifyContent="center"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <line x1="8" y1="6" x2="21" y2="6"></line>
                 <line x1="8" y1="12" x2="21" y2="12"></line>
                 <line x1="8" y1="18" x2="21" y2="18"></line>
@@ -129,7 +150,11 @@ export const FilesTable = ({
               px={2.5}
               py={1.5}
               borderRadius="md"
-              bg={viewMode === 'icon' ? { base: 'white', _dark: '#18202a' } : 'transparent'}
+              bg={
+                viewMode === 'icon'
+                  ? { base: 'white', _dark: '#18202a' }
+                  : 'transparent'
+              }
               color={viewMode === 'icon' ? 'primary' : 'fg.muted'}
               transition="all 0.2s"
               title="Icon view"
@@ -139,7 +164,16 @@ export const FilesTable = ({
               alignItems="center"
               justifyContent="center"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <rect x="3" y="3" width="7" height="7"></rect>
                 <rect x="14" y="3" width="7" height="7"></rect>
                 <rect x="14" y="14" width="7" height="7"></rect>
@@ -161,7 +195,10 @@ export const FilesTable = ({
               borderWidth="1px"
               borderColor="border"
               color="fg.muted"
-              _hover={{ bg: { base: 'white', _dark: '#18202a' }, color: 'primary' }}
+              _hover={{
+                bg: { base: 'white', _dark: '#18202a' },
+                color: 'primary',
+              }}
               _disabled={{ opacity: 0.6, cursor: 'not-allowed' }}
               transition="all 0.2s"
               title="Sync folders"
@@ -200,7 +237,13 @@ export const FilesTable = ({
       </HStack>
 
       {sortedItems.length === 0 ? (
-        <Center py={16} borderWidth="1px" borderColor="border" borderStyle="dashed" borderRadius="2xl">
+        <Center
+          py={16}
+          borderWidth="1px"
+          borderColor="border"
+          borderStyle="dashed"
+          borderRadius="2xl"
+        >
           <VStack gap={2}>
             <Box color="fg.muted" opacity={0.6}>
               <Icon type={IconType.CLOUD} size={32} />
@@ -222,11 +265,43 @@ export const FilesTable = ({
           <Table.Root variant="line">
             <Table.Header bg={{ base: '#f4f6f8', _dark: '#18202a/60' }}>
               <Table.Row borderColor="border">
-                <Table.ColumnHeader color="fg.muted" fontSize="2xs" fontWeight="bold" textTransform="uppercase">Name</Table.ColumnHeader>
-                <Table.ColumnHeader color="fg.muted" fontSize="2xs" fontWeight="bold" textTransform="uppercase">Owner</Table.ColumnHeader>
-                <Table.ColumnHeader color="fg.muted" fontSize="2xs" fontWeight="bold" textTransform="uppercase">Last Modified</Table.ColumnHeader>
-                <Table.ColumnHeader color="fg.muted" fontSize="2xs" fontWeight="bold" textTransform="uppercase">Size</Table.ColumnHeader>
-                <Table.ColumnHeader color="fg.muted" w="120px" textAlign="right" />
+                <Table.ColumnHeader
+                  color="fg.muted"
+                  fontSize="2xs"
+                  fontWeight="bold"
+                  textTransform="uppercase"
+                >
+                  Name
+                </Table.ColumnHeader>
+                <Table.ColumnHeader
+                  color="fg.muted"
+                  fontSize="2xs"
+                  fontWeight="bold"
+                  textTransform="uppercase"
+                >
+                  Owner
+                </Table.ColumnHeader>
+                <Table.ColumnHeader
+                  color="fg.muted"
+                  fontSize="2xs"
+                  fontWeight="bold"
+                  textTransform="uppercase"
+                >
+                  Last Modified
+                </Table.ColumnHeader>
+                <Table.ColumnHeader
+                  color="fg.muted"
+                  fontSize="2xs"
+                  fontWeight="bold"
+                  textTransform="uppercase"
+                >
+                  Size
+                </Table.ColumnHeader>
+                <Table.ColumnHeader
+                  color="fg.muted"
+                  w="120px"
+                  textAlign="right"
+                />
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -239,21 +314,46 @@ export const FilesTable = ({
                   cursor="pointer"
                   onClick={() => onItemClick(item)}
                 >
-                  <Table.Cell>
-                    <HStack gap={3}>
-                      <Box color={item.isFolder ? 'yellow.400' : 'primary'}>
+                  <Table.Cell overflow="hidden">
+                    <HStack gap={3} overflow="hidden">
+                      <Box
+                        color={item.isFolder ? 'yellow.400' : 'primary'}
+                        flexShrink={0}
+                      >
                         <Icon type={getFileIconType(item.type)} size={18} />
                       </Box>
-                      <Text fontSize="sm" fontWeight="medium" color="fg">
+                      <Text
+                        fontSize="sm"
+                        maxW="200px"
+                        fontWeight={item.name.length > 25 ? 'bold' : 'medium'}
+                        color={item.name.length > 25 ? 'primary' : 'fg'}
+                        textOverflow="ellipsis"
+                        overflow="hidden"
+                        whiteSpace="nowrap"
+                        title={item.name}
+                      >
                         {item.name}
                       </Text>
                     </HStack>
                   </Table.Cell>
                   <Table.Cell>
                     <HStack gap={2}>
-                      <Center w={5} h={5} borderRadius="full" bg="primary/20" fontSize="2xs" fontWeight="bold" color="primary">
+                      <Center
+                        w={5}
+                        h={5}
+                        borderRadius="full"
+                        bg="primary/20"
+                        fontSize="2xs"
+                        fontWeight="bold"
+                        color="primary"
+                      >
                         {item.owner && item.owner !== '—'
-                          ? item.owner.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
+                          ? item.owner
+                              .split(' ')
+                              .map((n) => n[0])
+                              .join('')
+                              .toUpperCase()
+                              .slice(0, 2)
                           : 'ME'}
                       </Center>
                       <Text fontSize="sm" color="fg.muted">
@@ -296,31 +396,42 @@ export const FilesTable = ({
               p={4}
               cursor="pointer"
               onClick={() => onItemClick(item)}
-              _hover={{ borderColor: 'primary', bg: { base: '#f4f6f8', _dark: '#18202a/60' } }}
+              _hover={{
+                borderColor: 'primary',
+                bg: { base: '#f4f6f8', _dark: '#18202a/60' },
+              }}
               transition="all 0.2s"
               position="relative"
               role="group"
             >
               <VStack gap={3} align="center">
-                <Box color={item.isFolder ? 'yellow.400' : 'primary'} p={3} bg={item.isFolder ? 'yellow.400/10' : 'primary/10'} borderRadius="xl">
+                <Box
+                  color={item.isFolder ? 'yellow.400' : 'primary'}
+                  p={3}
+                  bg={item.isFolder ? 'yellow.400/10' : 'primary/10'}
+                  borderRadius="xl"
+                >
                   <Icon type={getFileIconType(item.type)} size={28} />
                 </Box>
                 <VStack gap={0} align="center">
                   <Text
                     fontSize="xs"
-                    fontWeight="semibold"
-                    color="fg"
+                    fontWeight={item.name.length > 25 ? 'bold' : 'semibold'}
+                    color={item.name.length > 25 ? 'primary' : 'fg'}
                     textAlign="center"
                     maxW="100%"
                     overflow="hidden"
                     textOverflow="ellipsis"
                     whiteSpace="nowrap"
                     w="full"
+                    title={item.name}
                   >
                     {item.name}
                   </Text>
                   {!item.isFolder && (
-                    <Text fontSize="2xs" color="fg.muted">{item.size}</Text>
+                    <Text fontSize="2xs" color="fg.muted">
+                      {item.size}
+                    </Text>
                   )}
                 </VStack>
               </VStack>
@@ -419,7 +530,10 @@ const RowActions = ({
     {!item.isFolder && (
       <Box
         as="button"
-        onClick={(e: React.MouseEvent) => onDownload(item, e)}
+        onClick={(e: React.MouseEvent) => {
+          e.stopPropagation();
+          onDownload(item, e);
+        }}
         p={1.5}
         borderRadius="md"
         color="fg.muted"
@@ -431,7 +545,16 @@ const RowActions = ({
         alignItems="center"
         justifyContent="center"
       >
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
           <polyline points="7 10 12 15 17 10"></polyline>
           <line x1="12" y1="15" x2="12" y2="3"></line>

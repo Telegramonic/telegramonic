@@ -15,6 +15,7 @@ export type FileType =
   | 'document'
   | 'video'
   | 'csv'
+  | 'audio'
   | 'file';
 
 export const getFileType = (ext: string): Exclude<FileType, 'folder'> => {
@@ -25,6 +26,7 @@ export const getFileType = (ext: string): Exclude<FileType, 'folder'> => {
   if (['zip', 'tar', 'gz', 'rar'].includes(e)) return 'zip';
   if (['js', 'ts', 'tsx', 'rs', 'py', 'json', 'css', 'html'].includes(e)) return 'code';
   if (['csv', 'xlsx', 'xls'].includes(e)) return 'csv';
+  if (['mp3', 'wav', 'ogg', 'm4a', 'flac'].includes(e)) return 'audio';
   return 'file';
 };
 
@@ -38,6 +40,14 @@ export const getFileIconType = (type: string): IconType => {
       return IconType.ZIP;
     case 'folder':
       return IconType.FOLDER;
+    case 'code':
+      return IconType.CODE;
+    case 'presentation':
+      return IconType.PRESENTATION;
+    case 'csv':
+      return IconType.CSV;
+    case 'audio':
+      return IconType.AUDIO;
     case 'document':
     default:
       return IconType.FILE;
@@ -60,6 +70,8 @@ export const getGradientForType = (type: string): string => {
       return 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%)';
     case 'csv':
       return 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
+    case 'audio':
+      return 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
     default:
       return 'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)';
   }

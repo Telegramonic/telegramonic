@@ -45,4 +45,5 @@ export interface FilesTableProps {
 export interface UploadProgressBannerProps {
   uploadingFile: string | null;
   uploadProgress: number;
+  onCancelUpload?: () => void;
 }

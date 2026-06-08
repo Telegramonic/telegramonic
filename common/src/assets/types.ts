@@ -21,6 +21,10 @@ export enum IconType {
   LINUX = 'LINUX',
   ANDROID = 'ANDROID',
   PIN = 'PIN',
+  CODE = 'CODE',
+  PRESENTATION = 'PRESENTATION',
+  CSV = 'CSV',
+  AUDIO = 'AUDIO',
 }
 
 export enum IconSize {

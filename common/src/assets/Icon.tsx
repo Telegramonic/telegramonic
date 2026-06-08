@@ -19,6 +19,10 @@ import WindowsLogo from './icons/WindowsLogo';
 import LinuxLogo from './icons/LinuxLogo';
 import AndroidLogo from './icons/AndroidLogo';
 import PinIcon from './icons/PinIcon';
+import CodeIcon from './icons/CodeIcon';
+import PresentationIcon from './icons/PresentationIcon';
+import CsvIcon from './icons/CsvIcon';
+import AudioIcon from './icons/AudioIcon';
 
 interface GenericIconProps extends IconProps {
   type: IconType;
@@ -67,6 +71,14 @@ const Icon = ({ type, ...props }: GenericIconProps) => {
       return <AndroidLogo {...props} />;
     case IconType.PIN:
       return <PinIcon {...props} />;
+    case IconType.CODE:
+      return <CodeIcon {...props} />;
+    case IconType.PRESENTATION:
+      return <PresentationIcon {...props} />;
+    case IconType.CSV:
+      return <CsvIcon {...props} />;
+    case IconType.AUDIO:
+      return <AudioIcon {...props} />;
     default:
       return null;
   }
