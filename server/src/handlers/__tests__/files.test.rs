@@ -45,7 +45,7 @@ mod tests {
             post_json(app.clone(), "/drive/folders/create", payload_create).await;
         assert_eq!(status_create, StatusCode::OK);
         assert_eq!(body_create["name"], "TestFolder");
-        let created_id = body_create["id"].as_i64().unwrap();
+        let created_id = body_create["id"].as_str().unwrap();
 
         // Verify folder count increased
         let (_, body_folders_new) = get_json(app.clone(), "/drive/folders").await;
@@ -106,7 +106,7 @@ mod tests {
         let (status_save, body_save) =
             post_json(app.clone(), "/files/save-file", payload_save).await;
         assert_eq!(status_save, StatusCode::OK);
-        assert_eq!(body_save["id"], file_id);
+        assert_eq!(body_save["id"], file_id.to_string());
         assert_eq!(body_save["name"], "saved_test_file.txt");
         assert_eq!(body_save["icon_type"], "file");
 
@@ -127,5 +127,21 @@ mod tests {
         .await;
         assert_eq!(status_dl, StatusCode::OK);
         assert_eq!(dl_bytes.to_vec(), b"Hello from chunk data".to_vec());
+
+        // 5. Delete File
+        let payload_delete = json!({
+            "id": file_id
+        });
+        let (status_delete, body_delete) =
+            post_json(app.clone(), "/files/delete", payload_delete).await;
+        assert_eq!(status_delete, StatusCode::OK);
+        assert_eq!(body_delete["success"], true);
+
+        // Verify file count decreased
+        let (_, body_files_final) = get_json(app.clone(), "/drive/files").await;
+        assert_eq!(
+            body_files_final.as_array().unwrap().len(),
+            initial_files_len
+        );
     }
 }

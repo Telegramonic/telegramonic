@@ -1,51 +1,67 @@
-use crate::services::DynTelegramService;
+use crate::services::{deserialize_i64_from_string_or_number, serde_option_i64_string, DynTelegramService};
 use axum::{
     body::Bytes,
     extract::{Query, State},
     http::{header, HeaderMap, StatusCode},
-    response::IntoResponse,
+    response::{sse::{Event, Sse}, IntoResponse},
     Json,
 };
+use futures_util::stream::Stream;
+use std::convert::Infallible;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct UploadPartQuery {
+    #[serde(deserialize_with = "deserialize_i64_from_string_or_number")]
     pub file_id: i64,
     pub part_index: i32,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct SaveFilePayload {
+    #[serde(deserialize_with = "deserialize_i64_from_string_or_number")]
     pub file_id: i64,
     pub name: String,
     pub size: i64,
+    #[serde(default, deserialize_with = "serde_option_i64_string::deserialize")]
     pub folder_id: Option<i64>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct FileDownloadQuery {
+    #[serde(deserialize_with = "deserialize_i64_from_string_or_number")]
     pub file_id: i64,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct DriveFilesQuery {
+    #[serde(default, deserialize_with = "serde_option_i64_string::deserialize")]
     pub folder_id: Option<i64>,
     pub q: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct DriveFoldersQuery {
+    #[serde(default, deserialize_with = "serde_option_i64_string::deserialize")]
     pub parent_id: Option<i64>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct CreateFolderPayload {
     pub name: String,
+    #[serde(default, deserialize_with = "serde_option_i64_string::deserialize")]
     pub parent_id: Option<i64>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct DeleteFolderPayload {
+    #[serde(deserialize_with = "deserialize_i64_from_string_or_number")]
+    pub id: i64,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct DeleteFilePayload {
+    #[serde(deserialize_with = "deserialize_i64_from_string_or_number")]
     pub id: i64,
 }
 
@@ -203,4 +219,82 @@ pub async fn delete_folder(
         )
             .into_response(),
     }
+}
+
+pub async fn delete_file(
+    State(service): State<DynTelegramService>,
+    Json(payload): Json<DeleteFilePayload>,
+) -> impl IntoResponse {
+    match service.delete_file(payload.id).await {
+        Ok(success) => (
+            StatusCode::OK,
+            Json(serde_json::json!({ "success": success })),
+        )
+            .into_response(),
+        Err(err) => (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(serde_json::json!({ "success": false, "error": err })),
+        )
+            .into_response(),
+    }
+}
+
+#[derive(Debug, Deserialize)]
+pub struct UploadProgressQuery {
+    #[serde(deserialize_with = "deserialize_i64_from_string_or_number")]
+    pub file_id: i64,
+}
+
+pub async fn get_upload_progress(
+    State(service): State<DynTelegramService>,
+    Query(query): Query<UploadProgressQuery>,
+) -> impl IntoResponse {
+    match service.get_upload_progress(query.file_id).await {
+        Ok(percent) => (
+            StatusCode::OK,
+            Json(serde_json::json!({ "progress": percent })),
+        )
+            .into_response(),
+        Err(err) => (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(serde_json::json!({ "error": err })),
+        )
+            .into_response(),
+    }
+}
+
+pub async fn get_upload_progress_stream(
+    State(service): State<DynTelegramService>,
+    Query(query): Query<UploadProgressQuery>,
+) -> Sse<impl Stream<Item = Result<Event, Infallible>>> {
+    let file_id = query.file_id;
+    let stream = futures_util::stream::unfold(
+        (service.clone(), file_id, -1, false),
+        |(service, file_id, mut last_percent, mut finished)| async move {
+            if finished {
+                return None;
+            }
+            loop {
+                let percent = match service.get_upload_progress(file_id).await {
+                    Ok(p) => p,
+                    Err(_) => 0,
+                };
+                if percent != last_percent {
+                    last_percent = percent;
+                    let event = Event::default().data(percent.to_string());
+                    if percent >= 100 {
+                        finished = true;
+                    }
+                    return Some((Ok::<Event, Infallible>(event), (service, file_id, last_percent, finished)));
+                }
+                tokio::time::sleep(std::time::Duration::from_millis(200)).await;
+            }
+        },
+    );
+
+    Sse::new(stream).keep_alive(
+        axum::response::sse::KeepAlive::new()
+            .interval(std::time::Duration::from_secs(1))
+            .text("keep-alive-text"),
+    )
 }

@@ -357,6 +357,14 @@ impl TelegramService for MockTelegramService {
         Ok(db.folders.len() < initial_len)
     }
 
+    async fn delete_file(&self, id: i64) -> Result<bool, String> {
+        let mut db = self.db.lock().await;
+        let initial_len = db.files.len();
+        db.files.retain(|f| f.id != id);
+        db.uploaded_chunks.remove(&id);
+        Ok(db.files.len() < initial_len)
+    }
+
     async fn upload_part(
         &self,
         file_id: i64,
@@ -423,5 +431,9 @@ impl TelegramService for MockTelegramService {
             // Return some dummy payload for initial mock files
             Ok(format!("This is the content of mock file ID: {}", file_id).into_bytes())
         }
+    }
+
+    async fn get_upload_progress(&self, _file_id: i64) -> Result<i32, String> {
+        Ok(100)
     }
 }
