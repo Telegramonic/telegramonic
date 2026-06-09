@@ -3,6 +3,7 @@
   "electronVersion": "31.0.0",
   "appId": "com.telegramonic.app",
   "productName": "Telegramonic",
+  "compression": "maximum",
   "publish": [
     {
       "provider": "github",
@@ -16,6 +17,7 @@
   },
   "files": [
     "build/**/*",
+    "!build/**/*.map",
     "main.js",
     "preload.js",
     "package.json"
