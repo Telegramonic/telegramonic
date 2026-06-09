@@ -12,17 +12,19 @@ graph TD
     classDef server fill:#fdf2f8,stroke:#ec4899,stroke-width:2px,color:#500724;
     classDef telegram fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#052e16;
 
-    subgraph Frontends ["Client Interfaces"]
-        Desktop["Desktop Application<br/>(Electron + React)"]:::client
-        Web["Web Portal<br/>(Browser React)"]:::client
+    subgraph Frontends ["Apps (Client Interfaces)"]
+        Desktop["apps/desktop/<br/>(Electron App wrapper)"]:::client
+        Mobile["apps/mobile/<br/>(Tauri iOS/Android wrapper)"]:::client
+        Web["apps/web/<br/>(Web browser wrapper)"]:::client
     end
 
     subgraph Shared ["Shared Monorepo Resources"]
-        Common["common/<br/>(Tokens, SVGs, Localization)"]:::common
+        Common["shared/common/<br/>(Tokens, SVGs, Localization)"]:::common
+        ClientCommon["shared/client-common/<br/>(Core screens, components, state)"]:::common
     end
 
     subgraph BackendGateway ["Backend Gateway"]
-        Server["Axum Rust Server<br/>(localhost:50065)"]:::server
+        Server["apps/server/<br/>(Axum Rust Server on localhost:50065)"]:::server
     end
 
     subgraph TelegramCloud ["Telegram Storage Platform"]
@@ -30,8 +32,9 @@ graph TD
     end
 
     %% Connections
-    Desktop & Web -.-> Common
-    Desktop -- "HTTP & Native IPC" --> Server
+    Desktop & Mobile & Web -.-> ClientCommon
+    ClientCommon -.-> Common
+    Desktop & Mobile -- "HTTP & Native IPC" --> Server
     Server -- "MTProto / Grammers" --> TelegramDC
 ```
 
@@ -41,14 +44,14 @@ graph TD
 
 ### 🖥️ Desktop Application
 
-![Desktop Onboarding & Login Wizard](common/src/assets/images/desktop/Landing.png)
-![Desktop Cloud Storage Dashboard & Uploads](common/src/assets/images/desktop/Upload.png)
+![Desktop Onboarding & Login Wizard](shared/common/src/assets/images/desktop/Landing.png)
+![Desktop Cloud Storage Dashboard & Uploads](shared/common/src/assets/images/desktop/Upload.png)
 
 ### 🌐 Web Portal
 
-![Web Portal Landing Page](common/src/assets/images/web/landing_page.png)
-![Documentation Viewer](common/src/assets/images/web/doc.png)
-![Downloads Interface](common/src/assets/images/web/download.png)
+![Web Portal Landing Page](shared/common/src/assets/images/web/landing_page.png)
+![Documentation Viewer](shared/common/src/assets/images/web/doc.png)
+![Downloads Interface](shared/common/src/assets/images/web/download.png)
 
 ---
 
@@ -83,43 +86,31 @@ graph TD
 
 ## Monorepo Structure
 
-The monorepo contains four distinct workspaces:
+The monorepo contains six distinct workspaces organized under `apps/` and `shared/`:
 
 ```
 telegramonic/
-├── common/          # Shared utilities (design tokens, icons, translations, test utils)
-├── desktop/         # Electron desktop app containing core file management and login
-│   ├── main.js      # Electron main entry script (frameless, 80% screen dimensions)
-│   ├── preload.js   # Secure API/diagnostics bridge
-│   └── src/
-│       ├── components/         # Desktop-specific components (Icon, Logo)
-│       ├── providers/          # App-level providers (Chakra, Router, Query, Modal)
-│       ├── routes/             # Desktop routing and lazy-loaded screens
-│       ├── screens/
-│       │   ├── dashboard/      # Decomposed file explorer UI
-│       │   └── loginPage/      # Multi-step login flow wizard
-│       ├── services/
-│       │   ├── apiClient.ts    # HTTP client for Rust server (port 50065)
-│       │   ├── hooks.ts        # TanStack Query custom hooks for backend integration
-│       │   ├── types.ts        # API type definitions
-│       │   └── const.ts        # API routes constants
-│       └── store/              # Zustand stores (app credentials, UI modals)
-├── web/             # React web application (marketing portal, download page, docs viewer)
-│   └── src/
-│       ├── providers/          # UI-level providers (Theme, Localization, Query)
-│       ├── routes/             # Routing and lazy-loaded screen paths
-│       └── screens/
-│           ├── landingPage/    # Main landing and OS-detection download screen
-│           ├── DocsPage/       # Documentation viewer with sidebar navigation
-│           └── MdPage/         # Legal page renderer (privacy, terms, disclaimer)
-└── server/          # Rust/Axum HTTP server (MTProto gateway, default port: 50065)
+├── apps/
+│   ├── desktop/         # Electron desktop app containing core file management and login
+│   │   ├── main.js      # Electron main entry script (frameless, 90% screen dimensions)
+│   │   ├── preload.js   # Secure API/diagnostics bridge
+│   │   └── src/         # Desktop application wrapper React bundle
+│   ├── mobile/          # Tauri mobile app (iOS and Android builds)
+│   │   ├── src-tauri/   # Tauri native Rust config
+│   │   └── src/         # Mobile application wrapper React bundle
+│   ├── web/             # React web application (marketing portal, download page, docs viewer)
+│   │   └── src/         # Web application wrapper React bundle
+│   └── server/          # Rust/Axum HTTP server (MTProto gateway, default port: 50065)
+└── shared/
+    ├── common/          # Shared utilities (design tokens, icons, translations, test utils)
+    └── client-common/   # Shared React views, providers, stores, and services
 ```
 
 For detailed setup, configuration, features, and API routing of each workspace, see the module-specific README documentation:
 
-- 🖥️ **[Desktop Application README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/desktop/README.md)**: Electron shell configurations, preload API interfaces, streaming direct-to-disk downloads, and platform packaging scripts.
-- 🌐 **[Web Portal README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/web/README.md)**: Browser-only client setup, localized string files, routes, and browser E2E test commands.
-- ⚙️ **[Rust Backend Server README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/server/README.md)**: Axum endpoint details, MTProto integration details via Grammers, in-memory caches, and mock-based testing suites.
+- 🖥️ **[Desktop Application README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/apps/desktop/README.md)**: Electron shell configurations, preload API interfaces, streaming direct-to-disk downloads, and platform packaging scripts.
+- 🌐 **[Web Portal README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/apps/web/README.md)**: Browser-only client setup, localized string files, routes, and browser E2E test commands.
+- ⚙️ **[Rust Backend Server README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/apps/server/README.md)**: Axum endpoint details, MTProto integration details via Grammers, in-memory caches, and mock-based testing suites.
 
 ---
 

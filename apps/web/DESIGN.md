@@ -14,7 +14,7 @@ To provide a clean, distraction-free cloud workspace that optimizes flow efficie
 
 ## 3. Design Identity & System Tokens
 
-The web application utilizes a custom design system powered by **Chakra UI v3** and **Tailwind CSS**, configured in `web/src/components/Theme/theme.ts`:
+The web application utilizes a custom design system powered by **Chakra UI v3** and **Tailwind CSS**, configured in [theme.ts](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/shared/common/src/components/theme/theme.ts):
 
 ### 3.1 Theme Modes
 
@@ -63,4 +63,4 @@ The web application utilizes a custom design system powered by **Chakra UI v3** 
 - **UI Framework:** React (18.3+) + Chakra UI v3
 - **State & Query Routing:** Zustand v5 for application states; React Query for remote API cache management.
 - **Responsiveness:** Collapses into a mobile-friendly single-column layout with a top/bottom menu bar below a 600px screen width.
-- **Localization Integration:** Dynamic translation keys fetched via `i18next` locales in `web/src/localization/locales/`.
+- **Localization Integration:** Dynamic translation keys fetched via `i18next` locales in [locales](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/shared/common/src/localization/locales/).

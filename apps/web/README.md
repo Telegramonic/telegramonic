@@ -1,6 +1,6 @@
-# Telegramonic Web Portal (`web/`)
+# Telegramonic Web Portal (`apps/web/`)
 
-The web portal for **Telegramonic**—a React-based web application designed for web browsers. It compiles and bundles using **Craco** and uses **Chakra UI v3** alongside **Tailwind CSS** for visual layout. It serves as the marketing landing page, product download center, and documentation viewer (the desktop application in `desktop/` handles server integration and file management).
+The web portal for **Telegramonic**—a React-based web application designed for web browsers. It compiles and bundles using **Craco** and uses **Chakra UI v3** alongside **Tailwind CSS** for visual layout. It serves as the marketing landing page, product download center, and documentation viewer (the desktop application in `apps/desktop/` handles server integration and file management).
 
 ## Architecture Diagram
 
@@ -15,7 +15,7 @@ graph TD
         Storage["Session & LocalStorage"]:::browser
     end
 
-    subgraph ReactApp ["React Web App (web/)"]
+    subgraph ReactApp ["React Web App (apps/web/)"]
         App["App.tsx & React Router v7"]:::renderer
         Screens["Screens (LandingPage, ProductPage, DocsPage, MdPage)"]:::renderer
         Store["Zustand Stores"]:::renderer
@@ -52,16 +52,16 @@ graph TD
 
 ## Showcase
 
-![Web Portal Landing Page](../common/src/assets/images/web/landing_page.png)
-![Documentation Viewer](../common/src/assets/images/web/doc.png)
-![Downloads Interface](../common/src/assets/images/web/download.png)
+![Web Portal Landing Page](../../shared/common/src/assets/images/web/landing_page.png)
+![Documentation Viewer](../../shared/common/src/assets/images/web/doc.png)
+![Downloads Interface](../../shared/common/src/assets/images/web/download.png)
 
 ---
 
 ## Directory Structure
 
 ```
-web/
+apps/web/
 ├── src/
 │   ├── App.tsx             # Main React entry point with providers and routes
 │   ├── index.tsx           # React DOM bootstrap file (React 18)
@@ -129,7 +129,7 @@ The app will open automatically in your browser at `http://localhost:3000`.
 yarn web:build
 ```
 
-Compiled files will be exported to the `web/build/` directory.
+Compiled files will be exported to the `apps/web/build/` directory.
 
 ---
 

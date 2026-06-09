@@ -1,4 +1,4 @@
-# Telegramonic Desktop Client (`desktop/`)
+# Telegramonic Desktop Client (`apps/desktop/`)
 
 The desktop client for **Telegramonic**—a React-based user interface wrapped in an **Electron** shell. It connects to the local Rust Axum server via secure IPC tunnels and standard HTTP API requests, presenting a high-performance, dark-themed cloud storage workspace for managing Telegram channels as drives.
 
@@ -72,15 +72,15 @@ graph TD
 
 ## Showcase
 
-![Desktop Onboarding & Login Wizard](../common/src/assets/images/desktop/Landing.png)
-![Desktop Cloud Storage Dashboard & Uploads](../common/src/assets/images/desktop/Upload.png)
+![Desktop Onboarding & Login Wizard](../../shared/common/src/assets/images/desktop/Landing.png)
+![Desktop Cloud Storage Dashboard & Uploads](../../shared/common/src/assets/images/desktop/Upload.png)
 
 ---
 
 ## Directory Structure
 
 ```
-desktop/
+apps/desktop/
 ├── src/
 │   ├── App.tsx             # Root React component, routing, and provider configuration
 │   ├── index.tsx           # React DOM bootstrap file loading React 18
@@ -123,11 +123,11 @@ desktop/
 
 ### Process Isolation & Security
 
-The application strictly enforces Electron security best practices. The renderer process runs with `nodeIntegration: false` and `contextIsolation: true`. All native capability access is routed through a secure IPC interface defined in [`preload.js`](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/desktop/preload.js).
+The application strictly enforces Electron security best practices. The renderer process runs with `nodeIntegration: false` and `contextIsolation: true`. All native capability access is routed through a secure IPC interface defined in [preload.js](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/apps/desktop/preload.js).
 
 ### Window Configuration & Sizing
 
-Upon startup, [`main.js`](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/desktop/main.js) queries the user's primary display metrics using Electron's `screen` module. The application window is dynamically sized to **90%** of the screen's available `workAreaSize` and renders with a frameless design on macOS (`titleBarStyle: 'hidden'`).
+Upon startup, [main.js](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/apps/desktop/main.js) queries the user's primary display metrics using Electron's `screen` module. The application window is dynamically sized to **90%** of the screen's available `workAreaSize` and renders with a frameless design on macOS (`titleBarStyle: 'hidden'`).
 
 ### Direct File Downloads
 
@@ -174,7 +174,7 @@ yarn desktop:dist:linux
 yarn desktop:dist:all
 ```
 
-Outputs are saved to the `desktop/dist/` directory.
+Outputs are saved to the `apps/desktop/dist/` directory.
 
 ---
 

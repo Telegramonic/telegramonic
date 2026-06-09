@@ -1,4 +1,4 @@
-# Telegramonic Rust Server (`server/`)
+# Telegramonic Rust Server (`apps/server/`)
 
 Backend for **Telegramonic**—an async Rust HTTP server built with **Axum** and **Tokio**. It acts as an MTProto gateway, bridging the React/Electron frontend to Telegram via the **Grammers** client library. All operations (auth, storage, drives) are exposed as JSON REST endpoints on `localhost:50065`.
 
@@ -78,7 +78,7 @@ graph TD
 ## Directory Structure
 
 ```
-server/
+apps/server/
 ├── src/
 │   ├── main.rs              # Entry point: bootstraps tracing, config, service, and Axum server
 │   ├── config.rs            # AppConfig — reads HOST/PORT from environment variables
@@ -168,8 +168,8 @@ source $HOME/.cargo/env
 # From the monorepo root (recommended)
 yarn server:start
 
-# Or directly from the server/ directory
-cd server/
+# Or directly from the apps/server/ directory
+cd apps/server/
 cargo run
 ```
 
@@ -184,7 +184,7 @@ The server will start on `http://127.0.0.1:50065` by default.
 yarn server:build
 
 # Or directly
-cd server/
+cd apps/server/
 cargo build --release
 ```
 
@@ -192,7 +192,7 @@ cargo build --release
 
 ## Configuration
 
-Configuration is read from environment variables or a `.env` file in `server/`:
+Configuration is read from environment variables or a `.env` file in `apps/server/`:
 
 | Variable   | Description                                     | Default                                     |
 | :--------- | :---------------------------------------------- | :------------------------------------------ |
@@ -678,10 +678,10 @@ Client                              Server                        Telegram DC
 
 ## Persistence
 
-| File                          | Contents                        | Created by                   | Deleted by                        |
-| :---------------------------- | :------------------------------ | :--------------------------- | :-------------------------------- |
-| `server/telegram.session`     | Binary Grammers session         | `sign_in` / `check_password` | `log_out` / `reset_authorization` |
-| `server/telegram.credentials` | `api_id\napi_hash` (plain text) | `sign_in` / `check_password` | `log_out` / `reset_authorization` |
+| File                               | Contents                        | Created by                   | Deleted by                        |
+| :--------------------------------- | :------------------------------ | :--------------------------- | :-------------------------------- |
+| `apps/server/telegram.session`     | Binary Grammers session         | `sign_in` / `check_password` | `log_out` / `reset_authorization` |
+| `apps/server/telegram.credentials` | `api_id\napi_hash` (plain text) | `sign_in` / `check_password` | `log_out` / `reset_authorization` |
 
 Both files are loaded at startup to restore the session and are gitignored.
 
@@ -724,11 +724,11 @@ For end-to-end testing against a live Telegram account:
 
 ```bash
 # Start the server first
-cd server/
+cd apps/server/
 cargo run
 
 # In another terminal, from the project root
-./server/testing/test_real_api.sh
+./apps/server/testing/test_real_api.sh
 ```
 
 The script prompts for a phone number, OTP, and 2FA password to test major endpoints. Requires `curl` and `jq`.

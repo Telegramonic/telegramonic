@@ -1,4 +1,4 @@
-# server/testing
+# apps/server/testing
 
 Test scripts and tools for the Telegramonic Rust backend server.
 
@@ -15,7 +15,7 @@ Test scripts and tools for the Telegramonic Rust backend server.
 
 ## Scripts & Testing Tools
 
-### 1. Interactive Integration Testing (`test_real_api.sh`)
+## 1. Interactive Integration Testing (`test_real_api.sh`)
 
 Since the server runs exclusively in **Real Mode** using official MTProto connections, this script helps you test the active API endpoints interactively by prompting for real SMS codes, phone numbers, and optional 2FA passwords.
 
@@ -28,17 +28,18 @@ Since the server runs exclusively in **Real Mode** using official MTProto connec
 2. **Run the interactive test**:
    ```bash
    # From the project root
-   ./server/testing/test_real_api.sh
+   ./apps/server/testing/test_real_api.sh
    ```
 
 ---
 
-### 2. Unit & Integration Tests (`cargo test`)
+## 2. Unit & Integration Tests (`cargo test`)
 
 Unit and integration tests for route handlers run completely in-memory using localized test stubs without contacting any external Telegram networks.
 
 To run tests:
 ```bash
-cd server/
+```
+cd apps/server/
 cargo test
 ```

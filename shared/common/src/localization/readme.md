@@ -1,12 +1,12 @@
 ### Localization
 
-Localization is built using the `i18next` library. The localization files are located in the `common/src/localization` directory. The `i18next` library is used to load the localization files and provide translations to the application. It is initialized by importing `@localization/config` (mapped to `common/src/localization/config.ts`) inside the app's `LocalizationProvider.tsx`.
+Localization is built using the `i18next` library. The localization files are located in the `shared/common/src/localization` directory. The `i18next` library is used to load the localization files and provide translations to the application. It is initialized by importing `@localization/config` (mapped to `shared/common/src/localization/config.ts`) inside the app's `LocalizationProvider.tsx`.
 
 ### Adding a new language
 
 To add a new language (e.g. Spanish `es`):
 
-1. Create a new directory under `common/src/localization/locales/es/`.
+1. Create a new directory under `shared/common/src/localization/locales/es/`.
 2. Create `main.json`, `common.json`, and `error.json` containing the translation namespaces. For example:
 
 ```json
@@ -16,7 +16,7 @@ To add a new language (e.g. Spanish `es`):
 }
 ```
 
-3. Import the new language files and merge them inside `common/src/localization/config.ts`:
+3. Import the new language files and merge them inside `shared/common/src/localization/config.ts`:
 
 ```typescript
 import commonEs from './locales/es/common.json';
