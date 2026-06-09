@@ -58,8 +58,8 @@ jobs:
           github-token: ${{ secrets.PA_TOKEN }}
           git-user-name: 'Telegramonic bot'
           output-file: false
-          version-file: 'desktop/package.json'
-          git-path: 'desktop'
+          version-file: 'apps/desktop/package.json'
+          git-path: 'apps/desktop'
           tag-prefix: 'desktop-v'
           skip-on-empty: 'false'
 
@@ -76,13 +76,13 @@ jobs:
         run: |
           MATRIX_ITEMS="[]"
           if [ "${{ inputs.build-mac }}" = "true" ]; then
-            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "macos-latest", "platform": "mac", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-macos", "server-binary": "server/target/release/telegramonic-server", "release-assets": "desktop/dist/*.dmg"}]')
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "macos-latest", "platform": "mac", "artifact-path": "apps/desktop/dist/", "artifact-name": "desktop-build-macos", "server-binary": "apps/server/target/release/telegramonic-server", "release-assets": "apps/desktop/dist/*.dmg"}]')
           fi
           if [ "${{ inputs.build-windows }}" = "true" ]; then
-            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "windows-latest", "platform": "win", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-windows", "server-binary": "server/target/release/telegramonic-server.exe", "release-assets": "desktop/dist/*.exe"}]')
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "windows-latest", "platform": "win", "artifact-path": "apps/desktop/dist/", "artifact-name": "desktop-build-windows", "server-binary": "apps/server/target/release/telegramonic-server.exe", "release-assets": "apps/desktop/dist/*.exe"}]')
           fi
           if [ "${{ inputs.build-linux }}" = "true" ]; then
-            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "ubuntu-latest", "platform": "linux", "artifact-path": "desktop/dist/", "artifact-name": "desktop-build-linux", "server-binary": "server/target/release/telegramonic-server", "release-assets": "desktop/dist/*.AppImage\ndesktop/dist/*.deb"}]')
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "ubuntu-latest", "platform": "linux", "artifact-path": "apps/desktop/dist/", "artifact-name": "desktop-build-linux", "server-binary": "apps/server/target/release/telegramonic-server", "release-assets": "apps/desktop/dist/*.AppImage\napps/desktop/dist/*.deb"}]')
           fi
 
           HAS_TARGETS="false"
@@ -123,7 +123,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: desktop-frontend-build
-          path: desktop/build/
+          path: apps/desktop/build/
           retention-days: 1
 
   build-desktop:
@@ -146,7 +146,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: desktop-frontend-build
-          path: desktop/build
+          path: apps/desktop/build
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -166,12 +166,12 @@ jobs:
       # Build Rust Server Backend in Release mode
       - name: Build Rust Server
         run: cargo build --release
-        working-directory: server
+        working-directory: apps/server
 
       # Package using electron-builder
       - name: Build & Package Desktop App
         run: npx electron-builder --${{ matrix.platform }} --publish never
-        working-directory: desktop
+        working-directory: apps/desktop
         env:
           GH_TOKEN: ${{ secrets.PA_TOKEN }}
 

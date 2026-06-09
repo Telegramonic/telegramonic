@@ -5,17 +5,25 @@ node_modules
 /.pnp
 .pnp.js
 
-/server/target
+/apps/server/target
+/apps/mobile/src-tauri/target
+/apps/mobile/src-tauri/gen
+
 # testing
-web/coverage
-desktop/coverage
-common/coverage
+apps/web/coverage
+apps/desktop/coverage
+shared/common/coverage
+apps/mobile/coverage
+shared/client-common/coverage
 
 # production
-web/build
-desktop/build
-desktop/dist
-common/build
+apps/web/build
+apps/desktop/build
+apps/desktop/dist
+shared/common/build
+apps/mobile/build
+apps/mobile/dist
+shared/client-common/build
 
 # misc
 .DS_Store

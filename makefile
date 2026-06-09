@@ -2,7 +2,7 @@
 coverage:
 	echo "Running coverage tests"
 	yarn workspace telegramonic-web test:cov
-	open -a "Google Chrome" web/coverage/lcov-report/index.html
+	open -a "Google Chrome" apps/web/coverage/lcov-report/index.html
 
 .PHONY: branch-clean
 branch-clean:
@@ -11,10 +11,12 @@ branch-clean:
 .PHONY: clean
 clean:
 	@echo "Cleaning build, dist, and node_modules directories..."
-	rm -rf web/build web/dist web/node_modules
-	rm -rf desktop/build desktop/dist desktop/node_modules
-	rm -rf common/build common/dist common/node_modules
-	rm -rf server/target
+	rm -rf apps/web/build apps/web/dist apps/web/node_modules
+	rm -rf apps/desktop/build apps/desktop/dist apps/desktop/node_modules
+	rm -rf apps/mobile/build apps/mobile/dist apps/mobile/node_modules
+	rm -rf shared/common/build shared/common/dist shared/common/node_modules
+	rm -rf shared/client-common/build shared/client-common/dist shared/client-common/node_modules
+	rm -rf apps/server/target
 	rm -rf node_modules
 
 .PHONY: commit

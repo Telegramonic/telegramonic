@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@assets": ["../../shared/common/src/assets"],
+      "@assets/*": ["../../shared/common/src/assets/*"],
+      "@components": ["../../shared/common/src/components"],
+      "@components/*": ["../../shared/common/src/components/*"],
+      "@data": ["../../docs"],
+      "@data/*": ["../../docs/*"],
+      "@providers": ["src/providers"],
+      "@providers/*": ["src/providers/*"],
+      "@localization": ["../../shared/common/src/localization"],
+      "@localization/*": ["../../shared/common/src/localization/*"],
+      "@routes": ["src/routes"],
+      "@routes/*": ["src/routes/*"],
+      "@screens": ["src/screens"],
+      "@screens/*": ["src/screens/*"],
+      "@uiStore": ["src/store/ui"],
+      "@uiStore/*": ["src/store/ui/*"],
+      "@appStore": ["src/store/app"],
+      "@appStore/*": ["src/store/app/*"],
+      "@services": ["src/services"],
+      "@services/*": ["src/services/*"],
+      "@testUtils": ["../../shared/common/src/testUtils"],
+      "@testUtils/*": ["../../shared/common/src/testUtils/*"]
+    }
+  }
+}

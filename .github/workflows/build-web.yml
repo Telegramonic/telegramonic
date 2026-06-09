@@ -39,8 +39,8 @@ jobs:
           github-token: ${{ secrets.PA_TOKEN }}
           git-user-name: 'Telegramonic bot'
           output-file: false
-          version-file: 'web/package.json'
-          git-path: 'web'
+          version-file: 'apps/web/package.json'
+          git-path: 'apps/web'
           tag-prefix: 'web-v'
           skip-on-empty: 'false'
 
@@ -67,13 +67,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: web-build
-          path: web/build/
+          path: apps/web/build/
           retention-days: 7
 
       - name: Zip Build Artifacts
         if: ${{ steps.changelog.outputs.skipped == 'false' }}
         run: |
-          cd web/build
+          cd apps/web/build
           zip -r ../../web-build.zip .
           cd ../..
 
@@ -97,5 +97,5 @@ jobs:
           server: ftp.telegramonic.com
           username: u392139545.githubdeploy
           password: ${{ secrets.HOSTINGER_FTP_PASSWORD }}
-          local-dir: web/build/
+          local-dir: apps/web/build/
           server-dir: ./
