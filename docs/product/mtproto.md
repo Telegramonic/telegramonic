@@ -44,7 +44,7 @@ sequenceDiagram
 *   📁 `telegram.credentials`: Stores the user's `api_id` and `api_hash` values in plain text (separated by a newline). This allows the Rust server to automatically rebuild the Grammers client on restart.
 
 > [!IMPORTANT]
-> Both `telegram.session` and `telegram.credentials` are saved in the `server/` root directory and are explicitly configured in `.gitignore`. They are never transmitted, backing up, or shared. 
+> Both `telegram.session` and `telegram.credentials` are saved in the `apps/server/` root directory and are explicitly configured in `.gitignore`. They are never transmitted, backed up, or shared. 
 > 
 > Running `POST /auth/log-out` or `POST /auth/reset-authorization` deletes these files and cleans up the memory instantly.
 

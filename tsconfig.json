@@ -1,8 +1,10 @@
 {
   "files": [],
   "references": [
-    { "path": "./web/tsconfig.json" },
-    { "path": "./common/tsconfig.json" },
-    { "path": "./desktop/tsconfig.json" }
+    { "path": "./apps/web/tsconfig.json" },
+    { "path": "./apps/desktop/tsconfig.json" },
+    { "path": "./apps/mobile/tsconfig.json" },
+    { "path": "./shared/common/tsconfig.json" },
+    { "path": "./shared/client-common/tsconfig.json" }
   ]
 }

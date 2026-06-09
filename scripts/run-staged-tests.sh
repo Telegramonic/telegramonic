@@ -13,9 +13,9 @@ web_changed=false
 server_changed=false
 
 for file in $changed_files; do
-  if [[ $file == web/* || $file == common/* ]]; then
+  if [[ $file == apps/web/* || $file == shared/common/* ]]; then
     web_changed=true
-  elif [[ $file == server/* ]]; then
+  elif [[ $file == apps/server/* ]]; then
     server_changed=true
   fi
 done
@@ -27,15 +27,15 @@ if [ "$web_changed" = true ]; then
   all_these_files=()
 
   for file in $changed_files; do
-    if [[ $file == web/* || $file == common/* ]]; then
-      if [[ $file == web/* ]]; then
-        file_rel="${file#web/}"
-        prefix="web/"
-        strip_prefix="web/"
+    if [[ $file == apps/web/* || $file == shared/common/* ]]; then
+      if [[ $file == apps/web/* ]]; then
+        file_rel="${file#apps/web/}"
+        prefix="apps/web/"
+        strip_prefix="apps/web/"
       else
-        file_rel="${file#common/}"
-        prefix="common/"
-        strip_prefix="common/"
+        file_rel="${file#shared/common/}"
+        prefix="shared/common/"
+        strip_prefix="shared/common/"
       fi
 
       dir=$(dirname "$file_rel")
@@ -50,10 +50,10 @@ if [ "$web_changed" = true ]; then
           test_files=$(find "$prefix$test_dir" \( -name "*.test.ts" -o -name "*.test.tsx" \) -type f 2>/dev/null)
           if [ -n "$test_files" ]; then
             for tf in $test_files; do
-              if [ "$strip_prefix" == "web/" ]; then
-                all_these_files+=("${tf#web/}")
+              if [ "$strip_prefix" == "apps/web/" ]; then
+                all_these_files+=("${tf#apps/web/}")
               else
-                all_these_files+=("../$tf")
+                all_these_files+=("../../$tf")
               fi
             done
           fi
@@ -65,9 +65,9 @@ if [ "$web_changed" = true ]; then
 
   if [ ${#all_these_files[@]} -gt 0 ]; then
     echo "Running Jest on: ${all_these_files[*]}"
-    cd web && yarn test "${all_these_files[@]}" --watchAll=false
+    cd apps/web && yarn test "${all_these_files[@]}" --watchAll=false
     web_test_exit_code=$?
-    cd ..
+    cd ../..
     if [ $web_test_exit_code -ne 0 ]; then
       echo "Web/Common tests failed!"
       exit $web_test_exit_code
@@ -80,9 +80,9 @@ fi
 # 2. Run Server Tests if server files changed
 if [ "$server_changed" = true ]; then
   echo "--- Server workspace changes detected. Running Cargo tests... ---"
-  cd server && cargo test
+  cd apps/server && cargo test
   server_test_exit_code=$?
-  cd ..
+  cd ../..
   if [ $server_test_exit_code -ne 0 ]; then
     echo "Server tests failed!"
     exit $server_test_exit_code

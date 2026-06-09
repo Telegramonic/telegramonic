@@ -67,7 +67,7 @@ Advanced agent instructions are modularized in the `.claude/skills/` directory.
 
 ## 🌐 Localization Guidelines
 
-All user-facing copy strings (headings, paragraphs, labels, button texts, tooltips, placeholders, etc.) MUST be defined in the localization JSON files located in `web/src/localization/locales/` (e.g. `main.json`) and retrieved dynamically in code using the `useTranslation` hook (`t('key')`). Never hardcode text strings directly in component files.
+All user-facing copy strings (headings, paragraphs, labels, button texts, tooltips, placeholders, etc.) MUST be defined in the localization JSON files located in `shared/common/src/localization/locales/` (e.g. `main.json`) and retrieved dynamically in code using the `useTranslation` hook (`t('key')`). Never hardcode text strings directly in component files.
 
 ## 🧪 Testing Guidelines
 
@@ -118,34 +118,31 @@ The platform organizes resources into 13 primary verticals:
 /
 ├── .claude/                # Agent skills and settings
 ├── .github/                # CI/CD Workflows (Main, Deploy, Release)
-├── common/                 # Shared UI components and assets (Yarn Workspace)
-│   ├── src/
-│   │   ├── assets/         # Reusable SVG icons & logo
-│   │   ├── components/     # Reusable UI components & theme
-│   │   ├── localization/   # i18next translation json files
-│   │   └── testUtils/      # Common testing wrappers
-│   └── package.json
-├── web/                    # React frontend application (Yarn Workspace)
-│   ├── public/             # Static assets and index.html
-│   ├── src/
-│   │   ├── data/           # Static Markdown data files
-│   │   ├── providers/      # Context Providers
-│   │   ├── routes/         # Route definitions and lazy screens
-│   │   ├── screens/        # Page-level screen components
-│   │   ├── services/       # apiClient & endpoints logic
-│   │   ├── store/          # Zustand state stores
-│   │   ├── App.tsx         # Main application entry point
-│   │   └── index.tsx       # React DOM bootstrap
-│   └── package.json
-├── server/                 # Axum Rust backend (Yarn Workspace / Cargo)
-│   ├── src/                # Rust server source code
-│   └── Cargo.toml
-├── desktop/                # Electron desktop application
-│   ├── main.js             # Electron main entry script (80% workarea scale, frameless setup)
-│   ├── preload.js          # Secure contextBridge exposing API / diagnostics
-│   ├── electron-builder.json # Configuration for packaging macOS, Windows, Linux targets
-│   ├── package.json        # Workspace configuration and scripts
-│   └── src/                # React UI code (slate-blue dashboard, dynamic themes)
+├── apps/                   # Execution Targets & Wrappers
+│   ├── desktop/            # Electron desktop application (Yarn Workspace)
+│   │   ├── main.js         # Electron main entry script (frameless, window setup)
+│   │   ├── preload.js      # Secure contextBridge API / diagnostics bridge
+│   │   ├── craco.config.js # Custom Webpack and Babel settings
+│   │   └── src/            # React UI code
+│   ├── mobile/             # Tauri mobile client app (Yarn Workspace)
+│   │   ├── src-tauri/      # Tauri Rust native configuration
+│   │   └── src/            # React UI code
+│   ├── web/                # React browser web application (Yarn Workspace)
+│   │   ├── public/         # Static assets and index.html
+│   │   ├── src/            # Pages, routes, static data, and context providers
+│   │   └── craco.config.js # Craco configuration layer
+│   └── server/             # Axum Rust HTTP server (Yarn Workspace / Cargo)
+│       ├── src/            # Rust handlers, services, and configuration
+│       └── Cargo.toml      # Rust package manifest
+├── shared/                 # Shared Monorepo Code packages
+│   ├── common/             # Shared UI components, theme, and assets (Yarn Workspace)
+│   │   └── src/
+│   │       ├── assets/     # Reusable SVG icons & logo
+│   │       ├── components/ # Reusable UI components & theme
+│   │       ├── localization/ # i18next translation json locales
+│   │       └── testUtils/  # Shared testing wrappers
+│   └── client-common/      # Shared client React views and logic (Yarn Workspace)
+│       └── src/            # Screen views, Zustand store slices, hooks, and services
 ├── scripts/                # Task-specific helper scripts
 ├── package.json            # Root workspace configuration
 └── .yarnrc.yml             # Yarn 4 configuration
@@ -163,7 +160,7 @@ The platform organizes resources into 13 primary verticals:
 
 - **Compound Components**: Use the standard v3 pattern (e.g., `<Dialog.Root>`, `<Menu.Content>`).
 - **Icons**: Use inline SVGs or define local custom SVG components directly within the files where they are needed.
-- **Theme**: Tokens are managed in `web/src/components/Theme/theme.ts`. Avoid hardcoded colors.
+- **Theme**: Tokens are managed in `shared/common/src/components/theme/theme.ts`. Avoid hardcoded colors.
 
 ### Routing (React Router v7)
 
@@ -173,23 +170,23 @@ The platform organizes resources into 13 primary verticals:
 ### TypeScript
 
 - All files use `.ts` or `.tsx`.
-- Strictly adhere to path aliases defined in `web/tsconfig.path.json` (e.g., `@screens`, `@components`, `@store`).
+- Strictly adhere to path aliases defined in `apps/web/tsconfig.path.json` (e.g., `@screens`, `@components`, `@store`).
 
 ### Rust Backend (Axum)
 
 - **Architecture**: Modular setup divided into HTTP `handlers/`, business logic `services/` (mock and Grammers MTProto clients), and environment `config.rs`.
 - **Handlers**: Write Axum handlers that return JSON payloads (`Json<T>`) or explicit statuses.
 - **Testing**: Write unit/integration tests and run using `cargo test` (or `yarn server:test` at root). Use `services/mock.rs` to mock Telegram connections.
-- **README Maintenance**: Any change made to files inside `server/` (new endpoints, changed payloads, new dependencies, new environment variables, new files, behaviour changes) **MUST** also update [`server/README.md`](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/server/README.md) to keep it accurate, following the rules in the [readme skill](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/readme/SKILL.md). This includes but is not limited to: adding/removing routes in `handlers/mod.rs`, changing request/response types in handlers, changing `TelegramService` trait methods, adding new Cargo dependencies, and modifying `config.rs`.
+- **README Maintenance**: Any change made to files inside `apps/server/` (new endpoints, changed payloads, new dependencies, new environment variables, new files, behaviour changes) **MUST** also update [`apps/server/README.md`](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/apps/server/README.md) to keep it accurate, following the rules in the [readme skill](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/.claude/skills/readme/SKILL.md). This includes but is not limited to: adding/removing routes in `handlers/mod.rs`, changing request/response types in handlers, changing `TelegramService` trait methods, adding new Cargo dependencies, and modifying `config.rs`.
 
 ### Desktop Application (Electron)
 
-- **Process Isolation**: Securely expose APIs via `desktop/preload.js` contextBridge. Do not enable nodeIntegration in renderer processes.
+- **Process Isolation**: Securely expose APIs via `apps/desktop/preload.js` contextBridge. Do not enable nodeIntegration in renderer processes.
 - **Window Dimensions**: The desktop main process dynamically initializes at **80%** of the user's available screen width and height.
 - **Diagnostics**: Polling status indicator queries the local diagnostics server (`127.0.0.1:8080`) every 5 seconds. Runs silently in the background.
 - **Theme Defaulting**: Defaults automatically to system theme settings (`prefers-color-scheme`) using Chakra UI / NextThemes, with no theme-override controls in UI.
-- **Packaging (electron-builder)**: Uses `desktop/electron-builder.json` to generate builds. Ensure DMG layout remains clean and system files (`.background.tiff`, `.VolumeIcon.icns`) are not declared inside `dmg.contents` to prevent rendering them to users.
-- **Native File Downloads**: Bypasses Chromium's standard download manager by using an IPC handler `download-file-directly` in `main.js`. It utilizes `dialog.showSaveDialog` to prompt the user, streams the download from the local Axum server directly to disk via Node.js `fs.createWriteStream`, and cleans up any partial/failed files.
+- **Packaging (electron-builder)**: Uses `apps/desktop/electron-builder.json` to generate builds. Ensure DMG layout remains clean and system files (`.background.tiff`, `.VolumeIcon.icns`) are not declared inside `dmg.contents` to prevent rendering them to users.
+- **Native File Downloads**: Bypasses Chromium's standard download manager by using an IPC handler `download-file-directly` in `apps/desktop/main.js`. It utilizes `dialog.showSaveDialog` to prompt the user, streams the download from the local Axum server directly to disk via Node.js `fs.createWriteStream`, and cleans up any partial/failed files.
 
 ## 5. Testing & Verification
 

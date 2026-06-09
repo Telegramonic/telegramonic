@@ -6,14 +6,18 @@ This document details the system design, monorepo workspaces, and security model
 
 ## 🏗️ Monorepo Architecture
 
-Telegramonic is structured as a yarn-based monorepo consisting of four workspaces:
+Telegramonic is structured as a yarn-based monorepo consisting of six workspaces:
 
 ```text
 telegramonic/
-├── common/        # Shared assets, presentation components, localized copy schemas
-├── desktop/       # Electron desktop client (React renderer UI + Main process wrapper)
-├── web/           # Independent React web portal (Landing page, download center, docs)
-└── server/        # Axum Rust backend acting as the MTProto API Gateway
+├── apps/
+│   ├── desktop/       # Electron desktop client (React renderer UI + Main process wrapper)
+│   ├── mobile/        # Tauri mobile client (React renderer UI + Rust native wrapper)
+│   ├── web/           # Independent React web portal (Landing page, download center, docs)
+│   └── server/        # Axum Rust backend acting as the MTProto API Gateway
+└── shared/
+    ├── common/        # Shared assets, presentation components, localized copy schemas
+    └── client-common/ # Shared client React routes, screens, providers, and state stores
 ```
 
 ---

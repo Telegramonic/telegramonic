@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@assets": ["../../shared/common/src/assets"],
+      "@assets/*": ["../../shared/common/src/assets/*"],
+      "@components": ["../../shared/common/src/components"],
+      "@components/*": ["../../shared/common/src/components/*"],
+      "@data": ["../../docs"],
+      "@data/*": ["../../docs/*"],
+      "@providers": ["../../shared/client-common/src/providers"],
+      "@providers/*": ["../../shared/client-common/src/providers/*"],
+      "@localization": ["../../shared/common/src/localization"],
+      "@localization/*": ["../../shared/common/src/localization/*"],
+      "@routes": ["../../shared/client-common/src/routes"],
+      "@routes/*": ["../../shared/client-common/src/routes/*"],
+      "@screens": ["../../shared/client-common/src/screens"],
+      "@screens/*": ["../../shared/client-common/src/screens/*"],
+      "@uiStore": ["../../shared/client-common/src/store/ui"],
+      "@uiStore/*": ["../../shared/client-common/src/store/ui/*"],
+      "@appStore": ["../../shared/client-common/src/store/app"],
+      "@appStore/*": ["../../shared/client-common/src/store/app/*"],
+      "@services": ["../../shared/client-common/src/services"],
+      "@services/*": ["../../shared/client-common/src/services/*"],
+      "@testUtils": ["../../shared/common/src/testUtils"],
+      "@testUtils/*": ["../../shared/common/src/testUtils/*"]
+    }
+  }
+}

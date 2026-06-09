@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "ignoreDeprecations": "6.0",
+    "tsBuildInfoFile": "../../node_modules/.cache/tsconfig.common.tsbuildinfo",
+    "types": ["node"],
+    "baseUrl": "./",
+    "paths": {
+      "@assets": ["src/assets"],
+      "@assets/*": ["src/assets/*"],
+      "@components": ["src/components"],
+      "@components/*": ["src/components/*"],
+      "@localization": ["src/localization"],
+      "@localization/*": ["src/localization/*"],
+      "@testUtils": ["src/testUtils"],
+      "@testUtils/*": ["src/testUtils/*"],
+      "@uiStore": ["../../apps/web/src/store/ui"],
+      "@uiStore/*": ["../../apps/web/src/store/ui/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "src/testUtils/**/*",
+    "**/__tests__/*",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
+}

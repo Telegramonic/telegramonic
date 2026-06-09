@@ -5,8 +5,10 @@ on:
     branches:
       - development
     paths:
-      - 'desktop/**'
-      - 'common/**'
+      - 'apps/desktop/**'
+      - 'apps/mobile/**'
+      - 'shared/common/**'
+      - 'shared/client-common/**'
       - 'package.json'
       - 'yarn.lock'
       - '.github/workflows/ci-desktop.yml'
@@ -14,8 +16,10 @@ on:
     branches:
       - development
     paths:
-      - 'desktop/**'
-      - 'common/**'
+      - 'apps/desktop/**'
+      - 'apps/mobile/**'
+      - 'shared/common/**'
+      - 'shared/client-common/**'
       - 'package.json'
       - 'yarn.lock'
       - '.github/workflows/ci-desktop.yml'

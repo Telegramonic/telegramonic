@@ -5,8 +5,8 @@ on:
     branches:
       - development
     paths:
-      - 'web/**'
-      - 'common/**'
+      - 'apps/web/**'
+      - 'shared/common/**'
       - 'package.json'
       - 'yarn.lock'
       - '.github/workflows/ci-web.yml'
@@ -14,8 +14,8 @@ on:
     branches:
       - development
     paths:
-      - 'web/**'
-      - 'common/**'
+      - 'apps/web/**'
+      - 'shared/common/**'
       - 'package.json'
       - 'yarn.lock'
       - '.github/workflows/ci-web.yml'
