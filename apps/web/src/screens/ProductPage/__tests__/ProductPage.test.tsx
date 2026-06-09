@@ -1,6 +1,11 @@
 import { render, screen } from '@testing-library/react';
 import { ChakraProvider } from '@chakra-ui/react';
 import { system } from '@components';
+
+jest.mock('../../../../../desktop/package.json', () => ({
+  version: '0.2.1',
+}));
+
 import ProductPage from '../ProductPage';
 
 const renderProductPage = () => {
