@@ -4,7 +4,17 @@ This document tracks release updates, major features, optimizations, and bug fix
 
 ---
 
-## [v0.1.1] - Current Release
+## [v0.4.0] - Current Release
+
+- **Mobile Workspace Version**: `0.4.0`
+
+### 🌟 New Features
+
+- **Production Release**: Production release bump to `v0.4.0`.
+
+---
+
+## [v0.1.1]
 
 - **Mobile Workspace Version**: `0.1.1`
 

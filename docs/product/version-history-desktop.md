@@ -4,7 +4,18 @@ This document tracks release updates, major features, optimizations, and bug fix
 
 ---
 
-## [v0.2.1] - Current Release
+## [v0.3.0] - Current Release
+
+- **Desktop Version**: `0.3.0`
+- **Server Version**: `0.1.0`
+
+### 🌟 New Features
+
+- **Production Release**: Production release bump to `v0.3.0`.
+
+---
+
+## [v0.2.1]
 
 - **Desktop Version**: `0.2.1`
 - **Server Version**: `0.1.1`
