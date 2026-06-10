@@ -197,6 +197,22 @@ describe('ProfileTab', () => {
     expect(apiClient.updateCredentials).not.toHaveBeenCalled();
   });
 
+  it('disables Save Credentials button if inputs are unchanged from currentAccount', () => {
+    renderWithProvidersAndRouter(<ProfileTab onLogout={mockOnLogout} />);
+
+    const saveButton = screen.getByRole('button', { name: 'Save Credentials' });
+    expect(saveButton).toBeDisabled();
+
+    // Change one field
+    const apiIdInput = screen.getByPlaceholderText('Enter Telegram API ID (e.g. 1234567)');
+    fireEvent.change(apiIdInput, { target: { value: '9876543' } });
+    expect(saveButton).not.toBeDisabled();
+
+    // Revert back
+    fireEvent.change(apiIdInput, { target: { value: '987654' } });
+    expect(saveButton).toBeDisabled();
+  });
+
   it('calls onLogout when the logout button is clicked', () => {
     renderWithProvidersAndRouter(<ProfileTab onLogout={mockOnLogout} />);
 

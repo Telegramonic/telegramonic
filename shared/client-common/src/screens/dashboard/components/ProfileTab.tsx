@@ -47,8 +47,16 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
     const lastInitial = currentUser.last_name?.[0] || '';
     return `${firstInitial}${lastInitial}`.toUpperCase() || 'U';
   }, [currentUser]);
+  const isChanged = useMemo(() => {
+    const originalApiId = currentAccount?.apiId || '';
+    const originalApiHash = currentAccount?.apiHash || '';
+    return apiId.trim() !== originalApiId.trim() || apiHash.trim() !== originalApiHash.trim();
+  }, [apiId, apiHash, currentAccount]);
 
-
+  React.useEffect(() => {
+    setApiId(currentAccount?.apiId || '');
+    setApiHash(currentAccount?.apiHash || '');
+  }, [currentAccount]);
 
   const handleSaveCredentials = () => {
     if (!apiId.trim() || !apiHash.trim()) {
@@ -392,9 +400,12 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
             borderRadius="xl"
             fontSize="xs"
             fontWeight="bold"
-            _hover={{ filter: 'brightness(1.1)' }}
             w={{ base: '100%', sm: 'auto' }}
             alignSelf={{ base: 'stretch', sm: 'auto' }}
+            disabled={!isChanged}
+            opacity={isChanged ? 1 : 0.5}
+            cursor={isChanged ? 'pointer' : 'not-allowed'}
+            _hover={{ filter: isChanged ? 'brightness(1.1)' : 'none' }}
           >
             Save Credentials
           </Button>
