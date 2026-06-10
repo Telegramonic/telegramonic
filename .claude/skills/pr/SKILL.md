@@ -130,7 +130,7 @@ When creating a PR using the `github-mcp-server` tool, ensure:
    *PR Link:* [{{pullRequest.title}}]({{pullRequest.url}})
    ```
 
-5. Use `transitionJiraIssue` to move the ticket to `Done` (Transition ID: `31`).
+5. Use `transitionJiraIssue` to move the ticket to `Done` (Transition ID: `41`).
 
 ### Smart Values Reference
 
