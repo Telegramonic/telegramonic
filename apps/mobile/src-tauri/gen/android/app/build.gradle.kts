@@ -1,4 +1,5 @@
 import java.util.Properties
+import java.io.File
 
 plugins {
     id("com.android.application")
@@ -17,6 +18,13 @@ val tauriProperties = Properties().apply {
     }
 }
 
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) {
+        keystorePropertiesFile.inputStream().use { load(it) }
+    }
+}
+
 android {
     compileSdk = 36
     namespace = "com.telegramonic.mobile"
@@ -27,6 +35,16 @@ android {
         targetSdk = 36
         versionCode = tauriProperties.getProperty("tauri.android.versionCode", "1").toInt()
         versionName = tauriProperties.getProperty("tauri.android.versionName", "1.0")
+    }
+    signingConfigs {
+        create("release") {
+            if (keystorePropertiesFile.exists()) {
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+            }
+        }
     }
     buildTypes {
         getByName("debug") {
@@ -43,6 +61,9 @@ android {
         }
         getByName("release") {
             isMinifyEnabled = true
+            if (keystorePropertiesFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             proguardFiles(
                 *fileTree(".") { include("**/*.pro") }
                     .plus(getDefaultProguardFile("proguard-android-optimize.txt"))
@@ -55,6 +76,40 @@ android {
     }
     buildFeatures {
         buildConfig = true
+    }
+
+    applicationVariants.all {
+        val variant = this
+        variant.outputs.all {
+            val output = this as com.android.build.gradle.internal.api.BaseVariantOutputImpl
+            val baseName = "Telegramonic"
+            if (variant.buildType.name == "release") {
+                output.outputFileName = "${baseName}.apk"
+            } else {
+                output.outputFileName = "${baseName}-debug.apk"
+            }
+        }
+
+        val flavor = flavorName
+        val buildType = buildType.name
+        val flavorNameUpper = flavor.replaceFirstChar { it.uppercase() }
+        val buildTypeNameUpper = buildType.replaceFirstChar { it.uppercase() }
+        
+        val bundleTaskNames = listOf(
+            "sign${flavorNameUpper}${buildTypeNameUpper}Bundle",
+            "signUniversal${buildTypeNameUpper}Bundle",
+            "sign${buildTypeNameUpper}Bundle"
+        )
+        
+        bundleTaskNames.forEach { taskName ->
+            tasks.matching { it.name == taskName }.configureEach {
+                val finalizeTask = this as com.android.build.gradle.internal.tasks.FinalizeBundleTask
+                val file = finalizeTask.finalBundleFile.asFile.get()
+                val newName = if (buildType == "release") "Telegramonic.aab" else "Telegramonic-debug.aab"
+                val finalFile = File(file.parentFile, newName)
+                finalizeTask.finalBundleFile.fileValue(finalFile)
+            }
+        }
     }
 }
 
