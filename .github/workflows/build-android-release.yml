@@ -1,0 +1,166 @@
+name: Build Android Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump-version:
+        description: 'Bump package version using conventional commits'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+jobs:
+  bump-version:
+    name: Bump Version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      skipped: ${{ steps.changelog.outputs.skipped }}
+      tag: ${{ steps.changelog.outputs.tag }}
+      version: ${{ steps.changelog.outputs.version }}
+      clean_changelog: ${{ steps.changelog.outputs.clean_changelog }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.PA_TOKEN || secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Conventional Changelog Action
+        id: changelog
+        if: ${{ inputs.bump-version == true }}
+        uses: TriPSs/conventional-changelog-action@latest
+        with:
+          github-token: ${{ secrets.PA_TOKEN || secrets.GITHUB_TOKEN }}
+          git-user-name: 'Telegramonic bot'
+          output-file: false
+          version-file: 'apps/mobile/package.json'
+          git-path: 'apps/mobile'
+          tag-prefix: 'mobile-v'
+          skip-on-empty: 'false'
+          skip-commit: 'true'
+          git-push: 'false'
+
+  build-frontend:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Build Mobile React App
+        run: yarn workspace telegramonic-mobile build
+
+      - name: Upload Frontend Build Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: mobile-frontend-build
+          path: apps/mobile/build/
+          retention-days: 1
+
+  build-android:
+    name: Build Android Release App
+    needs: [bump-version, build-frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Download Frontend Build
+        uses: actions/download-artifact@v7
+        with:
+          name: mobile-frontend-build
+          path: apps/mobile/build
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Update package.json version
+        if: ${{ inputs.bump-version == true && needs.bump-version.outputs.skipped == 'false' }}
+        run: |
+          node -e "const fs = require('fs'); const pkg = require('./apps/mobile/package.json'); pkg.version = '${{ needs.bump-version.outputs.version }}'; fs.writeFileSync('./apps/mobile/package.json', JSON.stringify(pkg, null, 2));"
+
+      # Setup Java 17
+      - name: Setup Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # Install Android NDK
+      - name: Install Android NDK
+        run: |
+          if [ -d "$ANDROID_HOME/ndk" ] && [ "$(ls -A $ANDROID_HOME/ndk)" ]; then
+            NDK_DIR=$(ls -d $ANDROID_HOME/ndk/* | sort -V | tail -n 1)
+            echo "Using pre-installed NDK at $NDK_DIR"
+          else
+            echo "No pre-installed NDK found. Installing version 26.3.11579264..."
+            echo "y" | sdkmanager --install "ndk;26.3.11579264"
+            NDK_DIR="$ANDROID_HOME/ndk/26.3.11579264"
+          fi
+          echo "ANDROID_NDK_HOME=$NDK_DIR" >> $GITHUB_ENV
+          echo "NDK_HOME=$NDK_DIR" >> $GITHUB_ENV
+
+      # Setup Rust toolchain
+      - name: Setup Rust Toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          target: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+
+      # Setup Android Keystore for release signing (optional)
+      - name: Setup Keystore
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            mkdir -p apps/mobile/src-tauri/gen/android
+            echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > apps/mobile/src-tauri/gen/android/telegramonic.keystore
+            echo "storeFile=${{ github.workspace }}/apps/mobile/src-tauri/gen/android/telegramonic.keystore" > apps/mobile/src-tauri/gen/android/keystore.properties
+            echo "storePassword=$ANDROID_KEYSTORE_PASSWORD" >> apps/mobile/src-tauri/gen/android/keystore.properties
+            echo "keyAlias=$ANDROID_KEY_ALIAS" >> apps/mobile/src-tauri/gen/android/keystore.properties
+            echo "keyPassword=$ANDROID_KEY_PASSWORD" >> apps/mobile/src-tauri/gen/android/keystore.properties
+          else
+            echo "No keystore provided, skipping signing setup."
+          fi
+
+      # Compile Android App Release target
+      - name: Build Android App
+        run: yarn workspace telegramonic-mobile run tauri android build --ci
+
+      - name: Upload Android Release Artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: mobile-build-android-release
+          path: |
+            apps/mobile/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+            apps/mobile/src-tauri/gen/android/app/build/outputs/bundle/**/*.aab
+          retention-days: 7

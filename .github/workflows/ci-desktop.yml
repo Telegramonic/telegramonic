@@ -6,7 +6,6 @@ on:
       - development
     paths:
       - 'apps/desktop/**'
-      - 'apps/mobile/**'
       - 'shared/common/**'
       - 'shared/client-common/**'
       - 'package.json'

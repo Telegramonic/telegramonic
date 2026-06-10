@@ -230,7 +230,8 @@ Execute these commands from the monorepo root:
 | `yarn mobile:ios` | Compile and run the iOS app on a Simulator (interactive selector). |
 | `yarn mobile:ios:build` | Build the production/distribution-ready iOS application bundle. |
 | `yarn mobile:android` | Compile and run the Android app in development on an emulator. |
-| `yarn mobile:android:build` | Build the production/distribution-ready Android app. |
+| `yarn mobile:android:build:debug` | Build the development debug Android app. |
+| `yarn mobile:android:build:release` | Build the signed production release Android App Bundle (AAB). |
 | `yarn mobile:test` | Run the Jest unit tests for the mobile workspace. |
 
 ---

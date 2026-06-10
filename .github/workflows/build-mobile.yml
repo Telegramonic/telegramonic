@@ -1,4 +1,4 @@
-name: Build & Publish Mobile App
+name: Build & Publish Mobile App (Debug)
 
 on:
   workflow_dispatch:
@@ -15,7 +15,7 @@ on:
         default: true
 
 permissions:
-  contents: write
+  contents: read
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -33,38 +33,6 @@ jobs:
             exit 1
           fi
 
-  bump-version:
-    name: Bump Version
-    needs: check-branch
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    outputs:
-      skipped: ${{ steps.changelog.outputs.skipped }}
-      tag: ${{ steps.changelog.outputs.tag }}
-      version: ${{ steps.changelog.outputs.version }}
-      clean_changelog: ${{ steps.changelog.outputs.clean_changelog }}
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.PA_TOKEN }}
-          fetch-depth: 0
-
-      - name: Conventional Changelog Action
-        id: changelog
-        uses: TriPSs/conventional-changelog-action@latest
-        with:
-          github-token: ${{ secrets.PA_TOKEN }}
-          git-user-name: 'Telegramonic bot'
-          output-file: false
-          version-file: 'apps/mobile/package.json'
-          git-path: 'apps/mobile'
-          tag-prefix: 'mobile-v'
-          skip-on-empty: 'false'
-          skip-commit: 'true'
-          git-push: 'false'
-
   setup-matrix:
     name: Setup Build Matrix
     needs: check-branch
@@ -78,10 +46,10 @@ jobs:
         run: |
           MATRIX_ITEMS="[]"
           if [ "${{ inputs.build-android }}" = "true" ]; then
-            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "ubuntu-latest", "platform": "android", "artifact-path": "apps/mobile/src-tauri/gen/android/app/build/outputs/apk/**/*.apk", "artifact-name": "mobile-build-android", "release-assets": "apps/mobile/src-tauri/gen/android/app/build/outputs/apk/**/*.apk\napps/mobile/src-tauri/gen/android/app/build/outputs/bundle/**/*.aab", "rust-targets": "aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android"}]')
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "ubuntu-latest", "platform": "android", "artifact-path": "apps/mobile/src-tauri/gen/android/app/build/outputs/apk/**/*.apk", "artifact-name": "mobile-build-android-debug", "rust-targets": "aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android"}]')
           fi
           if [ "${{ inputs.build-ios }}" = "true" ]; then
-            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "macos-latest", "platform": "ios", "artifact-path": "apps/mobile/src-tauri/gen/apple/build/artifacts/*.zip", "artifact-name": "mobile-build-ios", "release-assets": "apps/mobile/src-tauri/gen/apple/build/artifacts/*.zip", "rust-targets": "aarch64-apple-ios,x86_64-apple-ios,aarch64-apple-ios-sim"}]')
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "macos-latest", "platform": "ios", "artifact-path": "apps/mobile/src-tauri/gen/apple/build/artifacts/*.zip", "artifact-name": "mobile-build-ios-debug", "rust-targets": "aarch64-apple-ios,x86_64-apple-ios,aarch64-apple-ios-sim"}]')
           fi
 
           HAS_TARGETS="false"
@@ -94,14 +62,12 @@ jobs:
 
   build-frontend:
     name: Build Frontend
-    needs: [check-branch, bump-version, setup-matrix]
-    if: ${{ needs.bump-version.outputs.skipped == 'false' && needs.setup-matrix.outputs.has-targets == 'true' }}
+    needs: [check-branch, setup-matrix]
+    if: ${{ needs.setup-matrix.outputs.has-targets == 'true' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.PA_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -125,9 +91,9 @@ jobs:
           retention-days: 1
 
   build-mobile:
-    name: Build Mobile App (${{ matrix.platform }})
-    needs: [check-branch, bump-version, setup-matrix, build-frontend]
-    if: ${{ needs.bump-version.outputs.skipped == 'false' && needs.setup-matrix.outputs.has-targets == 'true' }}
+    name: Build Mobile App (${{ matrix.platform }} Debug)
+    needs: [check-branch, setup-matrix, build-frontend]
+    if: ${{ needs.setup-matrix.outputs.has-targets == 'true' }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -136,8 +102,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.PA_TOKEN }}
 
       - name: Download Frontend Build
         uses: actions/download-artifact@v7
@@ -155,10 +119,6 @@ jobs:
 
       - name: Install Dependencies
         run: yarn install --immutable
-
-      - name: Update package.json version
-        run: |
-          node -e "const fs = require('fs'); const pkg = require('./apps/mobile/package.json'); pkg.version = '${{ needs.bump-version.outputs.version }}'; fs.writeFileSync('./apps/mobile/package.json', JSON.stringify(pkg, null, 2));"
 
       # Setup Java 17 for Android target
       - name: Setup Java 17
@@ -189,24 +149,24 @@ jobs:
         with:
           target: ${{ matrix.rust-targets }}
 
-      # Compile Android App Release target
-      - name: Build Android App
+      # Compile Android App Debug target
+      - name: Build Android App (Debug)
         if: ${{ matrix.platform == 'android' }}
-        run: yarn workspace telegramonic-mobile run tauri android build --ci
+        run: yarn workspace telegramonic-mobile run tauri android build --debug --ci
 
-      # Compile iOS App Release target
-      - name: Build iOS App
+      # Compile iOS App Debug target
+      - name: Build iOS App (Debug)
         if: ${{ matrix.platform == 'ios' }}
         run: |
-          yarn workspace telegramonic-mobile run tauri ios build --no-sign --ci
+          yarn workspace telegramonic-mobile run tauri ios build --debug --no-sign --ci
           APP_PATH=$(find apps/mobile/src-tauri/gen/apple/build -name "*.app" -type d | head -n 1)
           if [ -n "$APP_PATH" ]; then
             echo "Found app bundle at $APP_PATH"
             cd $(dirname "$APP_PATH")
-            zip -r telegramonic-ios-unsigned.zip $(basename "$APP_PATH")
+            zip -r telegramonic-ios-debug.zip $(basename "$APP_PATH")
             cd -
             mkdir -p apps/mobile/src-tauri/gen/apple/build/artifacts
-            cp "$(dirname "$APP_PATH")/telegramonic-ios-unsigned.zip" apps/mobile/src-tauri/gen/apple/build/artifacts/
+            cp "$(dirname "$APP_PATH")/telegramonic-ios-debug.zip" apps/mobile/src-tauri/gen/apple/build/artifacts/
           else
             echo "Error: Could not find compiled .app bundle!"
             exit 1
@@ -220,50 +180,5 @@ jobs:
             apps/mobile/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
             apps/mobile/src-tauri/gen/android/app/build/outputs/bundle/**/*.aab
             apps/mobile/src-tauri/gen/apple/build/artifacts/*.zip
-          retention-days: 1
+          retention-days: 7
           if-no-files-found: ignore
-
-  release-mobile:
-    name: Release Mobile App
-    needs: [bump-version, build-mobile]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v6
-        with:
-          token: ${{ secrets.PA_TOKEN }}
-          fetch-depth: 0
-
-      - name: Conventional Changelog Action
-        id: changelog
-        uses: TriPSs/conventional-changelog-action@latest
-        with:
-          github-token: ${{ secrets.PA_TOKEN }}
-          git-user-name: 'Telegramonic bot'
-          output-file: false
-          version-file: 'apps/mobile/package.json'
-          git-path: 'apps/mobile'
-          tag-prefix: 'mobile-v'
-          skip-on-empty: 'false'
-
-      - name: Download Build Artifacts
-        uses: actions/download-artifact@v7
-        with:
-          path: release-artifacts
-
-      - name: Publish Release to GitHub Release
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: ${{ steps.changelog.outputs.tag }}
-          name: ${{ steps.changelog.outputs.tag }}
-          body: ${{ steps.changelog.outputs.clean_changelog }}
-          files: |
-            release-artifacts/**/*.apk
-            release-artifacts/**/*.aab
-            release-artifacts/**/*.zip
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.PA_TOKEN }}

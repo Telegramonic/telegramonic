@@ -50,3 +50,7 @@ telegram.session
 *.credentials
 *.session
 
+# Android keystore & release configuration
+*.jks
+keystore.properties
+
