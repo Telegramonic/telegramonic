@@ -398,7 +398,16 @@ const Dashboard = () => {
     }
   };
   return (
-    <Box bg={{ base: '#f4f6f8', _dark: '#0b141d' }} minH="calc(100vh - 38px)" color="fg" display="flex" flexDirection="column" position="relative">
+    <Box
+      bg={{ base: '#f4f6f8', _dark: '#0b141d' }}
+      minH="calc(100vh - 38px)"
+      height={{ base: 'auto', md: 'calc(100vh - 38px)' }}
+      color="fg"
+      display="flex"
+      flexDirection={{ base: 'column', md: 'row' }}
+      position="relative"
+      overflow="hidden"
+    >
       {/* Hidden file input */}
       <input
         type="file"
@@ -408,28 +417,43 @@ const Dashboard = () => {
         data-testid="file-input"
       />
 
-      {/* 1. Header/TopNavBar */}
-      <TopNavBar
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        onUploadClick={triggerFileUpload}
-        onCreateFolderClick={handleCreateFolder}
-        currentFolderId={currentFolderId}
-      />
+      {/* 2. SideNavBar (Desktop View) */}
+      <Box display={{ base: 'none', md: 'flex' }} height="100%">
+        <SideNavBar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          setCurrentFolderId={setCurrentFolderId}
+          onLogout={handleLogout}
+        />
+      </Box>
 
-      <HStack flex={1} alignItems="stretch" gap={0} overflow="hidden">
-        {/* 2. SideNavBar (Desktop View) */}
-        <Box display={{ base: 'none', md: 'flex' }} height="100%">
-          <SideNavBar
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            setCurrentFolderId={setCurrentFolderId}
-            onLogout={handleLogout}
-          />
-        </Box>
+      {/* Main content column */}
+      <VStack
+        flex={1}
+        alignItems="stretch"
+        gap={0}
+        minW={0}
+        height="100%"
+        overflow="hidden"
+      >
+        {/* 1. Header/TopNavBar */}
+        <TopNavBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          onUploadClick={triggerFileUpload}
+          onCreateFolderClick={handleCreateFolder}
+          currentFolderId={currentFolderId}
+        />
 
         {/* 3. Main content area */}
-        <Box flex={1} p={{ base: 4, md: 8 }} pb={{ base: 24, md: 8 }} overflowY="auto" className="custom-scrollbar">
+        <Box
+          flex={1}
+          p={{ base: 4, md: 8 }}
+          pb={{ base: 24, md: 8 }}
+          overflowY="auto"
+          className="custom-scrollbar"
+          w="100%"
+        >
           <VStack gap={8} align="stretch" maxW="1100px" mx="auto">
             {/* Breadcrumbs Navigation */}
             <VStack align="stretch" gap={1.5}>
@@ -457,8 +481,6 @@ const Dashboard = () => {
               onCancelUpload={handleCancelUpload}
             />
 
-
-
             {/* Detailed Files Table */}
             <FilesTable
               activeTab={activeTab}
@@ -481,7 +503,7 @@ const Dashboard = () => {
             />
           </VStack>
         </Box>
-      </HStack>
+      </VStack>
 
       {/* Bottom navigation bar for smaller screens */}
       <BottomNavBar
@@ -700,10 +722,9 @@ const Dashboard = () => {
             transition={{ duration: 0.2 }}
             style={{
               position: 'fixed',
-              bottom: '32px',
-              right: '32px',
               zIndex: 2000,
             }}
+            className="toast-positioner"
           >
             <HStack
               bg={{ base: 'white', _dark: '#18202a' }}
@@ -716,14 +737,14 @@ const Dashboard = () => {
                     : 'primary'
               }
               borderRadius="xl"
-              px={5}
-              py={3.5}
+              px={{ base: 3, md: 5 }}
+              py={{ base: 2.5, md: 3.5 }}
               shadow="2xl"
-              gap={3}
+              gap={{ base: 2, md: 3 }}
             >
               <Box
-                w={2}
-                h={2}
+                w={{ base: 1.5, md: 2 }}
+                h={{ base: 1.5, md: 2 }}
                 borderRadius="full"
                 bg={
                   toastType === 'success'
@@ -733,7 +754,7 @@ const Dashboard = () => {
                       : 'primary'
                 }
               />
-              <Text fontSize="sm" fontWeight="bold" color="fg">
+              <Text fontSize={{ base: 'xs', md: 'sm' }} fontWeight="bold" color="fg">
                 {toastMessage}
               </Text>
             </HStack>
@@ -766,6 +787,23 @@ const Dashboard = () => {
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: var(--chakra-colors-border);
           border-radius: 10px;
+        }
+        /* Toast: bottom-right on desktop, bottom-center on mobile */
+        .toast-positioner {
+          bottom: 80px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: max-content;
+          max-width: calc(100vw - 32px);
+        }
+        @media (min-width: 768px) {
+          .toast-positioner {
+            bottom: 32px;
+            right: 32px;
+            left: auto;
+            transform: none;
+            max-width: none;
+          }
         }
       `}</style>
     </Box>
