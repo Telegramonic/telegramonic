@@ -68,7 +68,7 @@ graph TD
 - **Reliable Background Uploads**: Upload files with active progress bars that notify you when the file is safely stored on Telegram.
 - **Direct Native Downloads**: Download files directly to your computer using native system dialogs and direct-to-disk streaming for optimal download speeds.
 - **Automatic System Theme Sync**: An aesthetic interface that automatically adapts to your operating system's dark or light mode color preferences.
-- **Mac-Native Visual Polish**: Enjoy a borderless, integrated title bar design on macOS that blends with your native desktop environment.
+- **Mac-Native Visual Polish & Refactored Layout**: Enjoy a borderless, integrated title bar design on macOS that blends with your native desktop environment. The dashboard layout features a full-width top navigation bar and a side navigation bar spanning the full app height to maximize usable work area. Folder and file explorer cards feature bold text labels to enhance scan readability.
 
 ## Showcase
 

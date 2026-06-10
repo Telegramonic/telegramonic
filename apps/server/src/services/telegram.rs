@@ -320,6 +320,17 @@ impl TelegramService for RealTelegramService {
         res
     }
 
+    async fn update_credentials(&self, api_id: i32, api_hash: &str) -> Result<bool, String> {
+        tracing::info!("update_credentials request: api_id={}, api_hash=[masked]", api_id);
+        {
+            *self.api_id.lock().await = Some(api_id);
+            *self.api_hash.lock().await = Some(api_hash.to_string());
+            *self.client.lock().await = None;
+        }
+        Self::save_credentials_file(api_id, api_hash)?;
+        Ok(true)
+    }
+
     async fn get_me(&self) -> Result<TelegramUser, String> {
         tracing::info!("get_me request");
         let client = self.get_client().await?;

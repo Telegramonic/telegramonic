@@ -209,14 +209,35 @@ Make sure an Android Virtual Device (AVD) is running or a physical device with U
 yarn workspace telegramonic-mobile run tauri android dev
 ```
 
-#### Build APK (Debug or Release)
-To compile a debug APK for testing:
-```bash
-yarn workspace telegramonic-mobile run tauri android build --apk --debug
-```
+#### Build APK & AAB (Debug or Release)
+The application has custom build naming configured via Gradle:
+* **Debug APK**: Builds the development APK with the suffix `-debug` and cleartext local traffic allowed:
+  ```bash
+  yarn workspace telegramonic-mobile run android:build:debug
+  ```
+  Output path: `apps/mobile/src-tauri/gen/android/app/build/outputs/apk/universal/debug/Telegramonic-debug.apk`
 
-The compiled APK will be output to:
-`apps/mobile/src-tauri/gen/android/app/build/outputs/apk/universal/debug/app-universal-debug.apk`
+* **Release AAB & APK**: Builds the production-ready Android bundles using secure signing keys:
+  ```bash
+  yarn workspace telegramonic-mobile run android:build:release
+  ```
+  Output path (AAB): `apps/mobile/src-tauri/gen/android/app/build/outputs/bundle/universalRelease/Telegramonic.aab`
+  Output path (APK): `apps/mobile/src-tauri/gen/android/app/build/outputs/apk/universal/release/Telegramonic.apk`
+
+#### Secure Android Release Signing
+To generate a signed production build, Gradle looks for a `keystore.properties` file in `apps/mobile/src-tauri/gen/android/keystore.properties`.
+
+Create this file with the following keys:
+```properties
+keyAlias=yourKeyAlias
+keyPassword=yourKeyPassword
+storeFile=path/to/keystore.jks
+storePassword=yourStorePassword
+```
+*Note: Any keystores (`*.jks`) and `keystore.properties` files are ignored via git to prevent accidental credential leakage.*
+
+#### Cleartext HTTP Traffic
+To facilitate webview-to-localhost server communication (where the embedded Axum backend listens on `127.0.0.1:50065`), production release builds are configured with `usesCleartextTraffic` set to true specifically for local communication targets.
 
 ---
 

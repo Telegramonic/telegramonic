@@ -80,7 +80,8 @@ graph TD
 ```
 apps/server/
 ├── src/
-│   ├── main.rs              # Entry point: bootstraps tracing, config, service, and Axum server
+│   ├── main.rs              # Standalone binary entry point: bootstraps tracing, config, service, and Axum server
+│   ├── lib.rs               # Library entry point: encapsulates server logic for embedding in Tauri/Mobile clients
 │   ├── config.rs            # AppConfig — reads HOST/PORT from environment variables
 │   ├── handlers/            # Axum route handlers (HTTP layer)
 │   │   ├── mod.rs           # Router factory (create_router), CORS setup, auth middleware
@@ -133,7 +134,17 @@ apps/server/
 
 ## How It Works
 
-The single-binary server runs in **Real Mode**, connecting to Telegram's official Data Centers using MTProto via Grammers. Mocking is only used in unit tests via `MockTelegramService`.
+The server runs in **Real Mode**, connecting to Telegram's official Data Centers using MTProto via Grammers. Mocking is only used in unit tests via `MockTelegramService`.
+
+### Standalone Binary vs. Embedded Library
+
+The crate exposes two build targets:
+1. **Standalone Binary** (`[[bin]]` target in `Cargo.toml` compiled from `src/main.rs`): 
+   - Bootstraps tracing, CORS, configuration, and runs the Axum server directly on the host machine.
+   - Used during development (via `yarn server:start`) and when packaging the desktop client.
+2. **Embedded Library** (`[lib]` target in `Cargo.toml` compiled from `src/lib.rs`):
+   - Packages the server initialization logic and routes so it can be dynamically linked and called by other Rust packages.
+   - Imported directly by the mobile client (`apps/mobile/src-tauri`) to run the Axum server in a background thread on iOS and Android devices, exposing backend endpoints locally on the device (`127.0.0.1:50065`).
 
 **Request lifecycle:**
 
@@ -225,6 +236,7 @@ All endpoints return JSON. Large 64-bit integer IDs (`i64`) are serialized as **
 | `POST` | `/auth/sign-up`                                     |      No       | Alias for sign-in                     |
 | `POST` | `/auth/check-password`                              |      No       | Submit 2FA password                   |
 | `POST` | `/auth/log-out`                                     |    **Yes**    | Sign out and clear session            |
+| `POST` | `/auth/update-credentials`                         |    **Yes**    | Update Telegram API credentials       |
 | `POST` | `/auth/reset-authorization`                         |      No       | Force-clear client state              |
 | `GET`  | `/users/me`                                         |    **Yes**    | Get authenticated user profile        |
 | `GET`  | `/users/get-users`                                  |    **Yes**    | Get contacts (returns self)           |

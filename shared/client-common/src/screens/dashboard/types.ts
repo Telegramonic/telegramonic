@@ -19,6 +19,6 @@ export interface DashboardItem {
   folderId?: string | null;
 }
 
-export type ActiveTab = 'all' | 'pinned';
+export type ActiveTab = 'all' | 'pinned' | 'profile';
 
 export type ToastType = 'success' | 'info' | 'error';

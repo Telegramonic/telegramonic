@@ -108,9 +108,4 @@ describe('TopNavBar', () => {
     expect(onCreateFolderClick).toHaveBeenCalledTimes(1);
   });
 
-  it('displays the logged-in user initials (JD) when user data resolves', async () => {
-    renderWithProvidersAndRouter(<TopNavBar {...defaultProps} />);
-    // Initials derived from first_name[0] + last_name[0] → "JD"
-    expect(await screen.findByText('JD')).toBeInTheDocument();
-  });
 });

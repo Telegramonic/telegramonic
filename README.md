@@ -151,6 +151,15 @@ yarn server:start
 
 # Run web React application (browser-only mode)
 yarn web:start
+
+# Run mobile React application (web preview)
+yarn mobile:dev
+
+# Run mobile app in Android emulator
+yarn mobile:android
+
+# Run mobile app in iOS simulator
+yarn mobile:ios
 ```
 
 > **Note:** The desktop app connects to the Rust server at `http://localhost:50065`. Ensure the server is running when developing/running the desktop client.
@@ -170,10 +179,18 @@ yarn desktop:dist:win          # Generate Windows installer packages (NSIS & Zip
 yarn desktop:dist:linux        # Generate Linux packages (deb & AppImage)
 yarn desktop:dist:all          # Package for all desktop platforms concurrently
 
+# Build and package mobile application
+yarn mobile:android:build:debug   # Build mobile app for Android (debug APK)
+yarn mobile:android:build:release # Build mobile app for Android (signed release AAB)
+yarn mobile:ios:build             # Build mobile app for iOS (release build)
+yarn mobile:dist:android          # Build Android package output (--apk)
+yarn mobile:dist:ios              # Build iOS package output
+yarn mobile:dist:all              # Build both Android and iOS concurrently
+
 # Build React UI for both web and desktop components together
 yarn build:all
 
-# Package React UI and desktop apps for all targets together
+# Package React UI, desktop, and mobile apps for all targets together
 yarn dist:all
 ```
 
@@ -182,6 +199,9 @@ yarn dist:all
 ```bash
 # Run Jest unit tests for the desktop app
 yarn desktop:test
+
+# Run Jest unit tests for the mobile app
+yarn mobile:test
 
 # Run Jest tests for web
 yarn web:test
@@ -235,7 +255,7 @@ yarn workspace telegramonic-web run prettier:write
 The desktop login workflow is structured as a 4-step wizard:
 
 1. **Phone Number**: Enter your mobile number (includes country code selector).
-2. **API Credentials**: Submit your Telegram `api_id` and `api_hash` (from [my.telegram.org](https://my.telegram.org)).
+2. **API Credentials**: Submit your Telegram `api_id` and `api_hash` (obtained via the [Telegram Credentials Guide](docs/product/telegram-credentials.md)).
 3. **OTP Verification**: Enter the 5-digit code received via Telegram.
 4. **Success**: Displays a brief completion animation before loading the dashboard.
 
@@ -257,7 +277,13 @@ The desktop client bypasses Chromium's standard download manager to avoid leavin
 
 ## Infrastructure
 
-- **Deployment**: Automated build, test, lint, and FTP deployment via GitHub Actions.
+- **CI/CD Pipelines**: Automated workflows are divided into:
+  - `ci-desktop.yml`: Electron desktop application lints, tests, and builds.
+  - `build-mobile.yml`: Dedicated checks for mobile changes (debug builds).
+  - `build-android-release.yml`: Runs on releases to sign and package production Android outputs (`Telegramonic.apk` and `Telegramonic.aab`) and publish them using `secrets.PA_TOKEN`.
+- **Release Tracking & Documentation**: 
+  - Version history is divided into [Desktop Version History](docs/product/version-history-desktop.md) and [Mobile Version History](docs/product/version-history-mobile.md).
+  - Credentials guide is documented in [Telegram Credentials Guide](docs/product/telegram-credentials.md).
 - **Localization**: Dynamic translation handling via `i18next` localized schemas.
 - **Connectivity**: Automated health polls to `/health` every 5 seconds to show active connection states.
 - **State Caching**: Query caching via TanStack Query prevents duplicate server calls.
