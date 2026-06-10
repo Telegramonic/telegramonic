@@ -20,6 +20,9 @@ on:
       - 'yarn.lock'
       - '.github/workflows/ci-web.yml'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   web-ci:
     name: Lint, Build and Test Web

@@ -24,6 +24,9 @@ on:
       - 'yarn.lock'
       - '.github/workflows/ci-desktop.yml'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   desktop-ci:
     name: Lint, Build and Test Desktop
