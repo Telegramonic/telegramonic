@@ -59,7 +59,7 @@ exports[`DocsPage should render the documentation layout with sidebar and TOC 1`
                 <p
                   class="css-nh0ii3"
                 >
-                  Version History
+                  Setup Guide
                 </p>
               </div>
             </div>
@@ -118,6 +118,35 @@ exports[`DocsPage should render the documentation layout with sidebar and TOC 1`
                   class="css-nh0ii3"
                 >
                   API Gateway Reference
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <p
+              class="css-1503jht"
+            >
+              Version History
+            </p>
+            <div
+              class="chakra-stack css-1gzt2am"
+            >
+              <div
+                class="css-196g1ez"
+              >
+                <p
+                  class="css-nh0ii3"
+                >
+                  Desktop
+                </p>
+              </div>
+              <div
+                class="css-196g1ez"
+              >
+                <p
+                  class="css-nh0ii3"
+                >
+                  Mobile
                 </p>
               </div>
             </div>

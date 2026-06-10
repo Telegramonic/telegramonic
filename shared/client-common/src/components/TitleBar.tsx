@@ -152,6 +152,7 @@ const TitleBar = () => {
           _hover={{ bg: 'bg.hover', borderColor: 'primary/30' }}
           transition="all 0.2s"
           title="Click to recheck Internet Connection"
+          flexShrink={0}
         >
           <Box
             w={2}
@@ -176,7 +177,7 @@ const TitleBar = () => {
           {checkingInternet ? (
             <Spinner size="xs" color="primary" />
           ) : (
-            <Text fontSize="10px" fontWeight="medium" color="fg.muted">
+            <Text fontSize="10px" fontWeight="medium" color="fg.muted" whiteSpace="nowrap">
               {isOnline ? 'Internet: Online' : 'Internet: Offline'}
             </Text>
           )}
@@ -196,6 +197,7 @@ const TitleBar = () => {
           _hover={{ bg: 'bg.hover', borderColor: 'primary/30' }}
           transition="all 0.2s"
           title="Click to recheck Telegram Connection Latency"
+          flexShrink={0}
         >
           <Box
             w={2}
@@ -222,7 +224,7 @@ const TitleBar = () => {
           {status === 'checking' ? (
             <Spinner size="xs" color="primary" />
           ) : (
-            <Text fontSize="10px" fontWeight="medium" color="fg.muted">
+            <Text fontSize="10px" fontWeight="medium" color="fg.muted" whiteSpace="nowrap">
               {status === 'connected' && latency !== null
                 ? `TG Connected: ${latency}ms`
                 : status === 'error'

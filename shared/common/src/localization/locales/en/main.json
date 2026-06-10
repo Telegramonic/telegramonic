@@ -80,9 +80,12 @@
     "product": "Product",
     "introduction": "Introduction",
     "quickstart": "Quick Start",
+    "setup-guide": "Setup Guide",
     "mtproto": "MTProto Protocol",
     "direct-storage": "Direct Storage",
     "version-history": "Version History",
+    "version-history-desktop": "Desktop",
+    "version-history-mobile": "Mobile",
     "system-design": "System Design",
     "api-reference": "API Reference",
     "Login": "Login"

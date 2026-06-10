@@ -24,9 +24,9 @@ export const DOCS_TOPICS: DocTopic[] = [
         filePath: 'data/product/quickstart',
       },
       {
-        id: 'version-history',
-        title: 'Version History',
-        filePath: 'data/product/version-history',
+        id: 'setup-guide',
+        title: 'Setup Guide',
+        filePath: 'data/product/telegram-credentials',
       },
     ],
   },
@@ -57,6 +57,21 @@ export const DOCS_TOPICS: DocTopic[] = [
         id: 'api-reference',
         title: 'API Gateway Reference',
         filePath: 'data/product/api-reference',
+      },
+    ],
+  },
+  {
+    title: 'Version History',
+    items: [
+      {
+        id: 'version-history-desktop',
+        title: 'Desktop',
+        filePath: 'data/product/version-history-desktop',
+      },
+      {
+        id: 'version-history-mobile',
+        title: 'Mobile',
+        filePath: 'data/product/version-history-mobile',
       },
     ],
   },

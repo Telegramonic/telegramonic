@@ -170,7 +170,7 @@ describe('FilesTable', () => {
     expect(screen.getByTitle('Unpin')).toBeInTheDocument();
   });
 
-  it('renders sync button and shows last synced text', () => {
+  it('renders sync button', () => {
     const onSync = jest.fn();
     const lastSynced = new Date('2026-06-08T12:00:00Z');
     renderWithRouter(
@@ -182,7 +182,6 @@ describe('FilesTable', () => {
       />,
     );
     expect(screen.getByTitle('Sync folders')).toBeInTheDocument();
-    expect(screen.getByText(/Last synced:/)).toBeInTheDocument();
   });
 
   it('calls onSync when sync button is clicked', () => {

@@ -426,63 +426,63 @@ exports[`RouterProvider should render router provider correctly 2`] = `
           </svg>
         </div>
         <h2
-          class="chakra-heading css-1poqom1"
+          class="chakra-heading css-d2ykzl"
         >
           Connect Telegram Drive
         </h2>
         <p
-          class="css-1gwx093"
+          class="css-r1o49j"
         >
           Access your unlimited cloud storage space via MTProto 2.0 secure API connection.
         </p>
       </div>
       <div
-        class="css-ey0ahs"
+        class="css-mmqlg6"
       >
         <div
-          class="chakra-stack css-a10vpc"
+          class="chakra-stack css-12z8kea"
         >
           <div
-            class="chakra-stack css-1x0y7ph"
+            class="chakra-stack css-yfucoh"
           >
             <div
-              class="css-ay2ova"
+              class="css-1ekqdul"
             >
               1
             </div>
             <div
-              class="css-kow2l5"
+              class="css-g7ub9m"
             />
           </div>
           <div
-            class="chakra-stack css-1x0y7ph"
+            class="chakra-stack css-yfucoh"
           >
             <div
-              class="css-l1xccw"
+              class="css-1rntibf"
             >
               2
             </div>
             <div
-              class="css-kow2l5"
+              class="css-g7ub9m"
             />
           </div>
           <div
-            class="chakra-stack css-1x0y7ph"
+            class="chakra-stack css-yfucoh"
           >
             <div
-              class="css-l1xccw"
+              class="css-1rntibf"
             >
               3
             </div>
             <div
-              class="css-kow2l5"
+              class="css-g7ub9m"
             />
           </div>
           <div
-            class="chakra-stack css-1x0y7ph"
+            class="chakra-stack css-yfucoh"
           >
             <div
-              class="css-l1xccw"
+              class="css-1rntibf"
             >
               4
             </div>
@@ -499,12 +499,12 @@ exports[`RouterProvider should render router provider correctly 2`] = `
                 class="chakra-stack css-1jqo7jp"
               >
                 <h2
-                  class="chakra-heading css-1x2y5pk"
+                  class="chakra-heading css-wqtyn"
                 >
                   Phone Number
                 </h2>
                 <p
-                  class="css-dhdf1a"
+                  class="css-9k9ebl"
                 >
                   Enter the phone number associated with your Telegram account.
                 </p>
@@ -521,7 +521,7 @@ exports[`RouterProvider should render router provider correctly 2`] = `
                   class="chakra-stack css-1x0y7ph"
                 >
                   <div
-                    class="css-6sc8lq"
+                    class="css-2dp4d7"
                   >
                     <select
                       aria-label="Select Country Code"

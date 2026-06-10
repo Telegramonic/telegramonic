@@ -1,4 +1,4 @@
-# Version History
+# Desktop Version History
 
 This document tracks release updates, major features, optimizations, and bug fixes for the Telegramonic Desktop application and Rust Backend server.
 

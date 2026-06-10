@@ -63,10 +63,18 @@ const LoginPage = () => {
           <Box w={12} h={12} mb={2}>
             <Logo size="100%" />
           </Box>
-          <Heading size="lg" fontWeight="extrabold" color="fg">
+          <Heading
+            size={{ base: 'md', sm: 'lg' }}
+            fontWeight="extrabold"
+            color="fg"
+          >
             {t('LoginPage.title')}
           </Heading>
-          <Text fontSize="xs" color="fg.muted" maxW="360px">
+          <Text
+            fontSize={{ base: '2xs', sm: 'xs' }}
+            color="fg.muted"
+            maxW="360px"
+          >
             {t('LoginPage.subtitle')}
           </Text>
         </VStack>
@@ -78,7 +86,7 @@ const LoginPage = () => {
           borderRadius="2xl"
           borderWidth="1px"
           borderColor="border"
-          p={{ base: 6, md: 8 }}
+          p={{ base: 4, sm: 6, md: 8 }}
           shadow="2xl"
           position="relative"
           overflow="hidden"
@@ -150,12 +158,12 @@ const LoginPage = () => {
 
           {/* Step Progress Stepper */}
           {step > 0 && (
-            <HStack gap={4} justify="center" mb={8}>
+            <HStack gap={{ base: 1.5, sm: 3, md: 4 }} justify="center" mb={8}>
               {[1, 2, 3, 4].map((s) => (
-                <HStack key={s} gap={2} alignItems="center">
+                <HStack key={s} gap={{ base: 1, md: 2 }} alignItems="center">
                   <Center
-                    w={7}
-                    h={7}
+                    w={{ base: 6, md: 7 }}
+                    h={{ base: 6, md: 7 }}
                     borderRadius="full"
                     bg={
                       step === s
@@ -165,7 +173,7 @@ const LoginPage = () => {
                           : 'bg.subtle'
                     }
                     color={step >= s ? 'white' : 'fg.muted'}
-                    fontSize="xs"
+                    fontSize={{ base: '2xs', md: 'xs' }}
                     fontWeight="bold"
                     borderWidth="1px"
                     borderColor={
@@ -181,7 +189,7 @@ const LoginPage = () => {
                   </Center>
                   {s < 4 && (
                     <Box
-                      w={10}
+                      w={{ base: 3, sm: 6, md: 10 }}
                       h="2px"
                       bg={step > s ? 'success.400' : 'border'}
                       transition="all 0.3s"
@@ -204,10 +212,17 @@ const LoginPage = () => {
               >
                 <VStack gap={5} align="stretch">
                   <VStack align="start" gap={2}>
-                    <Heading size="xs" fontWeight="bold" color="fg">
+                    <Heading
+                      size={{ base: '2xs', sm: 'xs' }}
+                      fontWeight="bold"
+                      color="fg"
+                    >
                       {t('LoginPage.savedAccounts.title')}
                     </Heading>
-                    <Text fontSize="11px" color="fg.muted">
+                    <Text
+                      fontSize={{ base: '10px', sm: '11px' }}
+                      color="fg.muted"
+                    >
                       {t('LoginPage.savedAccounts.description')}
                     </Text>
                   </VStack>
@@ -335,10 +350,17 @@ const LoginPage = () => {
                 <form onSubmit={handlePhoneSubmit}>
                   <VStack gap={5} align="stretch">
                     <VStack align="start" gap={1}>
-                      <Heading size="xs" fontWeight="bold" color="fg">
+                      <Heading
+                        size={{ base: '2xs', sm: 'xs' }}
+                        fontWeight="bold"
+                        color="fg"
+                      >
                         {t('LoginPage.phone.title')}
                       </Heading>
-                      <Text fontSize="11px" color="fg.muted">
+                      <Text
+                        fontSize={{ base: '10px', sm: '11px' }}
+                        color="fg.muted"
+                      >
                         {t('LoginPage.phone.description')}
                       </Text>
                     </VStack>
@@ -360,7 +382,7 @@ const LoginPage = () => {
                               display="inline-flex"
                               alignItems="center"
                               h="48px"
-                              px={4}
+                              px={{ base: 2, sm: 4 }}
                               bg="bg.panel"
                               borderRadius="xl"
                               border="1px solid"
@@ -370,7 +392,7 @@ const LoginPage = () => {
                                 ring: '1px',
                                 ringColor: 'primary',
                               }}
-                              w="130px"
+                              w={{ base: '100px', sm: '130px' }}
                               flexShrink={0}
                             >
                               <select
@@ -491,12 +513,33 @@ const LoginPage = () => {
                 <form onSubmit={handleCredentialsSubmit}>
                   <VStack gap={5} align="stretch">
                     <VStack align="start" gap={1}>
-                      <Heading size="xs" fontWeight="bold" color="fg">
+                      <Heading
+                        size={{ base: '2xs', sm: 'xs' }}
+                        fontWeight="bold"
+                        color="fg"
+                      >
                         {t('LoginPage.api.title')}
                       </Heading>
-                      <Text fontSize="11px" color="fg.muted">
+                      <Text
+                        fontSize={{ base: '10px', sm: '11px' }}
+                        color="fg.muted"
+                      >
                         {t('LoginPage.api.description')}
                       </Text>
+                      <Box
+                        as="a"
+                        href="https://telegramonic.com/docs/introduction"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        fontSize={{ base: '10px', sm: '11px' }}
+                        color="primary"
+                        fontWeight="semibold"
+                        textDecoration="underline"
+                        _hover={{ opacity: 0.9 }}
+                        display="inline-block"
+                      >
+                        How to get API ID and Hash?
+                      </Box>
                     </VStack>
 
                     <form.Field
@@ -607,10 +650,17 @@ const LoginPage = () => {
                 <form onSubmit={handleCodeSubmit}>
                   <VStack gap={5} align="stretch">
                     <VStack align="start" gap={1}>
-                      <Heading size="xs" fontWeight="bold" color="fg">
+                      <Heading
+                        size={{ base: '2xs', sm: 'xs' }}
+                        fontWeight="bold"
+                        color="fg"
+                      >
                         {t('LoginPage.code.title')}
                       </Heading>
-                      <Text fontSize="11px" color="fg.muted">
+                      <Text
+                        fontSize={{ base: '10px', sm: '11px' }}
+                        color="fg.muted"
+                      >
                         {t('LoginPage.code.description')}
                       </Text>
                     </VStack>
@@ -703,10 +753,14 @@ const LoginPage = () => {
                       ✓
                     </Center>
                   </motion.div>
-                  <Heading size="md" color="fg" fontWeight="bold">
+                  <Heading
+                    size={{ base: 'sm', md: 'md' }}
+                    color="fg"
+                    fontWeight="bold"
+                  >
                     {t('LoginPage.successConfigured')}
                   </Heading>
-                  <Text fontSize="sm" color="fg.muted">
+                  <Text fontSize={{ base: 'xs', md: 'sm' }} color="fg.muted">
                     {t('LoginPage.redirecting')}
                   </Text>
                 </VStack>
@@ -741,12 +795,7 @@ const LoginPage = () => {
               shadow="2xl"
               gap={3}
             >
-              <Box
-                w={2}
-                h={2}
-                borderRadius="full"
-                bg="error.400"
-              />
+              <Box w={2} h={2} borderRadius="full" bg="error.400" />
               <Text fontSize="sm" fontWeight="bold" color="fg">
                 {authError}
               </Text>

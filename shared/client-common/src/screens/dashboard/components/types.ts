@@ -11,6 +11,7 @@ export interface TopNavBarProps {
   onUploadClick: () => void;
   onCreateFolderClick: () => void;
   currentFolderId: string | null;
+  onMenuClick?: () => void;
 }
 
 export interface SideNavBarProps {
