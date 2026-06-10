@@ -60,8 +60,6 @@ describe('ProfileTab', () => {
     expect(screen.getByText('Account Profile')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getAllByText('@johndoe').length).toBe(2);
-    expect(screen.getByText('45.2 GB Used')).toBeInTheDocument();
-    expect(screen.getByText('100 GB Limit')).toBeInTheDocument();
     expect(screen.getByText('+919876543210')).toBeInTheDocument();
     expect(screen.getByText('12345')).toBeInTheDocument();
   });

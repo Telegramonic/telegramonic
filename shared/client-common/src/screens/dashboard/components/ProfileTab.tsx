@@ -1,10 +1,7 @@
 import React, { useMemo } from 'react';
 import { Box, VStack, HStack, Stack, Text, Button, Center, Input } from '@chakra-ui/react';
-import { useCurrentUser, useStats, apiClient } from '@services';
+import { useCurrentUser, apiClient } from '@services';
 import { appStore } from '@appStore';
-import Icon from '@assets/Icon';
-import { IconType } from '@assets/types';
-import { formatSize } from './const';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface ProfileTabProps {
@@ -13,7 +10,6 @@ interface ProfileTabProps {
 
 export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
   const { data: currentUser } = useCurrentUser();
-  const { data: stats } = useStats();
 
   const currentAccount = appStore((state) => state.currentAccount);
   const saveAccount = appStore((state) => state.saveAccount);
@@ -52,10 +48,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
     return `${firstInitial}${lastInitial}`.toUpperCase() || 'U';
   }, [currentUser]);
 
-  const storagePercentage = useMemo(() => {
-    if (!stats || stats.total_space === 0) return 0;
-    return (stats.used_space / stats.total_space) * 100;
-  }, [stats]);
+
 
   const handleSaveCredentials = () => {
     if (!apiId.trim() || !apiHash.trim()) {
@@ -180,104 +173,42 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
         </Text>
       </VStack>
 
-      <Stack gap={6} align="stretch" direction={{ base: 'column', md: 'row' }}>
-        {/* User Card */}
-        <VStack
-          flex={1}
-          bg={{ base: 'white', _dark: '#131c26' }}
-          borderWidth="1px"
-          borderColor="border"
-          borderRadius="2xl"
-          p={{ base: 4, sm: 6 }}
-          align="center"
-          justify="center"
-          gap={4}
-          shadow="md"
+      {/* User Card */}
+      <VStack
+        bg={{ base: 'white', _dark: '#131c26' }}
+        borderWidth="1px"
+        borderColor="border"
+        borderRadius="2xl"
+        p={{ base: 6, sm: 8 }}
+        align="center"
+        justify="center"
+        gap={4}
+        shadow="md"
+      >
+        <Center
+          w={24}
+          h={24}
+          borderRadius="full"
+          bg="primary/10"
+          border="2px solid"
+          borderColor="primary"
+          color="primary"
+          fontSize="4xl"
+          fontWeight="bold"
         >
-          <Center
-            w={20}
-            h={20}
-            borderRadius="full"
-            bg="primary/10"
-            border="2px solid"
-            borderColor="primary"
-            color="primary"
-            fontSize="3xl"
-            fontWeight="bold"
-          >
-            {initials}
-          </Center>
-          <VStack gap={0.5} align="center">
-            <Text fontSize="lg" fontWeight="extrabold" color="fg">
-              {fullName}
+          {initials}
+        </Center>
+        <VStack gap={0.5} align="center">
+          <Text fontSize="xl" fontWeight="extrabold" color="fg">
+            {fullName}
+          </Text>
+          {currentUser?.username && (
+            <Text fontSize="sm" color="primary" fontWeight="semibold">
+              @{currentUser.username}
             </Text>
-            {currentUser?.username && (
-              <Text fontSize="sm" color="primary" fontWeight="semibold">
-                @{currentUser.username}
-              </Text>
-            )}
-          </VStack>
+          )}
         </VStack>
-
-        {/* Storage Stats Card */}
-        <VStack
-          flex={1.5}
-          bg={{ base: 'white', _dark: '#131c26' }}
-          borderWidth="1px"
-          borderColor="border"
-          borderRadius="2xl"
-          p={{ base: 4, sm: 6 }}
-          align="stretch"
-          gap={5}
-          shadow="md"
-        >
-          <HStack justify="space-between">
-            <Text fontWeight="extrabold" fontSize="md" color="fg">
-              Cloud Storage Usage
-            </Text>
-            <HStack color="primary" gap={1.5}>
-              <Icon type={IconType.CLOUD} size={18} />
-              <Text fontSize="xs" fontWeight="bold">Active</Text>
-            </HStack>
-          </HStack>
-
-          <VStack align="stretch" gap={2}>
-            {/* Progress Bar wrapper */}
-            <Box w="100%" h="10px" bg={{ base: '#e2e8f0', _dark: '#1a232f' }} borderRadius="full" overflow="hidden">
-              <Box
-                w={`${Math.max(1, Math.min(100, storagePercentage))}%`}
-                h="100%"
-                bg="primary"
-                borderRadius="full"
-                transition="width 0.4s ease-out"
-              />
-            </Box>
-            <HStack justify="space-between">
-              <Text fontSize="xs" fontWeight="bold" color="fg.muted">
-                {stats ? formatSize(stats.used_space) : '0 B'} Used
-              </Text>
-              <Text fontSize="xs" fontWeight="bold" color="fg.muted">
-                {stats ? formatSize(stats.total_space) : '10 TB'} Limit
-              </Text>
-            </HStack>
-          </VStack>
-
-          <HStack justify="space-between" pt={2} borderTop="1px solid" borderColor="border/30">
-            <VStack align="start" gap={0}>
-              <Text fontSize="xs" color="fg.muted" fontWeight="medium">Folders</Text>
-              <Text fontSize="md" fontWeight="extrabold" color="fg">{stats?.folder_count ?? 0}</Text>
-            </VStack>
-            <VStack align="start" gap={0}>
-              <Text fontSize="xs" color="fg.muted" fontWeight="medium">Files</Text>
-              <Text fontSize="md" fontWeight="extrabold" color="fg">{stats?.file_count ?? 0}</Text>
-            </VStack>
-            <VStack align="start" gap={0}>
-              <Text fontSize="xs" color="fg.muted" fontWeight="medium">Total Limit</Text>
-              <Text fontSize="md" fontWeight="extrabold" color="fg">10 TB</Text>
-            </VStack>
-          </HStack>
-        </VStack>
-      </Stack>
+      </VStack>
 
       {/* Account Info Details */}
       <VStack
