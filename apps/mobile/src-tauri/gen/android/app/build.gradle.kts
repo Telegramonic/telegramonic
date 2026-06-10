@@ -29,7 +29,7 @@ android {
     compileSdk = 36
     namespace = "com.telegramonic.mobile"
     defaultConfig {
-        manifestPlaceholders["usesCleartextTraffic"] = "false"
+        manifestPlaceholders["usesCleartextTraffic"] = "true"
         applicationId = "com.telegramonic.mobile"
         minSdk = 24
         targetSdk = 36
