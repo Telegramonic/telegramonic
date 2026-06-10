@@ -164,3 +164,48 @@ jobs:
             apps/mobile/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
             apps/mobile/src-tauri/gen/android/app/build/outputs/bundle/**/*.aab
           retention-days: 7
+
+  release-android:
+    name: Release Android App
+    needs: [bump-version, build-android]
+    if: ${{ inputs.bump-version == true && needs.bump-version.outputs.skipped == 'false' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.PA_TOKEN || secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@latest
+        with:
+          github-token: ${{ secrets.PA_TOKEN || secrets.GITHUB_TOKEN }}
+          git-user-name: 'Telegramonic bot'
+          output-file: false
+          version-file: 'apps/mobile/package.json'
+          git-path: 'apps/mobile'
+          tag-prefix: 'mobile-v'
+          skip-on-empty: 'false'
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v7
+        with:
+          path: release-artifacts
+
+      - name: Publish Release to GitHub Release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
+          files: |
+            release-artifacts/**/*.apk
+            release-artifacts/**/*.aab
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.PA_TOKEN || secrets.GITHUB_TOKEN }}
