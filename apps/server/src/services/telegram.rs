@@ -21,6 +21,9 @@ pub struct RealTelegramService {
     files: Arc<Mutex<Vec<FileMetadata>>>,
     uploaded_chunks: Arc<Mutex<HashMap<i64, Vec<(i32, Vec<u8>)>>>>,
     upload_progress: Arc<Mutex<HashMap<i64, i32>>>,
+    temp_client: Arc<Mutex<Option<Client>>>,
+    temp_api_id: Arc<Mutex<Option<i32>>>,
+    temp_api_hash: Arc<Mutex<Option<String>>>,
 }
 
 impl std::fmt::Debug for RealTelegramService {
@@ -87,6 +90,9 @@ impl RealTelegramService {
             files: Arc::new(Mutex::new(Vec::new())),
             uploaded_chunks: Arc::new(Mutex::new(HashMap::new())),
             upload_progress: Arc::new(Mutex::new(HashMap::new())),
+            temp_client: Arc::new(Mutex::new(None)),
+            temp_api_id: Arc::new(Mutex::new(None)),
+            temp_api_hash: Arc::new(Mutex::new(None)),
         }
     }
 
@@ -125,6 +131,32 @@ impl RealTelegramService {
             Session::load_file_or_create(&self.session_file).map_err(|e| e.to_string())?;
         let config = Config {
             session,
+            api_id,
+            api_hash,
+            params: InitParams {
+                catch_up: true,
+                ..Default::default()
+            },
+        };
+
+        let client = Client::connect(config).await.map_err(|e| e.to_string())?;
+        *client_opt = Some(client.clone());
+        Ok(client)
+    }
+
+    async fn get_temp_client(&self) -> Result<Client, String> {
+        let mut client_opt = self.temp_client.lock().await;
+        if let Some(ref client) = *client_opt {
+            return Ok(client.clone());
+        }
+
+        let (api_id, api_hash) = match (*self.temp_api_id.lock().await, &*self.temp_api_hash.lock().await) {
+            (Some(id), Some(hash)) => (id, hash.clone()),
+            _ => return Err("Temporary API credentials not set.".to_string()),
+        };
+
+        let config = Config {
+            session: Session::new(),
             api_id,
             api_hash,
             params: InitParams {
@@ -178,15 +210,14 @@ impl TelegramService for RealTelegramService {
         api_hash: &str,
     ) -> Result<AuthResult, String> {
         tracing::info!("send_code request: phone={}, api_id={}, api_hash=[masked]", phone, api_id);
-        // Reset client and credentials since new ones are being provided
+        // Reset temp client and credentials since new verification flow is starting
         {
-            *self.client.lock().await = None;
-            *self.api_id.lock().await = Some(api_id);
-            *self.api_hash.lock().await = Some(api_hash.to_string());
-            let _ = std::fs::remove_file(&self.session_file);
+            *self.temp_client.lock().await = None;
+            *self.temp_api_id.lock().await = Some(api_id);
+            *self.temp_api_hash.lock().await = Some(api_hash.to_string());
         }
 
-        let client = self.get_client().await?;
+        let client = self.get_temp_client().await?;
 
         let token = client
             .request_login_code(phone)
@@ -212,7 +243,7 @@ impl TelegramService for RealTelegramService {
         code: &str,
     ) -> Result<AuthResult, String> {
         tracing::info!("sign_in request: phone={}, phone_code_hash={}, code=[masked]", phone, phone_code_hash);
-        let client = self.get_client().await?;
+        let client = self.get_temp_client().await?;
         let token_lock = self.login_token.lock().await;
         let token = token_lock
             .as_ref()
@@ -220,15 +251,33 @@ impl TelegramService for RealTelegramService {
 
         let res = match client.sign_in(token, code).await {
             Ok(_user) => {
-                // Save credentials to local configuration file
-                let api_id = *self.api_id.lock().await;
-                let api_hash = self.api_hash.lock().await.clone();
+                // Promotion to active client
+                let api_id = *self.temp_api_id.lock().await;
+                let api_hash = self.temp_api_hash.lock().await.clone();
                 if let (Some(id), Some(hash)) = (api_id, api_hash) {
-                    let _ = Self::save_credentials_file(id, &hash);
+                    Self::save_credentials_file(id, &hash)?;
+                    *self.api_id.lock().await = Some(id);
+                    *self.api_hash.lock().await = Some(hash);
                 }
 
-                // Save session to local configuration file
                 let _ = client.session().save_to_file(&self.session_file);
+
+                // Set the active client to this newly authorized client
+                let old_client_opt = {
+                    let mut lock = self.client.lock().await;
+                    let old = lock.clone();
+                    *lock = Some(client.clone());
+                    old
+                };
+
+                if let Some(old_client) = old_client_opt {
+                    let _ = old_client.sign_out().await;
+                }
+
+                // Clear temp states
+                *self.temp_client.lock().await = None;
+                *self.temp_api_id.lock().await = None;
+                *self.temp_api_hash.lock().await = None;
 
                 Ok(AuthResult {
                     success: true,
@@ -257,7 +306,7 @@ impl TelegramService for RealTelegramService {
 
     async fn check_password(&self, password: &str) -> Result<AuthResult, String> {
         tracing::info!("check_password request: password=[masked]");
-        let client = self.get_client().await?;
+        let client = self.get_temp_client().await?;
         let token = {
             let mut pwd_lock = self.password_token.lock().await;
             pwd_lock
@@ -270,15 +319,33 @@ impl TelegramService for RealTelegramService {
             .await
             .map_err(|e| e.to_string())?;
 
-        // Save credentials to local configuration file
-        let api_id = *self.api_id.lock().await;
-        let api_hash = self.api_hash.lock().await.clone();
+        // Promotion to active client
+        let api_id = *self.temp_api_id.lock().await;
+        let api_hash = self.temp_api_hash.lock().await.clone();
         if let (Some(id), Some(hash)) = (api_id, api_hash) {
-            let _ = Self::save_credentials_file(id, &hash);
+            Self::save_credentials_file(id, &hash)?;
+            *self.api_id.lock().await = Some(id);
+            *self.api_hash.lock().await = Some(hash);
         }
 
-        // Save session to local configuration file
         let _ = client.session().save_to_file(&self.session_file);
+
+        // Set the active client to this newly authorized client
+        let old_client_opt = {
+            let mut lock = self.client.lock().await;
+            let old = lock.clone();
+            *lock = Some(client.clone());
+            old
+        };
+
+        if let Some(old_client) = old_client_opt {
+            let _ = old_client.sign_out().await;
+        }
+
+        // Clear temp states
+        *self.temp_client.lock().await = None;
+        *self.temp_api_id.lock().await = None;
+        *self.temp_api_hash.lock().await = None;
 
         let res = Ok(AuthResult {
             success: true,
