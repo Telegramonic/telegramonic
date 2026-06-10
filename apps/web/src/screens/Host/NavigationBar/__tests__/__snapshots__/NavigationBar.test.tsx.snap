@@ -195,7 +195,7 @@ exports[`NavigationBar should render standard navigation bar correctly 1`] = `
           class="css-k008qs"
         >
           <h2
-            class="chakra-heading css-bl9uvp"
+            class="chakra-heading css-1skm9mz"
           >
             Telegramonic
           </h2>
@@ -210,7 +210,7 @@ exports[`NavigationBar should render standard navigation bar correctly 1`] = `
       >
         <a
           aria-label="/docs-nav-link"
-          class="chakra-button css-mlkoou"
+          class="chakra-button css-1ubh9xi"
           data-discover="true"
           href="/docs"
           style="display: flex; align-items: center;"
@@ -224,7 +224,7 @@ exports[`NavigationBar should render standard navigation bar correctly 1`] = `
         </a>
         <a
           aria-label="/product-nav-link"
-          class="chakra-button css-mlkoou"
+          class="chakra-button css-1ubh9xi"
           data-discover="true"
           href="/product"
           style="display: flex; align-items: center;"
@@ -243,7 +243,7 @@ exports[`NavigationBar should render standard navigation bar correctly 1`] = `
         <button
           aria-expanded="false"
           aria-haspopup="menu"
-          class="chakra-button chakra-menu__trigger css-yoyrer"
+          class="chakra-button chakra-menu__trigger css-ymbu1e"
           data-controls="menu::r0::content"
           data-part="trigger"
           data-scope="menu"

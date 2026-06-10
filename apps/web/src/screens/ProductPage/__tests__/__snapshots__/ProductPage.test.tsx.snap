@@ -28,7 +28,7 @@ exports[`ProductPage should render all platform cards and download options by de
         class="chakra-stack css-c4e2fj"
       >
         <h1
-          class="chakra-heading css-j3fgci"
+          class="chakra-heading css-trdcsn"
         >
           Get Telegramonic
         </h1>
@@ -42,7 +42,7 @@ exports[`ProductPage should render all platform cards and download options by de
         class="css-287hsr"
       >
         <h2
-          class="chakra-heading css-1hy2c0p"
+          class="chakra-heading css-17ha6b6"
         >
           Desktop Applications
         </h2>
@@ -70,7 +70,7 @@ exports[`ProductPage should render all platform cards and download options by de
                   />
                 </svg>
                 <h3
-                  class="chakra-heading css-2v6thg"
+                  class="chakra-heading css-1iixuaq"
                 >
                   macOS
                 </h3>
@@ -84,7 +84,7 @@ exports[`ProductPage should render all platform cards and download options by de
                 class="chakra-stack css-ka3lke"
               >
                 <a
-                  class="chakra-button css-13mivnp"
+                  class="chakra-button css-i2t7ty"
                   href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.1-mac"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -93,7 +93,7 @@ exports[`ProductPage should render all platform cards and download options by de
                   Apple Silicon (M1/M2/M3)
                 </a>
                 <a
-                  class="chakra-button css-ckiwh"
+                  class="chakra-button css-1xkn640"
                   href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.1-mac"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -109,7 +109,7 @@ exports[`ProductPage should render all platform cards and download options by de
             data-testid="platform-card-windows"
           >
             <span
-              class="chakra-badge css-yrjleo"
+              class="chakra-badge css-iqqz2p"
             >
               Recommended
             </span>
@@ -130,7 +130,7 @@ exports[`ProductPage should render all platform cards and download options by de
                   />
                 </svg>
                 <h3
-                  class="chakra-heading css-2v6thg"
+                  class="chakra-heading css-1iixuaq"
                 >
                   Windows
                 </h3>
@@ -144,7 +144,7 @@ exports[`ProductPage should render all platform cards and download options by de
                 class="chakra-stack css-ka3lke"
               >
                 <a
-                  class="chakra-button css-13mivnp"
+                  class="chakra-button css-i2t7ty"
                   href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.1-win"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -153,7 +153,7 @@ exports[`ProductPage should render all platform cards and download options by de
                   Download Installer (.exe)
                 </a>
                 <a
-                  class="chakra-button css-ckiwh"
+                  class="chakra-button css-1xkn640"
                   href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.1-win"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -185,7 +185,7 @@ exports[`ProductPage should render all platform cards and download options by de
                   />
                 </svg>
                 <h3
-                  class="chakra-heading css-2v6thg"
+                  class="chakra-heading css-1iixuaq"
                 >
                   Linux
                 </h3>
@@ -199,7 +199,7 @@ exports[`ProductPage should render all platform cards and download options by de
                 class="chakra-stack css-ka3lke"
               >
                 <a
-                  class="chakra-button css-13mivnp"
+                  class="chakra-button css-i2t7ty"
                   href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.1-linux"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -208,7 +208,7 @@ exports[`ProductPage should render all platform cards and download options by de
                   Download AppImage
                 </a>
                 <a
-                  class="chakra-button css-ckiwh"
+                  class="chakra-button css-1xkn640"
                   href="https://github.com/telegramonic/telegramonic/releases/tag/desktop-v0.2.1-linux"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -223,7 +223,7 @@ exports[`ProductPage should render all platform cards and download options by de
       </div>
       <div>
         <h2
-          class="chakra-heading css-1hy2c0p"
+          class="chakra-heading css-17ha6b6"
         >
           Mobile Applications
         </h2>
@@ -251,7 +251,7 @@ exports[`ProductPage should render all platform cards and download options by de
                   />
                 </svg>
                 <h3
-                  class="chakra-heading css-2v6thg"
+                  class="chakra-heading css-1iixuaq"
                 >
                   iOS / iPadOS
                 </h3>
@@ -265,14 +265,14 @@ exports[`ProductPage should render all platform cards and download options by de
                 class="chakra-stack css-ka3lke"
               >
                 <a
-                  class="chakra-button css-13mivnp"
+                  class="chakra-button css-i2t7ty"
                   href="#download-ios-appstore"
                   type="button"
                 >
                   Download on App Store
                 </a>
                 <a
-                  class="chakra-button css-ckiwh"
+                  class="chakra-button css-1xkn640"
                   href="#download-ios-testflight"
                   type="button"
                 >
@@ -302,7 +302,7 @@ exports[`ProductPage should render all platform cards and download options by de
                   />
                 </svg>
                 <h3
-                  class="chakra-heading css-2v6thg"
+                  class="chakra-heading css-1iixuaq"
                 >
                   Android
                 </h3>
@@ -316,14 +316,14 @@ exports[`ProductPage should render all platform cards and download options by de
                 class="chakra-stack css-ka3lke"
               >
                 <a
-                  class="chakra-button css-13mivnp"
+                  class="chakra-button css-i2t7ty"
                   href="#download-android-apk"
                   type="button"
                 >
                   Direct APK Download
                 </a>
                 <a
-                  class="chakra-button css-ckiwh"
+                  class="chakra-button css-1xkn640"
                   href="#download-android-playstore"
                   type="button"
                 >

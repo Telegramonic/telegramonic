@@ -96,6 +96,7 @@ const TitleBar = () => {
   }, []);
 
   const isMac = platform === 'darwin';
+  const isMobile = typeof navigator !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
   const handleMinimize = () => {
     window.electronAPI?.minimize();
@@ -107,7 +108,8 @@ const TitleBar = () => {
 
   return (
     <HStack
-      h="38px"
+      h={isMobile ? "calc(40px + max(24px, env(safe-area-inset-top, 24px)))" : "38px"}
+      pt={isMobile ? "max(24px, env(safe-area-inset-top, 24px))" : "0px"}
       bg="bg.panel/85"
       backdropFilter="blur(12px)"
       borderBottom="1px solid"
@@ -231,7 +233,7 @@ const TitleBar = () => {
         </HStack>
 
         {/* Window controls for Windows/Linux */}
-        {!isMac && (
+        {!isMac && !isMobile && (
           <HStack gap={1}>
             {/* Minimize */}
             <Box

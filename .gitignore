@@ -7,7 +7,6 @@ node_modules
 
 /apps/server/target
 /apps/mobile/src-tauri/target
-/apps/mobile/src-tauri/gen
 
 # testing
 apps/web/coverage

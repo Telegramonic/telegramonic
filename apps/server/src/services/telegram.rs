@@ -58,17 +58,29 @@ fn get_channel_id(updates: &grammers_client::grammers_tl_types::enums::Updates) 
 }
 
 impl RealTelegramService {
+    fn get_config_path(filename: &str) -> std::path::PathBuf {
+        if let Ok(dir) = std::env::var("TELEGRAMONIC_DATA_DIR") {
+            std::path::Path::new(&dir).join(filename)
+        } else {
+            std::path::PathBuf::from(filename)
+        }
+    }
+
     pub fn new() -> Self {
         let (api_id, api_hash) = match Self::load_credentials_file() {
             Ok(creds) => (Some(creds.0), Some(creds.1)),
             Err(_) => (None, None),
         };
 
+        let session_file = Self::get_config_path("telegram.session")
+            .to_string_lossy()
+            .into_owned();
+
         Self {
             client: Arc::new(Mutex::new(None)),
             api_id: Arc::new(Mutex::new(api_id)),
             api_hash: Arc::new(Mutex::new(api_hash)),
-            session_file: "telegram.session".to_string(),
+            session_file,
             login_token: Arc::new(Mutex::new(None)),
             password_token: Arc::new(Mutex::new(None)),
             folders: Arc::new(Mutex::new(Vec::new())),
@@ -79,7 +91,8 @@ impl RealTelegramService {
     }
 
     fn load_credentials_file() -> Result<(i32, String), String> {
-        let content = std::fs::read_to_string("telegram.credentials").map_err(|e| e.to_string())?;
+        let path = Self::get_config_path("telegram.credentials");
+        let content = std::fs::read_to_string(path).map_err(|e| e.to_string())?;
         let lines: Vec<&str> = content.lines().collect();
         if lines.len() < 2 {
             return Err("Invalid credentials file format".to_string());
@@ -90,8 +103,9 @@ impl RealTelegramService {
     }
 
     fn save_credentials_file(api_id: i32, api_hash: &str) -> Result<(), String> {
+        let path = Self::get_config_path("telegram.credentials");
         let content = format!("{}\n{}", api_id, api_hash);
-        std::fs::write("telegram.credentials", content).map_err(|e| e.to_string())
+        std::fs::write(path, content).map_err(|e| e.to_string())
     }
 
     async fn get_client(&self) -> Result<Client, String> {
@@ -286,7 +300,7 @@ impl TelegramService for RealTelegramService {
         }
 
         let _ = std::fs::remove_file(&self.session_file);
-        let _ = std::fs::remove_file("telegram.credentials");
+        let _ = std::fs::remove_file(Self::get_config_path("telegram.credentials"));
         let res = Ok(true);
         tracing::info!("log_out response: {:?}", res);
         res
@@ -300,7 +314,7 @@ impl TelegramService for RealTelegramService {
             *self.client.lock().await = None;
         }
         let _ = std::fs::remove_file(&self.session_file);
-        let _ = std::fs::remove_file("telegram.credentials");
+        let _ = std::fs::remove_file(Self::get_config_path("telegram.credentials"));
         let res = Ok(true);
         tracing::info!("reset_authorization response: {:?}", res);
         res

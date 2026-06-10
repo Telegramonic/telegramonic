@@ -6,7 +6,7 @@ module.exports = {
     },
   },
   setupFilesAfterEnv: ['<rootDir>/jest.js'],
-  roots: ['./', '../../shared/common/src/'],
+  roots: ['./', '../../shared/common/src/', '../../shared/client-common/src/'],
   testEnvironment: 'jest-environment-jsdom',
   testEnvironmentOptions: {
     customExportConditions: ['node', 'node-addons'],

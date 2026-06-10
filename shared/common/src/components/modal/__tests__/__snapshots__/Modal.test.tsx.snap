@@ -3,7 +3,7 @@
 exports[`Modal should render correctly 1`] = `
 <div>
   <div
-    class="chakra-dialog__backdrop css-1cnmm3c"
+    class="chakra-dialog__backdrop css-1jd2aoc"
     data-part="backdrop"
     data-scope="dialog"
     data-state="open"
@@ -14,7 +14,7 @@ exports[`Modal should render correctly 1`] = `
     aria-describedby="dialog::r0::description"
     aria-labelledby="dialog::r0::title"
     aria-modal="true"
-    class="chakra-dialog__content css-1n543c7"
+    class="chakra-dialog__content css-1pqcini"
     data-part="content"
     data-scope="dialog"
     data-state="open"
@@ -35,7 +35,7 @@ exports[`Modal should render correctly 1`] = `
 exports[`Modal should render correctly with different modalID 1`] = `
 <div>
   <div
-    class="chakra-dialog__backdrop css-1cnmm3c"
+    class="chakra-dialog__backdrop css-1jd2aoc"
     data-part="backdrop"
     data-scope="dialog"
     data-state="open"
@@ -46,7 +46,7 @@ exports[`Modal should render correctly with different modalID 1`] = `
     aria-describedby="dialog::r1::description"
     aria-labelledby="dialog::r1::title"
     aria-modal="true"
-    class="chakra-dialog__content css-1n543c7"
+    class="chakra-dialog__content css-1pqcini"
     data-part="content"
     data-scope="dialog"
     data-state="open"

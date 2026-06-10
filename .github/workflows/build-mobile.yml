@@ -1,0 +1,193 @@
+name: Build & Publish Mobile App
+
+on:
+  workflow_dispatch:
+    inputs:
+      build-android:
+        description: 'Build Android App'
+        required: false
+        type: boolean
+        default: true
+      build-ios:
+        description: 'Build iOS App'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  check-branch:
+    name: Validate Branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assert development branch
+        run: |
+          echo "Triggered branch: ${{ github.ref_name }}"
+          if [ "${{ github.ref_name }}" != "development" ]; then
+            echo "Error: This workflow can only be manually run on the 'development' branch."
+            exit 1
+          fi
+
+  bump-version:
+    name: Bump Version
+    needs: check-branch
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      skipped: ${{ steps.changelog.outputs.skipped }}
+      tag: ${{ steps.changelog.outputs.tag }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PA_TOKEN }}
+          fetch-depth: 0
+
+      - name: Conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@latest
+        with:
+          github-token: ${{ secrets.PA_TOKEN }}
+          git-user-name: 'Telegramonic bot'
+          output-file: false
+          version-file: 'apps/mobile/package.json'
+          git-path: 'apps/mobile'
+          tag-prefix: 'mobile-v'
+          skip-on-empty: 'false'
+
+  setup-matrix:
+    name: Setup Build Matrix
+    needs: check-branch
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      has-targets: ${{ steps.set-matrix.outputs.has-targets }}
+    steps:
+      - name: Generate Matrix JSON
+        id: set-matrix
+        run: |
+          MATRIX_ITEMS="[]"
+          if [ "${{ inputs.build-android }}" = "true" ]; then
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "ubuntu-latest", "platform": "android", "artifact-path": "apps/mobile/src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk", "artifact-name": "mobile-build-android", "release-assets": "apps/mobile/src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk\napps/mobile/src-tauri/gen/android/app/build/outputs/bundle/universalRelease/*.aab", "rust-targets": "aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android"}]')
+          fi
+          if [ "${{ inputs.build-ios }}" = "true" ]; then
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "macos-latest", "platform": "ios", "artifact-path": "apps/mobile/src-tauri/gen/apple/build/arm64/*.ipa", "artifact-name": "mobile-build-ios", "release-assets": "apps/mobile/src-tauri/gen/apple/build/arm64/*.ipa", "rust-targets": "aarch64-apple-ios,x86_64-apple-ios,aarch64-apple-ios-sim"}]')
+          fi
+
+          HAS_TARGETS="false"
+          if [ "$MATRIX_ITEMS" != "[]" ]; then
+            HAS_TARGETS="true"
+          fi
+
+          echo "matrix={\"include\":$MATRIX_ITEMS}" >> $GITHUB_OUTPUT
+          echo "has-targets=$HAS_TARGETS" >> $GITHUB_OUTPUT
+
+  build-frontend:
+    name: Build Frontend
+    needs: [check-branch, bump-version, setup-matrix]
+    if: ${{ needs.bump-version.outputs.skipped == 'false' && needs.setup-matrix.outputs.has-targets == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PA_TOKEN }}
+          ref: ${{ needs.bump-version.outputs.tag }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Build Mobile React App
+        run: yarn workspace telegramonic-mobile build
+
+      - name: Upload Frontend Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-frontend-build
+          path: apps/mobile/build/
+          retention-days: 1
+
+  build-mobile:
+    name: Build Mobile App (${{ matrix.platform }})
+    needs: [check-branch, bump-version, setup-matrix, build-frontend]
+    if: ${{ needs.bump-version.outputs.skipped == 'false' && needs.setup-matrix.outputs.has-targets == 'true' }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.setup-matrix.outputs.matrix) }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PA_TOKEN }}
+          ref: ${{ needs.bump-version.outputs.tag }}
+
+      - name: Download Frontend Build
+        uses: actions/download-artifact@v4
+        with:
+          name: mobile-frontend-build
+          path: apps/mobile/build
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      # Setup Java 17 for Android target
+      - name: Setup Java 17
+        if: ${{ matrix.platform == 'android' }}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      # Install Android NDK 26.3.11579264
+      - name: Install Android NDK
+        if: ${{ matrix.platform == 'android' }}
+        run: |
+          echo "y" | sdkmanager --install "ndk;26.3.11579264"
+          echo "NDK_HOME=$ANDROID_HOME/ndk/26.3.11579264" >> $GITHUB_ENV
+
+      # Setup Rust toolchain with the corresponding mobile targets
+      - name: Setup Rust Toolchain
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          targets: ${{ matrix.rust-targets }}
+
+      # Compile Android App Release target
+      - name: Build Android App
+        if: ${{ matrix.platform == 'android' }}
+        run: yarn workspace telegramonic-mobile run android:dist
+
+      # Compile iOS App Release target
+      - name: Build iOS App
+        if: ${{ matrix.platform == 'ios' }}
+        run: yarn workspace telegramonic-mobile run ios:dist
+
+      - name: Publish Release Assets to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.bump-version.outputs.tag }}-${{ matrix.platform }}
+          files: ${{ matrix.release-assets }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.PA_TOKEN }}

@@ -198,7 +198,7 @@ exports[`Host should render correctly 1`] = `
             class="css-k008qs"
           >
             <h2
-              class="chakra-heading css-bl9uvp"
+              class="chakra-heading css-1skm9mz"
             >
               Telegramonic
             </h2>
@@ -213,7 +213,7 @@ exports[`Host should render correctly 1`] = `
         >
           <a
             aria-label="/docs-nav-link"
-            class="chakra-button css-mlkoou"
+            class="chakra-button css-1ubh9xi"
             data-discover="true"
             href="/docs"
             style="display: flex; align-items: center;"
@@ -227,7 +227,7 @@ exports[`Host should render correctly 1`] = `
           </a>
           <a
             aria-label="/product-nav-link"
-            class="chakra-button css-mlkoou"
+            class="chakra-button css-1ubh9xi"
             data-discover="true"
             href="/product"
             style="display: flex; align-items: center;"
@@ -246,7 +246,7 @@ exports[`Host should render correctly 1`] = `
           <button
             aria-expanded="false"
             aria-haspopup="menu"
-            class="chakra-button chakra-menu__trigger css-yoyrer"
+            class="chakra-button chakra-menu__trigger css-ymbu1e"
             data-controls="menu::r0::content"
             data-part="trigger"
             data-scope="menu"
@@ -469,7 +469,7 @@ exports[`Host should render correctly 1`] = `
                 </svg>
               </div>
               <h2
-                class="chakra-heading css-1czgs3w"
+                class="chakra-heading css-1lit7km"
               >
                 Telegramonic
               </h2>
@@ -492,7 +492,7 @@ exports[`Host should render correctly 1`] = `
                 Legal
               </p>
               <a
-                class="chakra-button css-ct63fk"
+                class="chakra-button css-105eugh"
                 data-discover="true"
                 href="/privacy"
                 type="button"
@@ -500,7 +500,7 @@ exports[`Host should render correctly 1`] = `
                 Privacy policy
               </a>
               <a
-                class="chakra-button css-ct63fk"
+                class="chakra-button css-105eugh"
                 data-discover="true"
                 href="/terms"
                 type="button"
@@ -508,7 +508,7 @@ exports[`Host should render correctly 1`] = `
                 Terms of service
               </a>
               <a
-                class="chakra-button css-ct63fk"
+                class="chakra-button css-105eugh"
                 data-discover="true"
                 href="/disclaimer"
                 type="button"
@@ -525,7 +525,7 @@ exports[`Host should render correctly 1`] = `
                 Team
               </p>
               <a
-                class="chakra-button css-ct63fk"
+                class="chakra-button css-105eugh"
                 data-discover="true"
                 href="/contact-us"
                 type="button"
@@ -533,7 +533,7 @@ exports[`Host should render correctly 1`] = `
                 Contact us
               </a>
               <a
-                class="chakra-button css-ct63fk"
+                class="chakra-button css-105eugh"
                 data-discover="true"
                 href="/about-us"
                 type="button"
@@ -541,7 +541,7 @@ exports[`Host should render correctly 1`] = `
                 About us
               </a>
               <a
-                class="chakra-button css-ct63fk"
+                class="chakra-button css-105eugh"
                 data-discover="true"
                 href="/faq"
                 type="button"
