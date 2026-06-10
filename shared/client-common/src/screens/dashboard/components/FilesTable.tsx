@@ -9,6 +9,7 @@ import {
   HStack,
   SimpleGrid,
   Menu,
+  Portal,
 } from '@chakra-ui/react';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
@@ -667,7 +668,8 @@ const RowActions = ({
             </svg>
           </Box>
         </Menu.Trigger>
-        <Menu.Positioner portalled>
+        <Portal>
+        <Menu.Positioner>
           <Menu.Content
             zIndex={9999}
             borderRadius="xl"
@@ -773,6 +775,7 @@ const RowActions = ({
             </Menu.Item>
           </Menu.Content>
         </Menu.Positioner>
+        </Portal>
       </Menu.Root>
     </Box>
   </HStack>
