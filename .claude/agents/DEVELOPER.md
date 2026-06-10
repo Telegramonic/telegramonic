@@ -50,4 +50,4 @@ When assigned to process a set of changes, the agent MUST follow these steps in 
 - Target the `telegramonic/telegramonic` repository.
 - Set the base branch to `development`.
 - Use the appropriate title and description templates.
-- Trigger the `jira-pr-created` step to comment on the Jira ticket and move it to "In Progress".
+- Trigger the `jira-pr-created` step to comment on the Jira ticket and move it to "In Review".
