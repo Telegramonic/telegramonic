@@ -473,7 +473,9 @@ const ProductPage = () => {
                 </Text>
                 <VStack width="100%" gap={3}>
                   <LinkButton
-                    href="#download-android-apk"
+                    href="https://play.google.com/store/apps/details?id=com.telegramonic.mobile"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     width="100%"
                     variant="solid"
                     bg="primary"
@@ -481,17 +483,17 @@ const ProductPage = () => {
                     _hover={{ bg: 'primary/80' }}
                     size="sm"
                   >
-                    {t('ProductPage.android.buttonApk')}
+                    {t('ProductPage.android.buttonPlayStore')}
                   </LinkButton>
                   <LinkButton
-                    href="#download-android-playstore"
+                    href="#download-android-apk"
                     width="100%"
                     variant="outline"
                     borderColor="border"
                     _hover={{ bg: 'bg.hover' }}
                     size="sm"
                   >
-                    {t('ProductPage.android.buttonPlayStore')}
+                    {t('ProductPage.android.buttonApk')}
                   </LinkButton>
                 </VStack>
               </VStack>
