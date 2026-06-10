@@ -3,6 +3,14 @@ name = "telegramonic-server"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "telegramonic_server"
+path = "src/lib.rs"
+
+[[bin]]
+name = "telegramonic-server"
+path = "src/main.rs"
+
 [dependencies]
 axum = { version = "0.7.4", features = ["multipart"] }
 tokio = { version = "1.36.0", features = ["full"] }

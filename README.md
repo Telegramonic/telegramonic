@@ -109,6 +109,7 @@ telegramonic/
 For detailed setup, configuration, features, and API routing of each workspace, see the module-specific README documentation:
 
 - 🖥️ **[Desktop Application README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/apps/desktop/README.md)**: Electron shell configurations, preload API interfaces, streaming direct-to-disk downloads, and platform packaging scripts.
+- 📱 **[Mobile Application README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/apps/mobile/README.md)**: Tauri native configuration, simulator targets, and setup/run instructions for iOS and Android environments.
 - 🌐 **[Web Portal README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/apps/web/README.md)**: Browser-only client setup, localized string files, routes, and browser E2E test commands.
 - ⚙️ **[Rust Backend Server README](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/apps/server/README.md)**: Axum endpoint details, MTProto integration details via Grammers, in-memory caches, and mock-based testing suites.
 

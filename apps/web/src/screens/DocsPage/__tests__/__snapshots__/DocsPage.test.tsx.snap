@@ -133,7 +133,7 @@ exports[`DocsPage should render the documentation layout with sidebar and TOC 1`
           <button
             aria-expanded="false"
             aria-haspopup="menu"
-            class="chakra-button chakra-menu__trigger css-yoivw2"
+            class="chakra-button chakra-menu__trigger css-ook8mb"
             data-controls="menu::r0::content"
             data-part="trigger"
             data-scope="menu"

@@ -1,0 +1,51 @@
+name: Mobile CI
+
+on:
+  push:
+    branches:
+      - development
+    paths:
+      - 'apps/mobile/**'
+      - 'shared/common/**'
+      - 'shared/client-common/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.github/workflows/ci-mobile.yml'
+  pull_request:
+    branches:
+      - development
+    paths:
+      - 'apps/mobile/**'
+      - 'shared/common/**'
+      - 'shared/client-common/**'
+      - 'package.json'
+      - 'yarn.lock'
+      - '.github/workflows/ci-mobile.yml'
+
+jobs:
+  mobile-ci:
+    name: Lint, Build and Test Mobile
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Dependencies
+        run: yarn install --immutable
+
+      - name: Lint
+        run: yarn workspace telegramonic-mobile run lint
+
+      - name: Build Frontend
+        run: yarn mobile:build
+
+      - name: Test
+        run: yarn mobile:test --watchAll=false --passWithNoTests

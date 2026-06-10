@@ -196,7 +196,7 @@ exports[`CopyrightFooter should render 1`] = `
               </svg>
             </div>
             <h2
-              class="chakra-heading css-1czgs3w"
+              class="chakra-heading css-1lit7km"
             >
               Telegramonic
             </h2>
@@ -219,7 +219,7 @@ exports[`CopyrightFooter should render 1`] = `
               Legal
             </p>
             <a
-              class="chakra-button css-ct63fk"
+              class="chakra-button css-105eugh"
               data-discover="true"
               href="/privacy"
               type="button"
@@ -227,7 +227,7 @@ exports[`CopyrightFooter should render 1`] = `
               Privacy policy
             </a>
             <a
-              class="chakra-button css-ct63fk"
+              class="chakra-button css-105eugh"
               data-discover="true"
               href="/terms"
               type="button"
@@ -235,7 +235,7 @@ exports[`CopyrightFooter should render 1`] = `
               Terms of service
             </a>
             <a
-              class="chakra-button css-ct63fk"
+              class="chakra-button css-105eugh"
               data-discover="true"
               href="/disclaimer"
               type="button"
@@ -252,7 +252,7 @@ exports[`CopyrightFooter should render 1`] = `
               Team
             </p>
             <a
-              class="chakra-button css-ct63fk"
+              class="chakra-button css-105eugh"
               data-discover="true"
               href="/contact-us"
               type="button"
@@ -260,7 +260,7 @@ exports[`CopyrightFooter should render 1`] = `
               Contact us
             </a>
             <a
-              class="chakra-button css-ct63fk"
+              class="chakra-button css-105eugh"
               data-discover="true"
               href="/about-us"
               type="button"
@@ -268,7 +268,7 @@ exports[`CopyrightFooter should render 1`] = `
               About us
             </a>
             <a
-              class="chakra-button css-ct63fk"
+              class="chakra-button css-105eugh"
               data-discover="true"
               href="/faq"
               type="button"

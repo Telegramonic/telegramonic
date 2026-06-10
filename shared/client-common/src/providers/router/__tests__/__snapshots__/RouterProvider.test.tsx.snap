@@ -239,7 +239,7 @@ exports[`RouterProvider should render router provider correctly 1`] = `
 exports[`RouterProvider should render router provider correctly 2`] = `
 <div>
   <div
-    class="css-1ksz11"
+    class="css-z6xxr1"
   >
     <div
       class="chakra-stack css-qngkry"
@@ -426,7 +426,7 @@ exports[`RouterProvider should render router provider correctly 2`] = `
           </svg>
         </div>
         <h2
-          class="chakra-heading css-1fn9q2y"
+          class="chakra-heading css-1poqom1"
         >
           Connect Telegram Drive
         </h2>
@@ -446,7 +446,7 @@ exports[`RouterProvider should render router provider correctly 2`] = `
             class="chakra-stack css-1x0y7ph"
           >
             <div
-              class="css-151yyo4"
+              class="css-ay2ova"
             >
               1
             </div>
@@ -458,7 +458,7 @@ exports[`RouterProvider should render router provider correctly 2`] = `
             class="chakra-stack css-1x0y7ph"
           >
             <div
-              class="css-z50irs"
+              class="css-l1xccw"
             >
               2
             </div>
@@ -470,7 +470,7 @@ exports[`RouterProvider should render router provider correctly 2`] = `
             class="chakra-stack css-1x0y7ph"
           >
             <div
-              class="css-z50irs"
+              class="css-l1xccw"
             >
               3
             </div>
@@ -482,7 +482,7 @@ exports[`RouterProvider should render router provider correctly 2`] = `
             class="chakra-stack css-1x0y7ph"
           >
             <div
-              class="css-z50irs"
+              class="css-l1xccw"
             >
               4
             </div>
@@ -499,7 +499,7 @@ exports[`RouterProvider should render router provider correctly 2`] = `
                 class="chakra-stack css-1jqo7jp"
               >
                 <h2
-                  class="chakra-heading css-7s810c"
+                  class="chakra-heading css-1x2y5pk"
                 >
                   Phone Number
                 </h2>
@@ -699,14 +699,14 @@ exports[`RouterProvider should render router provider correctly 2`] = `
                     </div>
                   </div>
                   <input
-                    class="chakra-input css-l626ka"
+                    class="chakra-input css-c09d3z"
                     placeholder="Enter phone number without country code"
                     value=""
                   />
                 </div>
               </div>
               <button
-                class="chakra-button css-tncwgp"
+                class="chakra-button css-1sjl20o"
                 type="submit"
               >
                 Continue

@@ -34,7 +34,7 @@ exports[`LandingPage should render correctly for guest user 1`] = `
             Secure & Limitless Cloud Storage
           </div>
           <h2
-            class="chakra-heading css-rst1vz"
+            class="chakra-heading css-1txzm46"
           >
             Vast Cloud Storage
             <br />
@@ -53,7 +53,7 @@ exports[`LandingPage should render correctly for guest user 1`] = `
             class="chakra-stack css-19cg7hp"
           >
             <a
-              class="chakra-button css-1hp9x0"
+              class="chakra-button css-128j574"
               data-discover="true"
               href="/docs"
               type="button"
@@ -61,7 +61,7 @@ exports[`LandingPage should render correctly for guest user 1`] = `
               Get Started
             </a>
             <button
-              class="chakra-button css-18ne13"
+              class="chakra-button css-zk80wl"
               type="button"
             >
               Explore Features

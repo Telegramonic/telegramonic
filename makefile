@@ -17,6 +17,8 @@ clean:
 	rm -rf shared/common/build shared/common/dist shared/common/node_modules
 	rm -rf shared/client-common/build shared/client-common/dist shared/client-common/node_modules
 	rm -rf apps/server/target
+	rm -rf apps/mobile/src-tauri/target
+	rm -rf apps/mobile/src-tauri/gen
 	rm -rf node_modules
 
 .PHONY: commit

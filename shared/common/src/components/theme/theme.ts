@@ -151,6 +151,9 @@ const customConfig = defineConfig({
   },
 });
 
-export const system = createSystem(defaultConfig, customConfig);
+export const system = createSystem(defaultConfig, {
+  ...customConfig,
+  disableLayers: true,
+});
 
 export default system;
