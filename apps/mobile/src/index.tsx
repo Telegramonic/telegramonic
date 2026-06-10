@@ -1,5 +1,9 @@
-/* eslint-disable import/first */
 // Polyfill structuredClone for older WebView runtimes (Chromium < 99)
+import ReactDOM from 'react-dom/client';
+import App from 'telegramonic-client-common';
+import './index.css';
+import reportWebVitals from './reportWebVitals';
+
 if (typeof window !== 'undefined' && !(window as any).structuredClone) {
   (window as any).structuredClone = function structuredClone(obj: any): any {
     if (obj === null || typeof obj !== 'object') {
@@ -43,30 +47,6 @@ if (typeof window !== 'undefined' && !(window as any).structuredClone) {
     }
   };
 }
-
-// Polyfill Array.prototype.at and String.prototype.at for older WebView runtimes (Chromium < 92)
-if (!Array.prototype.at) {
-  Array.prototype.at = function (n: number) {
-    n = Math.trunc(n) || 0;
-    if (n < 0) n += this.length;
-    if (n < 0 || n >= this.length) return undefined;
-    return this[n];
-  };
-}
-
-if (!String.prototype.at) {
-  String.prototype.at = function (n: number) {
-    n = Math.trunc(n) || 0;
-    if (n < 0) n += this.length;
-    if (n < 0 || n >= this.length) return '';
-    return this.charAt(n);
-  };
-}
-
-import ReactDOM from 'react-dom/client';
-import App from 'telegramonic-client-common';
-import './index.css';
-import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
