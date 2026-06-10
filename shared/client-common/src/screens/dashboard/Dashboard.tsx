@@ -472,6 +472,12 @@ const Dashboard = () => {
               onSync={handleSync}
               lastSynced={lastSynced}
               isSyncing={isSyncing}
+              isInsideFolder={currentFolderId !== null}
+              onBack={() => {
+                // Navigate to parent: find parent of currentFolder from breadcrumbs
+                const parent = breadcrumbs[breadcrumbs.length - 2];
+                setCurrentFolderId(parent ? parent.id : null);
+              }}
             />
           </VStack>
         </Box>

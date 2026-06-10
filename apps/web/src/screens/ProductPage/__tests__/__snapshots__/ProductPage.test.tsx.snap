@@ -317,17 +317,19 @@ exports[`ProductPage should render all platform cards and download options by de
               >
                 <a
                   class="chakra-button css-i2t7ty"
+                  href="https://play.google.com/store/apps/details?id=com.telegramonic.mobile"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  type="button"
+                >
+                  Get it on Google Play
+                </a>
+                <a
+                  class="chakra-button css-1xkn640"
                   href="#download-android-apk"
                   type="button"
                 >
                   Direct APK Download
-                </a>
-                <a
-                  class="chakra-button css-1xkn640"
-                  href="#download-android-playstore"
-                  type="button"
-                >
-                  Get it on Google Play
                 </a>
               </div>
             </div>

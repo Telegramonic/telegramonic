@@ -31,6 +31,8 @@ export const FilesTable = ({
   onSync,
   lastSynced,
   isSyncing,
+  onBack,
+  isInsideFolder,
 }: FilesTableProps) => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [sortMode, setSortMode] = useState<SortMode>('az');
@@ -53,13 +55,50 @@ export const FilesTable = ({
     <Box>
       {/* Header row: title + controls */}
       <HStack justify="space-between" mb={4} align="center">
-        {sectionTitle ? (
-          <Heading size="sm" fontWeight="bold" color="fg">
-            {sectionTitle}
-          </Heading>
-        ) : (
-          <Box />
-        )}
+        <HStack gap={2} align="center">
+          {/* Back button — only shown when inside a folder */}
+          {isInsideFolder && onBack && (
+            <Box
+              as="button"
+              onClick={onBack}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              w="30px"
+              h="30px"
+              borderRadius="lg"
+              bg={{ base: '#f4f6f8', _dark: '#131c26' }}
+              borderWidth="1px"
+              borderColor="border"
+              color="fg.muted"
+              _hover={{ bg: { base: 'white', _dark: '#18202a' }, color: 'primary' }}
+              transition="all 0.2s"
+              title="Go back"
+              aria-label="Go back"
+              flexShrink={0}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </Box>
+          )}
+          {sectionTitle ? (
+            <Heading size="sm" fontWeight="bold" color="fg">
+              {sectionTitle}
+            </Heading>
+          ) : (
+            <Box />
+          )}
+        </HStack>
 
         <HStack gap={3} align="flex-start">
           {/* Premium Sort selector */}
@@ -408,8 +447,8 @@ export const FilesTable = ({
                 <VStack gap={0} align="center">
                   <Text
                     fontSize="xs"
-                    fontWeight={item.name.length > 25 ? 'bold' : 'semibold'}
-                    color={item.name.length > 25 ? 'primary' : 'fg'}
+                    fontWeight="bold"
+                    color="fg"
                     textAlign="center"
                     maxW="100%"
                     overflow="hidden"
@@ -628,15 +667,17 @@ const RowActions = ({
             </svg>
           </Box>
         </Menu.Trigger>
-        <Menu.Positioner>
+        <Menu.Positioner portalled>
           <Menu.Content
-            zIndex={200}
+            zIndex={9999}
             borderRadius="xl"
             boxShadow="2xl"
             bg="bg.panel"
             borderColor="border"
             py={1}
             minW="140px"
+            maxH="none"
+            overflow="visible"
           >
             <Menu.Item
               value="star"
