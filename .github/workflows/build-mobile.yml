@@ -17,6 +17,9 @@ on:
 permissions:
   contents: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   check-branch:
     name: Validate Branch
@@ -39,6 +42,8 @@ jobs:
     outputs:
       skipped: ${{ steps.changelog.outputs.skipped }}
       tag: ${{ steps.changelog.outputs.tag }}
+      version: ${{ steps.changelog.outputs.version }}
+      clean_changelog: ${{ steps.changelog.outputs.clean_changelog }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -57,6 +62,8 @@ jobs:
           git-path: 'apps/mobile'
           tag-prefix: 'mobile-v'
           skip-on-empty: 'false'
+          skip-commit: 'true'
+          git-push: 'false'
 
   setup-matrix:
     name: Setup Build Matrix
@@ -71,10 +78,10 @@ jobs:
         run: |
           MATRIX_ITEMS="[]"
           if [ "${{ inputs.build-android }}" = "true" ]; then
-            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "ubuntu-latest", "platform": "android", "artifact-path": "apps/mobile/src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk", "artifact-name": "mobile-build-android", "release-assets": "apps/mobile/src-tauri/gen/android/app/build/outputs/apk/universal/release/*.apk\napps/mobile/src-tauri/gen/android/app/build/outputs/bundle/universalRelease/*.aab", "rust-targets": "aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android"}]')
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "ubuntu-latest", "platform": "android", "artifact-path": "apps/mobile/src-tauri/gen/android/app/build/outputs/apk/**/*.apk", "artifact-name": "mobile-build-android", "release-assets": "apps/mobile/src-tauri/gen/android/app/build/outputs/apk/**/*.apk\napps/mobile/src-tauri/gen/android/app/build/outputs/bundle/**/*.aab", "rust-targets": "aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android"}]')
           fi
           if [ "${{ inputs.build-ios }}" = "true" ]; then
-            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "macos-latest", "platform": "ios", "artifact-path": "apps/mobile/src-tauri/gen/apple/build/arm64/*.ipa", "artifact-name": "mobile-build-ios", "release-assets": "apps/mobile/src-tauri/gen/apple/build/arm64/*.ipa", "rust-targets": "aarch64-apple-ios,x86_64-apple-ios,aarch64-apple-ios-sim"}]')
+            MATRIX_ITEMS=$(echo "$MATRIX_ITEMS" | jq -c '. + [{"os": "macos-latest", "platform": "ios", "artifact-path": "apps/mobile/src-tauri/gen/apple/build/artifacts/*.zip", "artifact-name": "mobile-build-ios", "release-assets": "apps/mobile/src-tauri/gen/apple/build/artifacts/*.zip", "rust-targets": "aarch64-apple-ios,x86_64-apple-ios,aarch64-apple-ios-sim"}]')
           fi
 
           HAS_TARGETS="false"
@@ -95,7 +102,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PA_TOKEN }}
-          ref: ${{ needs.bump-version.outputs.tag }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -132,7 +138,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PA_TOKEN }}
-          ref: ${{ needs.bump-version.outputs.tag }}
 
       - name: Download Frontend Build
         uses: actions/download-artifact@v4
@@ -151,6 +156,10 @@ jobs:
       - name: Install Dependencies
         run: yarn install --immutable
 
+      - name: Update package.json version
+        run: |
+          node -e "const fs = require('fs'); const pkg = require('./apps/mobile/package.json'); pkg.version = '${{ needs.bump-version.outputs.version }}'; fs.writeFileSync('./apps/mobile/package.json', JSON.stringify(pkg, null, 2));"
+
       # Setup Java 17 for Android target
       - name: Setup Java 17
         if: ${{ matrix.platform == 'android' }}
@@ -159,34 +168,101 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      # Install Android NDK 26.3.11579264
+      # Install Android NDK
       - name: Install Android NDK
         if: ${{ matrix.platform == 'android' }}
         run: |
-          echo "y" | sdkmanager --install "ndk;26.3.11579264"
-          echo "NDK_HOME=$ANDROID_HOME/ndk/26.3.11579264" >> $GITHUB_ENV
+          if [ -d "$ANDROID_HOME/ndk" ] && [ "$(ls -A $ANDROID_HOME/ndk)" ]; then
+            NDK_DIR=$(ls -d $ANDROID_HOME/ndk/* | sort -V | tail -n 1)
+            echo "Using pre-installed NDK at $NDK_DIR"
+          else
+            echo "No pre-installed NDK found. Installing version 26.3.11579264..."
+            echo "y" | sdkmanager --install "ndk;26.3.11579264"
+            NDK_DIR="$ANDROID_HOME/ndk/26.3.11579264"
+          fi
+          echo "ANDROID_NDK_HOME=$NDK_DIR" >> $GITHUB_ENV
+          echo "NDK_HOME=$NDK_DIR" >> $GITHUB_ENV
 
       # Setup Rust toolchain with the corresponding mobile targets
       - name: Setup Rust Toolchain
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          targets: ${{ matrix.rust-targets }}
+          target: ${{ matrix.rust-targets }}
 
       # Compile Android App Release target
       - name: Build Android App
         if: ${{ matrix.platform == 'android' }}
-        run: yarn workspace telegramonic-mobile run android:dist
+        run: yarn workspace telegramonic-mobile run tauri android build --ci
 
       # Compile iOS App Release target
       - name: Build iOS App
         if: ${{ matrix.platform == 'ios' }}
-        run: yarn workspace telegramonic-mobile run ios:dist
+        run: |
+          yarn workspace telegramonic-mobile run tauri ios build --no-sign --ci
+          APP_PATH=$(find apps/mobile/src-tauri/gen/apple/build -name "*.app" -type d | head -n 1)
+          if [ -n "$APP_PATH" ]; then
+            echo "Found app bundle at $APP_PATH"
+            cd $(dirname "$APP_PATH")
+            zip -r telegramonic-ios-unsigned.zip $(basename "$APP_PATH")
+            cd -
+            mkdir -p apps/mobile/src-tauri/gen/apple/build/artifacts
+            cp "$(dirname "$APP_PATH")/telegramonic-ios-unsigned.zip" apps/mobile/src-tauri/gen/apple/build/artifacts/
+          else
+            echo "Error: Could not find compiled .app bundle!"
+            exit 1
+          fi
 
-      - name: Publish Release Assets to GitHub Release
+      - name: Upload Mobile Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: |
+            apps/mobile/src-tauri/gen/android/app/build/outputs/apk/**/*.apk
+            apps/mobile/src-tauri/gen/android/app/build/outputs/bundle/**/*.aab
+            apps/mobile/src-tauri/gen/apple/build/artifacts/*.zip
+          retention-days: 1
+          if-no-files-found: ignore
+
+  release-mobile:
+    name: Release Mobile App
+    needs: [bump-version, build-mobile]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PA_TOKEN }}
+          fetch-depth: 0
+
+      - name: Conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@latest
+        with:
+          github-token: ${{ secrets.PA_TOKEN }}
+          git-user-name: 'Telegramonic bot'
+          output-file: false
+          version-file: 'apps/mobile/package.json'
+          git-path: 'apps/mobile'
+          tag-prefix: 'mobile-v'
+          skip-on-empty: 'false'
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-artifacts
+
+      - name: Publish Release to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ needs.bump-version.outputs.tag }}-${{ matrix.platform }}
-          files: ${{ matrix.release-assets }}
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
+          files: |
+            release-artifacts/**/*.apk
+            release-artifacts/**/*.aab
+            release-artifacts/**/*.zip
           draft: false
           prerelease: false
         env:
