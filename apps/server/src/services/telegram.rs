@@ -183,6 +183,7 @@ impl TelegramService for RealTelegramService {
             *self.client.lock().await = None;
             *self.api_id.lock().await = Some(api_id);
             *self.api_hash.lock().await = Some(api_hash.to_string());
+            let _ = std::fs::remove_file(&self.session_file);
         }
 
         let client = self.get_client().await?;
