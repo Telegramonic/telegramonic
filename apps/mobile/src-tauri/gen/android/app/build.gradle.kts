@@ -6,6 +6,10 @@ plugins {
     id("rust")
 }
 
+base {
+    archivesName.set("Telegramonic")
+}
+
 val tauriProperties = Properties().apply {
     val propFile = file("tauri.properties")
     if (propFile.exists()) {
