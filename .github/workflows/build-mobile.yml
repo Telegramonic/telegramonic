@@ -46,7 +46,7 @@ jobs:
       clean_changelog: ${{ steps.changelog.outputs.clean_changelog }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.PA_TOKEN }}
           fetch-depth: 0
@@ -99,12 +99,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.PA_TOKEN }}
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20
 
@@ -118,7 +118,7 @@ jobs:
         run: yarn workspace telegramonic-mobile build
 
       - name: Upload Frontend Build Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: mobile-frontend-build
           path: apps/mobile/build/
@@ -135,18 +135,18 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.PA_TOKEN }}
 
       - name: Download Frontend Build
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: mobile-frontend-build
           path: apps/mobile/build
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 20
 
@@ -163,7 +163,7 @@ jobs:
       # Setup Java 17 for Android target
       - name: Setup Java 17
         if: ${{ matrix.platform == 'android' }}
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -213,7 +213,7 @@ jobs:
           fi
 
       - name: Upload Mobile Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact-name }}
           path: |
@@ -231,7 +231,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           token: ${{ secrets.PA_TOKEN }}
           fetch-depth: 0
@@ -249,12 +249,12 @@ jobs:
           skip-on-empty: 'false'
 
       - name: Download Build Artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           path: release-artifacts
 
       - name: Publish Release to GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.changelog.outputs.tag }}
           name: ${{ steps.changelog.outputs.tag }}
