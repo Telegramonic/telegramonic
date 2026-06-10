@@ -121,23 +121,6 @@ export const TopNavBar = ({
           <Box display={{ base: 'inline', md: 'none' }}>+</Box>
           <Box display={{ base: 'none', md: 'inline' }}>+ New Folder</Box>
         </Button>
-
-        <Center
-          w={8}
-          h={8}
-          borderRadius="full"
-          bg="primary/15"
-          border="1px solid"
-          borderColor="primary/30"
-          color="primary"
-          fontSize="sm"
-          fontWeight="bold"
-          title={currentUser ? `${currentUser.first_name} ${currentUser.last_name || ''}`.trim() : 'Profile'}
-        >
-          {currentUser
-            ? `${currentUser.first_name[0]}${currentUser.last_name ? currentUser.last_name[0] : ''}`.toUpperCase()
-            : 'U'}
-        </Center>
       </HStack>
     </HStack>
   );

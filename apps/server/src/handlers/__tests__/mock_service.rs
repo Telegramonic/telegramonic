@@ -212,6 +212,10 @@ impl TelegramService for MockTelegramService {
         Ok(true)
     }
 
+    async fn update_credentials(&self, _api_id: i32, _api_hash: &str) -> Result<bool, String> {
+        Ok(true)
+    }
+
     async fn get_me(&self) -> Result<TelegramUser, String> {
         Ok(TelegramUser {
             id: 123456789,

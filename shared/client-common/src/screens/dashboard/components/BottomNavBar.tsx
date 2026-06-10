@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, HStack, VStack, Text } from '@chakra-ui/react';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
@@ -7,14 +8,29 @@ interface BottomNavBarProps {
   activeTab: ActiveTab;
   setActiveTab: (tab: ActiveTab) => void;
   setCurrentFolderId: (id: string | null) => void;
-  onLogout: () => void;
 }
+
+const UserIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width="20"
+    height="20"
+    {...props}
+  >
+    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
 
 export const BottomNavBar = ({
   activeTab,
   setActiveTab,
   setCurrentFolderId,
-  onLogout,
 }: BottomNavBarProps) => {
   return (
     <Box
@@ -66,19 +82,22 @@ export const BottomNavBar = ({
 
       <VStack
         as="button"
-        onClick={onLogout}
+        onClick={() => {
+          setActiveTab('profile');
+          setCurrentFolderId(null);
+        }}
         gap={1}
         py={2}
         px={4}
-        color="error.400"
-        _hover={{ color: 'error.500' }}
+        color={activeTab === 'profile' ? 'primary' : 'fg.muted'}
+        _hover={{ color: 'fg' }}
         cursor="pointer"
         flex={1}
         alignItems="center"
       >
-        <Icon type={IconType.LOCK} size={20} />
-        <Text fontSize="10px" fontWeight="medium">
-          Logout
+        <UserIcon />
+        <Text fontSize="10px" fontWeight={activeTab === 'profile' ? 'bold' : 'medium'}>
+          Profile
         </Text>
       </VStack>
     </Box>

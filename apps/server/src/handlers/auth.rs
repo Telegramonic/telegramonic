@@ -116,3 +116,44 @@ pub async fn reset_authorization(State(service): State<DynTelegramService>) -> i
             .into_response(),
     }
 }
+
+#[derive(Debug, Deserialize)]
+pub struct UpdateCredentialsPayload {
+    pub api_id: String,
+    pub api_hash: String,
+}
+
+pub async fn update_credentials(
+    State(service): State<DynTelegramService>,
+    Json(payload): Json<UpdateCredentialsPayload>,
+) -> impl IntoResponse {
+    let api_id_parsed = match payload.api_id.parse::<i32>() {
+        Ok(val) => val,
+        Err(_) => {
+            return (
+                StatusCode::BAD_REQUEST,
+                Json(serde_json::json!({
+                    "success": false,
+                    "error": "Invalid API ID format. Must be a valid integer."
+                })),
+            )
+                .into_response();
+        }
+    };
+
+    match service
+        .update_credentials(api_id_parsed, &payload.api_hash)
+        .await
+    {
+        Ok(success) => (
+            StatusCode::OK,
+            Json(serde_json::json!({ "success": success })),
+        )
+            .into_response(),
+        Err(err) => (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(serde_json::json!({ "success": false, "error": err })),
+        )
+            .into_response(),
+    }
+}

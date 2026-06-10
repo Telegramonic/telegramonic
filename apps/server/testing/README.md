@@ -39,7 +39,6 @@ Unit and integration tests for route handlers run completely in-memory using loc
 
 To run tests:
 ```bash
-```
 cd apps/server/
 cargo test
 ```

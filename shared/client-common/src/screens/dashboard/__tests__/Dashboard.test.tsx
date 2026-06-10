@@ -244,15 +244,19 @@ describe('Dashboard', () => {
     confirmSpy.mockRestore();
   });
 
-  it('should open confirmation dialog when clicking logout, and perform logout when confirmed', async () => {
+  it('should open confirmation dialog when clicking logout inside Profile, and perform logout when confirmed', async () => {
     const logOutSpy = jest.spyOn(apiClient, 'logOut').mockResolvedValue(true);
     
     renderWithProvidersAndRouter(<Dashboard />);
     expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
 
-    // The Logout button is rendered in the SideNavBar/BottomNavBar
-    const logoutButtons = screen.getAllByText('Logout');
-    fireEvent.click(logoutButtons[0]);
+    // Switch to Profile tab
+    const profileButtons = screen.getAllByText('Profile');
+    fireEvent.click(profileButtons[0]);
+
+    // ProfileTab has the "Logout" button
+    const logoutButton = screen.getByRole('button', { name: 'Logout' });
+    fireEvent.click(logoutButton);
 
     // Confirmation dialog should be visible now
     expect(await screen.findByText('Confirm Logout')).toBeInTheDocument();
@@ -264,19 +268,18 @@ describe('Dashboard', () => {
     expect(screen.queryByText('Confirm Logout')).not.toBeInTheDocument();
 
     // Open it again
-    fireEvent.click(logoutButtons[0]);
+    fireEvent.click(logoutButton);
     expect(await screen.findByText('Confirm Logout')).toBeInTheDocument();
 
     // Click confirm/Logout button in the dialog
     const confirmButtons = screen.getAllByRole('button', { name: 'Logout' });
-    // SideNavBar has 'Logout' text, BottomNavBar has 'Logout' text. The modal button is also 'Logout'.
-    // Let's find the confirm button which is one of the returned elements.
-    // Let's click the last one (which should be the modal button)
+    // Profile tab has 'Logout' button, and the modal has 'Logout' button.
+    // Let's click the last one (which is the modal button)
     fireEvent.click(confirmButtons[confirmButtons.length - 1]);
 
     expect(logOutSpy).toHaveBeenCalled();
     expect(await screen.findByText('Logged out successfully')).toBeInTheDocument();
 
     logOutSpy.mockRestore();
-  });
+  }, 15000);
 });

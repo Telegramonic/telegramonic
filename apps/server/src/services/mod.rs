@@ -96,6 +96,7 @@ pub trait TelegramService: Send + Sync {
     async fn check_password(&self, password: &str) -> Result<AuthResult, String>;
     async fn log_out(&self) -> Result<bool, String>;
     async fn reset_authorization(&self) -> Result<bool, String>;
+    async fn update_credentials(&self, api_id: i32, api_hash: &str) -> Result<bool, String>;
     async fn get_auth_state(&self) -> AuthState;
 
     // User/Account operations

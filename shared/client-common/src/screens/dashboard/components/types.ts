@@ -18,7 +18,6 @@ export interface SideNavBarProps {
   activeTab: ActiveTab;
   setActiveTab: (tab: ActiveTab) => void;
   setCurrentFolderId: (id: string | null) => void;
-  onLogout: () => void;
 }
 
 export interface BreadcrumbsProps {

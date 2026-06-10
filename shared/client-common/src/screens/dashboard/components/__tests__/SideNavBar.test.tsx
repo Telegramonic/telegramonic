@@ -18,7 +18,6 @@ const defaultProps = {
   activeTab: 'all' as const,
   setActiveTab: jest.fn(),
   setCurrentFolderId: jest.fn(),
-  onLogout: jest.fn(),
 };
 
 describe('SideNavBar', () => {
@@ -37,10 +36,11 @@ describe('SideNavBar', () => {
     expect(setActiveTab).toHaveBeenCalledWith('pinned');
   });
 
-  it('calls onLogout when the Logout button is clicked', () => {
-    const onLogout = jest.fn();
-    renderWithProvidersAndRouter(<SideNavBar {...defaultProps} onLogout={onLogout} />);
-    fireEvent.click(screen.getByText('Logout'));
-    expect(onLogout).toHaveBeenCalledTimes(1);
+  it('renders Profile tab and calls setActiveTab with "profile" when clicked', () => {
+    const setActiveTab = jest.fn();
+    renderWithProvidersAndRouter(<SideNavBar {...defaultProps} setActiveTab={setActiveTab} />);
+    expect(screen.getByText('Profile')).toBeInTheDocument();
+    fireEvent.click(screen.getByText('Profile'));
+    expect(setActiveTab).toHaveBeenCalledWith('profile');
   });
 });

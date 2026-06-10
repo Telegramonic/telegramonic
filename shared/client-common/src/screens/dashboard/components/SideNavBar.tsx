@@ -1,13 +1,30 @@
+import React from 'react';
 import { Text, VStack, HStack } from '@chakra-ui/react';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
 import { SideNavBarProps } from './types';
 
+const UserIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    width="18"
+    height="18"
+    {...props}
+  >
+    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
 export const SideNavBar = ({
   activeTab,
   setActiveTab,
   setCurrentFolderId,
-  onLogout,
 }: SideNavBarProps) => {
   return (
     <VStack
@@ -90,18 +107,33 @@ export const SideNavBar = ({
           <Text fontSize="sm">Help</Text>
         </HStack>
         <HStack
-          onClick={onLogout}
+          onClick={() => {
+            setActiveTab('profile');
+            setCurrentFolderId(null);
+          }}
           cursor="pointer"
           px={4}
           py={3}
-          color="error.400"
+          bg={
+            activeTab === 'profile'
+              ? { base: 'primary/10', _dark: '#3f4a59/40' }
+              : 'transparent'
+          }
+          color={activeTab === 'profile' ? 'primary' : 'fg.muted'}
           borderRadius="xl"
-          _hover={{ bg: 'error.500/10' }}
+          fontWeight={activeTab === 'profile' ? 'bold' : 'medium'}
+          _hover={{
+            bg:
+              activeTab === 'profile'
+                ? { base: 'primary/15', _dark: '#3f4a59/40' }
+                : 'bg.hover',
+            color: 'fg',
+          }}
           transition="all 0.2s"
           gap={3}
         >
-          <Icon type={IconType.LOCK} size={18} />
-          <Text fontSize="sm">Logout</Text>
+          <UserIcon />
+          <Text fontSize="sm">Profile</Text>
         </HStack>
       </VStack>
     </VStack>

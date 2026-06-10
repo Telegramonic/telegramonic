@@ -66,6 +66,12 @@ export const apiClient = {
       method: 'POST',
     }),
 
+  updateCredentials: (apiId: string, apiHash: string) =>
+    request<{ success: boolean }>('/auth/update-credentials', {
+      method: 'POST',
+      body: JSON.stringify({ api_id: apiId, api_hash: apiHash }),
+    }),
+
   // Drive API
   getStats: () => request<DriveStats>(TELEGRAM_API_ROUTES.DRIVE.GET_STATS),
 

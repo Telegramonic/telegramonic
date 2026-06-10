@@ -47,6 +47,7 @@ pub fn create_router(service: DynTelegramService) -> Router {
     // Protected routes requiring authorization
     let protected_routes = Router::new()
         .route("/auth/log-out", post(auth::log_out))
+        .route("/auth/update-credentials", post(auth::update_credentials))
         // Users namespace
         .route("/users/me", get(users::get_me))
         .route("/users/get-users", get(users::get_users))

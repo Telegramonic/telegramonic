@@ -20,6 +20,7 @@ import { Breadcrumbs } from './components/Breadcrumbs';
 import { UploadProgressBanner } from './components/UploadProgressBanner';
 import { FilesTable } from './components/FilesTable';
 import { BottomNavBar } from './components/BottomNavBar';
+import { ProfileTab } from './components/ProfileTab';
 import { getTelegramShareLink, formatSize, formatDate, getFileType } from './components/const';
 
 const Dashboard = () => {
@@ -433,7 +434,6 @@ const Dashboard = () => {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             setCurrentFolderId={setCurrentFolderId}
-            onLogout={handleLogout}
           />
         </Box>
 
@@ -446,52 +446,58 @@ const Dashboard = () => {
           className="custom-scrollbar"
         >
           <VStack gap={8} align="stretch" maxW="1100px" mx="auto">
-            {/* Breadcrumbs Navigation */}
-            <VStack align="stretch" gap={1.5}>
-              <Breadcrumbs
-                breadcrumbs={breadcrumbs}
-                currentFolderId={currentFolderId}
-                setCurrentFolderId={setCurrentFolderId}
-              />
-              <Text fontSize="2xs" color="fg.muted">
-                Last synced:{' '}
-                {lastSynced
-                  ? lastSynced.toLocaleTimeString([], {
-                      hour: 'numeric',
-                      minute: '2-digit',
-                      second: '2-digit',
-                    })
-                  : 'Never'}
-              </Text>
-            </VStack>
+            {activeTab === 'profile' ? (
+              <ProfileTab onLogout={handleLogout} />
+            ) : (
+              <>
+                {/* Breadcrumbs Navigation */}
+                <VStack align="stretch" gap={1.5}>
+                  <Breadcrumbs
+                    breadcrumbs={breadcrumbs}
+                    currentFolderId={currentFolderId}
+                    setCurrentFolderId={setCurrentFolderId}
+                  />
+                  <Text fontSize="2xs" color="fg.muted">
+                    Last synced:{' '}
+                    {lastSynced
+                      ? lastSynced.toLocaleTimeString([], {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          second: '2-digit',
+                        })
+                      : 'Never'}
+                  </Text>
+                </VStack>
 
-            {/* Upload progress banner */}
-            <UploadProgressBanner
-              uploadingFile={uploadingFile}
-              uploadProgress={uploadProgress}
-              onCancelUpload={handleCancelUpload}
-            />
+                {/* Upload progress banner */}
+                <UploadProgressBanner
+                  uploadingFile={uploadingFile}
+                  uploadProgress={uploadProgress}
+                  onCancelUpload={handleCancelUpload}
+                />
 
-            {/* Detailed Files Table */}
-            <FilesTable
-              activeTab={activeTab}
-              filteredItems={filteredItems}
-              onItemClick={handleItemClick}
-              onToggleStar={handleToggleStar}
-              onShare={handleShareFile}
-              onDownload={handleDownloadFile}
-              onDeleteFolder={handleDeleteFolder}
-              onDeleteFile={handleDeleteFile}
-              onSync={handleSync}
-              lastSynced={lastSynced}
-              isSyncing={isSyncing}
-              isInsideFolder={currentFolderId !== null}
-              onBack={() => {
-                // Navigate to parent: find parent of currentFolder from breadcrumbs
-                const parent = breadcrumbs[breadcrumbs.length - 2];
-                setCurrentFolderId(parent ? parent.id : null);
-              }}
-            />
+                {/* Detailed Files Table */}
+                <FilesTable
+                  activeTab={activeTab}
+                  filteredItems={filteredItems}
+                  onItemClick={handleItemClick}
+                  onToggleStar={handleToggleStar}
+                  onShare={handleShareFile}
+                  onDownload={handleDownloadFile}
+                  onDeleteFolder={handleDeleteFolder}
+                  onDeleteFile={handleDeleteFile}
+                  onSync={handleSync}
+                  lastSynced={lastSynced}
+                  isSyncing={isSyncing}
+                  isInsideFolder={currentFolderId !== null}
+                  onBack={() => {
+                    // Navigate to parent: find parent of currentFolder from breadcrumbs
+                    const parent = breadcrumbs[breadcrumbs.length - 2];
+                    setCurrentFolderId(parent ? parent.id : null);
+                  }}
+                />
+              </>
+            )}
           </VStack>
         </Box>
       </HStack>
@@ -501,7 +507,6 @@ const Dashboard = () => {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         setCurrentFolderId={setCurrentFolderId}
-        onLogout={handleLogout}
       />
 
 
