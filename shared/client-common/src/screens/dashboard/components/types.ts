@@ -11,6 +11,7 @@ export interface TopNavBarProps {
   onUploadClick: () => void;
   onCreateFolderClick: () => void;
   currentFolderId: string | null;
+  onMenuClick?: () => void;
 }
 
 export interface SideNavBarProps {
@@ -40,6 +41,10 @@ export interface FilesTableProps {
   onSync: () => void;
   lastSynced: Date | null;
   isSyncing: boolean;
+  /** Called when the user presses the back button (only shown when inside a folder) */
+  onBack?: () => void;
+  /** Whether we are currently inside a folder (not at root) */
+  isInsideFolder?: boolean;
 }
 
 export interface UploadProgressBannerProps {

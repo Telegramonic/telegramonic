@@ -154,6 +154,8 @@ jobs:
 
       # Compile Android App Release target
       - name: Build Android App
+        env:
+          TAURI_SKIP_FRONTEND_BUILD: 'true'
         run: yarn workspace telegramonic-mobile run tauri android build --ci
 
       - name: Upload Android Release Artifacts

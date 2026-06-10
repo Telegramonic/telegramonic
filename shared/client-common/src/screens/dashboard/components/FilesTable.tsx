@@ -8,6 +8,8 @@ import {
   Table,
   HStack,
   SimpleGrid,
+  Menu,
+  Portal,
 } from '@chakra-ui/react';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
@@ -30,6 +32,8 @@ export const FilesTable = ({
   onSync,
   lastSynced,
   isSyncing,
+  onBack,
+  isInsideFolder,
 }: FilesTableProps) => {
   const [viewMode, setViewMode] = useState<ViewMode>('list');
   const [sortMode, setSortMode] = useState<SortMode>('az');
@@ -52,13 +56,50 @@ export const FilesTable = ({
     <Box>
       {/* Header row: title + controls */}
       <HStack justify="space-between" mb={4} align="center">
-        {sectionTitle ? (
-          <Heading size="sm" fontWeight="bold" color="fg">
-            {sectionTitle}
-          </Heading>
-        ) : (
-          <Box />
-        )}
+        <HStack gap={2} align="center">
+          {/* Back button — only shown when inside a folder */}
+          {isInsideFolder && onBack && (
+            <Box
+              as="button"
+              onClick={onBack}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              w="30px"
+              h="30px"
+              borderRadius="lg"
+              bg={{ base: '#f4f6f8', _dark: '#131c26' }}
+              borderWidth="1px"
+              borderColor="border"
+              color="fg.muted"
+              _hover={{ bg: { base: 'white', _dark: '#18202a' }, color: 'primary' }}
+              transition="all 0.2s"
+              title="Go back"
+              aria-label="Go back"
+              flexShrink={0}
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </Box>
+          )}
+          {sectionTitle ? (
+            <Heading size="sm" fontWeight="bold" color="fg">
+              {sectionTitle}
+            </Heading>
+          ) : (
+            <Box />
+          )}
+        </HStack>
 
         <HStack gap={3} align="flex-start">
           {/* Premium Sort selector */}
@@ -182,57 +223,45 @@ export const FilesTable = ({
             </Box>
           </HStack>
 
-          {/* Sync Button & Last Synced Text Wrapper */}
-          <VStack gap={1} align="center">
-            <Box
-              as="button"
-              onClick={onSync}
-              {...({ disabled: isSyncing } as any)}
-              h="30px"
-              w="34px"
-              borderRadius="md"
-              bg={{ base: '#f4f6f8', _dark: '#131c26' }}
-              borderWidth="1px"
-              borderColor="border"
-              color="fg.muted"
-              _hover={{
-                bg: { base: 'white', _dark: '#18202a' },
-                color: 'primary',
-              }}
-              _disabled={{ opacity: 0.6, cursor: 'not-allowed' }}
-              transition="all 0.2s"
-              title="Sync folders"
-              aria-label="Sync folders"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
+          {/* Sync Button */}
+          <Box
+            as="button"
+            onClick={onSync}
+            {...({ disabled: isSyncing } as any)}
+            h="30px"
+            w="34px"
+            borderRadius="md"
+            bg={{ base: '#f4f6f8', _dark: '#131c26' }}
+            borderWidth="1px"
+            borderColor="border"
+            color="fg.muted"
+            _hover={{
+              bg: { base: 'white', _dark: '#18202a' },
+              color: 'primary',
+            }}
+            _disabled={{ opacity: 0.6, cursor: 'not-allowed' }}
+            transition="all 0.2s"
+            title="Sync folders"
+            aria-label="Sync folders"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <svg
+              className={isSyncing ? 'spin-anim' : ''}
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
             >
-              <svg
-                className={isSyncing ? 'spin-anim' : ''}
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="23 4 23 10 17 10"></polyline>
-                <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-              </svg>
-            </Box>
-            <Text fontSize="2xs" color="fg.muted" whiteSpace="nowrap" mt="-1px">
-              Last synced:{' '}
-              {lastSynced
-                ? lastSynced.toLocaleTimeString([], {
-                    hour: 'numeric',
-                    minute: '2-digit',
-                    second: '2-digit',
-                  })
-                : 'Never'}
-            </Text>
-          </VStack>
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+          </Box>
         </HStack>
       </HStack>
 
@@ -278,6 +307,7 @@ export const FilesTable = ({
                   fontSize="2xs"
                   fontWeight="bold"
                   textTransform="uppercase"
+                  display={{ base: 'none', md: 'table-cell' }}
                 >
                   Owner
                 </Table.ColumnHeader>
@@ -286,6 +316,7 @@ export const FilesTable = ({
                   fontSize="2xs"
                   fontWeight="bold"
                   textTransform="uppercase"
+                  display={{ base: 'none', md: 'table-cell' }}
                 >
                   Last Modified
                 </Table.ColumnHeader>
@@ -294,6 +325,7 @@ export const FilesTable = ({
                   fontSize="2xs"
                   fontWeight="bold"
                   textTransform="uppercase"
+                  display={{ base: 'none', md: 'table-cell' }}
                 >
                   Size
                 </Table.ColumnHeader>
@@ -336,7 +368,7 @@ export const FilesTable = ({
                       </Text>
                     </HStack>
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell display={{ base: 'none', md: 'table-cell' }}>
                     <HStack gap={2}>
                       <Center
                         w={5}
@@ -361,10 +393,10 @@ export const FilesTable = ({
                       </Text>
                     </HStack>
                   </Table.Cell>
-                  <Table.Cell fontSize="sm" color="fg.muted">
+                  <Table.Cell fontSize="sm" color="fg.muted" display={{ base: 'none', md: 'table-cell' }}>
                     {item.lastModified}
                   </Table.Cell>
-                  <Table.Cell fontSize="sm" color="fg.muted">
+                  <Table.Cell fontSize="sm" color="fg.muted" display={{ base: 'none', md: 'table-cell' }}>
                     {item.size}
                   </Table.Cell>
                   <Table.Cell textAlign="right">
@@ -416,8 +448,8 @@ export const FilesTable = ({
                 <VStack gap={0} align="center">
                   <Text
                     fontSize="xs"
-                    fontWeight={item.name.length > 25 ? 'bold' : 'semibold'}
-                    color={item.name.length > 25 ? 'primary' : 'fg'}
+                    fontWeight="bold"
+                    color="fg"
                     textAlign="center"
                     maxW="100%"
                     overflow="hidden"
@@ -441,7 +473,7 @@ export const FilesTable = ({
                 position="absolute"
                 top={2}
                 right={2}
-                opacity={0}
+                opacity={{ base: 1, md: 0 }}
                 _groupHover={{ opacity: 1 }}
                 transition="opacity 0.2s"
                 gap={0.5}
@@ -483,121 +515,268 @@ const RowActions = ({
   onDeleteFolder: (id: string, e: React.MouseEvent) => void;
   onDeleteFile: (item: DashboardItem, e: React.MouseEvent) => void;
 }) => (
-  <HStack gap={1} justify="flex-end">
-    {/* Pin / Star */}
-    <Box
-      as="button"
-      onClick={(e: React.MouseEvent) => onToggleStar(item, e)}
-      p={1.5}
-      borderRadius="md"
-      color={item.starred ? 'yellow.400' : 'fg.muted'}
-      _hover={{ bg: 'bg.hover/20', color: item.starred ? 'yellow.300' : 'fg' }}
-      transition="all 0.2s"
-      title={item.starred ? 'Unpin' : 'Pin'}
-      aria-label={item.starred ? 'Unpin' : 'Pin'}
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-    >
-      <Icon
-        type={IconType.PIN}
-        size="16px"
-        fill={item.starred ? 'currentColor' : 'none'}
-      />
-    </Box>
-
-    {/* Share — files only */}
-    {!item.isFolder && (
+  <HStack gap={1} justify="flex-end" onClick={(e) => e.stopPropagation()}>
+    {/* Desktop View: Side-by-side buttons */}
+    <HStack gap={1} display={{ base: 'none', md: 'flex' }}>
+      {/* Pin / Star */}
       <Box
         as="button"
-        onClick={(e: React.MouseEvent) => onShare(item, e)}
+        onClick={(e: React.MouseEvent) => onToggleStar(item, e)}
         p={1.5}
         borderRadius="md"
-        color="fg.muted"
-        _hover={{ bg: 'bg.hover/20', color: 'primary' }}
+        color={item.starred ? 'yellow.400' : 'fg.muted'}
+        _hover={{ bg: 'bg.hover/20', color: item.starred ? 'yellow.300' : 'fg' }}
         transition="all 0.2s"
-        title="Share Link"
-        aria-label="Share Link"
+        title={item.starred ? 'Unpin' : 'Pin'}
+        aria-label={item.starred ? 'Unpin' : 'Pin'}
         display="flex"
         alignItems="center"
         justifyContent="center"
       >
-        <Icon type={IconType.SHARE} size="15px" />
+        <Icon
+          type={IconType.PIN}
+          size="16px"
+          fill={item.starred ? 'currentColor' : 'none'}
+        />
       </Box>
-    )}
 
-    {/* Download — files only */}
-    {!item.isFolder && (
-      <Box
-        as="button"
-        onClick={(e: React.MouseEvent) => {
-          e.stopPropagation();
-          onDownload(item, e);
-        }}
-        p={1.5}
-        borderRadius="md"
-        color="fg.muted"
-        _hover={{ bg: 'bg.hover/20', color: 'primary' }}
-        transition="all 0.2s"
-        title="Download File"
-        aria-label="Download File"
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
-      >
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
+      {/* Share — files only */}
+      {!item.isFolder && (
+        <Box
+          as="button"
+          onClick={(e: React.MouseEvent) => onShare(item, e)}
+          p={1.5}
+          borderRadius="md"
+          color="fg.muted"
+          _hover={{ bg: 'bg.hover/20', color: 'primary' }}
+          transition="all 0.2s"
+          title="Share Link"
+          aria-label="Share Link"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
         >
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-      </Box>
-    )}
+          <Icon type={IconType.SHARE} size="15px" />
+        </Box>
+      )}
 
-    {/* Delete folder */}
-    {item.isFolder && (
-      <Box
-        as="button"
-        onClick={(e: React.MouseEvent) => onDeleteFolder(item.dbId, e)}
-        p={1.5}
-        borderRadius="md"
-        color="error.400"
-        _hover={{ bg: 'error.500/10' }}
-        transition="all 0.2s"
-        title="Delete Folder"
-        aria-label="Delete Folder"
-        fontSize="xs"
-        fontWeight="bold"
-      >
-        🗑
-      </Box>
-    )}
+      {/* Download — files only */}
+      {!item.isFolder && (
+        <Box
+          as="button"
+          onClick={(e: React.MouseEvent) => {
+            e.stopPropagation();
+            onDownload(item, e);
+          }}
+          p={1.5}
+          borderRadius="md"
+          color="fg.muted"
+          _hover={{ bg: 'bg.hover/20', color: 'primary' }}
+          transition="all 0.2s"
+          title="Download File"
+          aria-label="Download File"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </Box>
+      )}
 
-    {/* Delete file — files only */}
-    {!item.isFolder && (
-      <Box
-        as="button"
-        onClick={(e: React.MouseEvent) => onDeleteFile(item, e)}
-        p={1.5}
-        borderRadius="md"
-        color="error.400"
-        _hover={{ bg: 'error.500/10' }}
-        transition="all 0.2s"
-        title="Delete File"
-        aria-label="Delete File"
-        fontSize="xs"
-        fontWeight="bold"
-      >
-        🗑
-      </Box>
-    )}
+      {/* Delete folder */}
+      {item.isFolder && (
+        <Box
+          as="button"
+          onClick={(e: React.MouseEvent) => onDeleteFolder(item.dbId, e)}
+          p={1.5}
+          borderRadius="md"
+          color="error.400"
+          _hover={{ bg: 'error.500/10' }}
+          transition="all 0.2s"
+          title="Delete Folder"
+          aria-label="Delete Folder"
+          fontSize="xs"
+          fontWeight="bold"
+        >
+          🗑
+        </Box>
+      )}
+
+      {/* Delete file — files only */}
+      {!item.isFolder && (
+        <Box
+          as="button"
+          onClick={(e: React.MouseEvent) => onDeleteFile(item, e)}
+          p={1.5}
+          borderRadius="md"
+          color="error.400"
+          _hover={{ bg: 'error.500/10' }}
+          transition="all 0.2s"
+          title="Delete File"
+          aria-label="Delete File"
+          fontSize="xs"
+          fontWeight="bold"
+        >
+          🗑
+        </Box>
+      )}
+    </HStack>
+
+    {/* Mobile View: 3-dot dropdown menu */}
+    <Box display={{ base: 'block', md: 'none' }} position="relative" zIndex={10}>
+      <Menu.Root>
+        <Menu.Trigger asChild>
+          <Box
+            as="button"
+            p={1.5}
+            borderRadius="md"
+            color="fg.muted"
+            _hover={{ bg: 'bg.hover/25', color: 'fg' }}
+            transition="all 0.2s"
+            title="Options"
+            aria-label="Options"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="1.5"></circle>
+              <circle cx="12" cy="5" r="1.5"></circle>
+              <circle cx="12" cy="19" r="1.5"></circle>
+            </svg>
+          </Box>
+        </Menu.Trigger>
+        <Portal>
+        <Menu.Positioner>
+          <Menu.Content
+            zIndex={9999}
+            borderRadius="xl"
+            boxShadow="2xl"
+            bg="bg.panel"
+            borderColor="border"
+            py={1}
+            minW="140px"
+            maxH="none"
+            overflow="visible"
+          >
+            <Menu.Item
+              value="star"
+              onClick={(e: React.MouseEvent) => onToggleStar(item, e)}
+              style={{
+                padding: '8px 12px',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <Icon
+                type={IconType.PIN}
+                size="14px"
+                color={item.starred ? 'yellow.400' : 'inherit'}
+                fill={item.starred ? 'currentColor' : 'none'}
+              />
+              {item.starred ? 'Unpin' : 'Pin'}
+            </Menu.Item>
+
+            {!item.isFolder && (
+              <Menu.Item
+                value="share"
+                onClick={(e: React.MouseEvent) => onShare(item, e)}
+                style={{
+                  padding: '8px 12px',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                <Icon type={IconType.SHARE} size="14px" />
+                Share Link
+              </Menu.Item>
+            )}
+
+            {!item.isFolder && (
+              <Menu.Item
+                value="download"
+                onClick={(e: React.MouseEvent) => onDownload(item, e)}
+                style={{
+                  padding: '8px 12px',
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download
+              </Menu.Item>
+            )}
+
+            <Menu.Item
+              value="delete"
+              onClick={(e: React.MouseEvent) => {
+                if (item.isFolder) {
+                  onDeleteFolder(item.dbId, e);
+                } else {
+                  onDeleteFile(item, e);
+                }
+              }}
+              style={{
+                padding: '8px 12px',
+                fontSize: '13px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                color: 'var(--chakra-colors-error-400)',
+              }}
+            >
+              <span style={{ fontSize: '14px', width: '14px', textAlign: 'center' }}>🗑</span>
+              Delete
+            </Menu.Item>
+          </Menu.Content>
+        </Menu.Positioner>
+        </Portal>
+      </Menu.Root>
+    </Box>
   </HStack>
 );

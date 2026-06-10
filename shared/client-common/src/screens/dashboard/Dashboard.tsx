@@ -19,6 +19,7 @@ import { SideNavBar } from './components/SideNavBar';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { UploadProgressBanner } from './components/UploadProgressBanner';
 import { FilesTable } from './components/FilesTable';
+import { BottomNavBar } from './components/BottomNavBar';
 import { getTelegramShareLink, formatSize, formatDate, getFileType } from './components/const';
 
 const Dashboard = () => {
@@ -198,7 +199,12 @@ const Dashboard = () => {
     }
   };
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
+    setIsLogoutConfirmOpen(true);
+  };
+
+  const confirmLogout = async () => {
+    setIsLogoutConfirmOpen(false);
     try {
       await apiClient.logOut();
     } catch (_) {}
@@ -301,6 +307,7 @@ const Dashboard = () => {
   // Create Folder modal states
   const [isCreateFolderOpen, setIsCreateFolderOpen] = useState(false);
   const [newFolderName, setNewFolderName] = useState('');
+  const [isLogoutConfirmOpen, setIsLogoutConfirmOpen] = useState(false);
 
   // Create real folder on server
   const handleCreateFolder = () => {
@@ -390,9 +397,17 @@ const Dashboard = () => {
       handleDownloadFile(item);
     }
   };
-
   return (
-    <Box bg={{ base: '#f4f6f8', _dark: '#0b141d' }} minH="calc(100vh - 38px)" color="fg" display="flex" flexDirection="column" position="relative">
+    <Box
+      bg={{ base: '#f4f6f8', _dark: '#0b141d' }}
+      minH="calc(100vh - 38px)"
+      height={{ base: 'auto', md: 'calc(100vh - 38px)' }}
+      color="fg"
+      display="flex"
+      flexDirection="column"
+      position="relative"
+      overflow={{ base: 'visible', md: 'hidden' }}
+    >
       {/* Hidden file input */}
       <input
         type="file"
@@ -411,24 +426,44 @@ const Dashboard = () => {
         currentFolderId={currentFolderId}
       />
 
-      <HStack flex={1} alignItems="stretch" gap={0} overflow="hidden">
-        {/* 2. SideNavBar */}
-        <SideNavBar
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          setCurrentFolderId={setCurrentFolderId}
-          onLogout={handleLogout}
-        />
+      <HStack flex={1} alignItems="stretch" gap={0} overflow="hidden" minH={0}>
+        {/* 2. SideNavBar (Desktop View) */}
+        <Box display={{ base: 'none', md: 'flex' }} height="100%">
+          <SideNavBar
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            setCurrentFolderId={setCurrentFolderId}
+            onLogout={handleLogout}
+          />
+        </Box>
 
         {/* 3. Main content area */}
-        <Box flex={1} p={8} overflowY="auto" className="custom-scrollbar">
+        <Box
+          flex={1}
+          p={{ base: 4, md: 8 }}
+          pb={{ base: 24, md: 8 }}
+          overflowY="auto"
+          className="custom-scrollbar"
+        >
           <VStack gap={8} align="stretch" maxW="1100px" mx="auto">
             {/* Breadcrumbs Navigation */}
-            <Breadcrumbs
-              breadcrumbs={breadcrumbs}
-              currentFolderId={currentFolderId}
-              setCurrentFolderId={setCurrentFolderId}
-            />
+            <VStack align="stretch" gap={1.5}>
+              <Breadcrumbs
+                breadcrumbs={breadcrumbs}
+                currentFolderId={currentFolderId}
+                setCurrentFolderId={setCurrentFolderId}
+              />
+              <Text fontSize="2xs" color="fg.muted">
+                Last synced:{' '}
+                {lastSynced
+                  ? lastSynced.toLocaleTimeString([], {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      second: '2-digit',
+                    })
+                  : 'Never'}
+              </Text>
+            </VStack>
 
             {/* Upload progress banner */}
             <UploadProgressBanner
@@ -436,8 +471,6 @@ const Dashboard = () => {
               uploadProgress={uploadProgress}
               onCancelUpload={handleCancelUpload}
             />
-
-
 
             {/* Detailed Files Table */}
             <FilesTable
@@ -452,10 +485,24 @@ const Dashboard = () => {
               onSync={handleSync}
               lastSynced={lastSynced}
               isSyncing={isSyncing}
+              isInsideFolder={currentFolderId !== null}
+              onBack={() => {
+                // Navigate to parent: find parent of currentFolder from breadcrumbs
+                const parent = breadcrumbs[breadcrumbs.length - 2];
+                setCurrentFolderId(parent ? parent.id : null);
+              }}
             />
           </VStack>
         </Box>
       </HStack>
+
+      {/* Bottom navigation bar for smaller screens */}
+      <BottomNavBar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        setCurrentFolderId={setCurrentFolderId}
+        onLogout={handleLogout}
+      />
 
 
       {/* Create Folder Dialog */}
@@ -480,7 +527,8 @@ const Dashboard = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <VStack
-                w="400px"
+                w={{ base: 'calc(100vw - 32px)', sm: '400px' }}
+                maxW="400px"
                 bg={{ base: 'white', _dark: '#131c26' }}
                 borderWidth="1px"
                 borderColor="border"
@@ -568,6 +616,93 @@ const Dashboard = () => {
         )}
       </AnimatePresence>
 
+      {/* Logout Confirmation Dialog */}
+      <AnimatePresence>
+        {isLogoutConfirmOpen && (
+          <Box
+            position="fixed"
+            inset={0}
+            bg="black/60"
+            backdropFilter="blur(4px)"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            zIndex={1000}
+            onClick={() => setIsLogoutConfirmOpen(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 10 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <VStack
+                w={{ base: 'calc(100vw - 32px)', sm: '400px' }}
+                maxW="400px"
+                bg={{ base: 'white', _dark: '#131c26' }}
+                borderWidth="1px"
+                borderColor="border"
+                borderRadius="2xl"
+                p={6}
+                gap={5}
+                shadow="2xl"
+                align="stretch"
+              >
+                <HStack justify="space-between">
+                  <Text fontWeight="extrabold" fontSize="md" color="fg">
+                    Confirm Logout
+                  </Text>
+                  <Box
+                    as="button"
+                    onClick={() => setIsLogoutConfirmOpen(false)}
+                    color="fg.muted"
+                    _hover={{ color: 'fg' }}
+                    fontSize="sm"
+                    fontWeight="bold"
+                    aria-label="Close dialog"
+                  >
+                    ✕
+                  </Box>
+                </HStack>
+
+                <Text fontSize="sm" color="fg.muted">
+                  Are you sure you want to log out of Telegramonic? You will need to log back in to access your files.
+                </Text>
+
+                <HStack justify="flex-end" gap={3}>
+                  <Button
+                    onClick={() => setIsLogoutConfirmOpen(false)}
+                    variant="outline"
+                    borderColor="border"
+                    color="fg.muted"
+                    h="36px"
+                    borderRadius="xl"
+                    fontSize="xs"
+                    fontWeight="bold"
+                    _hover={{ bg: 'bg.hover' }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={confirmLogout}
+                    bg="red.500"
+                    _hover={{ bg: 'red.600' }}
+                    color="white"
+                    h="36px"
+                    borderRadius="xl"
+                    fontSize="xs"
+                    fontWeight="bold"
+                  >
+                    Logout
+                  </Button>
+                </HStack>
+              </VStack>
+            </motion.div>
+          </Box>
+        )}
+      </AnimatePresence>
+
       {/* 5. Custom Toast Notifications */}
       <AnimatePresence>
         {toastMessage && (
@@ -578,10 +713,9 @@ const Dashboard = () => {
             transition={{ duration: 0.2 }}
             style={{
               position: 'fixed',
-              bottom: '32px',
-              right: '32px',
               zIndex: 2000,
             }}
+            className="toast-positioner"
           >
             <HStack
               bg={{ base: 'white', _dark: '#18202a' }}
@@ -594,14 +728,14 @@ const Dashboard = () => {
                     : 'primary'
               }
               borderRadius="xl"
-              px={5}
-              py={3.5}
+              px={{ base: 3, md: 5 }}
+              py={{ base: 2.5, md: 3.5 }}
               shadow="2xl"
-              gap={3}
+              gap={{ base: 2, md: 3 }}
             >
               <Box
-                w={2}
-                h={2}
+                w={{ base: 1.5, md: 2 }}
+                h={{ base: 1.5, md: 2 }}
                 borderRadius="full"
                 bg={
                   toastType === 'success'
@@ -611,7 +745,7 @@ const Dashboard = () => {
                       : 'primary'
                 }
               />
-              <Text fontSize="sm" fontWeight="bold" color="fg">
+              <Text fontSize={{ base: 'xs', md: 'sm' }} fontWeight="bold" color="fg">
                 {toastMessage}
               </Text>
             </HStack>
@@ -644,6 +778,23 @@ const Dashboard = () => {
         .custom-scrollbar::-webkit-scrollbar-thumb {
           background: var(--chakra-colors-border);
           border-radius: 10px;
+        }
+        /* Toast: bottom-right on desktop, bottom-center on mobile */
+        .toast-positioner {
+          bottom: 80px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: max-content;
+          max-width: calc(100vw - 32px);
+        }
+        @media (min-width: 768px) {
+          .toast-positioner {
+            bottom: 32px;
+            right: 32px;
+            left: auto;
+            transform: none;
+            max-width: none;
+          }
         }
       `}</style>
     </Box>

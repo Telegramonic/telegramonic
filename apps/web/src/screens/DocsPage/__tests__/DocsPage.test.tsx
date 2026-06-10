@@ -38,11 +38,14 @@ describe('DocsPage', () => {
     // Renders sidebar categories
     expect(screen.getByText('Getting Started')).toBeInTheDocument();
     expect(screen.getByText('Architecture')).toBeInTheDocument();
+    expect(screen.getAllByText('Version History')[0]).toBeInTheDocument();
 
     // Renders sidebar items
     expect(screen.getAllByText('Introduction')[0]).toBeInTheDocument();
     expect(screen.getByText('Quick Start')).toBeInTheDocument();
-    expect(screen.getByText('Version History')).toBeInTheDocument();
+    expect(screen.getByText('Setup Guide')).toBeInTheDocument();
+    expect(screen.getByText('Desktop')).toBeInTheDocument();
+    expect(screen.getByText('Mobile')).toBeInTheDocument();
     expect(screen.getByText('MTProto Protocol')).toBeInTheDocument();
     expect(screen.getByText('Direct Storage')).toBeInTheDocument();
 

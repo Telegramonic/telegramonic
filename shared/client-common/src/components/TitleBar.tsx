@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, HStack, Text, Spinner } from '@chakra-ui/react';
+import { Box, HStack, VStack, Text, Spinner } from '@chakra-ui/react';
 import { Logo } from '@assets';
 import { useServerHealth } from '@services';
 
@@ -138,99 +138,96 @@ const TitleBar = () => {
 
       {/* Right side: Connection Indicators + Window Controls */}
       <HStack gap={3} style={{ WebkitAppRegion: 'no-drag' } as any} alignItems="center">
-        {/* Internet Status Indicator */}
-        <HStack
-          gap={2}
-          cursor="pointer"
-          onClick={checkInternet}
+        {/* Unified Connection Status Column */}
+        <VStack
+          align="stretch"
+          gap={0.5}
           px={2.5}
           py={0.5}
-          borderRadius="full"
-          bg="bg.hover/40"
+          borderRadius="lg"
+          bg="bg.hover/20"
           border="1px solid"
           borderColor="border/20"
-          _hover={{ bg: 'bg.hover', borderColor: 'primary/30' }}
-          transition="all 0.2s"
-          title="Click to recheck Internet Connection"
+          flexShrink={0}
         >
-          <Box
-            w={2}
-            h={2}
-            borderRadius="full"
-            bg={
-              checkingInternet
-                ? 'yellow.400'
-                : isOnline
-                  ? 'success.400'
-                  : 'error.400'
-            }
-            className={checkingInternet ? 'pulse-anim' : ''}
-            style={
-              !checkingInternet && isOnline
-                ? { boxShadow: '0 0 8px var(--chakra-colors-success-400)' }
-                : !checkingInternet && !isOnline
-                  ? { boxShadow: '0 0 8px var(--chakra-colors-error-400)' }
-                  : {}
-            }
-          />
-          {checkingInternet ? (
-            <Spinner size="xs" color="primary" />
-          ) : (
-            <Text fontSize="10px" fontWeight="medium" color="fg.muted">
-              {isOnline ? 'Internet: Online' : 'Internet: Offline'}
-            </Text>
-          )}
-        </HStack>
+          {/* Internet Status */}
+          <HStack
+            gap={1.5}
+            cursor="pointer"
+            onClick={checkInternet}
+            title="Click to recheck Internet Connection"
+            alignItems="center"
+          >
+            <Box
+              w={1.5}
+              h={1.5}
+              borderRadius="full"
+              bg={
+                checkingInternet
+                  ? 'yellow.400'
+                  : isOnline
+                    ? 'success.400'
+                    : 'error.400'
+              }
+              className={checkingInternet ? 'pulse-anim' : ''}
+              style={
+                !checkingInternet && isOnline
+                  ? { boxShadow: '0 0 6px var(--chakra-colors-success-400)' }
+                  : !checkingInternet && !isOnline
+                    ? { boxShadow: '0 0 6px var(--chakra-colors-error-400)' }
+                    : {}
+              }
+            />
+            {checkingInternet ? (
+              <Spinner size="2xs" color="primary" />
+            ) : (
+              <Text fontSize="9px" fontWeight="bold" color="fg.muted" whiteSpace="nowrap" lineHeight="1">
+                {isOnline ? 'Internet: Online' : 'Internet: Offline'}
+              </Text>
+            )}
+          </HStack>
 
-        {/* Interactive Status Indicator */}
-        <HStack
-          gap={2}
-          cursor="pointer"
-          onClick={() => refetch()}
-          px={2.5}
-          py={0.5}
-          borderRadius="full"
-          bg="bg.hover/40"
-          border="1px solid"
-          borderColor="border/20"
-          _hover={{ bg: 'bg.hover', borderColor: 'primary/30' }}
-          transition="all 0.2s"
-          title="Click to recheck Telegram Connection Latency"
-        >
-          <Box
-            w={2}
-            h={2}
-            borderRadius="full"
-            bg={
-              status === 'checking'
-                ? 'yellow.400'
-                : status === 'connected'
-                  ? 'success.400'
+          {/* Telegram Status */}
+          <HStack
+            gap={1.5}
+            cursor="pointer"
+            onClick={() => refetch()}
+            title="Click to recheck Telegram Connection Latency"
+            alignItems="center"
+          >
+            <Box
+              w={1.5}
+              h={1.5}
+              borderRadius="full"
+              bg={
+                status === 'checking'
+                  ? 'yellow.400'
+                  : status === 'connected'
+                    ? 'success.400'
+                    : 'error.400'
+              }
+              className={status === 'checking' || status === 'connected' ? 'pulse-anim' : ''}
+              style={
+                status === 'connected'
+                  ? { boxShadow: '0 0 6px var(--chakra-colors-success-400)' }
                   : status === 'error'
-                    ? 'error.400'
-                    : 'fg.muted'
-            }
-            className={status === 'checking' || status === 'connected' ? 'pulse-anim' : ''}
-            style={
-              status === 'connected'
-                ? { boxShadow: '0 0 8px var(--chakra-colors-success-400)' }
-                : status === 'error'
-                  ? { boxShadow: '0 0 8px var(--chakra-colors-error-400)' }
-                  : {}
-            }
-          />
-          {status === 'checking' ? (
-            <Spinner size="xs" color="primary" />
-          ) : (
-            <Text fontSize="10px" fontWeight="medium" color="fg.muted">
-              {status === 'connected' && latency !== null
-                ? `TG Connected: ${latency}ms`
-                : status === 'error'
-                  ? 'TG Disconnected'
-                  : 'Check Status'}
-            </Text>
-          )}
-        </HStack>
+                    ? { boxShadow: '0 0 6px var(--chakra-colors-error-400)' }
+                    : {}
+              }
+            />
+            {status === 'checking' ? (
+              <Spinner size="2xs" color="primary" />
+            ) : (
+              <Text fontSize="9px" fontWeight="bold" color="fg.muted" whiteSpace="nowrap" lineHeight="1">
+                {status === 'connected' && latency !== null
+                  ? `TG Connected: ${latency}ms`
+                  : status === 'error'
+                    ? 'TG Disconnected'
+                    : 'Check Status'}
+              </Text>
+            )}
+          </HStack>
+        </VStack>
 
         {/* Window controls for Windows/Linux */}
         {!isMac && !isMobile && (

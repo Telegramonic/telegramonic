@@ -3,6 +3,7 @@ import { fireEvent, screen, act } from '@testing-library/react';
 import Dashboard from '../Dashboard';
 import { renderWithProvidersAndRouter } from '@testUtils';
 import { appStore } from '@appStore';
+import { apiClient } from '@services/apiClient';
 
 // Polyfill Blob.prototype.arrayBuffer for JSDOM environments if missing
 if (!Blob.prototype.arrayBuffer) {
@@ -132,7 +133,7 @@ describe('Dashboard', () => {
   it('should filter files/folders based on search query', async () => {
     renderWithProvidersAndRouter(<Dashboard />);
     expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
-    const searchInput = screen.getByPlaceholderText('Search files, folders...');
+    const searchInput = screen.getByPlaceholderText('Search...');
     
     await act(async () => {
       fireEvent.change(searchInput, { target: { value: 'Marketing' } });
@@ -178,7 +179,7 @@ describe('Dashboard', () => {
     expect(await screen.findByText('Pinned: Product_Demo_Final.mp4')).toBeInTheDocument();
 
     // Switch to Pinned tab
-    fireEvent.click(screen.getByText('Pinned'));
+    fireEvent.click(screen.getAllByText('Pinned')[0]);
     
     // Pinned tab should show pinned file Product_Demo_Final.mp4
     expect((await screen.findAllByText('Product_Demo_Final.mp4'))[0]).toBeInTheDocument();
@@ -201,7 +202,10 @@ describe('Dashboard', () => {
     fireEvent.click(screen.getByText('Marketing Assets'));
     expect((await screen.findAllByText('Product_Demo_Final.mp4'))[0]).toBeInTheDocument();
     
-    const shareButtons = await screen.findAllByRole('button', { name: 'Share Link' });
+    const shareButtons = await screen.findAllByRole('button', {
+      name: 'Share Link',
+      hidden: true,
+    });
     fireEvent.click(shareButtons[0]); // share Product_Demo_Final.mp4 (index 0)
 
     expect(await screen.findByText('Telegram message link copied: Product_Demo_Final.mp4')).toBeInTheDocument();
@@ -238,5 +242,41 @@ describe('Dashboard', () => {
     expect(await screen.findByText('Folder deleted successfully')).toBeInTheDocument();
 
     confirmSpy.mockRestore();
+  });
+
+  it('should open confirmation dialog when clicking logout, and perform logout when confirmed', async () => {
+    const logOutSpy = jest.spyOn(apiClient, 'logOut').mockResolvedValue(true);
+    
+    renderWithProvidersAndRouter(<Dashboard />);
+    expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
+
+    // The Logout button is rendered in the SideNavBar/BottomNavBar
+    const logoutButtons = screen.getAllByText('Logout');
+    fireEvent.click(logoutButtons[0]);
+
+    // Confirmation dialog should be visible now
+    expect(await screen.findByText('Confirm Logout')).toBeInTheDocument();
+    expect(screen.getByText('Are you sure you want to log out of Telegramonic? You will need to log back in to access your files.')).toBeInTheDocument();
+
+    // Clicking Cancel should close the dialog
+    const cancelBtn = screen.getByRole('button', { name: 'Cancel' });
+    fireEvent.click(cancelBtn);
+    expect(screen.queryByText('Confirm Logout')).not.toBeInTheDocument();
+
+    // Open it again
+    fireEvent.click(logoutButtons[0]);
+    expect(await screen.findByText('Confirm Logout')).toBeInTheDocument();
+
+    // Click confirm/Logout button in the dialog
+    const confirmButtons = screen.getAllByRole('button', { name: 'Logout' });
+    // SideNavBar has 'Logout' text, BottomNavBar has 'Logout' text. The modal button is also 'Logout'.
+    // Let's find the confirm button which is one of the returned elements.
+    // Let's click the last one (which should be the modal button)
+    fireEvent.click(confirmButtons[confirmButtons.length - 1]);
+
+    expect(logOutSpy).toHaveBeenCalled();
+    expect(await screen.findByText('Logged out successfully')).toBeInTheDocument();
+
+    logOutSpy.mockRestore();
   });
 });

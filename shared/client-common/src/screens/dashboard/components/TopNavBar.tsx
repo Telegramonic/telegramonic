@@ -10,6 +10,7 @@ export const TopNavBar = ({
   onUploadClick,
   onCreateFolderClick,
   currentFolderId,
+  onMenuClick,
 }: TopNavBarProps) => {
   const { data: currentUser } = useCurrentUser();
 
@@ -20,15 +21,29 @@ export const TopNavBar = ({
       h="64px"
       borderBottom="1px solid"
       borderBottomColor={{ base: '#e2e8f0', _dark: '#2f3942' }}
-      px={6}
+      px={{ base: 4, md: 6 }}
       justifyContent="space-between"
       bg={{ base: 'white', _dark: '#0b141d' }}
       position="sticky"
       top={0}
       zIndex={40}
     >
-      <HStack gap={8} flex={1}>
-        <HStack gap={3}>
+      <HStack gap={{ base: 3, md: 8 }} flex={1} overflow="hidden">
+        {onMenuClick && (
+          <Box
+            as="button"
+            onClick={onMenuClick}
+            display={{ base: 'flex', md: 'none' }}
+            color="fg.muted"
+            _hover={{ color: 'primary' }}
+            cursor="pointer"
+            aria-label="Toggle Navigation Menu"
+            flexShrink={0}
+          >
+            <Icon type={IconType.MENU} size={20} />
+          </Box>
+        )}
+        <HStack gap={3} flexShrink={0} display={{ base: 'none', sm: 'flex' }}>
           <Box w={8} h={8}>
             <Icon type={IconType.LOGO} size="100%" />
           </Box>
@@ -43,7 +58,7 @@ export const TopNavBar = ({
             <Icon type={IconType.SEARCH} size={16} />
           </Box>
           <Input
-            placeholder="Search files, folders..."
+            placeholder="Search..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             bg={{ base: '#e2e8f0/50', _dark: '#18202a' }}
@@ -64,14 +79,14 @@ export const TopNavBar = ({
         </Box>
       </HStack>
 
-      <HStack gap={4}>
+      <HStack gap={{ base: 2, md: 4 }} flexShrink={0}>
         <Button
           onClick={onUploadClick}
           bg="primary"
           color="white"
           borderRadius="xl"
           h="40px"
-          px={5}
+          px={{ base: 3, md: 5 }}
           fontSize="sm"
           fontWeight="bold"
           disabled={isAtRoot}
@@ -82,7 +97,7 @@ export const TopNavBar = ({
           gap={2}
         >
           <Icon type={IconType.CLOUD_UPLOAD} size={16} />
-          Upload File
+          <Box display={{ base: 'none', md: 'inline' }}>Upload File</Box>
         </Button>
 
         <Button
@@ -92,15 +107,19 @@ export const TopNavBar = ({
           color="primary"
           borderRadius="xl"
           h="40px"
-          px={4}
+          px={{ base: 3, md: 4 }}
           fontSize="sm"
           fontWeight="bold"
           disabled={!isAtRoot}
           opacity={!isAtRoot ? 0.5 : 1}
           cursor={!isAtRoot ? 'not-allowed' : 'pointer'}
           _hover={{ bg: !isAtRoot ? 'transparent' : 'primary/5' }}
+          display="flex"
+          gap={2}
         >
-          + New Folder
+          <Icon type={IconType.FOLDER} size={16} />
+          <Box display={{ base: 'inline', md: 'none' }}>+</Box>
+          <Box display={{ base: 'none', md: 'inline' }}>+ New Folder</Box>
         </Button>
 
         <Center
