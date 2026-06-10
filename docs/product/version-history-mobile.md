@@ -4,6 +4,21 @@ This document tracks release updates, major features, optimizations, and bug fix
 
 ---
 
+## [v0.1.1] - Current Release
+
+- **Mobile Workspace Version**: `0.1.1`
+
+### 🌟 New Features
+
+- **Responsive Profile Section**: Integrated the new Profile settings navigation button into the bottom navigation bar.
+- **Glassmorphic Credentials Verification Dialogs**: Added confirmation, OTP verification, and 2FA password modals with flexible vertical stacking to ensure a premium user experience on mobile screen resolutions.
+
+### 🐛 Bug Fixes
+
+- **Dashboard Query Sync**: Fixed intermittent forced logouts on mobile during verification by isolating the credentials check within a temporary client context.
+
+---
+
 ## [v0.1.0] - Initial Mobile Release
 
 - **Mobile Workspace Version**: `0.1.0`

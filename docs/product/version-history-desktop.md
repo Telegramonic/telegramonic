@@ -4,7 +4,27 @@ This document tracks release updates, major features, optimizations, and bug fix
 
 ---
 
-## [v0.2.0] - Current Release
+## [v0.2.1] - Current Release
+
+- **Desktop Version**: `0.2.1`
+- **Server Version**: `0.1.1`
+
+### 🌟 New Features
+
+- **Profile Credentials Verification Flow**: Added a multi-step confirmation and verification dialog flow (OTP/2FA password prompts) inside the Profile tab for updating Telegram API credentials.
+- **Profile Layout & Responsiveness Refinements**: Refactored the Profile screen with glassmorphic cards and stack scaling. Replaced standard inputs with unified Chakra UI components and enabled auto-truncation for user details on smaller screens.
+- **Unchanged Fields Validation**: Dynamically disabled the Save Credentials button until the API ID or API Hash fields differ from the active profile.
+- **Cloud Storage Gauges Removal**: Removed the unnecessary Cloud Storage Usage section to optimize screen space.
+
+### 🐛 Bug Fixes
+
+- **Auto-Logout & Session Invalidation Prevention**: Introduced an asynchronous temporary client context during credential updates. This allows the primary session to remain active and fully operational during code verification, preventing forced logouts on concurrent background queries.
+- **Session Revocation on Telegram Servers**: Implemented automatic sign-out of the old Telegram session key upon successful credentials verification to clean up active devices.
+- **AUTH_RESTART RPC Resolution**: Purged cached session files before requesting verification codes to resolve MTProto connection restarts.
+
+---
+
+## [v0.2.0]
 
 - **Desktop Version**: `0.2.0`
 - **Server Version**: `0.1.0`
