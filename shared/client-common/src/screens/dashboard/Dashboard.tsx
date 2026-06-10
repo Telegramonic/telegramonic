@@ -404,9 +404,9 @@ const Dashboard = () => {
       height={{ base: 'auto', md: 'calc(100vh - 38px)' }}
       color="fg"
       display="flex"
-      flexDirection={{ base: 'column', md: 'row' }}
+      flexDirection="column"
       position="relative"
-      overflow="hidden"
+      overflow={{ base: 'visible', md: 'hidden' }}
     >
       {/* Hidden file input */}
       <input
@@ -417,33 +417,25 @@ const Dashboard = () => {
         data-testid="file-input"
       />
 
-      {/* 2. SideNavBar (Desktop View) */}
-      <Box display={{ base: 'none', md: 'flex' }} height="100%">
-        <SideNavBar
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          setCurrentFolderId={setCurrentFolderId}
-          onLogout={handleLogout}
-        />
-      </Box>
+      {/* 1. Header/TopNavBar */}
+      <TopNavBar
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        onUploadClick={triggerFileUpload}
+        onCreateFolderClick={handleCreateFolder}
+        currentFolderId={currentFolderId}
+      />
 
-      {/* Main content column */}
-      <VStack
-        flex={1}
-        alignItems="stretch"
-        gap={0}
-        minW={0}
-        height="100%"
-        overflow="hidden"
-      >
-        {/* 1. Header/TopNavBar */}
-        <TopNavBar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          onUploadClick={triggerFileUpload}
-          onCreateFolderClick={handleCreateFolder}
-          currentFolderId={currentFolderId}
-        />
+      <HStack flex={1} alignItems="stretch" gap={0} overflow="hidden" minH={0}>
+        {/* 2. SideNavBar (Desktop View) */}
+        <Box display={{ base: 'none', md: 'flex' }} height="100%">
+          <SideNavBar
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            setCurrentFolderId={setCurrentFolderId}
+            onLogout={handleLogout}
+          />
+        </Box>
 
         {/* 3. Main content area */}
         <Box
@@ -452,7 +444,6 @@ const Dashboard = () => {
           pb={{ base: 24, md: 8 }}
           overflowY="auto"
           className="custom-scrollbar"
-          w="100%"
         >
           <VStack gap={8} align="stretch" maxW="1100px" mx="auto">
             {/* Breadcrumbs Navigation */}
@@ -503,7 +494,7 @@ const Dashboard = () => {
             />
           </VStack>
         </Box>
-      </VStack>
+      </HStack>
 
       {/* Bottom navigation bar for smaller screens */}
       <BottomNavBar
