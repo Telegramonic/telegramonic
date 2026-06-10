@@ -30,7 +30,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v6
         with:
-          token: ${{ secrets.PA_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PA_TOKEN }}
           fetch-depth: 0
 
       - name: Conventional Changelog Action
@@ -38,7 +38,7 @@ jobs:
         if: ${{ inputs.bump-version == true }}
         uses: TriPSs/conventional-changelog-action@latest
         with:
-          github-token: ${{ secrets.PA_TOKEN || secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PA_TOKEN }}
           git-user-name: 'Telegramonic bot'
           output-file: false
           version-file: 'apps/mobile/package.json'
@@ -176,14 +176,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v6
         with:
-          token: ${{ secrets.PA_TOKEN || secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PA_TOKEN }}
           fetch-depth: 0
 
       - name: Conventional Changelog Action
         id: changelog
         uses: TriPSs/conventional-changelog-action@latest
         with:
-          github-token: ${{ secrets.PA_TOKEN || secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PA_TOKEN }}
           git-user-name: 'Telegramonic bot'
           output-file: false
           version-file: 'apps/mobile/package.json'
@@ -208,4 +208,4 @@ jobs:
           draft: false
           prerelease: false
         env:
-          GITHUB_TOKEN: ${{ secrets.PA_TOKEN || secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PA_TOKEN }}
