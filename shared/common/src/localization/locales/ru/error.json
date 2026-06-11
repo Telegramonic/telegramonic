@@ -1,0 +1,22 @@
+{
+  "LoginPage": {
+    "errors": {
+      "serverConnection": "Ошибка подключения к серверу",
+      "invalidCode": "Неверный код",
+      "verificationFailed": "Ошибка проверки"
+    }
+  },
+  "Dashboard": {
+    "profile": {
+      "errors": {
+        "emptyCredentials": "API ID и API Hash не могут быть пустыми.",
+        "phoneNotFound": "Номер телефона не найден. Невозможно проверить учетные данные.",
+        "failedSendCode": "Не удалось отправить код подтверждения.",
+        "serverConnection": "Ошибка подключения к серверу.",
+        "invalidCode": "Неверный код.",
+        "verificationFailed": "Ошибка проверки.",
+        "incorrectPassword": "Неверный пароль 2FA."
+      }
+    }
+  }
+}

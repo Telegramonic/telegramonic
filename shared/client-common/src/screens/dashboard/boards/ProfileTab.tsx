@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useCurrentUser, apiClient } from '@services';
 import { appStore } from '@appStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import { LanguageSelector } from '@components';
 
 interface ProfileTabProps {
   onLogout: () => void;
@@ -411,6 +412,38 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
           >
             {t('Dashboard.profile.credentials.save')}
           </Button>
+        </Stack>
+      </VStack>
+
+      {/* Language Settings card */}
+      <VStack
+        bg={{ base: 'white', _dark: '#131c26' }}
+        borderWidth="1px"
+        borderColor="border"
+        borderRadius="2xl"
+        p={{ base: 4, sm: 6 }}
+        align="stretch"
+        gap={4}
+        shadow="md"
+      >
+        <VStack align="stretch" gap={1}>
+          <Text fontWeight="extrabold" fontSize="md" color="fg">
+            {t('Dashboard.profile.language.title')}
+          </Text>
+          <Text fontSize="xs" color="fg.muted">
+            {t('Dashboard.profile.language.subtitle')}
+          </Text>
+        </VStack>
+        <Stack
+          justify="space-between"
+          align={{ base: 'stretch', sm: 'center' }}
+          pt={2}
+          borderTop="1px solid"
+          borderColor="border/30"
+          direction={{ base: 'column', sm: 'row' }}
+          gap={4}
+        >
+          <LanguageSelector variant="form" />
         </Stack>
       </VStack>
 

@@ -1,0 +1,22 @@
+{
+  "LoginPage": {
+    "errors": {
+      "serverConnection": "服务器连接错误",
+      "invalidCode": "无效验证码",
+      "verificationFailed": "验证失败"
+    }
+  },
+  "Dashboard": {
+    "profile": {
+      "errors": {
+        "emptyCredentials": "API ID 和 API Hash 不能为空。",
+        "phoneNotFound": "找不到电话号码。无法验证凭据。",
+        "failedSendCode": "发送验证码失败。",
+        "serverConnection": "服务器连接错误。",
+        "invalidCode": "无效验证码。",
+        "verificationFailed": "验证失败。",
+        "incorrectPassword": "2FA 密码不正确。"
+      }
+    }
+  }
+}

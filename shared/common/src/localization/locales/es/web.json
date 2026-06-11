@@ -1,0 +1,156 @@
+{
+  "LandingPage": {
+    "heroBadge": "Almacenamiento seguro e ilimitado en la nube",
+    "heroText": "Vasto almacenamiento en la nube",
+    "poweredBy": "Desarrollado por Telegram",
+    "subHeroText": "Acceda a almacenamiento ilimitado en la nube directamente a través de la API MTProto de Telegram. Suba, administre y comparta sus archivos instantáneamente sin bases de datos intermediarias, sin límites de tamaño de archivo y con la propiedad completa de sus datos.",
+    "getStarted": "Comenzar",
+    "exploreFeatures": "Explorar funciones",
+    "tags": {
+      "encrypted": "Cifrado MTProto",
+      "fileSize": "Hasta 4 GB por archivo",
+      "direct": "Directo a la API"
+    },
+    "driveWidget": {
+      "title": "Mi unidad Telegramonic",
+      "uploading": "Subiendo...",
+      "hoursAgo": "Hace 2 horas",
+      "yesterday": "Ayer",
+      "dropzoneTitle": "Arrastre y suelte archivos aquí para subirlos",
+      "dropzoneSubtitle": "Se sincroniza de forma inmediata directamente con la API de Telegram"
+    },
+    "features": {
+      "title": "Diseñado para el rendimiento",
+      "subtitle": "Todo lo que necesita para administrar su vida digital con la menor fricción.",
+      "infinite": {
+        "title": "Almacenamiento infinito",
+        "description": "Libérese de las cuotas restrictivas. Aproveche la infraestructura ilimitada de Telegram para almacenar documentos, archivos multimedia e históricos sin preocuparse por quedarse sin espacio.",
+        "stat": "Ilimitado",
+        "statLabel": "Límite de espacio"
+      },
+      "security": {
+        "title": "Seguridad de nivel bancario",
+        "description": "Sus archivos están protegidos por el cifrado MTProto 2.0, el mismo protocolo que protege a más de 900 millones de usuarios de Telegram. Solo usted posee las claves de descifrado.",
+        "stat": "256 bits",
+        "statLabel": "Cifrado AES"
+      },
+      "transfers": {
+        "title": "Transferencias aceleradas",
+        "description": "Experimente velocidades de subida y bajada inigualables y optimizadas en servidores globales distribuidos.",
+        "stat": "Hasta 4 GB",
+        "statLabel": "Por archivo"
+      },
+      "sync": {
+        "title": "Sincronización sin fisuras en todos los dispositivos",
+        "description": "Acceda a sus archivos instantáneamente desde su computadora, tableta o teléfono. Los cambios se sincronizan en tiempo real en todo el ecosistema.",
+        "stat": "Tiempo real",
+        "statLabel": "Sincronización entre dispositivos"
+      },
+      "search": {
+        "title": "Búsqueda inteligente instantánea",
+        "description": "Encuentre cualquier archivo en milisegundos con la búsqueda de texto completo en nombres de archivo, tipos y metadatos. Se acabó el desplazamiento interminable.",
+        "stat": "<50 ms",
+        "statLabel": "Tiempo medio de búsqueda"
+      },
+      "share": {
+        "title": "Compartir con un solo clic",
+        "description": "Genere enlaces compartibles seguros al instante. Establezca tiempos de expiración, proteja enlaces con contraseña y revoque el acceso en cualquier momento.",
+        "stat": "Cero",
+        "statLabel": "Servidores de terceros"
+      }
+    }
+  },
+  "Footer": {
+    "copyrightText": "© {{year}} telegramonic.com | Todos los derechos reservados",
+    "tagline": "Almacenamiento ilimitado en la nube, seguro, rápido y desarrollado completamente por Telegram.",
+    "madeWith": "Hecho con ❤️ para la nube."
+  },
+  "NavigationBar": {
+    "Home": "Inicio",
+    "About": "Acerca de",
+    "Contact": "Contacto",
+    "privacy": "Política de privacidad",
+    "terms": "Condiciones del servicio",
+    "about-us": "Quiénes somos",
+    "contact-us": "Contacto",
+    "faq": "Preguntas frecuentes",
+    "disclaimer": "Descargo de responsabilidad",
+    "docs": "Documentación",
+    "product": "Producto",
+    "introduction": "Introducción",
+    "quickstart": "Inicio rápido",
+    "setup-guide": "Guía de configuración",
+    "mtproto": "Protocolo MTProto",
+    "direct-storage": "Almacenamiento directo",
+    "version-history": "Historial de versiones",
+    "version-history-desktop": "Escritorio",
+    "version-history-mobile": "Móvil",
+    "system-design": "Diseño del sistema",
+    "api-reference": "Referencia de la API",
+    "Login": "Iniciar sesión"
+  },
+  "MdPage": {
+    "privacy": {
+      "title": "Política de privacidad",
+      "badge": "Legal"
+    },
+    "terms": {
+      "title": "Condiciones de servicio",
+      "badge": "Legal"
+    },
+    "contactUs": {
+      "title": "Contáctenos",
+      "badge": "Soporte"
+    },
+    "aboutUs": {
+      "title": "Acerca de nosotros",
+      "badge": "Compañía"
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "badge": "Ayuda"
+    },
+    "disclaimer": {
+      "title": "Descargo de responsabilidad",
+      "badge": "Legal"
+    },
+    "lastUpdated": "Última actualización: 30 de mayo de 2026"
+  },
+  "ProductPage": {
+    "heroTitle": "Descargar Telegramonic",
+    "heroSubtitle": "Ejecute Telegramonic en todos sus dispositivos. Disfrute de un almacenamiento en la nube de alta velocidad con la tecnología segura de la red MTProto.",
+    "desktopHeading": "Aplicaciones de escritorio",
+    "mobileHeading": "Aplicaciones móviles",
+    "recommended": "Recomendado",
+    "macos": {
+      "title": "macOS",
+      "description": "Aplicación nativa para macOS. Compatible con Apple Silicon y procesadores Intel.",
+      "buttonArm": "Apple Silicon (M1/M2/M3)",
+      "buttonIntel": "Chip Intel"
+    },
+    "windows": {
+      "title": "Windows",
+      "description": "Instaladores o versiones portátiles para Windows 10/11 (64 bits).",
+      "buttonExe": "Descargar instalador (.exe)",
+      "buttonZip": "Archivo ZIP portátil (.zip)"
+    },
+    "linux": {
+      "title": "Linux",
+      "description": "Paquetes estándar AppImage o binarios compilados para Linux.",
+      "buttonAppImage": "Descargar AppImage",
+      "buttonTar": "Archivo comprimido (.tar.gz)"
+    },
+    "ios": {
+      "title": "iOS / iPadOS",
+      "description": "Obtenga la aplicación oficial en el App Store de Apple o únase a TestFlight.",
+      "buttonAppStore": "Descargar en el App Store",
+      "buttonTestFlight": "Unirse a la beta de TestFlight"
+    },
+    "android": {
+      "title": "Android",
+      "description": "Descargue el paquete de instalación directa APK o consígalo en Google Play.",
+      "buttonApk": "Descarga directa de APK",
+      "buttonPlayStore": "Consíguelo en Google Play"
+    }
+  }
+}

@@ -1,0 +1,156 @@
+{
+  "LandingPage": {
+    "heroBadge": "安全且无限制的云存储",
+    "heroText": "海量云端存储",
+    "poweredBy": "基于 Telegram 技术",
+    "subHeroText": "直接通过 Telegram 的 MTProto API 访问无限的云存储空间。即时上传、管理和分享您的文件，无需中间数据库，没有文件大小限制，并且完全拥有您自己的数据。",
+    "getStarted": "立即体验",
+    "exploreFeatures": "了解产品特性",
+    "tags": {
+      "encrypted": "MTProto 加密",
+      "fileSize": "单文件最大支持 4GB",
+      "direct": "直连 API"
+    },
+    "driveWidget": {
+      "title": "我的 Telegramonic 云盘",
+      "uploading": "上传中...",
+      "hoursAgo": "2 小时前",
+      "yesterday": "昨天",
+      "dropzoneTitle": "拖放文件至此处上传",
+      "dropzoneSubtitle": "即时与 Telegram API 直接同步"
+    },
+    "features": {
+      "title": "专为极致性能而设计",
+      "subtitle": "以极低的摩擦力管理您的数字生活所需要的一切。",
+      "infinite": {
+        "title": "无限存储空间",
+        "description": "摆脱繁琐的配额限制。利用 Telegram 无穷的基础设施来存储文档、媒体和归档文件，从此无需担心空间不足。",
+        "stat": "无限制",
+        "statLabel": "存储上限"
+      },
+      "security": {
+        "title": "金融级安全保障",
+        "description": "您的文件受到 MTProto 2.0 加密的保护 — 该协议目前保障着 9 亿多 Telegram 用户。只有您自己掌握解密密钥。",
+        "stat": "256位",
+        "statLabel": "AES 加密"
+      },
+      "transfers": {
+        "title": "极速文件传输",
+        "description": "体验在分布式全球服务器上优化的卓越上传和下载速度。",
+        "stat": "最大 4 GB",
+        "statLabel": "单个文件"
+      },
+      "sync": {
+        "title": "跨设备无缝同步",
+        "description": "从您的电脑、平板或手机即时访问您的文件。更改会在整个生态系统中实时同步。",
+        "stat": "实时",
+        "statLabel": "跨设备同步"
+      },
+      "search": {
+        "title": "即时智能搜索",
+        "description": "通过对文件名、类型和元数据的全文检索，在几毫秒内找到任何文件。无需再无休止地滚动列表。",
+        "stat": "<50 毫秒",
+        "statLabel": "平均搜索耗时"
+      },
+      "share": {
+        "title": "一键快速分享",
+        "description": "即时生成安全的分享链接。可以设置过期时间、使用密码保护链接，并随时撤销访问权限。",
+        "stat": "零",
+        "statLabel": "第三方服务器"
+      }
+    }
+  },
+  "Footer": {
+    "copyrightText": "© {{year}} telegramonic.com | 保留所有权利",
+    "tagline": "无限云存储，安全、快速，并完全基于 Telegram。",
+    "madeWith": "用 ❤️ 倾心为云端打造。"
+  },
+  "NavigationBar": {
+    "Home": "首页",
+    "About": "关于",
+    "Contact": "联系我们",
+    "privacy": "隐私政策",
+    "terms": "服务条款",
+    "about-us": "关于我们",
+    "contact-us": "联系我们",
+    "faq": "常见问题",
+    "disclaimer": "免责声明",
+    "docs": "文档中心",
+    "product": "产品中心",
+    "introduction": "产品介绍",
+    "quickstart": "快速开始",
+    "setup-guide": "配置指南",
+    "mtproto": "MTProto 协议",
+    "direct-storage": "直连存储",
+    "version-history": "版本历史",
+    "version-history-desktop": "桌面版",
+    "version-history-mobile": "移动版",
+    "system-design": "系统设计",
+    "api-reference": "API 参考",
+    "Login": "登录"
+  },
+  "MdPage": {
+    "privacy": {
+      "title": "隐私政策",
+      "badge": "法律合规"
+    },
+    "terms": {
+      "title": "服务条款",
+      "badge": "法律合规"
+    },
+    "contactUs": {
+      "title": "联系我们",
+      "badge": "客户支持"
+    },
+    "aboutUs": {
+      "title": "关于我们",
+      "badge": "公司概况"
+    },
+    "faq": {
+      "title": "常见问题",
+      "badge": "使用帮助"
+    },
+    "disclaimer": {
+      "title": "免责声明",
+      "badge": "法律合规"
+    },
+    "lastUpdated": "最近更新：2026年5月30日"
+  },
+  "ProductPage": {
+    "heroTitle": "获取 Telegramonic",
+    "heroSubtitle": "在您的所有设备上运行 Telegramonic。享受由安全 MTProto 网络提供的高速云端存储服务。",
+    "desktopHeading": "桌面客户端",
+    "mobileHeading": "移动客户端",
+    "recommended": "推荐下载",
+    "macos": {
+      "title": "macOS",
+      "description": "原生 macOS 客户端。支持 Apple Silicon (M系列芯片) 和 Intel 架构的 Mac。",
+      "buttonArm": "Apple Silicon (M1/M2/M3)",
+      "buttonIntel": "Intel 芯片"
+    },
+    "windows": {
+      "title": "Windows",
+      "description": "适用于 Windows 10/11 (64位) 的安装包或便携版绿色软件。",
+      "buttonExe": "下载安装包 (.exe)",
+      "buttonZip": "下载免安装绿色版 (.zip)"
+    },
+    "linux": {
+      "title": "Linux",
+      "description": "适用于 Linux 的标准 AppImage 镜像或预编译的二进制包。",
+      "buttonAppImage": "下载 AppImage",
+      "buttonTar": "下载压缩包 (.tar.gz)"
+    },
+    "ios": {
+      "title": "iOS / iPadOS",
+      "description": "从苹果 App Store 获取官方客户端，或加入 TestFlight 参与测试。",
+      "buttonAppStore": "在 App Store 下载",
+      "buttonTestFlight": "加入 TestFlight 公测"
+    },
+    "android": {
+      "title": "Android",
+      "description": "直接下载 APK 安装包，或从 Google Play 商店获取应用。",
+      "buttonApk": "直接下载 APK",
+      "buttonPlayStore": "在 Google Play 下载"
+    }
+  }
+}

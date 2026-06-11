@@ -1,0 +1,201 @@
+{
+  "LoginPage": {
+    "title": "Conectar Telegram Drive",
+    "subtitle": "Acceda a su espacio de almacenamiento ilimitado en la nube a través de una conexión API segura MTProto 2.0.",
+    "phone": {
+      "title": "Número de teléfono",
+      "description": "Ingrese el número de teléfono asociado con su cuenta de Telegram.",
+      "label": "Número de teléfono",
+      "placeholder": "Ingrese el número de teléfono sin el código de país",
+      "errorEmpty": "Se requiere el número de teléfono para continuar.",
+      "button": "Continuar"
+    },
+    "code": {
+      "title": "Ingrese el código de verificación",
+      "description": "Enviamos un código de verificación a su aplicación de Telegram o por SMS. Ingréselo a continuación.",
+      "label": "Código de verificación",
+      "placeholder": "Ingrese el código de 5 dígitos",
+      "errorEmpty": "Se requiere el código de verificación.",
+      "button": "Verificar código"
+    },
+    "api": {
+      "title": "Configuración de la API",
+      "description": "Proporcione sus credenciales personalizadas de la API de Telegram. Obténgalas de forma segura en my.telegram.org.",
+      "idLabel": "ID de la API",
+      "idPlaceholder": "ej., 123456",
+      "idError": "El ID de la API es obligatorio.",
+      "hashLabel": "Hash de la API",
+      "hashPlaceholder": "ej., d58a9e...",
+      "hashError": "El Hash de la API es obligatorio.",
+      "button": "Continuar",
+      "help": "¿Cómo obtener el ID y el Hash de la API?",
+      "errorSendCode": "Error al enviar el código"
+    },
+    "loading": "Estableciendo conexión...",
+    "verifying": "Verificando...",
+    "loadingDefault": "Cargando...",
+    "success": "¡Conectado con éxito! Redirigiendo...",
+    "successConfigured": "Telegramonic configurado correctamente.",
+    "redirecting": "Redirigiendo al panel de control...",
+    "savedAccounts": {
+      "title": "Cuentas guardadas",
+      "description": "Seleccione una cuenta existente para iniciar sesión directamente, o configure una nueva.",
+      "addNew": "Agregar nueva cuenta"
+    }
+  },
+  "Dashboard": {
+    "lastSynced": "Última sincronización: {{time}}",
+    "never": "Nunca",
+    "cancel": "Cancelar",
+    "confirmDeleteFolder": "¿Está seguro de que desea eliminar permanentemente esta carpeta?",
+    "dragDrop": {
+      "active": "Suelte los archivos aquí",
+      "inactive": "Arrastre y suelte archivos aquí, o haga clic para subir",
+      "subtitle": "Admite la subida de varios archivos simultáneamente"
+    },
+    "createFolder": {
+      "title": "Crear nueva carpeta",
+      "label": "Nombre de la carpeta",
+      "placeholder": "Ingrese el nombre de la carpeta...",
+      "submit": "Crear carpeta"
+    },
+    "logout": {
+      "title": "Confirmar cierre de sesión",
+      "message": "¿Está seguro de que desea cerrar sesión en Telegramonic? Deberá volver a iniciar sesión para acceder a sus archivos.",
+      "submit": "Cerrar sesión"
+    },
+    "toasts": {
+      "syncSuccess": "Drive sincronizado correctamente",
+      "syncFailed": "Error de sincronización: {{error}}",
+      "logoutSuccess": "Sesión cerrada correctamente",
+      "copySuccess": "Enlace del mensaje de Telegram copiado: {{name}}",
+      "copyFailed": "Error al copiar el enlace",
+      "unpinned": "Desanclado: {{name}}",
+      "pinned": "Anclado: {{name}}",
+      "deleting": "Eliminando {{name}}...",
+      "deleteSuccess": "Eliminado con éxito: {{name}}",
+      "deleteFailed": "Error al eliminar el archivo: {{error}}",
+      "uploadRootError": "No se pueden subir archivos directamente a la raíz 'En mi unidad'. Por favor, entre en una carpeta primero.",
+      "uploadSuccess": "Subido con éxito: {{name}}",
+      "uploadCancelled": "Subida cancelada: {{name}}",
+      "uploadFailed": "Subida fallida: {{name}}: {{error}}",
+      "nestedFoldersError": "Las carpetas anidadas no están permitidas. Las carpetas solo se pueden crear en la raíz.",
+      "createFolderSuccess": "Carpeta creada: {{name}}",
+      "createFolderFailed": "Error al crear la carpeta: {{error}}",
+      "deleteFolderSuccess": "Carpeta eliminada con éxito",
+      "deleteFolderFailed": "Error al eliminar la carpeta: {{error}}",
+      "downloading": "Descargando {{name}}...",
+      "downloadSuccess": "Descargado con éxito: {{name}}",
+      "downloadFailed": "Error de descarga: {{error}}"
+    },
+    "date": {
+      "justNow": "Ahora mismo",
+      "minsAgo": "{{count}}m antes",
+      "hoursAgo": "{{count}}h antes",
+      "recent": "Reciente"
+    },
+    "nav": {
+      "drive": "Unidad",
+      "inMyDrive": "En mi unidad",
+      "pinned": "Anclado",
+      "profile": "Perfil",
+      "help": "Ayuda"
+    },
+    "topNav": {
+      "searchPlaceholder": "Buscar...",
+      "uploadFile": "Subir archivo",
+      "newFolder": "+ Nueva carpeta"
+    },
+    "breadcrumbs": {
+      "root": "En mi unidad"
+    },
+    "uploadProgress": {
+      "uploading": "Subiendo {{name}}..."
+    },
+    "filesTable": {
+      "pinned": "Anclado",
+      "goBack": "Volver",
+      "emptyState": "No se encontraron archivos ni carpetas aquí.",
+      "listView": "Vista de lista",
+      "iconView": "Vista de iconos",
+      "syncFolders": "Sincronizar carpetas",
+      "sort": {
+        "az": "Nombre: A → Z",
+        "za": "Nombre: Z → A"
+      },
+      "headers": {
+        "name": "Nombre",
+        "owner": "Propietario",
+        "lastModified": "Última modificación",
+        "size": "Tamaño"
+      },
+      "actions": {
+        "pin": "Anclar",
+        "unpin": "Desanclar",
+        "share": "Compartir enlace",
+        "download": "Descargar archivo",
+        "deleteFolder": "Eliminar carpeta",
+        "deleteFile": "Eliminar archivo",
+        "options": "Opciones",
+        "delete": "Eliminar"
+      }
+    },
+    "profile": {
+      "loading": "Cargando...",
+      "title": "Perfil de la cuenta",
+      "subtitle": "Gestione los detalles del perfil de su cuenta, las credenciales de la API de Telegram y la configuración de su unidad en la nube.",
+      "copied": "Copiado ✓",
+      "copy": "Copiar",
+      "info": {
+        "title": "Información de la cuenta",
+        "firstName": "Nombre",
+        "lastName": "Apellido",
+        "phone": "Número de teléfono",
+        "userId": "ID de usuario",
+        "username": "Nombre de usuario"
+      },
+      "credentials": {
+        "title": "Credenciales de la API de Telegram",
+        "subtitle": "Configure las credenciales de la API utilizadas para conectarse a los servidores MTProto de Telegram.",
+        "apiId": "ID de la API",
+        "apiHash": "Hash de la API",
+        "apiIdPlaceholder": "Ingrese el ID de la API de Telegram (ej. 1234567)",
+        "apiHashPlaceholder": "Ingrese el Hash de la API de Telegram (ej. abcdef123456...)",
+        "show": "Mostrar",
+        "hide": "Ocultar",
+        "save": "Guardar credenciales"
+      },
+      "actions": {
+        "title": "Acciones de la cuenta",
+        "disconnect": "Desconectar cuenta",
+        "disconnectSubtitle": "Cierre su sesión de Telegram y elimine la caché local de credenciales en este dispositivo.",
+        "logout": "Cerrar sesión"
+      },
+      "confirmUpdate": {
+        "title": "Actualizar credenciales de la API",
+        "message": "La actualización de sus credenciales de la API volverá a conectar su sesión de Telegram. Se enviará un código de verificación a su número de teléfono registrado ({{phone}}).",
+        "submit": "Continuar"
+      },
+      "verification": {
+        "title": "Verificar conexión",
+        "titlePassword": "Confirmar contraseña 2FA",
+        "titleSuccess": "Éxito",
+        "sending": "Enviando código...",
+        "verifying": "Verificando...",
+        "codeMessage": "Ingrese el código de verificación de 5 dígitos enviado a su cuenta de Telegram o teléfono.",
+        "codeLabel": "Código de verificación",
+        "codePlaceholder": "Ingrese el código de 5 dígitos",
+        "passwordMessage": "Su cuenta tiene 2FA habilitado. Ingrese su contraseña de Telegram.",
+        "passwordLabel": "Contraseña de Telegram",
+        "passwordPlaceholder": "Ingrese la contraseña",
+        "successMessage": "¡Credenciales guardadas y verificadas con éxito!",
+        "verify": "Verificar",
+        "close": "Cerrar"
+      },
+      "language": {
+        "title": "Ajustes de idioma",
+        "subtitle": "Seleccione su idioma de visualización preferido."
+      }
+    }
+  }
+}

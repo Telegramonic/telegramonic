@@ -1,0 +1,156 @@
+{
+  "LandingPage": {
+    "heroBadge": "安全で無制限のクラウドストレージ",
+    "heroText": "広大なクラウドストレージ",
+    "poweredBy": "Telegramによる提供",
+    "subHeroText": "TelegramのMTProto APIを介して、無制限のクラウドストレージに直接アクセスします。仲介データベースやファイルサイズ制限なしで、ファイルを即座にアップロード、管理、共有できます。データの完全な所有権を維持します。",
+    "getStarted": "始める",
+    "exploreFeatures": "機能を探索",
+    "tags": {
+      "encrypted": "MTProto暗号化",
+      "fileSize": "最大4GB/ファイル",
+      "direct": "API直結"
+    },
+    "driveWidget": {
+      "title": "マイ Telegramonic ドライブ",
+      "uploading": "アップロード中...",
+      "hoursAgo": "2時間前",
+      "yesterday": "昨日",
+      "dropzoneTitle": "ファイルをドラッグ＆ドロップしてアップロード",
+      "dropzoneSubtitle": "Telegram APIと直接かつ即座に同期"
+    },
+    "features": {
+      "title": "パフォーマンスに特化した設計",
+      "subtitle": "最小限の摩擦でデジタルライフを管理するために必要なすべてを提供します。",
+      "infinite": {
+        "title": "無制限のストレージ",
+        "description": "制限的なクォータから解放されましょう。Telegramの無制限のインフラを活用して、容量不足を心配することなく文書、メディア、アーカイブを保存できます。",
+        "stat": "無制限",
+        "statLabel": "ストレージ容量"
+      },
+      "security": {
+        "title": "銀行レベルのセキュリティ",
+        "description": "ファイルは、9億人以上のTelegramユーザーを保護しているのと同じMTProto 2.0暗号化によって保護されています。復号キーを所有しているのはあなただけです。",
+        "stat": "256ビット",
+        "statLabel": "AES暗号化"
+      },
+      "transfers": {
+        "title": "高速転送",
+        "description": "グローバルに分散されたサーバーに最適化された、比類のないアップロードとダウンロード速度を体験してください。",
+        "stat": "最大4 GB",
+        "statLabel": "ファイルごと"
+      },
+      "sync": {
+        "title": "デバイス間のシームレスな同期",
+        "description": "デスクトップ、タブレット、スマートフォンからファイルに即座にアクセスできます。変更はエコシステム全体でリアルタイムに同期されます。",
+        "stat": "リアルタイム",
+        "statLabel": "マルチデバイス同期"
+      },
+      "search": {
+        "title": "スマートな検索機能",
+        "description": "ファイル名、タイプ、メタデータの全文検索により、ミリ秒単位でファイルを見つけることができます。もうスクロールし続ける必要はありません。",
+        "stat": "50ミリ秒未満",
+        "statLabel": "平均検索時間"
+      },
+      "share": {
+        "title": "ワンクリック共有",
+        "description": "安全な共有リンクを即座に生成。有効期限の設定、リンクのパスワード保護、アクセス権のいつでも取り消しが可能です。",
+        "stat": "ゼロ",
+        "statLabel": "サードパーティサーバー"
+      }
+    }
+  },
+  "Footer": {
+    "copyrightText": "© {{year}} telegramonic.com | All rights reserved",
+    "tagline": "無制限のクラウドストレージ。安全、高速、そして完全にTelegramをベースにしています。",
+    "madeWith": "クラウドへの ❤️ を込めて作成。"
+  },
+  "NavigationBar": {
+    "Home": "ホーム",
+    "About": "概要",
+    "Contact": "連絡先",
+    "privacy": "プライバシーポリシー",
+    "terms": "利用規約",
+    "about-us": "運営会社",
+    "contact-us": "お問い合わせ",
+    "faq": "よくある質問",
+    "disclaimer": "免責事項",
+    "docs": "ドキュメント",
+    "product": "プロダクト",
+    "introduction": "製品紹介",
+    "quickstart": "クイックスタート",
+    "setup-guide": "セットアップガイド",
+    "mtproto": "MTProtoプロトコル",
+    "direct-storage": "ダイレクトストレージ",
+    "version-history": "更新履歴",
+    "version-history-desktop": "デスクトップ",
+    "version-history-mobile": "モバイル",
+    "system-design": "システム設計",
+    "api-reference": "APIリファレンス",
+    "Login": "ログイン"
+  },
+  "MdPage": {
+    "privacy": {
+      "title": "プライバシーポリシー",
+      "badge": "法的文書"
+    },
+    "terms": {
+      "title": "利用規約",
+      "badge": "法的文書"
+    },
+    "contactUs": {
+      "title": "お問い合わせ",
+      "badge": "サポート"
+    },
+    "aboutUs": {
+      "title": "運営会社情報",
+      "badge": "会社"
+    },
+    "faq": {
+      "title": "よくある質問",
+      "badge": "ヘルプ"
+    },
+    "disclaimer": {
+      "title": "免責事項",
+      "badge": "法的文書"
+    },
+    "lastUpdated": "最終更新日: 2026年5月30日"
+  },
+  "ProductPage": {
+    "heroTitle": "Telegramonicを入手する",
+    "heroSubtitle": "すべてのデバイスでTelegramonicを実行してください。安全なMTProtoネットワークによる高速クラウドストレージをご利用ください。",
+    "desktopHeading": "デスクトップアプリ",
+    "mobileHeading": "モバイルアプリ",
+    "recommended": "推奨",
+    "macos": {
+      "title": "macOS",
+      "description": "ネイティブmacOSアプリケーション。Apple SiliconとIntel Macをサポートします。",
+      "buttonArm": "Apple Silicon (M1/M2/M3)",
+      "buttonIntel": "Intelチップ"
+    },
+    "windows": {
+      "title": "Windows",
+      "description": "Windows 10/11（64ビット）用のインストーラーまたはポータブル版。",
+      "buttonExe": "インストーラーをダウンロード (.exe)",
+      "buttonZip": "ポータブルZip形式 (.zip)"
+    },
+    "linux": {
+      "title": "Linux",
+      "description": "Linux用の標準AppImageまたはコンパイル済みバイナリパッケージ。",
+      "buttonAppImage": "AppImageをダウンロード",
+      "buttonTar": "圧縮アーカイブ (.tar.gz)"
+    },
+    "ios": {
+      "title": "iOS / iPadOS",
+      "description": "Apple App Storeで公式アプリを入手するか、TestFlightに参加してください。",
+      "buttonAppStore": "App Storeからダウンロード",
+      "buttonTestFlight": "TestFlightベータに参加"
+    },
+    "android": {
+      "title": "Android",
+      "description": "直接インストール用のAPKパッケージをダウンロードするか、Google Playで入手してください。",
+      "buttonApk": "直接APKダウンロード",
+      "buttonPlayStore": "Google Playで入手"
+    }
+  }
+}

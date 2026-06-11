@@ -1,0 +1,201 @@
+{
+  "LoginPage": {
+    "title": "Подключить Telegram Drive",
+    "subtitle": "Получите доступ к неограниченному облачному хранилищу через безопасное API-соединение MTProto 2.0.",
+    "phone": {
+      "title": "Номер телефона",
+      "description": "Введите номер телефона, связанный с вашим аккаунтом Telegram.",
+      "label": "Номер телефона",
+      "placeholder": "Введите номер телефона без кода страны",
+      "errorEmpty": "Для продолжения требуется номер телефона.",
+      "button": "Продолжить"
+    },
+    "code": {
+      "title": "Введите код подтверждения",
+      "description": "Мы отправили код подтверждения в приложение Telegram или по SMS. Пожалуйста, введите его ниже.",
+      "label": "Код подтверждения",
+      "placeholder": "Введите 5-значный код",
+      "errorEmpty": "Требуется код подтверждения.",
+      "button": "Проверить код"
+    },
+    "api": {
+      "title": "Настройка API",
+      "description": "Укажите собственные учетные данные Telegram API. Безопасно получите их на my.telegram.org.",
+      "idLabel": "API ID",
+      "idPlaceholder": "например, 123456",
+      "idError": "Требуется API ID.",
+      "hashLabel": "API Hash",
+      "hashPlaceholder": "например, d58a9e...",
+      "hashError": "Требуется API Hash.",
+      "button": "Продолжить",
+      "help": "Как получить API ID and Hash?",
+      "errorSendCode": "Не удалось отправить код"
+    },
+    "loading": "Установка соединения...",
+    "verifying": "Проверка...",
+    "loadingDefault": "Загрузка...",
+    "success": "Успешно подключено! Перенаправление...",
+    "successConfigured": "Telegramonic успешно настроен.",
+    "redirecting": "Перенаправление на панель управления...",
+    "savedAccounts": {
+      "title": "Сохраненные аккаунты",
+      "description": "Выберите существующий аккаунт для быстрого входа или настройте новый.",
+      "addNew": "Добавить новый аккаунт"
+    }
+  },
+  "Dashboard": {
+    "lastSynced": "Последняя синхронизация: {{time}}",
+    "never": "Никогда",
+    "cancel": "Отмена",
+    "confirmDeleteFolder": "Вы уверены, что хотите навсегда удалить эту папку?",
+    "dragDrop": {
+      "active": "Перетащите файлы сюда",
+      "inactive": "Перетащите файлы сюда или нажмите для загрузки",
+      "subtitle": "Поддерживает одновременную загрузку нескольких файлов"
+    },
+    "createFolder": {
+      "title": "Создать новую папку",
+      "label": "Имя папки",
+      "placeholder": "Введите имя папки...",
+      "submit": "Создать папку"
+    },
+    "logout": {
+      "title": "Подтверждение выхода",
+      "message": "Вы уверены, что хотите выйти из Telegramonic? Вам придется войти снова, чтобы получить доступ к своим файлам.",
+      "submit": "Выйти"
+    },
+    "toasts": {
+      "syncSuccess": "Диск успешно синхронизирован",
+      "syncFailed": "Ошибка синхронизации: {{error}}",
+      "logoutSuccess": "Вы успешно вышли из системы",
+      "copySuccess": "Ссылка на сообщение Telegram скопирована: {{name}}",
+      "copyFailed": "Не удалось скопировать ссылку",
+      "unpinned": "Откреплено: {{name}}",
+      "pinned": "Закреплено: {{name}}",
+      "deleting": "Удаление {{name}}...",
+      "deleteSuccess": "Успешно удалено: {{name}}",
+      "deleteFailed": "Не удалось удалить файл: {{error}}",
+      "uploadRootError": "Нельзя загружать файлы напрямую в корень 'На моем диске'. Пожалуйста, сначала войдите в папку.",
+      "uploadSuccess": "Успешно загружено: {{name}}",
+      "uploadCancelled": "Загрузка отменена: {{name}}",
+      "uploadFailed": "Ошибка загрузки: {{name}}: {{error}}",
+      "nestedFoldersError": "Вложенные папки не поддерживаются. Папки можно создавать только на корневом уровне.",
+      "createFolderSuccess": "Папка создана: {{name}}",
+      "createFolderFailed": "Не удалось создать папку: {{error}}",
+      "deleteFolderSuccess": "Папка успешно удалена",
+      "deleteFolderFailed": "Не удалось удалить папку: {{error}}",
+      "downloading": "Скачивание {{name}}...",
+      "downloadSuccess": "Успешно скачано: {{name}}",
+      "downloadFailed": "Не удалось скачать: {{error}}"
+    },
+    "date": {
+      "justNow": "Только что",
+      "minsAgo": "{{count}}m назад",
+      "hoursAgo": "{{count}}h назад",
+      "recent": "Недавние"
+    },
+    "nav": {
+      "drive": "Диск",
+      "inMyDrive": "На моем диске",
+      "pinned": "Закрепленные",
+      "profile": "Профиль",
+      "help": "Справка"
+    },
+    "topNav": {
+      "searchPlaceholder": "Поиск...",
+      "uploadFile": "Загрузить файл",
+      "newFolder": "+ Создать папку"
+    },
+    "breadcrumbs": {
+      "root": "На моем диске"
+    },
+    "uploadProgress": {
+      "uploading": "Загрузка {{name}}..."
+    },
+    "filesTable": {
+      "pinned": "Закрепленные",
+      "goBack": "Назад",
+      "emptyState": "Файлы или папки не найдены.",
+      "listView": "Список",
+      "iconView": "Значки",
+      "syncFolders": "Синхронизировать папки",
+      "sort": {
+        "az": "Имя: А → Я",
+        "za": "Имя: Я → А"
+      },
+      "headers": {
+        "name": "Имя",
+        "owner": "Владелец",
+        "lastModified": "Дата изменения",
+        "size": "Размер"
+      },
+      "actions": {
+        "pin": "Закрепить",
+        "unpin": "Открепить",
+        "share": "Поделиться ссылкой",
+        "download": "Скачать файл",
+        "deleteFolder": "Удалить папку",
+        "deleteFile": "Удалить файл",
+        "options": "Опции",
+        "delete": "Удалить"
+      }
+    },
+    "profile": {
+      "loading": "Загрузка...",
+      "title": "Профиль аккаунта",
+      "subtitle": "Управляйте данными своего профиля, учетными данными Telegram API и настройками облачного диска.",
+      "copied": "Скопировано ✓",
+      "copy": "Копировать",
+      "info": {
+        "title": "Информация об аккаунте",
+        "firstName": "Имя",
+        "lastName": "Фамилия",
+        "phone": "Номер телефона",
+        "userId": "ID пользователя",
+        "username": "Имя пользователя"
+      },
+      "credentials": {
+        "title": "Учетные данные Telegram API",
+        "subtitle": "Настройте учетные данные API, используемые для подключения к серверам Telegram MTProto.",
+        "apiId": "API ID",
+        "apiHash": "API Hash",
+        "apiIdPlaceholder": "Введите Telegram API ID (например, 1234567)",
+        "apiHashPlaceholder": "Введите Telegram API Hash (например, abcdef123456...)",
+        "show": "Показать",
+        "hide": "Скрыть",
+        "save": "Сохранить учетные данные"
+      },
+      "actions": {
+        "title": "Действия с аккаунтом",
+        "disconnect": "Отключить аккаунт",
+        "disconnectSubtitle": "Выйти из сеанса Telegram и удалить локальный кэш учетных данных на этом устройстве.",
+        "logout": "Выйти"
+      },
+      "confirmUpdate": {
+        "title": "Обновить учетные данные API",
+        "message": "Обновление учетных данных API приведет к повторному подключению сеанса Telegram. Код подтверждения будет отправлен на ваш зарегистрированный номер телефона ({{phone}}).",
+        "submit": "Продолжить"
+      },
+      "verification": {
+        "title": "Подтвердить подключение",
+        "titlePassword": "Введите пароль 2FA",
+        "titleSuccess": "Успешно",
+        "sending": "Отправка кода...",
+        "verifying": "Проверка...",
+        "codeMessage": "Введите 5-значный код подтверждения, отправленный на ваш аккаунт Telegram или телефон.",
+        "codeLabel": "Код подтверждения",
+        "codePlaceholder": "Введите 5-значный код",
+        "passwordMessage": "В вашем аккаунте включена двухфакторная аутентификация. Пожалуйста, введите свой пароль облака Telegram.",
+        "passwordLabel": "Пароль 2FA облака",
+        "passwordPlaceholder": "Введите пароль 2FA",
+        "successMessage": "Учетные данные успешно сохранены и проверены!",
+        "verify": "Проверить",
+        "close": "Закрыть"
+      },
+      "language": {
+        "title": "Языковые настройки",
+        "subtitle": "Выберите предпочитаемый язык интерфейса."
+      }
+    }
+  }
+}

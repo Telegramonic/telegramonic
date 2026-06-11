@@ -1,0 +1,201 @@
+{
+  "LoginPage": {
+    "title": "Telegramドライブを接続",
+    "subtitle": "MTProto 2.0の安全なAPI接続を介して、無制限のクラウドストレージスペースにアクセスします。",
+    "phone": {
+      "title": "電話番号",
+      "description": "Telegramアカウントに関連付けられている電話番号を入力します。",
+      "label": "電話番号",
+      "placeholder": "国番号なしで電話番号を入力",
+      "errorEmpty": "続行するには電話番号が必要です。",
+      "button": "次へ"
+    },
+    "code": {
+      "title": "認証コードを入力",
+      "description": "TelegramアプリまたはSMS経由で認証コードを送信しました。以下に入力してください。",
+      "label": "認証コード",
+      "placeholder": "5桁のコードを入力",
+      "errorEmpty": "認証コードが必要です。",
+      "button": "コードを検証"
+    },
+    "api": {
+      "title": "API設定",
+      "description": "カスタムTelegram API認証情報を指定します。my.telegram.orgから安全に入手してください。",
+      "idLabel": "API ID",
+      "idPlaceholder": "例: 123456",
+      "idError": "API IDが必要です。",
+      "hashLabel": "API Hash",
+      "hashPlaceholder": "例: d58a9e...",
+      "hashError": "API Hashが必要です。",
+      "button": "次へ",
+      "help": "API IDとHashを取得するには？",
+      "errorSendCode": "コードの送信に失敗しました"
+    },
+    "loading": "接続を確立中...",
+    "verifying": "検証中...",
+    "loadingDefault": "読み込み中...",
+    "success": "接続に成功しました！リダイレクト中...",
+    "successConfigured": "Telegramonicの設定が正常に完了しました。",
+    "redirecting": "ダッシュボードにリダイレクト中...",
+    "savedAccounts": {
+      "title": "保存されたアカウント",
+      "description": "既存のアカウントを選択して直接サインインするか、新しいアカウントを設定します。",
+      "addNew": "新しいアカウントを追加"
+    }
+  },
+  "Dashboard": {
+    "lastSynced": "最終同期: {{time}}",
+    "never": "同期なし",
+    "cancel": "キャンセル",
+    "confirmDeleteFolder": "このフォルダを完全に削除してもよろしいですか？",
+    "dragDrop": {
+      "active": "ここにファイルをドロップ",
+      "inactive": "ファイルをここにドラッグ＆ドロップするか、クリックしてアップロード",
+      "subtitle": "複数ファイルの同時アップロードをサポート"
+    },
+    "createFolder": {
+      "title": "新規フォルダ作成",
+      "label": "フォルダ名",
+      "placeholder": "フォルダ名を入力...",
+      "submit": "フォルダを作成"
+    },
+    "logout": {
+      "title": "ログアウトの確認",
+      "message": "Telegramonicからログアウトしてもよろしいですか？ファイルにアクセスするには再ログインが必要になります。",
+      "submit": "ログアウト"
+    },
+    "toasts": {
+      "syncSuccess": "ドライブが正常に同期されました",
+      "syncFailed": "同期失敗: {{error}}",
+      "logoutSuccess": "正常にログアウトしました",
+      "copySuccess": "Telegramメッセージリンクをコピーしました: {{name}}",
+      "copyFailed": "リンクのコピーに失敗しました",
+      "unpinned": "ピン留め解除: {{name}}",
+      "pinned": "ピン留め: {{name}}",
+      "deleting": "{{name}}を削除中...",
+      "deleteSuccess": "正常に削除されました: {{name}}",
+      "deleteFailed": "ファイルの削除に失敗しました: {{error}}",
+      "uploadRootError": "ルートの「マイドライブ」に直接ファイルをアップロードすることはできません。最初にフォルダに入ってください。",
+      "uploadSuccess": "アップロード完了: {{name}}",
+      "uploadCancelled": "アップロードがキャンセルされました: {{name}}",
+      "uploadFailed": "アップロード失敗: {{name}}: {{error}}",
+      "nestedFoldersError": "ネストされたフォルダはサポートされていません。フォルダはルートレベルでのみ作成できます。",
+      "createFolderSuccess": "フォルダを作成しました: {{name}}",
+      "createFolderFailed": "フォルダの作成に失敗しました: {{error}}",
+      "deleteFolderSuccess": "フォルダを削除しました",
+      "deleteFolderFailed": "フォルダの削除に失敗しました: {{error}}",
+      "downloading": "{{name}}をダウンロード中...",
+      "downloadSuccess": "ダウンロード完了: {{name}}",
+      "downloadFailed": "ダウンロードに失敗しました: {{error}}"
+    },
+    "date": {
+      "justNow": "たった今",
+      "minsAgo": "{{count}}m前",
+      "hoursAgo": "{{count}}h前",
+      "recent": "最近"
+    },
+    "nav": {
+      "drive": "ドライブ",
+      "inMyDrive": "マイドライブ",
+      "pinned": "ピン留め",
+      "profile": "プロフィール",
+      "help": "ヘルプ"
+    },
+    "topNav": {
+      "searchPlaceholder": "検索...",
+      "uploadFile": "ファイルをアップロード",
+      "newFolder": "+ 新規フォルダ"
+    },
+    "breadcrumbs": {
+      "root": "マイドライブ"
+    },
+    "uploadProgress": {
+      "uploading": "{{name}}をアップロード中..."
+    },
+    "filesTable": {
+      "pinned": "ピン留め",
+      "goBack": "戻る",
+      "emptyState": "ファイルやフォルダが見つかりません。",
+      "listView": "リスト表示",
+      "iconView": "アイコン表示",
+      "syncFolders": "フォルダを同期",
+      "sort": {
+        "az": "名前: A → Z",
+        "za": "名前: Z → A"
+      },
+      "headers": {
+        "name": "名前",
+        "owner": "オーナー",
+        "lastModified": "更新日時",
+        "size": "サイズ"
+      },
+      "actions": {
+        "pin": "ピン留めする",
+        "unpin": "ピン留めを解除",
+        "share": "リンクを共有",
+        "download": "ファイルをダウンロード",
+        "deleteFolder": "フォルダを削除",
+        "deleteFile": "ファイルを削除",
+        "options": "オプション",
+        "delete": "削除"
+      }
+    },
+    "profile": {
+      "loading": "読み込み中...",
+      "title": "アカウントプロフィール",
+      "subtitle": "アカウントプロフィール詳細、Telegram API認証情報、クラウドドライブ設定を管理します。",
+      "copied": "コピー完了 ✓",
+      "copy": "コピー",
+      "info": {
+        "title": "アカウント情報",
+        "firstName": "名",
+        "lastName": "姓",
+        "phone": "電話番号",
+        "userId": "ユーザーID",
+        "username": "ユーザー名"
+      },
+      "credentials": {
+        "title": "Telegram API認証情報",
+        "subtitle": "Telegram MTProtoサーバーへの接続に使用するAPI認証情報を設定します。",
+        "apiId": "API ID",
+        "apiHash": "API Hash",
+        "apiIdPlaceholder": "Telegram API IDを入力（例: 1234567）",
+        "apiHashPlaceholder": "Telegram API Hashを入力（例: abcdef123456...）",
+        "show": "表示",
+        "hide": "非表示",
+        "save": "認証情報を保存"
+      },
+      "actions": {
+        "title": "アカウント操作",
+        "disconnect": "アカウントを切断",
+        "disconnectSubtitle": "Telegramセッションからログアウトし、このデバイス上のローカル認証情報キャッシュを削除します。",
+        "logout": "ログアウト"
+      },
+      "confirmUpdate": {
+        "title": "API認証情報を更新",
+        "message": "API認証情報を更新すると、Telegramセッションが再接続されます。登録済みの電話番号（{{phone}}）に認証コードが送信されます。",
+        "submit": "続行"
+      },
+      "verification": {
+        "title": "接続を検証",
+        "titlePassword": "2段階認証パスワードを入力",
+        "titleSuccess": "成功",
+        "sending": "コード送信中...",
+        "verifying": "検証中...",
+        "codeMessage": "Telegramアカウントまたは電話番号に送信された5桁の認証コードを入力します。",
+        "codeLabel": "認証コード",
+        "codePlaceholder": "5桁のコードを入力",
+        "passwordMessage": "アカウントで2段階認証が有効になっています。Telegramクラウドのパスワードを入力してください。",
+        "passwordLabel": "2段階認証クラウドパスワード",
+        "passwordPlaceholder": "2段階認証パスワードを入力",
+        "successMessage": "認証情報が正常に保存され、検証されました！",
+        "verify": "検証する",
+        "close": "閉じる"
+      },
+      "language": {
+        "title": "言語設定",
+        "subtitle": "表示言語を選択します。"
+      }
+    }
+  }
+}

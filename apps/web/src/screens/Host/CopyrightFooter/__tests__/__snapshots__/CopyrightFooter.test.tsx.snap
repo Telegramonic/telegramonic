@@ -290,60 +290,126 @@ exports[`CopyrightFooter should render 1`] = `
           © 2026 telegramonic.com | All rights reserved
         </p>
         <div
-          style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 8px; border-radius: 9999px; transition: border-color 0.2s; cursor: pointer;"
+          class="chakra-stack css-vyigcq"
         >
-          <span
-            aria-hidden="true"
-            style="line-height: 0; flex-shrink: 0;"
+          <div
+            style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 8px; border-radius: 9999px; transition: border-color 0.2s; cursor: pointer;"
           >
+            <span
+              aria-hidden="true"
+              style="font-size: 12px; line-height: 0; flex-shrink: 0;"
+            >
+              🇺🇸
+            </span>
+            <select
+              aria-label="Select language"
+              id="language-selector"
+              style="appearance: none; background: transparent; outline: none; font-size: 11px; font-weight: 600; font-family: inherit; cursor: pointer; padding-right: 14px; line-height: 1.5;"
+            >
+              <option
+                value="en"
+              >
+                English
+              </option>
+              <option
+                value="hi"
+              >
+                हिन्दी (Hindi)
+              </option>
+              <option
+                value="es"
+              >
+                Español (Spanish)
+              </option>
+              <option
+                value="ru"
+              >
+                Русский (Russian)
+              </option>
+              <option
+                value="zh"
+              >
+                中文 (Chinese)
+              </option>
+              <option
+                value="ja"
+              >
+                日本語 (Japanese)
+              </option>
+            </select>
             <svg
-              fill="currentColor"
-              height="14"
-              viewBox="0 0 24 24"
-              width="14"
+              aria-hidden="true"
+              fill="none"
+              height="9"
+              stroke="currentColor"
+              stroke-width="1.5"
+              style="pointer-events: none; flex-shrink: 0; margin-left: -10px;"
+              viewBox="0 0 10 6"
+              width="9"
             >
               <path
-                d="M9.57 3.38a8 8 0 0010.4 10.4 1 1 0 011.31 1.3 10 10 0 11-13-13 1 1 0 011.3 1.3zM7.1 5.04a8 8 0 1011.2 11.23A10 10 0 017.08 5.04z"
+                d="M1 1l4 4 4-4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               />
             </svg>
-          </span>
-          <select
-            aria-label="Select colour theme"
-            id="theme-selector"
-            style="appearance: none; background: transparent; outline: none; font-size: 11px; font-weight: 600; font-family: inherit; cursor: pointer; padding-right: 14px; line-height: 1.5;"
+          </div>
+          <div
+            style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 8px; border-radius: 9999px; transition: border-color 0.2s; cursor: pointer;"
           >
-            <option
-              value="system"
+            <span
+              aria-hidden="true"
+              style="line-height: 0; flex-shrink: 0;"
             >
-              System
-            </option>
-            <option
-              value="light"
+              <svg
+                fill="currentColor"
+                height="14"
+                viewBox="0 0 24 24"
+                width="14"
+              >
+                <path
+                  d="M9.57 3.38a8 8 0 0010.4 10.4 1 1 0 011.31 1.3 10 10 0 11-13-13 1 1 0 011.3 1.3zM7.1 5.04a8 8 0 1011.2 11.23A10 10 0 017.08 5.04z"
+                />
+              </svg>
+            </span>
+            <select
+              aria-label="Select colour theme"
+              id="theme-selector"
+              style="appearance: none; background: transparent; outline: none; font-size: 11px; font-weight: 600; font-family: inherit; cursor: pointer; padding-right: 14px; line-height: 1.5;"
             >
-              Light
-            </option>
-            <option
-              value="dark"
+              <option
+                value="system"
+              >
+                System
+              </option>
+              <option
+                value="light"
+              >
+                Light
+              </option>
+              <option
+                value="dark"
+              >
+                Dark
+              </option>
+            </select>
+            <svg
+              aria-hidden="true"
+              fill="none"
+              height="9"
+              stroke="currentColor"
+              stroke-width="1.5"
+              style="pointer-events: none; flex-shrink: 0; margin-left: -10px;"
+              viewBox="0 0 10 6"
+              width="9"
             >
-              Dark
-            </option>
-          </select>
-          <svg
-            aria-hidden="true"
-            fill="none"
-            height="9"
-            stroke="currentColor"
-            stroke-width="1.5"
-            style="pointer-events: none; flex-shrink: 0; margin-left: -10px;"
-            viewBox="0 0 10 6"
-            width="9"
-          >
-            <path
-              d="M1 1l4 4 4-4"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
+              <path
+                d="M1 1l4 4 4-4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </div>
         </div>
       </div>
     </div>

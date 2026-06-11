@@ -47,7 +47,7 @@ graph TD
 - **Interactive Documentation Viewer**: Reads product, architecture, version histories, and credentials/setup guides directly inside the web browser. Supports structured documentation, including the Telegram API Credentials Guide and separate platform version logs for desktop and mobile clients.
 - **Legal & Compliance Documents**: Fast rendering of privacy policy, terms of service, disclaimer, FAQ, etc.
 - **Smooth Animation Flow**: Fully integrated with Framer Motion for responsive UI element state changes and animations.
-- **Seamless Localisation**: Native support for multilingual translation toggling via `i18next` localized string configurations.
+- **Seamless Localisation**: Native support for multilingual translation toggling via `i18next` localized string configurations (supporting English, Hindi, Spanish, Russian, Chinese, and Japanese).
 - **System Theme Adaptability**: Automatic synchronization between user browser theme parameters (`prefers-color-scheme`) and app dark/light displays.
 
 ## Showcase

@@ -1,0 +1,22 @@
+{
+  "LoginPage": {
+    "errors": {
+      "serverConnection": "Error de conexión con el servidor",
+      "invalidCode": "Código inválido",
+      "verificationFailed": "Verificación fallida"
+    }
+  },
+  "Dashboard": {
+    "profile": {
+      "errors": {
+        "emptyCredentials": "El ID de la API y el Hash de la API no pueden estar vacíos.",
+        "phoneNotFound": "Número de teléfono no encontrado. No se pueden verificar las credenciales.",
+        "failedSendCode": "Error al enviar el código de verificación.",
+        "serverConnection": "Error de conexión con el servidor.",
+        "invalidCode": "Código inválido.",
+        "verificationFailed": "Verificación fallida.",
+        "incorrectPassword": "Contraseña 2FA incorrecta."
+      }
+    }
+  }
+}
