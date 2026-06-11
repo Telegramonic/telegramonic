@@ -1,7 +1,7 @@
 {
   "name": "telegramonic-desktop",
   "description": "Telegramonic desktop project",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "homepage": ".",
   "main": "main.js",
   "scripts": {
