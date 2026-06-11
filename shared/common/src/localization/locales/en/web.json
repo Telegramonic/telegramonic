@@ -1,0 +1,156 @@
+{
+  "LandingPage": {
+    "heroBadge": "Secure & Limitless Cloud Storage",
+    "heroText": "Vast Cloud Storage",
+    "poweredBy": "Powered by Telegram",
+    "subHeroText": "Access limitless cloud storage directly through Telegram's MTProto API. Upload, manage, and share your files instantly with zero middleman databases, no file sizes caps, and complete ownership of your data.",
+    "getStarted": "Get Started",
+    "exploreFeatures": "Explore Features",
+    "tags": {
+      "encrypted": "MTProto Encrypted",
+      "fileSize": "Up to 4GB/File",
+      "direct": "Direct-to-API"
+    },
+    "driveWidget": {
+      "title": "My Telegramonic Drive",
+      "uploading": "Uploading…",
+      "hoursAgo": "2 hours ago",
+      "yesterday": "Yesterday",
+      "dropzoneTitle": "Drag and drop files to upload",
+      "dropzoneSubtitle": "Syncs immediately directly with Telegram API"
+    },
+    "features": {
+      "title": "Engineered for Performance",
+      "subtitle": "Everything you need to manage your digital life with minimal friction.",
+      "infinite": {
+        "title": "Infinite Storage",
+        "description": "Break free from restrictive quotas. Leverage Telegram's limitless infrastructure to store documents, media, and archives without ever worrying about running out of space.",
+        "stat": "Unlimited",
+        "statLabel": "Storage cap"
+      },
+      "security": {
+        "title": "Bank-Grade Security",
+        "description": "Your files are protected by MTProto 2.0 encryption — the same protocol securing 900M+ Telegram users. Only you hold the decryption keys.",
+        "stat": "256-bit",
+        "statLabel": "AES encryption"
+      },
+      "transfers": {
+        "title": "Turbocharged Transfers",
+        "description": "Experience unmatched upload and download speeds optimized across global distributed servers.",
+        "stat": "Up to 4 GB",
+        "statLabel": "Per file"
+      },
+      "sync": {
+        "title": "Seamless Sync across Devices",
+        "description": "Access your files instantly from your desktop, tablet, or phone. Changes sync in real-time across the ecosystem.",
+        "stat": "Real-time",
+        "statLabel": "Cross-device sync"
+      },
+      "search": {
+        "title": "Instant Smart Search",
+        "description": "Find any file in milliseconds with full-text search across filenames, types, and metadata. No more endless scrolling.",
+        "stat": "<50 ms",
+        "statLabel": "Average search time"
+      },
+      "share": {
+        "title": "One-Click Sharing",
+        "description": "Generate secure shareable links instantly. Set expiry times, password-protect links, and revoke access at any time.",
+        "stat": "Zero",
+        "statLabel": "Third-party servers"
+      }
+    }
+  },
+  "Footer": {
+    "copyrightText": "© {{year}} telegramonic.com | All rights reserved",
+    "tagline": "Unlimited cloud storage, secure, fast, and completely powered by Telegram.",
+    "madeWith": "Made with ❤️ for the cloud."
+  },
+  "NavigationBar": {
+    "Home": "Home",
+    "About": "About",
+    "Contact": "Contact",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "about-us": "About Us",
+    "contact-us": "Contact Us",
+    "faq": "FAQs",
+    "disclaimer": "Disclaimer",
+    "docs": "Documentation",
+    "product": "Product",
+    "introduction": "Introduction",
+    "quickstart": "Quick Start",
+    "setup-guide": "Setup Guide",
+    "mtproto": "MTProto Protocol",
+    "direct-storage": "Direct Storage",
+    "version-history": "Version History",
+    "version-history-desktop": "Desktop",
+    "version-history-mobile": "Mobile",
+    "system-design": "System Design",
+    "api-reference": "API Reference",
+    "Login": "Login"
+  },
+  "MdPage": {
+    "privacy": {
+      "title": "Privacy Policy",
+      "badge": "Legal"
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "badge": "Legal"
+    },
+    "contactUs": {
+      "title": "Contact Us",
+      "badge": "Support"
+    },
+    "aboutUs": {
+      "title": "About Us",
+      "badge": "Company"
+    },
+    "faq": {
+      "title": "FAQs",
+      "badge": "Help"
+    },
+    "disclaimer": {
+      "title": "Disclaimer",
+      "badge": "Legal"
+    },
+    "lastUpdated": "Last updated: May 30, 2026"
+  },
+  "ProductPage": {
+    "heroTitle": "Get Telegramonic",
+    "heroSubtitle": "Run Telegramonic on all your devices. Enjoy high-speed cloud storage powered securely by the MTProto network.",
+    "desktopHeading": "Desktop Applications",
+    "mobileHeading": "Mobile Applications",
+    "recommended": "Recommended",
+    "macos": {
+      "title": "macOS",
+      "description": "Native macOS application. Supports Apple Silicon and Intel Macs.",
+      "buttonArm": "Apple Silicon (M1/M2/M3)",
+      "buttonIntel": "Intel Chip"
+    },
+    "windows": {
+      "title": "Windows",
+      "description": "Installer or portable builds for Windows 10/11 (64-bit).",
+      "buttonExe": "Download Installer (.exe)",
+      "buttonZip": "Portable Zip (.zip)"
+    },
+    "linux": {
+      "title": "Linux",
+      "description": "Standard AppImage or compiled binary packages for Linux.",
+      "buttonAppImage": "Download AppImage",
+      "buttonTar": "Tarball (.tar.gz)"
+    },
+    "ios": {
+      "title": "iOS / iPadOS",
+      "description": "Get the official app on the Apple App Store or join the TestFlight.",
+      "buttonAppStore": "Download on App Store",
+      "buttonTestFlight": "Join TestFlight Beta"
+    },
+    "android": {
+      "title": "Android",
+      "description": "Download the direct installer package or get it on Google Play.",
+      "buttonApk": "Direct APK Download",
+      "buttonPlayStore": "Get it on Google Play"
+    }
+  }
+}

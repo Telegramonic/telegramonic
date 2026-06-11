@@ -1,1 +1,22 @@
-{}
+{
+  "LoginPage": {
+    "errors": {
+      "serverConnection": "Server connection error",
+      "invalidCode": "Invalid code",
+      "verificationFailed": "Verification failed"
+    }
+  },
+  "Dashboard": {
+    "profile": {
+      "errors": {
+        "emptyCredentials": "API ID and API Hash cannot be empty.",
+        "phoneNotFound": "Phone number not found. Cannot verify credentials.",
+        "failedSendCode": "Failed to send verification code.",
+        "serverConnection": "Server connection error.",
+        "invalidCode": "Invalid code.",
+        "verificationFailed": "Verification failed.",
+        "incorrectPassword": "Incorrect 2FA password."
+      }
+    }
+  }
+}

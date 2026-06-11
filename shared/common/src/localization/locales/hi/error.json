@@ -1,0 +1,22 @@
+{
+  "LoginPage": {
+    "errors": {
+      "serverConnection": "सर्वर कनेक्शन त्रुटि",
+      "invalidCode": "अवैध कोड",
+      "verificationFailed": "सत्यापन विफल"
+    }
+  },
+  "Dashboard": {
+    "profile": {
+      "errors": {
+        "emptyCredentials": "API ID और API Hash खाली नहीं हो सकते।",
+        "phoneNotFound": "फ़ोन नंबर नहीं मिला। क्रेडेंशियल सत्यापित नहीं किया जा सकता।",
+        "failedSendCode": "सत्यापन कोड भेजने में विफल।",
+        "serverConnection": "सर्वर कनेक्शन त्रुटि।",
+        "invalidCode": "अवैध कोड।",
+        "verificationFailed": "सत्यापन विफल।",
+        "incorrectPassword": "गलत 2FA पासवर्ड।"
+      }
+    }
+  }
+}

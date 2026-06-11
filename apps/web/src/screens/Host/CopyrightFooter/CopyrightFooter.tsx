@@ -10,7 +10,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Logo } from '@assets';
-import { ThemeSelector } from '@components';
+import { ThemeSelector, LanguageSelector } from '@components';
 
 const LEGAL_LINKS = [
   {
@@ -174,8 +174,11 @@ const CopyrightFooter = () => {
           >
             {t('Footer.copyrightText', { year: currentYear })}
           </Text>
-          {/* Theme selector — bottom right */}
-          <ThemeSelector />
+          {/* Language and Theme selectors — bottom right */}
+          <HStack gap={3}>
+            <LanguageSelector />
+            <ThemeSelector />
+          </HStack>
         </Stack>
       </VStack>
     </Box>

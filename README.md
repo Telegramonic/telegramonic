@@ -284,6 +284,6 @@ The desktop client bypasses Chromium's standard download manager to avoid leavin
 - **Release Tracking & Documentation**: 
   - Version history is divided into [Desktop Version History](docs/product/version-history-desktop.md) and [Mobile Version History](docs/product/version-history-mobile.md).
   - Credentials guide is documented in [Telegram Credentials Guide](docs/product/telegram-credentials.md).
-- **Localization**: Dynamic translation handling via `i18next` localized schemas.
+- **Localization**: Dynamic translation handling via `i18next` localized schemas, with out-of-the-box support for English (`en`), Hindi (`hi`), Spanish (`es`), Russian (`ru`), Chinese (`zh`), and Japanese (`ja`).
 - **Connectivity**: Automated health polls to `/health` every 5 seconds to show active connection states.
 - **State Caching**: Query caching via TanStack Query prevents duplicate server calls.

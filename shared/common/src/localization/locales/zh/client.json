@@ -1,0 +1,201 @@
+{
+  "LoginPage": {
+    "title": "连接 Telegram 云盘",
+    "subtitle": "通过 MTProto 2.0 安全 API 连接访问您的无限云存储空间。",
+    "phone": {
+      "title": "电话号码",
+      "description": "输入与您的 Telegram 账号关联的电话号码。",
+      "label": "电话号码",
+      "placeholder": "输入不带国家代码的电话号码",
+      "errorEmpty": "必须输入电话号码才能继续。",
+      "button": "继续"
+    },
+    "code": {
+      "title": "输入验证码",
+      "description": "我们向您的 Telegram 应用程序或通过短信发送了验证码。请在下方输入。",
+      "label": "验证码",
+      "placeholder": "输入 5 位验证码",
+      "errorEmpty": "必须输入验证码。",
+      "button": "验证代码"
+    },
+    "api": {
+      "title": "API 配置",
+      "description": "提供您自定义的 Telegram API 凭据。请在 my.telegram.org 安全获取。",
+      "idLabel": "API ID",
+      "idPlaceholder": "例如，123456",
+      "idError": "必须输入 API ID。",
+      "hashLabel": "API Hash",
+      "hashPlaceholder": "例如，d58a9e...",
+      "hashError": "必须输入 API Hash。",
+      "button": "继续",
+      "help": "如何获取 API ID 和 Hash？",
+      "errorSendCode": "发送代码失败"
+    },
+    "loading": "正在建立连接...",
+    "verifying": "正在验证...",
+    "loadingDefault": "正在加载...",
+    "success": "连接成功！正在重定向...",
+    "successConfigured": "Telegramonic 配置成功。",
+    "redirecting": "正在重定向到仪表板...",
+    "savedAccounts": {
+      "title": "已保存的账号",
+      "description": "选择现有账号直接登录，或设置新账号。",
+      "addNew": "添加新账号"
+    }
+  },
+  "Dashboard": {
+    "lastSynced": "上次同步：{{time}}",
+    "never": "从未",
+    "cancel": "取消",
+    "confirmDeleteFolder": "您确定要永久删除此文件夹吗？",
+    "dragDrop": {
+      "active": "将文件拖放到此处",
+      "inactive": "将文件拖放到此处，或点击上传",
+      "subtitle": "支持同时上传多个文件"
+    },
+    "createFolder": {
+      "title": "创建新文件夹",
+      "label": "文件夹名称",
+      "placeholder": "输入文件夹名称...",
+      "submit": "创建文件夹"
+    },
+    "logout": {
+      "title": "确认注销",
+      "message": "您确定要注销 Telegramonic 吗？您需要重新登录才能访问您的文件。",
+      "submit": "注销"
+    },
+    "toasts": {
+      "syncSuccess": "云盘同步成功",
+      "syncFailed": "同步失败：{{error}}",
+      "logoutSuccess": "成功注销",
+      "copySuccess": "Telegram 消息链接已复制：{{name}}",
+      "copyFailed": "复制链接失败",
+      "unpinned": "已取消固定：{{name}}",
+      "pinned": "已固定：{{name}}",
+      "deleting": "正在删除 {{name}}...",
+      "deleteSuccess": "删除成功：{{name}}",
+      "deleteFailed": "删除文件失败：{{error}}",
+      "uploadRootError": "无法直接将文件上传到根目录“在我的云盘中”。请先进入一个文件夹。",
+      "uploadSuccess": "上传成功：{{name}}",
+      "uploadCancelled": "上传已取消：{{name}}",
+      "uploadFailed": "上传失败：{{name}}：{{error}}",
+      "nestedFoldersError": "不支持嵌套文件夹。文件夹只能在根目录下创建。",
+      "createFolderSuccess": "已创建文件夹：{{name}}",
+      "createFolderFailed": "创建文件夹失败：{{error}}",
+      "deleteFolderSuccess": "文件夹删除成功",
+      "deleteFolderFailed": "删除文件夹失败：{{error}}",
+      "downloading": "正在下载 {{name}}...",
+      "downloadSuccess": "下载成功：{{name}}",
+      "downloadFailed": "下载失败：{{error}}"
+    },
+    "date": {
+      "justNow": "刚刚",
+      "minsAgo": "{{count}}m前",
+      "hoursAgo": "{{count}}h前",
+      "recent": "最近"
+    },
+    "nav": {
+      "drive": "云盘",
+      "inMyDrive": "在我的云盘中",
+      "pinned": "已固定",
+      "profile": "个人资料",
+      "help": "帮助"
+    },
+    "topNav": {
+      "searchPlaceholder": "搜索...",
+      "uploadFile": "上传文件",
+      "newFolder": "+ 新建文件夹"
+    },
+    "breadcrumbs": {
+      "root": "在我的云盘中"
+    },
+    "uploadProgress": {
+      "uploading": "正在上传 {{name}}..."
+    },
+    "filesTable": {
+      "pinned": "已固定",
+      "goBack": "返回",
+      "emptyState": "未在此处找到任何文件或文件夹。",
+      "listView": "列表视图",
+      "iconView": "图标视图",
+      "syncFolders": "同步文件夹",
+      "sort": {
+        "az": "名称：A → Z",
+        "za": "名称：Z → A"
+      },
+      "headers": {
+        "name": "名称",
+        "owner": "所有者",
+        "lastModified": "修改日期",
+        "size": "大小"
+      },
+      "actions": {
+        "pin": "固定",
+        "unpin": "取消固定",
+        "share": "分享链接",
+        "download": "下载文件",
+        "deleteFolder": "删除文件夹",
+        "deleteFile": "删除文件",
+        "options": "选项",
+        "delete": "删除"
+      }
+    },
+    "profile": {
+      "loading": "正在加载...",
+      "title": "账号资料",
+      "subtitle": "管理您的账号资料详情、Telegram API 凭据和云盘设置。",
+      "copied": "已复制 ✓",
+      "copy": "复制",
+      "info": {
+        "title": "账号信息",
+        "firstName": "名字",
+        "lastName": "姓氏",
+        "phone": "电话号码",
+        "userId": "用户 ID",
+        "username": "用户名"
+      },
+      "credentials": {
+        "title": "Telegram API 凭据",
+        "subtitle": "配置用于连接到 Telegram MTProto 服务器的 API 凭据。",
+        "apiId": "API ID",
+        "apiHash": "API Hash",
+        "apiIdPlaceholder": "输入 Telegram API ID（如 1234567）",
+        "apiHashPlaceholder": "输入 Telegram API Hash（如 abcdef123456...）",
+        "show": "显示",
+        "hide": "隐藏",
+        "save": "保存凭据"
+      },
+      "actions": {
+        "title": "账号操作",
+        "disconnect": "断开账号连接",
+        "disconnectSubtitle": "注销您的 Telegram 会话并删除此设备上的本地凭据缓存。",
+        "logout": "注销"
+      },
+      "confirmUpdate": {
+        "title": "更新 API 凭据",
+        "message": "更新您的 API 凭据将重新连接您的 Telegram 会话。验证码将发送到您的注册电话号码（{{phone}}）。",
+        "submit": "继续"
+      },
+      "verification": {
+        "title": "验证连接",
+        "titlePassword": "输入两步验证密码",
+        "titleSuccess": "成功",
+        "sending": "正在发送代码...",
+        "verifying": "正在验证...",
+        "codeMessage": "输入发送到您的 Telegram 账号或手机的 5 位验证码。",
+        "codeLabel": "验证码",
+        "codePlaceholder": "输入 5 位验证码",
+        "passwordMessage": "您的账号已启用两步验证。请输入您的 Telegram 云端密码。",
+        "passwordLabel": "两步验证云端密码",
+        "passwordPlaceholder": "输入两步验证密码",
+        "successMessage": "凭据保存并验证成功！",
+        "verify": "验证",
+        "close": "关闭"
+      },
+      "language": {
+        "title": "语言设置",
+        "subtitle": "选择您偏好的显示语言。"
+      }
+    }
+  }
+}

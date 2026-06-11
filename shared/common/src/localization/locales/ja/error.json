@@ -1,0 +1,22 @@
+{
+  "LoginPage": {
+    "errors": {
+      "serverConnection": "サーバー接続エラー",
+      "invalidCode": "無効なコード",
+      "verificationFailed": "認証に失敗しました"
+    }
+  },
+  "Dashboard": {
+    "profile": {
+      "errors": {
+        "emptyCredentials": "API IDとAPI Hashは空にできません。",
+        "phoneNotFound": "電話番号が見つかりません。認証情報を確認できません。",
+        "failedSendCode": "認証コードの送信に失敗しました。",
+        "serverConnection": "サーバー接続エラー。",
+        "invalidCode": "無効なコード。",
+        "verificationFailed": "認証に失敗しました。",
+        "incorrectPassword": "2FAパスワードが正しくありません。"
+      }
+    }
+  }
+}

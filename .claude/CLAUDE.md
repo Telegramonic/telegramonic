@@ -67,7 +67,9 @@ Advanced agent instructions are modularized in the `.claude/skills/` directory.
 
 ## 🌐 Localization Guidelines
 
-All user-facing copy strings (headings, paragraphs, labels, button texts, tooltips, placeholders, etc.) MUST be defined in the localization JSON files located in `shared/common/src/localization/locales/` (e.g. `main.json`) and retrieved dynamically in code using the `useTranslation` hook (`t('key')`). Never hardcode text strings directly in component files.
+All user-facing copy strings (headings, paragraphs, labels, button texts, tooltips, placeholders, etc.) MUST be defined in the localization JSON files located in `shared/common/src/localization/locales/` (`client.json`, `web.json`, `common.json`, and `error.json` under each locale directory) and retrieved dynamically in code using the `useTranslation` hook (`t('key')`). Never hardcode text strings directly in component files.
+
+Always ensure that any newly added or updated translation keys are copied and synchronized across all supported languages (`en/`, `hi/`, `es/`, `ru/`, `zh/`, `ja/`) to guarantee proper fallback resolution.
 
 ## 🧪 Testing Guidelines
 
