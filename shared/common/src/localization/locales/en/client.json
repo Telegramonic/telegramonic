@@ -31,6 +31,15 @@
       "help": "How to get API ID and Hash?",
       "errorSendCode": "Failed to send code"
     },
+    "password": {
+      "title": "Enter 2FA Password",
+      "description": "Your account has 2-Factor Authentication (2FA) enabled. Please enter your Telegram cloud password below.",
+      "label": "2FA Cloud Password",
+      "placeholder": "Enter 2FA password",
+      "errorEmpty": "2FA password is required.",
+      "errorIncorrect": "Incorrect 2FA password.",
+      "button": "Verify Password"
+    },
     "loading": "Establishing connection...",
     "verifying": "Verifying...",
     "loadingDefault": "Loading...",

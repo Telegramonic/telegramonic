@@ -177,14 +177,18 @@ describe('LoginPage', () => {
     expect(
       await screen.findByText('Enter Verification Code'),
     ).toBeInTheDocument();
-    const codeInput = screen.getByPlaceholderText('Enter 5-digit code');
-    expect(codeInput).toBeInTheDocument();
+    const codeInputs = screen.getAllByRole('textbox');
+    expect(codeInputs).toHaveLength(5);
 
     // Enable fake timers BEFORE submitting step 3
     jest.useFakeTimers();
 
     // Step 3: Submit Verification Code
-    fireEvent.change(codeInput, { target: { value: '12345' } });
+    fireEvent.change(codeInputs[0], { target: { value: '1' } });
+    fireEvent.change(codeInputs[1], { target: { value: '2' } });
+    fireEvent.change(codeInputs[2], { target: { value: '3' } });
+    fireEvent.change(codeInputs[3], { target: { value: '4' } });
+    fireEvent.change(codeInputs[4], { target: { value: '5' } });
     const verifyButton = screen.getByRole('button', { name: 'Verify Code' });
     fireEvent.click(verifyButton);
 
@@ -193,7 +197,7 @@ describe('LoginPage', () => {
       await Promise.resolve();
     });
 
-    // Success screen (Step 4) should be visible
+    // Success screen (Step 5) should be visible
     expect(
       await screen.findByText('Successfully configured Telegramonic.'),
     ).toBeInTheDocument();
@@ -372,5 +376,87 @@ describe('LoginPage', () => {
     expect(
       screen.getByRole('heading', { name: 'Phone Number' }),
     ).toBeInTheDocument();
+  });
+
+  it('should handle Two-Factor Authentication (2FA) flow successfully', async () => {
+    mockSignIn.mockResolvedValueOnce({ success: true, next_step: 'password' });
+
+    renderWithRouter(<LoginPage />);
+
+    // Step 1: Submit Phone Number
+    const phoneInput = screen.getByPlaceholderText(
+      'Enter phone number without country code',
+    );
+    fireEvent.change(phoneInput, { target: { value: '5555555555' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
+
+    // Step 2: Submit API Credentials
+    expect(
+      await screen.findByPlaceholderText('e.g., 123456'),
+    ).toBeInTheDocument();
+    fireEvent.change(screen.getByPlaceholderText('e.g., 123456'), {
+      target: { value: '654321' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('e.g., d58a9e...'), {
+      target: { value: 'hash_abc' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
+
+    // Wait for sendCode
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    // Step 3: Enter OTP Verification Code
+    expect(
+      await screen.findByText('Enter Verification Code'),
+    ).toBeInTheDocument();
+
+    const codeInputs = screen.getAllByRole('textbox');
+    expect(codeInputs).toHaveLength(5);
+
+    fireEvent.change(codeInputs[0], { target: { value: '1' } });
+    fireEvent.change(codeInputs[1], { target: { value: '2' } });
+    fireEvent.change(codeInputs[2], { target: { value: '3' } });
+    fireEvent.change(codeInputs[3], { target: { value: '4' } });
+    fireEvent.change(codeInputs[4], { target: { value: '5' } });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Verify Code' }));
+
+    // Wait for signIn response (returning next_step: 'password')
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    // Now it should be on Step 4 (2FA Password)
+    expect(await screen.findByText('Enter 2FA Password')).toBeInTheDocument();
+    const passwordInput = screen.getByPlaceholderText('Enter 2FA password');
+    expect(passwordInput).toBeInTheDocument();
+
+    // Enable fake timers for success redirect
+    jest.useFakeTimers();
+
+    // Submit Password
+    fireEvent.change(passwordInput, { target: { value: 'my_2fa_password' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Verify Password' }));
+
+    // Wait for checkPassword response
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(mockCheckPassword).toHaveBeenCalledWith('my_2fa_password');
+
+    // Success screen (Step 5) should be visible
+    expect(
+      await screen.findByText('Successfully configured Telegramonic.'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Redirecting to dashboard...')).toBeInTheDocument();
+
+    // Advance fake timers to trigger final redirect
+    act(() => {
+      jest.advanceTimersByTime(3000);
+    });
+    jest.useRealTimers();
   });
 });

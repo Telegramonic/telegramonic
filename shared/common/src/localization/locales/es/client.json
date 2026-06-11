@@ -31,6 +31,15 @@
       "help": "¿Cómo obtener el ID y el Hash de la API?",
       "errorSendCode": "Error al enviar el código"
     },
+    "password": {
+      "title": "Confirmar contraseña 2FA",
+      "description": "Su cuenta tiene 2FA habilitado. Ingrese su contraseña de Telegram a continuación.",
+      "label": "Contraseña de Telegram",
+      "placeholder": "Ingrese la contraseña",
+      "errorEmpty": "Se requiere la contraseña de Telegram.",
+      "errorIncorrect": "Contraseña 2FA incorrecta.",
+      "button": "Verificar contraseña"
+    },
     "loading": "Estableciendo conexión...",
     "verifying": "Verificando...",
     "loadingDefault": "Cargando...",
