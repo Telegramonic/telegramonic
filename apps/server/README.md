@@ -254,7 +254,7 @@ All endpoints return JSON. Large 64-bit integer IDs (`i64`) are serialized as **
 | `GET`  | `/drive/files?folder_id=<i64>&q=<str>&all=<bool>`   |    **Yes**    | List files in a drive/folder          |
 | `POST` | `/drive/folders/create`                             |    **Yes**    | Create folder / Telegram channel      |
 | `POST` | `/drive/folders/delete`                             |    **Yes**    | Delete folder / leave channel         |
-| `POST` | `/files/upload-part?file_id=<i64>&part_index=<i32>` |    **Yes**    | Upload a raw binary chunk             |
+| `POST` | `/files/upload-part?file_id=<i64>&part_index=<i32>&file_size=<i64>&total_parts=<i32>` |    **Yes**    | Upload a raw binary chunk             |
 | `POST` | `/files/save-file`                                  |    **Yes**    | Finalize and send file to Telegram    |
 | `GET`  | `/files/download?file_id=<i64>`                     |    **Yes**    | Download file bytes                   |
 | `GET`  | `/files/get-file?file_id=<i64>`                     |    **Yes**    | Alias for download                    |
@@ -474,7 +474,7 @@ Deletes the Telegram channel (or leaves it if not the creator) and cascades to o
 
 #### `POST /files/upload-part`
 
-Receives a raw binary chunk (`application/octet-stream`) using `file_id` and `part_index` query parameters. Chunks are buffered in `uploaded_chunks`.
+Receives a raw binary chunk (`application/octet-stream`) using `file_id`, `part_index`, `file_size`, and `total_parts` query parameters. Chunks are immediately uploaded to Telegram's media servers. Chunks for small files (≤10 MB) are also buffered in memory to calculate the MD5 checksum.
 
 ---
 

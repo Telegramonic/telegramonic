@@ -90,10 +90,10 @@ export const useLoginForm = () => {
         setPhoneCodeHash(res.next_step || 'mock_hash');
         setStep(3);
       } else {
-        setErrors({ apiId: res.error || 'Failed to send code' });
+        setErrors({ apiId: res.error || t('LoginPage.api.errorSendCode') });
       }
     } catch (err: any) {
-      setErrors({ apiId: err.message || 'Server connection error' });
+      setErrors({ apiId: err.message || t('LoginPage.errors.serverConnection') });
     } finally {
       setIsLoading(false);
     }
@@ -113,11 +113,11 @@ export const useLoginForm = () => {
         setPhoneCodeHash(res.next_step || 'mock_hash');
         setStep(3);
       } else {
-        setErrors({ apiId: res.error || 'Failed to send code' });
+        setErrors({ apiId: res.error || t('LoginPage.api.errorSendCode') });
         setStep(2);
       }
     } catch (err: any) {
-      setErrors({ apiId: err.message || 'Server connection error' });
+      setErrors({ apiId: err.message || t('LoginPage.errors.serverConnection') });
       setStep(2);
     } finally {
       setIsLoading(false);
@@ -155,10 +155,10 @@ export const useLoginForm = () => {
 
         setStep(4);
       } else {
-        setErrors({ code: res.error || 'Invalid code' });
+        setErrors({ code: res.error || t('LoginPage.errors.invalidCode') });
       }
     } catch (err: any) {
-      setErrors({ code: err.message || 'Verification failed' });
+      setErrors({ code: err.message || t('LoginPage.errors.verificationFailed') });
     } finally {
       setIsLoading(false);
     }

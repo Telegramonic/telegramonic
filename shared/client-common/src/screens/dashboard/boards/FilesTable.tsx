@@ -11,13 +11,17 @@ import {
   Menu,
   Portal,
 } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
 import { FilesTableProps } from './types';
-import { getFileIconType } from './const';
+import { getFileIconType } from '../components/const';
 import { DashboardItem } from '../types';
 
-type ViewMode = 'list' | 'icon';
+export enum ViewMode {
+  LIST = 'list',
+  ICON = 'icon',
+}
 type SortMode = 'az' | 'za';
 
 export const FilesTable = ({
@@ -34,8 +38,11 @@ export const FilesTable = ({
   isSyncing,
   onBack,
   isInsideFolder,
+  onDropFiles,
+  onUploadClick,
 }: FilesTableProps) => {
-  const [viewMode, setViewMode] = useState<ViewMode>('list');
+  const { t } = useTranslation();
+  const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.LIST);
   const [sortMode, setSortMode] = useState<SortMode>('az');
 
   const sortedItems = useMemo(() => {
@@ -50,7 +57,8 @@ export const FilesTable = ({
     });
   }, [filteredItems, sortMode]);
 
-  const sectionTitle = activeTab === 'all' ? '' : 'Pinned';
+  const sectionTitle =
+    activeTab === 'all' ? '' : t('Dashboard.filesTable.pinned');
 
   return (
     <Box>
@@ -72,24 +80,16 @@ export const FilesTable = ({
               borderWidth="1px"
               borderColor="border"
               color="fg.muted"
-              _hover={{ bg: { base: 'white', _dark: '#18202a' }, color: 'primary' }}
+              _hover={{
+                bg: { base: 'white', _dark: '#18202a' },
+                color: 'primary',
+              }}
               transition="all 0.2s"
-              title="Go back"
-              aria-label="Go back"
+              title={t('Dashboard.filesTable.goBack')}
+              aria-label={t('Dashboard.filesTable.goBack')}
               flexShrink={0}
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
+              <Icon type={IconType.CHEVRON_LEFT} size="14px" />
             </Box>
           )}
           {sectionTitle ? (
@@ -121,8 +121,8 @@ export const FilesTable = ({
                 transition: 'all 0.2s',
               }}
             >
-              <option value="az">Name: A → Z</option>
-              <option value="za">Name: Z → A</option>
+              <option value="az">{t('Dashboard.filesTable.sort.az')}</option>
+              <option value="za">{t('Dashboard.filesTable.sort.za')}</option>
             </select>
             <Box
               position="absolute"
@@ -149,77 +149,47 @@ export const FilesTable = ({
           >
             <Box
               as="button"
-              onClick={() => setViewMode('list')}
+              onClick={() => setViewMode(ViewMode.LIST)}
               px={2.5}
               py={1.5}
               borderRadius="md"
               bg={
-                viewMode === 'list'
+                viewMode === ViewMode.LIST
                   ? { base: 'white', _dark: '#18202a' }
                   : 'transparent'
               }
-              color={viewMode === 'list' ? 'primary' : 'fg.muted'}
+              color={viewMode === ViewMode.LIST ? 'primary' : 'fg.muted'}
               transition="all 0.2s"
-              title="List view"
-              aria-label="List view"
-              boxShadow={viewMode === 'list' ? 'sm' : 'none'}
+              title={t('Dashboard.filesTable.listView')}
+              aria-label={t('Dashboard.filesTable.listView')}
+              boxShadow={viewMode === ViewMode.LIST ? 'sm' : 'none'}
               display="flex"
               alignItems="center"
               justifyContent="center"
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="8" y1="6" x2="21" y2="6"></line>
-                <line x1="8" y1="12" x2="21" y2="12"></line>
-                <line x1="8" y1="18" x2="21" y2="18"></line>
-                <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                <line x1="3" y1="18" x2="3.01" y2="18"></line>
-              </svg>
+              <Icon type={IconType.LIST_VIEW} size="14px" />
             </Box>
             <Box
               as="button"
-              onClick={() => setViewMode('icon')}
+              onClick={() => setViewMode(ViewMode.ICON)}
               px={2.5}
               py={1.5}
               borderRadius="md"
               bg={
-                viewMode === 'icon'
+                viewMode === ViewMode.ICON
                   ? { base: 'white', _dark: '#18202a' }
                   : 'transparent'
               }
-              color={viewMode === 'icon' ? 'primary' : 'fg.muted'}
+              color={viewMode === ViewMode.ICON ? 'primary' : 'fg.muted'}
               transition="all 0.2s"
-              title="Icon view"
-              aria-label="Icon view"
-              boxShadow={viewMode === 'icon' ? 'sm' : 'none'}
+              title={t('Dashboard.filesTable.iconView')}
+              aria-label={t('Dashboard.filesTable.iconView')}
+              boxShadow={viewMode === ViewMode.ICON ? 'sm' : 'none'}
               display="flex"
               alignItems="center"
               justifyContent="center"
             >
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect x="3" y="3" width="7" height="7"></rect>
-                <rect x="14" y="3" width="7" height="7"></rect>
-                <rect x="14" y="14" width="7" height="7"></rect>
-                <rect x="3" y="14" width="7" height="7"></rect>
-              </svg>
+              <Icon type={IconType.GRID_VIEW} size="14px" />
             </Box>
           </HStack>
 
@@ -241,26 +211,17 @@ export const FilesTable = ({
             }}
             _disabled={{ opacity: 0.6, cursor: 'not-allowed' }}
             transition="all 0.2s"
-            title="Sync folders"
-            aria-label="Sync folders"
+            title={t('Dashboard.filesTable.syncFolders')}
+            aria-label={t('Dashboard.filesTable.syncFolders')}
             display="flex"
             alignItems="center"
             justifyContent="center"
           >
-            <svg
+            <Icon
+              type={IconType.SYNC}
+              size="14px"
               className={isSyncing ? 'spin-anim' : ''}
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="23 4 23 10 17 10"></polyline>
-              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-            </svg>
+            />
           </Box>
         </HStack>
       </HStack>
@@ -270,19 +231,19 @@ export const FilesTable = ({
           py={16}
           borderWidth="1px"
           borderColor="border"
-          borderStyle="dashed"
           borderRadius="2xl"
+          bg={{ base: 'white', _dark: '#131c26' }}
         >
           <VStack gap={2}>
             <Box color="fg.muted" opacity={0.6}>
               <Icon type={IconType.CLOUD} size={32} />
             </Box>
-            <Text fontSize="sm" color="fg.muted">
-              No files or folders found here.
+            <Text fontSize="sm" color="fg.muted" textAlign="center" px={4}>
+              {t('Dashboard.filesTable.emptyState')}
             </Text>
           </VStack>
         </Center>
-      ) : viewMode === 'list' ? (
+      ) : viewMode === ViewMode.LIST ? (
         /* ── LIST VIEW ── */
         <Box
           overflow="hidden"
@@ -300,7 +261,7 @@ export const FilesTable = ({
                   fontWeight="bold"
                   textTransform="uppercase"
                 >
-                  Name
+                  {t('Dashboard.filesTable.headers.name')}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader
                   color="fg.muted"
@@ -309,7 +270,7 @@ export const FilesTable = ({
                   textTransform="uppercase"
                   display={{ base: 'none', md: 'table-cell' }}
                 >
-                  Owner
+                  {t('Dashboard.filesTable.headers.owner')}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader
                   color="fg.muted"
@@ -318,7 +279,7 @@ export const FilesTable = ({
                   textTransform="uppercase"
                   display={{ base: 'none', md: 'table-cell' }}
                 >
-                  Last Modified
+                  {t('Dashboard.filesTable.headers.lastModified')}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader
                   color="fg.muted"
@@ -327,7 +288,7 @@ export const FilesTable = ({
                   textTransform="uppercase"
                   display={{ base: 'none', md: 'table-cell' }}
                 >
-                  Size
+                  {t('Dashboard.filesTable.headers.size')}
                 </Table.ColumnHeader>
                 <Table.ColumnHeader
                   color="fg.muted"
@@ -393,10 +354,18 @@ export const FilesTable = ({
                       </Text>
                     </HStack>
                   </Table.Cell>
-                  <Table.Cell fontSize="sm" color="fg.muted" display={{ base: 'none', md: 'table-cell' }}>
+                  <Table.Cell
+                    fontSize="sm"
+                    color="fg.muted"
+                    display={{ base: 'none', md: 'table-cell' }}
+                  >
                     {item.lastModified}
                   </Table.Cell>
-                  <Table.Cell fontSize="sm" color="fg.muted" display={{ base: 'none', md: 'table-cell' }}>
+                  <Table.Cell
+                    fontSize="sm"
+                    color="fg.muted"
+                    display={{ base: 'none', md: 'table-cell' }}
+                  >
                     {item.size}
                   </Table.Cell>
                   <Table.Cell textAlign="right">
@@ -408,6 +377,7 @@ export const FilesTable = ({
                       onDownload={onDownload}
                       onDeleteFolder={onDeleteFolder}
                       onDeleteFile={onDeleteFile}
+                      viewMode={ViewMode.LIST}
                     />
                   </Table.Cell>
                 </Table.Row>
@@ -435,8 +405,17 @@ export const FilesTable = ({
               transition="all 0.2s"
               position="relative"
               role="group"
+              overflow="hidden"
+              minW={0}
+              w="full"
             >
-              <VStack gap={3} align="center">
+              <VStack
+                gap={3}
+                align="center"
+                w="full"
+                minW={0}
+                overflow="hidden"
+              >
                 <Box
                   color={item.isFolder ? 'yellow.400' : 'primary'}
                   p={3}
@@ -445,10 +424,16 @@ export const FilesTable = ({
                 >
                   <Icon type={getFileIconType(item.type)} size={28} />
                 </Box>
-                <VStack gap={0} align="center">
+                <VStack
+                  gap={0}
+                  align="center"
+                  w="full"
+                  minW={0}
+                  overflow="hidden"
+                >
                   <Text
-                    fontSize="xs"
-                    fontWeight="bold"
+                    fontSize="2xs"
+                    fontWeight="extrabold"
                     color="fg"
                     textAlign="center"
                     maxW="100%"
@@ -468,14 +453,11 @@ export const FilesTable = ({
                 </VStack>
               </VStack>
 
-              {/* Hover action row */}
+              {/* Card actions */}
               <HStack
                 position="absolute"
                 top={2}
                 right={2}
-                opacity={{ base: 1, md: 0 }}
-                _groupHover={{ opacity: 1 }}
-                transition="opacity 0.2s"
                 gap={0.5}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -487,6 +469,7 @@ export const FilesTable = ({
                   onDownload={onDownload}
                   onDeleteFolder={onDeleteFolder}
                   onDeleteFile={onDeleteFile}
+                  viewMode={ViewMode.ICON}
                 />
               </HStack>
             </Box>
@@ -506,6 +489,7 @@ const RowActions = ({
   onDownload,
   onDeleteFolder,
   onDeleteFile,
+  viewMode,
 }: {
   item: DashboardItem;
   activeTab: string;
@@ -514,269 +498,267 @@ const RowActions = ({
   onDownload: (item: DashboardItem, e: React.MouseEvent) => void;
   onDeleteFolder: (id: string, e: React.MouseEvent) => void;
   onDeleteFile: (item: DashboardItem, e: React.MouseEvent) => void;
-}) => (
-  <HStack gap={1} justify="flex-end" onClick={(e) => e.stopPropagation()}>
-    {/* Desktop View: Side-by-side buttons */}
-    <HStack gap={1} display={{ base: 'none', md: 'flex' }}>
-      {/* Pin / Star */}
-      <Box
-        as="button"
-        onClick={(e: React.MouseEvent) => onToggleStar(item, e)}
-        p={1.5}
-        borderRadius="md"
-        color={item.starred ? 'yellow.400' : 'fg.muted'}
-        _hover={{ bg: 'bg.hover/20', color: item.starred ? 'yellow.300' : 'fg' }}
-        transition="all 0.2s"
-        title={item.starred ? 'Unpin' : 'Pin'}
-        aria-label={item.starred ? 'Unpin' : 'Pin'}
-        display="flex"
-        alignItems="center"
-        justifyContent="center"
+  viewMode: ViewMode;
+}) => {
+  const { t } = useTranslation();
+  return (
+    <HStack gap={1} justify="flex-end" onClick={(e) => e.stopPropagation()}>
+      {/* Desktop View: Side-by-side buttons */}
+      <HStack
+        gap={1}
+        display={
+          viewMode === ViewMode.ICON ? 'none' : { base: 'none', md: 'flex' }
+        }
       >
-        <Icon
-          type={IconType.PIN}
-          size="16px"
-          fill={item.starred ? 'currentColor' : 'none'}
-        />
-      </Box>
-
-      {/* Share — files only */}
-      {!item.isFolder && (
+        {/* Pin / Star */}
         <Box
           as="button"
-          onClick={(e: React.MouseEvent) => onShare(item, e)}
+          onClick={(e: React.MouseEvent) => onToggleStar(item, e)}
           p={1.5}
           borderRadius="md"
-          color="fg.muted"
-          _hover={{ bg: 'bg.hover/20', color: 'primary' }}
-          transition="all 0.2s"
-          title="Share Link"
-          aria-label="Share Link"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Icon type={IconType.SHARE} size="15px" />
-        </Box>
-      )}
-
-      {/* Download — files only */}
-      {!item.isFolder && (
-        <Box
-          as="button"
-          onClick={(e: React.MouseEvent) => {
-            e.stopPropagation();
-            onDownload(item, e);
+          color={item.starred ? 'yellow.400' : 'fg.muted'}
+          _hover={{
+            bg: 'bg.hover/20',
+            color: item.starred ? 'yellow.300' : 'fg',
           }}
-          p={1.5}
-          borderRadius="md"
-          color="fg.muted"
-          _hover={{ bg: 'bg.hover/20', color: 'primary' }}
           transition="all 0.2s"
-          title="Download File"
-          aria-label="Download File"
+          title={
+            item.starred
+              ? t('Dashboard.filesTable.actions.unpin')
+              : t('Dashboard.filesTable.actions.pin')
+          }
+          aria-label={
+            item.starred
+              ? t('Dashboard.filesTable.actions.unpin')
+              : t('Dashboard.filesTable.actions.pin')
+          }
           display="flex"
           alignItems="center"
           justifyContent="center"
         >
-          <svg
-            width="15"
-            height="15"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
+          <Icon
+            type={IconType.PIN}
+            size="16px"
+            fill={item.starred ? 'currentColor' : 'none'}
+          />
         </Box>
-      )}
 
-      {/* Delete folder */}
-      {item.isFolder && (
-        <Box
-          as="button"
-          onClick={(e: React.MouseEvent) => onDeleteFolder(item.dbId, e)}
-          p={1.5}
-          borderRadius="md"
-          color="error.400"
-          _hover={{ bg: 'error.500/10' }}
-          transition="all 0.2s"
-          title="Delete Folder"
-          aria-label="Delete Folder"
-          fontSize="xs"
-          fontWeight="bold"
-        >
-          🗑
-        </Box>
-      )}
-
-      {/* Delete file — files only */}
-      {!item.isFolder && (
-        <Box
-          as="button"
-          onClick={(e: React.MouseEvent) => onDeleteFile(item, e)}
-          p={1.5}
-          borderRadius="md"
-          color="error.400"
-          _hover={{ bg: 'error.500/10' }}
-          transition="all 0.2s"
-          title="Delete File"
-          aria-label="Delete File"
-          fontSize="xs"
-          fontWeight="bold"
-        >
-          🗑
-        </Box>
-      )}
-    </HStack>
-
-    {/* Mobile View: 3-dot dropdown menu */}
-    <Box display={{ base: 'block', md: 'none' }} position="relative" zIndex={10}>
-      <Menu.Root>
-        <Menu.Trigger asChild>
+        {/* Share — files only */}
+        {!item.isFolder && (
           <Box
             as="button"
+            onClick={(e: React.MouseEvent) => onShare(item, e)}
             p={1.5}
             borderRadius="md"
             color="fg.muted"
-            _hover={{ bg: 'bg.hover/25', color: 'fg' }}
+            _hover={{ bg: 'bg.hover/20', color: 'primary' }}
             transition="all 0.2s"
-            title="Options"
-            aria-label="Options"
+            title={t('Dashboard.filesTable.actions.share')}
+            aria-label={t('Dashboard.filesTable.actions.share')}
             display="flex"
             alignItems="center"
             justifyContent="center"
           >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="1.5"></circle>
-              <circle cx="12" cy="5" r="1.5"></circle>
-              <circle cx="12" cy="19" r="1.5"></circle>
-            </svg>
+            <Icon type={IconType.SHARE} size="15px" />
           </Box>
-        </Menu.Trigger>
-        <Portal>
-        <Menu.Positioner>
-          <Menu.Content
-            zIndex={9999}
-            borderRadius="xl"
-            boxShadow="2xl"
-            bg="bg.panel"
-            borderColor="border"
-            py={1}
-            minW="140px"
-            maxH="none"
-            overflow="visible"
+        )}
+
+        {/* Download — files only */}
+        {!item.isFolder && (
+          <Box
+            as="button"
+            onClick={(e: React.MouseEvent) => {
+              e.stopPropagation();
+              onDownload(item, e);
+            }}
+            p={1.5}
+            borderRadius="md"
+            color="fg.muted"
+            _hover={{ bg: 'bg.hover/20', color: 'primary' }}
+            transition="all 0.2s"
+            title={t('Dashboard.filesTable.actions.download')}
+            aria-label={t('Dashboard.filesTable.actions.download')}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
           >
-            <Menu.Item
-              value="star"
-              onClick={(e: React.MouseEvent) => onToggleStar(item, e)}
-              style={{
-                padding: '8px 12px',
-                fontSize: '13px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}
+            <Icon type={IconType.DOWNLOAD} size="15px" />
+          </Box>
+        )}
+
+        {/* Delete folder */}
+        {item.isFolder && (
+          <Box
+            as="button"
+            onClick={(e: React.MouseEvent) => onDeleteFolder(item.dbId, e)}
+            p={1.5}
+            borderRadius="md"
+            color="error.400"
+            _hover={{ bg: 'error.500/10' }}
+            transition="all 0.2s"
+            title={t('Dashboard.filesTable.actions.deleteFolder')}
+            aria-label={t('Dashboard.filesTable.actions.deleteFolder')}
+            fontSize="xs"
+            fontWeight="bold"
+          >
+            🗑
+          </Box>
+        )}
+
+        {/* Delete file — files only */}
+        {!item.isFolder && (
+          <Box
+            as="button"
+            onClick={(e: React.MouseEvent) => onDeleteFile(item, e)}
+            p={1.5}
+            borderRadius="md"
+            color="error.400"
+            _hover={{ bg: 'error.500/10' }}
+            transition="all 0.2s"
+            title={t('Dashboard.filesTable.actions.deleteFile')}
+            aria-label={t('Dashboard.filesTable.actions.deleteFile')}
+            fontSize="xs"
+            fontWeight="bold"
+          >
+            🗑
+          </Box>
+        )}
+      </HStack>
+
+      {/* Mobile View: 3-dot dropdown menu */}
+      <Box
+        display={
+          viewMode === ViewMode.ICON ? 'block' : { base: 'block', md: 'none' }
+        }
+        position="relative"
+        zIndex={10}
+      >
+        <Menu.Root>
+          <Menu.Trigger asChild>
+            <Box
+              as="button"
+              onClick={(e) => e.stopPropagation()}
+              p={1.5}
+              borderRadius="md"
+              color="fg.muted"
+              _hover={{ bg: 'bg.hover/25', color: 'fg' }}
+              transition="all 0.2s"
+              title={t('Dashboard.filesTable.actions.options')}
+              aria-label={t('Dashboard.filesTable.actions.options')}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
             >
-              <Icon
-                type={IconType.PIN}
-                size="14px"
-                color={item.starred ? 'yellow.400' : 'inherit'}
-                fill={item.starred ? 'currentColor' : 'none'}
-              />
-              {item.starred ? 'Unpin' : 'Pin'}
-            </Menu.Item>
-
-            {!item.isFolder && (
-              <Menu.Item
-                value="share"
-                onClick={(e: React.MouseEvent) => onShare(item, e)}
-                style={{
-                  padding: '8px 12px',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
+              <Icon type={IconType.THREE_DOTS} size="16px" />
+            </Box>
+          </Menu.Trigger>
+          <Portal>
+            <Menu.Positioner onClick={(e) => e.stopPropagation()}>
+              <Menu.Content
+                zIndex={9999}
+                borderRadius="xl"
+                boxShadow="2xl"
+                bg="bg.panel"
+                borderColor="border"
+                py={1}
+                minW="140px"
+                maxH="none"
+                overflow="visible"
               >
-                <Icon type={IconType.SHARE} size="14px" />
-                Share Link
-              </Menu.Item>
-            )}
-
-            {!item.isFolder && (
-              <Menu.Item
-                value="download"
-                onClick={(e: React.MouseEvent) => onDownload(item, e)}
-                style={{
-                  padding: '8px 12px',
-                  fontSize: '13px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}
-              >
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+                <Menu.Item
+                  value="star"
+                  onClick={(e: React.MouseEvent) => onToggleStar(item, e)}
+                  style={{
+                    padding: '8px 12px',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                  }}
                 >
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                Download
-              </Menu.Item>
-            )}
+                  <Icon
+                    type={IconType.PIN}
+                    size="14px"
+                    color={item.starred ? 'yellow.400' : 'inherit'}
+                    fill={item.starred ? 'currentColor' : 'none'}
+                  />
+                  {item.starred
+                    ? t('Dashboard.filesTable.actions.unpin')
+                    : t('Dashboard.filesTable.actions.pin')}
+                </Menu.Item>
 
-            <Menu.Item
-              value="delete"
-              onClick={(e: React.MouseEvent) => {
-                if (item.isFolder) {
-                  onDeleteFolder(item.dbId, e);
-                } else {
-                  onDeleteFile(item, e);
-                }
-              }}
-              style={{
-                padding: '8px 12px',
-                fontSize: '13px',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                color: 'var(--chakra-colors-error-400)',
-              }}
-            >
-              <span style={{ fontSize: '14px', width: '14px', textAlign: 'center' }}>🗑</span>
-              Delete
-            </Menu.Item>
-          </Menu.Content>
-        </Menu.Positioner>
-        </Portal>
-      </Menu.Root>
-    </Box>
-  </HStack>
-);
+                {!item.isFolder && (
+                  <Menu.Item
+                    value="share"
+                    onClick={(e: React.MouseEvent) => onShare(item, e)}
+                    style={{
+                      padding: '8px 12px',
+                      fontSize: '13px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <Icon type={IconType.SHARE} size="14px" />
+                    {t('Dashboard.filesTable.actions.share')}
+                  </Menu.Item>
+                )}
+
+                {!item.isFolder && (
+                  <Menu.Item
+                    value="download"
+                    onClick={(e: React.MouseEvent) => onDownload(item, e)}
+                    style={{
+                      padding: '8px 12px',
+                      fontSize: '13px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <Icon type={IconType.DOWNLOAD} size="14px" />
+                    {t('Dashboard.filesTable.actions.download')}
+                  </Menu.Item>
+                )}
+
+                <Menu.Item
+                  value="delete"
+                  onClick={(e: React.MouseEvent) => {
+                    if (item.isFolder) {
+                      onDeleteFolder(item.dbId, e);
+                    } else {
+                      onDeleteFile(item, e);
+                    }
+                  }}
+                  style={{
+                    padding: '8px 12px',
+                    fontSize: '13px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    color: 'var(--chakra-colors-error-400)',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: '14px',
+                      width: '14px',
+                      textAlign: 'center',
+                    }}
+                  >
+                    🗑
+                  </span>
+                  {t('Dashboard.filesTable.actions.delete')}
+                </Menu.Item>
+              </Menu.Content>
+            </Menu.Positioner>
+          </Portal>
+        </Menu.Root>
+      </Box>
+    </HStack>
+  );
+};

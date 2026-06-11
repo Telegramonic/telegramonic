@@ -23,6 +23,13 @@ import CodeIcon from './icons/CodeIcon';
 import PresentationIcon from './icons/PresentationIcon';
 import CsvIcon from './icons/CsvIcon';
 import AudioIcon from './icons/AudioIcon';
+import UserIcon from './icons/UserIcon';
+import DownloadIcon from './icons/DownloadIcon';
+import UploadIcon from './icons/UploadIcon';
+import ChevronLeftIcon from './icons/ChevronLeftIcon';
+import ListViewIcon from './icons/ListViewIcon';
+import GridViewIcon from './icons/GridViewIcon';
+import ThreeDotsIcon from './icons/ThreeDotsIcon';
 
 interface GenericIconProps extends IconProps {
   type: IconType;
@@ -79,6 +86,20 @@ const Icon = ({ type, ...props }: GenericIconProps) => {
       return <CsvIcon {...props} />;
     case IconType.AUDIO:
       return <AudioIcon {...props} />;
+    case IconType.USER:
+      return <UserIcon {...props} />;
+    case IconType.DOWNLOAD:
+      return <DownloadIcon {...props} />;
+    case IconType.UPLOAD:
+      return <UploadIcon {...props} />;
+    case IconType.CHEVRON_LEFT:
+      return <ChevronLeftIcon {...props} />;
+    case IconType.LIST_VIEW:
+      return <ListViewIcon {...props} />;
+    case IconType.GRID_VIEW:
+      return <GridViewIcon {...props} />;
+    case IconType.THREE_DOTS:
+      return <ThreeDotsIcon {...props} />;
     default:
       return null;
   }

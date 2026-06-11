@@ -14,6 +14,12 @@ export { default as AppleLogo } from './icons/AppleLogo';
 export { default as WindowsLogo } from './icons/WindowsLogo';
 export { default as LinuxLogo } from './icons/LinuxLogo';
 export { default as AndroidLogo } from './icons/AndroidLogo';
+export { default as UserIcon } from './icons/UserIcon';
+export { default as DownloadIcon } from './icons/DownloadIcon';
+export { default as UploadIcon } from './icons/UploadIcon';
+export { default as ChevronLeftIcon } from './icons/ChevronLeftIcon';
+export { default as ListViewIcon } from './icons/ListViewIcon';
+export { default as GridViewIcon } from './icons/GridViewIcon';
+export { default as ThreeDotsIcon } from './icons/ThreeDotsIcon';
 export * from './types';
 export * from './iconUtils';
-

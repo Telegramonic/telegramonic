@@ -5,6 +5,7 @@ import {
   Center,
   Heading,
   Input,
+  Link,
   Text,
   VStack,
   HStack,
@@ -149,8 +150,8 @@ const LoginPage = () => {
                   {step === 2 || step === 0
                     ? t('LoginPage.loading')
                     : step === 3
-                      ? 'Verifying...'
-                      : 'Loading...'}
+                      ? t('LoginPage.verifying')
+                      : t('LoginPage.loadingDefault')}
                 </Text>
               </VStack>
             </Center>
@@ -213,7 +214,7 @@ const LoginPage = () => {
                 <VStack gap={5} align="stretch">
                   <VStack align="start" gap={2}>
                     <Heading
-                      size={{ base: '2xs', sm: 'xs' }}
+                      size={{ base: 'xs', sm: 'xs' }}
                       fontWeight="bold"
                       color="fg"
                     >
@@ -351,7 +352,7 @@ const LoginPage = () => {
                   <VStack gap={5} align="stretch">
                     <VStack align="start" gap={1}>
                       <Heading
-                        size={{ base: '2xs', sm: 'xs' }}
+                        size={{ base: 'xs' }}
                         fontWeight="bold"
                         color="fg"
                       >
@@ -514,7 +515,7 @@ const LoginPage = () => {
                   <VStack gap={5} align="stretch">
                     <VStack align="start" gap={1}>
                       <Heading
-                        size={{ base: '2xs', sm: 'xs' }}
+                        size={{ base: 'xs' }}
                         fontWeight="bold"
                         color="fg"
                       >
@@ -526,8 +527,7 @@ const LoginPage = () => {
                       >
                         {t('LoginPage.api.description')}
                       </Text>
-                      <Box
-                        as="a"
+                      <Link
                         href="https://telegramonic.com/docs/introduction"
                         target="_blank"
                         rel="noopener noreferrer"
@@ -538,8 +538,8 @@ const LoginPage = () => {
                         _hover={{ opacity: 0.9 }}
                         display="inline-block"
                       >
-                        How to get API ID and Hash?
-                      </Box>
+                        {t('LoginPage.api.help')}
+                      </Link>
                     </VStack>
 
                     <form.Field
@@ -651,7 +651,7 @@ const LoginPage = () => {
                   <VStack gap={5} align="stretch">
                     <VStack align="start" gap={1}>
                       <Heading
-                        size={{ base: '2xs', sm: 'xs' }}
+                        size={{ base: 'xs' }}
                         fontWeight="bold"
                         color="fg"
                       >

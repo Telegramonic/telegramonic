@@ -2,30 +2,15 @@ import React from 'react';
 import { Text, VStack, HStack } from '@chakra-ui/react';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
+import { useTranslation } from 'react-i18next';
 import { SideNavBarProps } from './types';
-
-const UserIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    width="18"
-    height="18"
-    {...props}
-  >
-    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-);
 
 export const SideNavBar = ({
   activeTab,
   setActiveTab,
   setCurrentFolderId,
 }: SideNavBarProps) => {
+  const { t } = useTranslation();
   return (
     <VStack
       w="280px"
@@ -41,8 +26,8 @@ export const SideNavBar = ({
         {/* Navigation links */}
         <VStack gap={1} align="stretch">
           {[
-            { tab: 'all', label: 'In my drive', icon: IconType.CLOUD },
-            { tab: 'pinned', label: 'Pinned', icon: IconType.PIN },
+            { tab: 'all', label: t('Dashboard.nav.inMyDrive'), icon: IconType.CLOUD },
+            { tab: 'pinned', label: t('Dashboard.nav.pinned'), icon: IconType.PIN },
           ].map(({ tab, label, icon }) => (
             <HStack
               key={tab}
@@ -104,7 +89,7 @@ export const SideNavBar = ({
           gap={3}
         >
           <Icon type={IconType.BOLT} size={18} />
-          <Text fontSize="sm">Help</Text>
+          <Text fontSize="sm">{t('Dashboard.nav.help')}</Text>
         </HStack>
         <HStack
           onClick={() => {
@@ -132,8 +117,8 @@ export const SideNavBar = ({
           transition="all 0.2s"
           gap={3}
         >
-          <UserIcon />
-          <Text fontSize="sm">Profile</Text>
+          <Icon type={IconType.USER} size={18} />
+          <Text fontSize="sm">{t('Dashboard.nav.profile')}</Text>
         </HStack>
       </VStack>
     </VStack>

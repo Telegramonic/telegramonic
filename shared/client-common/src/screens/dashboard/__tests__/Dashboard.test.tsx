@@ -216,6 +216,9 @@ describe('Dashboard', () => {
     renderWithProvidersAndRouter(<Dashboard />);
     expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
 
+    // Navigate inside Marketing Assets
+    fireEvent.click(screen.getByText('Marketing Assets'));
+
     const file = new File(['hello'], 'Marketing_Strategy_2026.docx', { type: 'text/plain' });
     const fileInput = screen.getByTestId('file-input');
 
@@ -282,4 +285,47 @@ describe('Dashboard', () => {
 
     logOutSpy.mockRestore();
   }, 15000);
+
+  it('should support drag and drop upload inside a folder', async () => {
+    renderWithProvidersAndRouter(<Dashboard />);
+    expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
+
+    // Navigate inside Marketing Assets
+    fireEvent.click(screen.getByText('Marketing Assets'));
+
+    const file = new File(['hello'], 'dragged_file.txt', { type: 'text/plain' });
+    const dropzone = await screen.findByText('Drag and drop files here, or click to upload');
+
+    await act(async () => {
+      fireEvent.drop(dropzone, {
+        dataTransfer: {
+          files: [file]
+        }
+      });
+    });
+
+    expect(await screen.findByText('Uploaded successfully: dragged_file.txt')).toBeInTheDocument();
+    expect(mockUploadStream).toHaveBeenCalled();
+  });
+
+  it('should prevent drag and drop upload at the root directory and show a warning toast', async () => {
+    renderWithProvidersAndRouter(<Dashboard />);
+    expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
+
+    const file = new File(['hello'], 'dragged_file.txt', { type: 'text/plain' });
+    
+    // Drop directly on the brand title to bubble up to root Box
+    const brandTitle = screen.getByText('Telegramonic');
+    await act(async () => {
+      fireEvent.drop(brandTitle, {
+        dataTransfer: {
+          files: [file]
+        }
+      });
+    });
+
+    expect(await screen.findByText("Cannot upload files directly to the root 'In my drive'. Please enter a folder first.")).toBeInTheDocument();
+    expect(mockUploadStream).not.toHaveBeenCalled();
+  });
 });
+

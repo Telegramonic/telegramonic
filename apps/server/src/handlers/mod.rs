@@ -71,7 +71,10 @@ pub fn create_router(service: DynTelegramService) -> Router {
         .route("/files/upload-part", post(files::upload_part))
         .route("/files/save-file", post(files::save_file))
         .route("/files/upload-progress", get(files::get_upload_progress))
-        .route("/files/upload-progress/stream", get(files::get_upload_progress_stream))
+        .route(
+            "/files/upload-progress/stream",
+            get(files::get_upload_progress_stream),
+        )
         .route("/files/download", get(files::download_file))
         .route("/files/get-file", get(files::download_file)) // Map get-file to download handler
         .route("/files/delete", post(files::delete_file))
@@ -101,4 +104,5 @@ pub fn create_router(service: DynTelegramService) -> Router {
         // Share client service state globally
         .with_state(service)
         .layer(cors)
+        .layer(axum::extract::DefaultBodyLimit::max(20 * 1024 * 1024))
 }

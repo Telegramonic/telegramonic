@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, HStack, VStack, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
 import { ActiveTab } from '../types';
@@ -10,28 +11,12 @@ interface BottomNavBarProps {
   setCurrentFolderId: (id: string | null) => void;
 }
 
-const UserIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    width="20"
-    height="20"
-    {...props}
-  >
-    <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-    <circle cx="12" cy="7" r="4" />
-  </svg>
-);
-
 export const BottomNavBar = ({
   activeTab,
   setActiveTab,
   setCurrentFolderId,
 }: BottomNavBarProps) => {
+  const { t } = useTranslation();
   return (
     <Box
       position="fixed"
@@ -51,8 +36,8 @@ export const BottomNavBar = ({
       shadow="0 -4px 12px rgba(0, 0, 0, 0.05)"
     >
       {[
-        { tab: 'all' as ActiveTab, label: 'Drive', icon: IconType.CLOUD },
-        { tab: 'pinned' as ActiveTab, label: 'Pinned', icon: IconType.PIN },
+        { tab: 'all' as ActiveTab, label: t('Dashboard.nav.drive'), icon: IconType.CLOUD },
+        { tab: 'pinned' as ActiveTab, label: t('Dashboard.nav.pinned'), icon: IconType.PIN },
       ].map(({ tab, label, icon }) => {
         const isActive = activeTab === tab;
         return (
@@ -95,9 +80,12 @@ export const BottomNavBar = ({
         flex={1}
         alignItems="center"
       >
-        <UserIcon />
-        <Text fontSize="10px" fontWeight={activeTab === 'profile' ? 'bold' : 'medium'}>
-          Profile
+        <Icon type={IconType.USER} size={20} />
+        <Text
+          fontSize="10px"
+          fontWeight={activeTab === 'profile' ? 'bold' : 'medium'}
+        >
+          {t('Dashboard.nav.profile')}
         </Text>
       </VStack>
     </Box>

@@ -1,7 +1,14 @@
 import { resolveIconSize } from '../iconUtils';
 import { IconProps } from '../types';
 
-const PresentationIcon = ({ size, w, h, width, height, ...props }: IconProps) => {
+const PresentationIcon = ({
+  size,
+  w,
+  h,
+  width,
+  height,
+  ...props
+}: IconProps) => {
   const finalWidth = resolveIconSize(size ?? w ?? width, 18);
   const finalHeight = resolveIconSize(size ?? h ?? height, 18);
 

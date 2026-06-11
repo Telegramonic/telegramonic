@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Box, VStack, HStack, Stack, Text, Button, Center, Input } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { useCurrentUser, apiClient } from '@services';
 import { appStore } from '@appStore';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,6 +10,7 @@ interface ProfileTabProps {
 }
 
 export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
+  const { t } = useTranslation();
   const { data: currentUser } = useCurrentUser();
 
   const currentAccount = appStore((state) => state.currentAccount);
@@ -37,9 +39,9 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
   const [phoneCodeHash, setPhoneCodeHash] = React.useState('');
 
   const fullName = useMemo(() => {
-    if (!currentUser) return 'Loading...';
+    if (!currentUser) return t('Dashboard.profile.loading');
     return `${currentUser.first_name} ${currentUser.last_name || ''}`.trim();
-  }, [currentUser]);
+  }, [currentUser, t]);
 
   const initials = useMemo(() => {
     if (!currentUser) return 'U';
@@ -62,7 +64,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
     if (!apiId.trim() || !apiHash.trim()) {
       setSaveStatus({
         type: 'error',
-        message: 'API ID and API Hash cannot be empty.',
+        message: t('Dashboard.profile.errors.emptyCredentials'),
       });
       return;
     }
@@ -77,7 +79,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
     if (!phone) {
       setSaveStatus({
         type: 'error',
-        message: 'Phone number not found. Cannot verify credentials.',
+        message: t('Dashboard.profile.errors.phoneNotFound'),
       });
       return;
     }
@@ -93,10 +95,10 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
       if (res.success) {
         setPhoneCodeHash(res.next_step || 'mock_hash');
       } else {
-        setVerificationError(res.error || 'Failed to send verification code.');
+        setVerificationError(res.error || t('Dashboard.profile.errors.failedSendCode'));
       }
     } catch (err: any) {
-      setVerificationError(err.message || 'Server connection error.');
+      setVerificationError(err.message || t('Dashboard.profile.errors.serverConnection'));
     } finally {
       setVerificationLoading(false);
     }
@@ -125,10 +127,10 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
           setVerificationStep('success');
         }
       } else {
-        setVerificationError(res.error || 'Invalid code.');
+        setVerificationError(res.error || t('Dashboard.profile.errors.invalidCode'));
       }
     } catch (err: any) {
-      setVerificationError(err.message || 'Verification failed.');
+      setVerificationError(err.message || t('Dashboard.profile.errors.verificationFailed'));
     } finally {
       setVerificationLoading(false);
     }
@@ -153,10 +155,10 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
         });
         setVerificationStep('success');
       } else {
-        setVerificationError(res.error || 'Incorrect 2FA password.');
+        setVerificationError(res.error || t('Dashboard.profile.errors.incorrectPassword'));
       }
     } catch (err: any) {
-      setVerificationError(err.message || 'Verification failed.');
+      setVerificationError(err.message || t('Dashboard.profile.errors.verificationFailed'));
     } finally {
       setVerificationLoading(false);
     }
@@ -174,10 +176,10 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
       {/* Page Title */}
       <VStack align="stretch" gap={1}>
         <Text fontSize="2xl" fontWeight="extrabold" color="fg">
-          Account Profile
+          {t('Dashboard.profile.title')}
         </Text>
         <Text fontSize="sm" color="fg.muted">
-          Manage your account profile details, Telegram API credentials, and cloud drive settings.
+          {t('Dashboard.profile.subtitle')}
         </Text>
       </VStack>
 
@@ -230,15 +232,15 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
         shadow="md"
       >
         <Text fontWeight="extrabold" fontSize="md" color="fg" pb={2} borderBottom="1px solid" borderColor="border/30">
-          Account Information
+          {t('Dashboard.profile.info.title')}
         </Text>
 
         {[
-          { label: 'First Name', value: currentUser?.first_name || '—' },
-          { label: 'Last Name', value: currentUser?.last_name || '—' },
-          { label: 'Phone Number', value: currentUser?.phone || '—' },
-          { label: 'User ID', value: currentUser?.id || '—', copyable: true },
-          { label: 'Username', value: currentUser?.username ? `@${currentUser.username}` : '—', copyable: !!currentUser?.username }
+          { label: t('Dashboard.profile.info.firstName'), value: currentUser?.first_name || '—' },
+          { label: t('Dashboard.profile.info.lastName'), value: currentUser?.last_name || '—' },
+          { label: t('Dashboard.profile.info.phone'), value: currentUser?.phone || '—' },
+          { label: t('Dashboard.profile.info.userId'), value: currentUser?.id || '—', copyable: true },
+          { label: t('Dashboard.profile.info.username'), value: currentUser?.username ? `@${currentUser.username}` : '—', copyable: !!currentUser?.username }
         ].map((item) => (
           <Stack
             key={item.label}
@@ -276,10 +278,10 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
       >
         <VStack align="stretch" gap={1}>
           <Text fontWeight="extrabold" fontSize="md" color="fg">
-            Telegram API Credentials
+            {t('Dashboard.profile.credentials.title')}
           </Text>
           <Text fontSize="xs" color="fg.muted">
-            Configure the API credentials used to connect to the Telegram MTProto servers.
+            {t('Dashboard.profile.credentials.subtitle')}
           </Text>
         </VStack>
 
@@ -287,14 +289,14 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
           {/* API ID Input */}
           <VStack align="stretch" gap={1.5}>
             <Text fontSize="xs" fontWeight="bold" color="fg.muted">
-              API ID
+              {t('Dashboard.profile.credentials.apiId')}
             </Text>
             <HStack position="relative" w="100%">
               <Input
                 type={showApiId ? 'text' : 'password'}
                 value={apiId}
                 onChange={(e) => setApiId(e.target.value)}
-                placeholder="Enter Telegram API ID (e.g. 1234567)"
+                placeholder={t('Dashboard.profile.credentials.apiIdPlaceholder')}
                 border="1px solid"
                 borderColor="border"
                 borderRadius="xl"
@@ -322,7 +324,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                 fontSize="2xs"
                 fontWeight="bold"
               >
-                {showApiId ? 'Hide' : 'Show'}
+                {showApiId ? t('Dashboard.profile.credentials.hide') : t('Dashboard.profile.credentials.show')}
               </Button>
             </HStack>
           </VStack>
@@ -330,14 +332,14 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
           {/* API Hash Input */}
           <VStack align="stretch" gap={1.5}>
             <Text fontSize="xs" fontWeight="bold" color="fg.muted">
-              API Hash
+              {t('Dashboard.profile.credentials.apiHash')}
             </Text>
             <HStack position="relative" w="100%">
               <Input
                 type={showApiHash ? 'text' : 'password'}
                 value={apiHash}
                 onChange={(e) => setApiHash(e.target.value)}
-                placeholder="Enter Telegram API Hash (e.g. abcdef123456...)"
+                placeholder={t('Dashboard.profile.credentials.apiHashPlaceholder')}
                 border="1px solid"
                 borderColor="border"
                 borderRadius="xl"
@@ -365,7 +367,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                 fontSize="2xs"
                 fontWeight="bold"
               >
-                {showApiHash ? 'Hide' : 'Show'}
+                {showApiHash ? t('Dashboard.profile.credentials.hide') : t('Dashboard.profile.credentials.show')}
               </Button>
             </HStack>
           </VStack>
@@ -407,7 +409,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
             cursor={isChanged ? 'pointer' : 'not-allowed'}
             _hover={{ filter: isChanged ? 'brightness(1.1)' : 'none' }}
           >
-            Save Credentials
+            {t('Dashboard.profile.credentials.save')}
           </Button>
         </Stack>
       </VStack>
@@ -424,7 +426,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
         shadow="md"
       >
         <Text fontWeight="extrabold" fontSize="md" color="fg">
-          Account Actions
+          {t('Dashboard.profile.actions.title')}
         </Text>
         <Stack
           justify="space-between"
@@ -437,10 +439,10 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
         >
           <VStack align="start" gap={0.5}>
             <Text fontSize="sm" fontWeight="bold" color="fg">
-              Disconnect Account
+              {t('Dashboard.profile.actions.disconnect')}
             </Text>
             <Text fontSize="xs" color="fg.muted">
-              Log out of your Telegram session and delete local credentials cache on this device.
+              {t('Dashboard.profile.actions.disconnectSubtitle')}
             </Text>
           </VStack>
           <Button
@@ -456,7 +458,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
             alignSelf={{ base: 'stretch', sm: 'auto' }}
             w={{ base: '100%', sm: 'auto' }}
           >
-            Logout
+            {t('Dashboard.profile.actions.logout')}
           </Button>
         </Stack>
       </VStack>
@@ -496,7 +498,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
               >
                 <HStack justify="space-between">
                   <Text fontWeight="extrabold" fontSize="md" color="fg">
-                    Update API Credentials
+                    {t('Dashboard.profile.confirmUpdate.title')}
                   </Text>
                   <Box
                     as="button"
@@ -512,7 +514,9 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                 </HStack>
 
                 <Text fontSize="sm" color="fg.muted">
-                  Updating your API credentials will reconnect your Telegram session. A verification code will be sent to your registered phone number ({currentUser?.phone || currentAccount?.phone || 'your phone number'}).
+                  {t('Dashboard.profile.confirmUpdate.message', {
+                    phone: currentUser?.phone || currentAccount?.phone || 'your phone number',
+                  })}
                 </Text>
 
                 <Stack
@@ -533,7 +537,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                     _hover={{ bg: 'bg.hover' }}
                     w={{ base: '100%', sm: 'auto' }}
                   >
-                    Cancel
+                    {t('Dashboard.cancel')}
                   </Button>
                   <Button
                     onClick={handleStartCredentialsUpdate}
@@ -546,7 +550,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                     _hover={{ filter: 'brightness(1.1)' }}
                     w={{ base: '100%', sm: 'auto' }}
                   >
-                    Continue
+                    {t('Dashboard.profile.confirmUpdate.submit')}
                   </Button>
                 </Stack>
               </VStack>
@@ -594,10 +598,10 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                 <HStack justify="space-between">
                   <Text fontWeight="extrabold" fontSize="md" color="fg">
                     {verificationStep === 'code'
-                      ? 'Verify Connection'
+                      ? t('Dashboard.profile.verification.title')
                       : verificationStep === 'password'
-                        ? 'Enter 2FA Password'
-                        : 'Success'}
+                        ? t('Dashboard.profile.verification.titlePassword')
+                        : t('Dashboard.profile.verification.titleSuccess')}
                   </Text>
                   <Box
                     as="button"
@@ -632,7 +636,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                         style={{ animation: 'spin 0.8s linear infinite' }}
                       />
                       <Text fontSize="xs" fontWeight="bold" color="fg">
-                        {verificationStep === 'code' ? 'Sending Code...' : 'Verifying...'}
+                        {verificationStep === 'code' ? t('Dashboard.profile.verification.sending') : t('Dashboard.profile.verification.verifying')}
                       </Text>
                     </VStack>
                   </Center>
@@ -642,12 +646,12 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                 {verificationStep === 'code' && (
                   <VStack align="stretch" gap={4}>
                     <Text fontSize="xs" color="fg.muted">
-                      Enter the 5-digit verification code sent to your Telegram account or phone.
+                      {t('Dashboard.profile.verification.codeMessage')}
                     </Text>
 
                     <VStack align="stretch" gap={1.5}>
                       <Text fontSize="xs" fontWeight="bold" color="fg.muted">
-                        Verification Code
+                        {t('Dashboard.profile.verification.codeLabel')}
                       </Text>
                       <Input
                         type="text"
@@ -656,7 +660,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                           setVerificationCode(e.target.value);
                           setVerificationError('');
                         }}
-                        placeholder="Enter 5-digit code"
+                        placeholder={t('Dashboard.profile.verification.codePlaceholder')}
                         maxLength={5}
                         border="1px solid"
                         borderColor="border"
@@ -684,12 +688,12 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                 {verificationStep === 'password' && (
                   <VStack align="stretch" gap={4}>
                     <Text fontSize="xs" color="fg.muted">
-                      Your account has 2FA enabled. Please enter your Telegram cloud password.
+                      {t('Dashboard.profile.verification.passwordMessage')}
                     </Text>
 
                     <VStack align="stretch" gap={1.5}>
                       <Text fontSize="xs" fontWeight="bold" color="fg.muted">
-                        2FA Cloud Password
+                        {t('Dashboard.profile.verification.passwordLabel')}
                       </Text>
                       <Input
                         type="password"
@@ -698,7 +702,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                           setVerificationPassword(e.target.value);
                           setVerificationError('');
                         }}
-                        placeholder="Enter 2FA password"
+                        placeholder={t('Dashboard.profile.verification.passwordPlaceholder')}
                         border="1px solid"
                         borderColor="border"
                         borderRadius="xl"
@@ -736,7 +740,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                       ✓
                     </Center>
                     <Text fontSize="sm" fontWeight="bold" color="fg">
-                      Credentials saved and verified successfully!
+                      {t('Dashboard.profile.verification.successMessage')}
                     </Text>
                   </VStack>
                 )}
@@ -776,7 +780,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                       _hover={{ bg: 'bg.hover' }}
                       w={{ base: '100%', sm: 'auto' }}
                     >
-                      Cancel
+                      {t('Dashboard.cancel')}
                     </Button>
                     <Button
                       onClick={
@@ -798,7 +802,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                       }
                       w={{ base: '100%', sm: 'auto' }}
                     >
-                      Verify
+                      {t('Dashboard.profile.verification.verify')}
                     </Button>
                   </Stack>
                 )}
@@ -820,7 +824,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                       _hover={{ filter: 'brightness(1.1)' }}
                       w={{ base: '100%', sm: 'auto' }}
                     >
-                      Close
+                      {t('Dashboard.profile.verification.close')}
                     </Button>
                   </Stack>
                 )}
@@ -841,6 +845,7 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
 
 // Copy Button component helper with temporary tooltip status
 const CopyButton = ({ text }: { text: string }) => {
+  const { t } = useTranslation();
   const [copied, setCopied] = React.useState(false);
 
   const handleCopy = () => {
@@ -862,7 +867,7 @@ const CopyButton = ({ text }: { text: string }) => {
       fontSize="2xs"
       fontWeight="bold"
     >
-      {copied ? 'Copied ✓' : 'Copy'}
+      {copied ? t('Dashboard.profile.copied') : t('Dashboard.profile.copy')}
     </Button>
   );
 };

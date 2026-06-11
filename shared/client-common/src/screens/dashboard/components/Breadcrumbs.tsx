@@ -1,4 +1,5 @@
 import { HStack, Text } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
 import { BreadcrumbsProps } from './types';
 
 export const Breadcrumbs = ({
@@ -6,6 +7,7 @@ export const Breadcrumbs = ({
   currentFolderId,
   setCurrentFolderId,
 }: BreadcrumbsProps) => {
+  const { t } = useTranslation();
   return (
     <HStack gap={1.5} fontSize="sm" color="fg.muted">
       <Text
@@ -15,7 +17,7 @@ export const Breadcrumbs = ({
         color={!currentFolderId ? 'fg' : 'fg.muted'}
         onClick={() => setCurrentFolderId(null)}
       >
-        In my drive
+        {t('Dashboard.breadcrumbs.root')}
       </Text>
       {breadcrumbs.map((crumb) => (
         <HStack key={crumb.id} gap={1.5}>
