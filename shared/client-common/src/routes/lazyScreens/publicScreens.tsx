@@ -24,4 +24,3 @@ export const LazyDashboardPage = () => (
 );
 
 // [End]-------- Dashboard screen --------
-

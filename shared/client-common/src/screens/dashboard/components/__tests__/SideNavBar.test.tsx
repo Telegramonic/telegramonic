@@ -7,7 +7,7 @@ jest.mock('@services/apiClient', () => ({
   apiClient: {
     getStats: jest.fn().mockResolvedValue({
       total_space: 100 * 1024 * 1024 * 1024 * 1024, // 100 TB
-      used_space: 45.2 * 1024 * 1024 * 1024,         // 45.2 GB
+      used_space: 45.2 * 1024 * 1024 * 1024, // 45.2 GB
       file_count: 5,
       folder_count: 2,
     }),
@@ -31,14 +31,18 @@ describe('SideNavBar', () => {
 
   it('calls setActiveTab with "pinned" when Pinned is clicked', () => {
     const setActiveTab = jest.fn();
-    renderWithProvidersAndRouter(<SideNavBar {...defaultProps} setActiveTab={setActiveTab} />);
+    renderWithProvidersAndRouter(
+      <SideNavBar {...defaultProps} setActiveTab={setActiveTab} />,
+    );
     fireEvent.click(screen.getByText('Pinned'));
     expect(setActiveTab).toHaveBeenCalledWith('pinned');
   });
 
   it('renders Profile tab and calls setActiveTab with "profile" when clicked', () => {
     const setActiveTab = jest.fn();
-    renderWithProvidersAndRouter(<SideNavBar {...defaultProps} setActiveTab={setActiveTab} />);
+    renderWithProvidersAndRouter(
+      <SideNavBar {...defaultProps} setActiveTab={setActiveTab} />,
+    );
     expect(screen.getByText('Profile')).toBeInTheDocument();
     fireEvent.click(screen.getByText('Profile'));
     expect(setActiveTab).toHaveBeenCalledWith('profile');

@@ -38,6 +38,7 @@ Since the server runs exclusively in **Real Mode** using official MTProto connec
 Unit and integration tests for route handlers run completely in-memory using localized test stubs without contacting any external Telegram networks.
 
 To run tests:
+
 ```bash
 cd apps/server/
 cargo test

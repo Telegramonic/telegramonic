@@ -3,13 +3,16 @@ const { spawnSync } = require('child_process');
 const args = process.argv.slice(2);
 
 console.log('Running tests for all workspaces...');
-console.log('Arguments to forward to Jest:', args.length > 0 ? args.join(' ') : 'none');
+console.log(
+  'Arguments to forward to Jest:',
+  args.length > 0 ? args.join(' ') : 'none',
+);
 
 const workspaces = [
   { name: 'telegramonic-web', type: 'jest' },
   { name: 'telegramonic-server', type: 'cargo' },
   { name: 'telegramonic-desktop', type: 'jest' },
-  { name: 'telegramonic-mobile', type: 'jest' }
+  { name: 'telegramonic-mobile', type: 'jest' },
 ];
 
 const failures = [];
@@ -21,9 +24,15 @@ for (const ws of workspaces) {
 
   let result;
   if (ws.type === 'jest') {
-    result = spawnSync('yarn', ['workspace', ws.name, 'test', ...args], { stdio: 'inherit', shell: true });
+    result = spawnSync('yarn', ['workspace', ws.name, 'test', ...args], {
+      stdio: 'inherit',
+      shell: true,
+    });
   } else if (ws.type === 'cargo') {
-    result = spawnSync('yarn', ['workspace', ws.name, 'test'], { stdio: 'inherit', shell: true });
+    result = spawnSync('yarn', ['workspace', ws.name, 'test'], {
+      stdio: 'inherit',
+      shell: true,
+    });
   }
 
   if (result && result.status !== 0) {

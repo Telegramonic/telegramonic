@@ -55,15 +55,17 @@ graph TD
 ## 🌐 Web Portal Independence
 
 Unlike the Desktop App, the browser **Web Portal** operates as a completely static application:
-*   It has **no** routes connecting to the Rust server or handling live files/drives.
-*   It serves the product landing page, detects user agent strings to recommend platform installations (Windows, macOS, Linux, Android, iOS), and provides this documentation viewer.
-*   By maintaining a clean separation between the static web portal and client-side operations, the web workspace is light, secure, and easily hostable on standard static CDNs.
+
+- It has **no** routes connecting to the Rust server or handling live files/drives.
+- It serves the product landing page, detects user agent strings to recommend platform installations (Windows, macOS, Linux, Android, iOS), and provides this documentation viewer.
+- By maintaining a clean separation between the static web portal and client-side operations, the web workspace is light, secure, and easily hostable on standard static CDNs.
 
 ---
 
 ## ⚙️ Rust Backend Gateway (Axum)
 
 The backend server is written in Axum (using Tokio runtime) to facilitate concurrent network calls:
-*   **Routing**: Defined modularly in `handlers/`. Routes are categorized into `auth`, `users`, `drives`, and `files`.
-*   **Service Layer**: Employs the `TelegramService` Rust trait. The system runs in `RealTelegramService` (connecting to MTProto via Grammers), while unit tests utilize `MockTelegramService` for rapid in-memory verification.
-*   **Tokio Task Loops**: Grammers client connections are managed on a dedicated tokio background thread to handle MTProto updates, packet keep-alives, and event triggers asynchronously.
+
+- **Routing**: Defined modularly in `handlers/`. Routes are categorized into `auth`, `users`, `drives`, and `files`.
+- **Service Layer**: Employs the `TelegramService` Rust trait. The system runs in `RealTelegramService` (connecting to MTProto via Grammers), while unit tests utilize `MockTelegramService` for rapid in-memory verification.
+- **Tokio Task Loops**: Grammers client connections are managed on a dedicated tokio background thread to handle MTProto updates, packet keep-alives, and event triggers asynchronously.

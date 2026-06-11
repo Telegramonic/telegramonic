@@ -45,15 +45,21 @@ describe('formatDate', () => {
   afterEach(() => jest.useRealTimers());
 
   it('returns "Just now" for very recent timestamps', () => {
-    expect(formatDate(new Date('2024-10-24T11:59:30Z').toISOString())).toBe('Just now');
+    expect(formatDate(new Date('2024-10-24T11:59:30Z').toISOString())).toBe(
+      'Just now',
+    );
   });
 
   it('returns minutes ago within the same hour', () => {
-    expect(formatDate(new Date('2024-10-24T11:30:00Z').toISOString())).toBe('30m ago');
+    expect(formatDate(new Date('2024-10-24T11:30:00Z').toISOString())).toBe(
+      '30m ago',
+    );
   });
 
   it('returns hours ago within the same day', () => {
-    expect(formatDate(new Date('2024-10-24T09:00:00Z').toISOString())).toBe('3h ago');
+    expect(formatDate(new Date('2024-10-24T09:00:00Z').toISOString())).toBe(
+      '3h ago',
+    );
   });
 
   it('returns a formatted date for older timestamps', () => {
@@ -151,7 +157,9 @@ describe('getGradientForType', () => {
 
   it('returns a default gradient for unknown types', () => {
     const defaultGrad = getGradientForType('unknown');
-    expect(defaultGrad).toBe('linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)');
+    expect(defaultGrad).toBe(
+      'linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%)',
+    );
   });
 
   it.each(['video', 'zip', 'code', 'presentation', 'document', 'csv', 'audio'])(

@@ -23,7 +23,9 @@ export const appStore = create<AppStoreState>()(
         }),
       removeAccount: (phone) =>
         set((state) => {
-          state.savedAccounts = state.savedAccounts.filter((acc) => acc.phone !== phone);
+          state.savedAccounts = state.savedAccounts.filter(
+            (acc) => acc.phone !== phone,
+          );
         }),
       clearApiCredentials: () =>
         set((state) => {
@@ -61,7 +63,11 @@ function deepMerge(
   return {
     ...currentState,
     ...persistedState,
-    currentAccount: persistedState?.currentAccount !== undefined ? persistedState.currentAccount : currentState.currentAccount,
-    savedAccounts: persistedState?.savedAccounts ?? currentState.savedAccounts ?? [],
+    currentAccount:
+      persistedState?.currentAccount !== undefined
+        ? persistedState.currentAccount
+        : currentState.currentAccount,
+    savedAccounts:
+      persistedState?.savedAccounts ?? currentState.savedAccounts ?? [],
   };
 }

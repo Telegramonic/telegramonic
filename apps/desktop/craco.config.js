@@ -5,18 +5,48 @@ module.exports = {
     alias: {
       '@assets': path.resolve(__dirname, '../../shared/common/src/assets'),
       '@assets/*': path.resolve(__dirname, '../../shared/common/src/assets/*'),
-      '@components': path.resolve(__dirname, '../../shared/common/src/components'),
+      '@components': path.resolve(
+        __dirname,
+        '../../shared/common/src/components',
+      ),
       '@data': path.resolve(__dirname, '../../docs'),
       '@data/*': path.resolve(__dirname, '../../docs/*'),
-      '@providers': path.resolve(__dirname, '../../shared/client-common/src/providers'),
-      '@localization': path.resolve(__dirname, '../../shared/common/src/localization'),
-      '@routes': path.resolve(__dirname, '../../shared/client-common/src/routes'),
-      '@uiStore': path.resolve(__dirname, '../../shared/client-common/src/store/ui'),
-      '@screens': path.resolve(__dirname, '../../shared/client-common/src/screens'),
-      '@screens/*': path.resolve(__dirname, '../../shared/client-common/src/screens/*'),
-      '@appStore': path.resolve(__dirname, '../../shared/client-common/src/store/app'),
-      '@services': path.resolve(__dirname, '../../shared/client-common/src/services'),
-      '@testUtils': path.resolve(__dirname, '../../shared/common/src/testUtils'),
+      '@providers': path.resolve(
+        __dirname,
+        '../../shared/client-common/src/providers',
+      ),
+      '@localization': path.resolve(
+        __dirname,
+        '../../shared/common/src/localization',
+      ),
+      '@routes': path.resolve(
+        __dirname,
+        '../../shared/client-common/src/routes',
+      ),
+      '@uiStore': path.resolve(
+        __dirname,
+        '../../shared/client-common/src/store/ui',
+      ),
+      '@screens': path.resolve(
+        __dirname,
+        '../../shared/client-common/src/screens',
+      ),
+      '@screens/*': path.resolve(
+        __dirname,
+        '../../shared/client-common/src/screens/*',
+      ),
+      '@appStore': path.resolve(
+        __dirname,
+        '../../shared/client-common/src/store/app',
+      ),
+      '@services': path.resolve(
+        __dirname,
+        '../../shared/client-common/src/services',
+      ),
+      '@testUtils': path.resolve(
+        __dirname,
+        '../../shared/common/src/testUtils',
+      ),
     },
     configure: (webpackConfig) => {
       // Remove ModuleScopePlugin to allow importing from common/ workspace

@@ -39,13 +39,13 @@ import errorJa from './locales/ja/error.json';
 import webJa from './locales/ja/web.json';
 
 function isObject(item: any): boolean {
-  return (item && typeof item === 'object' && !Array.isArray(item));
+  return item && typeof item === 'object' && !Array.isArray(item);
 }
 
 function deepMerge(target: any, source: any): any {
   const output = { ...target };
   if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach(key => {
+    Object.keys(source).forEach((key) => {
       if (isObject(source[key])) {
         if (!(key in target)) {
           Object.assign(output, { [key]: source[key] });
@@ -60,7 +60,8 @@ function deepMerge(target: any, source: any): any {
   return output;
 }
 
-const mergeAll = (sources: any[]) => sources.reduce((acc, src) => deepMerge(acc, src), {});
+const mergeAll = (sources: any[]) =>
+  sources.reduce((acc, src) => deepMerge(acc, src), {});
 
 const enTranslations = mergeAll([clientEn, webEn, commonEn, errorEn]);
 const hiTranslations = mergeAll([clientHi, webHi, commonHi, errorHi]);

@@ -3,7 +3,11 @@ import { AppStoreState } from '../../appStore/types';
 
 describe('App selectors', () => {
   const mockState: AppStoreState = {
-    currentAccount: { phone: '+1234567890', apiId: '123456', apiHash: 'abcde12345' },
+    currentAccount: {
+      phone: '+1234567890',
+      apiId: '123456',
+      apiHash: 'abcde12345',
+    },
     savedAccounts: [],
     authError: null,
     setCurrentAccount: jest.fn(),

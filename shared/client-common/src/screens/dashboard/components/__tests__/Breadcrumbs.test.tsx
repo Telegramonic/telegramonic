@@ -9,7 +9,11 @@ const folder2: FolderMetadata = { id: 2, parent_id: 1, name: 'Projects' };
 describe('Breadcrumbs', () => {
   it('renders "In my drive" root link by default', () => {
     renderWithRouter(
-      <Breadcrumbs breadcrumbs={[]} currentFolderId={null} setCurrentFolderId={jest.fn()} />,
+      <Breadcrumbs
+        breadcrumbs={[]}
+        currentFolderId={null}
+        setCurrentFolderId={jest.fn()}
+      />,
     );
     expect(screen.getByText('In my drive')).toBeInTheDocument();
   });
@@ -17,7 +21,11 @@ describe('Breadcrumbs', () => {
   it('calls setCurrentFolderId(null) when "In my drive" is clicked', () => {
     const setCurrentFolderId = jest.fn();
     renderWithRouter(
-      <Breadcrumbs breadcrumbs={[]} currentFolderId={null} setCurrentFolderId={setCurrentFolderId} />,
+      <Breadcrumbs
+        breadcrumbs={[]}
+        currentFolderId={null}
+        setCurrentFolderId={setCurrentFolderId}
+      />,
     );
     fireEvent.click(screen.getByText('In my drive'));
     expect(setCurrentFolderId).toHaveBeenCalledWith(null);

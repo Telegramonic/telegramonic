@@ -68,8 +68,12 @@ describe('ProfileTab', () => {
     renderWithProvidersAndRouter(<ProfileTab onLogout={mockOnLogout} />);
 
     // Get input elements
-    const apiIdInput = screen.getByPlaceholderText('Enter Telegram API ID (e.g. 1234567)');
-    const apiHashInput = screen.getByPlaceholderText('Enter Telegram API Hash (e.g. abcdef123456...)');
+    const apiIdInput = screen.getByPlaceholderText(
+      'Enter Telegram API ID (e.g. 1234567)',
+    );
+    const apiHashInput = screen.getByPlaceholderText(
+      'Enter Telegram API Hash (e.g. abcdef123456...)',
+    );
 
     expect(apiIdInput).toHaveAttribute('type', 'password');
     expect(apiHashInput).toHaveAttribute('type', 'password');
@@ -84,13 +88,20 @@ describe('ProfileTab', () => {
   });
 
   it('successfully updates credentials and saves them to store', async () => {
-    (apiClient.sendCode as jest.Mock).mockResolvedValueOnce({ success: true, next_step: 'mock_hash' });
+    (apiClient.sendCode as jest.Mock).mockResolvedValueOnce({
+      success: true,
+      next_step: 'mock_hash',
+    });
     (apiClient.signIn as jest.Mock).mockResolvedValueOnce({ success: true });
 
     renderWithProvidersAndRouter(<ProfileTab onLogout={mockOnLogout} />);
 
-    const apiIdInput = screen.getByPlaceholderText('Enter Telegram API ID (e.g. 1234567)');
-    const apiHashInput = screen.getByPlaceholderText('Enter Telegram API Hash (e.g. abcdef123456...)');
+    const apiIdInput = screen.getByPlaceholderText(
+      'Enter Telegram API ID (e.g. 1234567)',
+    );
+    const apiHashInput = screen.getByPlaceholderText(
+      'Enter Telegram API Hash (e.g. abcdef123456...)',
+    );
 
     // Change inputs
     fireEvent.change(apiIdInput, { target: { value: '111111' } });
@@ -108,7 +119,11 @@ describe('ProfileTab', () => {
     fireEvent.click(continueButton);
 
     await waitFor(() => {
-      expect(apiClient.sendCode).toHaveBeenCalledWith('+919876543210', '111111', 'hash111111');
+      expect(apiClient.sendCode).toHaveBeenCalledWith(
+        '+919876543210',
+        '111111',
+        'hash111111',
+      );
     });
 
     // Verification dialog (OTP stage) should be visible
@@ -123,11 +138,17 @@ describe('ProfileTab', () => {
     fireEvent.click(verifyButton);
 
     await waitFor(() => {
-      expect(apiClient.signIn).toHaveBeenCalledWith('+919876543210', '12345', 'mock_hash');
+      expect(apiClient.signIn).toHaveBeenCalledWith(
+        '+919876543210',
+        '12345',
+        'mock_hash',
+      );
     });
 
     // Verification dialog success stage should be visible
-    expect(await screen.findByText('Credentials saved and verified successfully!')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Credentials saved and verified successfully!'),
+    ).toBeInTheDocument();
 
     // Check Zustand store update
     expect(appStore.getState().currentAccount).toEqual({
@@ -138,14 +159,26 @@ describe('ProfileTab', () => {
   });
 
   it('handles 2FA password step if required', async () => {
-    (apiClient.sendCode as jest.Mock).mockResolvedValueOnce({ success: true, next_step: 'mock_hash' });
-    (apiClient.signIn as jest.Mock).mockResolvedValueOnce({ success: true, next_step: 'password' });
-    (apiClient.checkPassword as jest.Mock).mockResolvedValueOnce({ success: true });
+    (apiClient.sendCode as jest.Mock).mockResolvedValueOnce({
+      success: true,
+      next_step: 'mock_hash',
+    });
+    (apiClient.signIn as jest.Mock).mockResolvedValueOnce({
+      success: true,
+      next_step: 'password',
+    });
+    (apiClient.checkPassword as jest.Mock).mockResolvedValueOnce({
+      success: true,
+    });
 
     renderWithProvidersAndRouter(<ProfileTab onLogout={mockOnLogout} />);
 
-    const apiIdInput = screen.getByPlaceholderText('Enter Telegram API ID (e.g. 1234567)');
-    const apiHashInput = screen.getByPlaceholderText('Enter Telegram API Hash (e.g. abcdef123456...)');
+    const apiIdInput = screen.getByPlaceholderText(
+      'Enter Telegram API ID (e.g. 1234567)',
+    );
+    const apiHashInput = screen.getByPlaceholderText(
+      'Enter Telegram API Hash (e.g. abcdef123456...)',
+    );
 
     fireEvent.change(apiIdInput, { target: { value: '111111' } });
     fireEvent.change(apiHashInput, { target: { value: 'hash111111' } });
@@ -176,14 +209,20 @@ describe('ProfileTab', () => {
       expect(apiClient.checkPassword).toHaveBeenCalledWith('cloud_pwd');
     });
 
-    expect(await screen.findByText('Credentials saved and verified successfully!')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Credentials saved and verified successfully!'),
+    ).toBeInTheDocument();
   });
 
   it('displays error message when API ID or API Hash is empty', async () => {
     renderWithProvidersAndRouter(<ProfileTab onLogout={mockOnLogout} />);
 
-    const apiIdInput = screen.getByPlaceholderText('Enter Telegram API ID (e.g. 1234567)');
-    const apiHashInput = screen.getByPlaceholderText('Enter Telegram API Hash (e.g. abcdef123456...)');
+    const apiIdInput = screen.getByPlaceholderText(
+      'Enter Telegram API ID (e.g. 1234567)',
+    );
+    const apiHashInput = screen.getByPlaceholderText(
+      'Enter Telegram API Hash (e.g. abcdef123456...)',
+    );
 
     // Clear inputs
     fireEvent.change(apiIdInput, { target: { value: '' } });
@@ -193,7 +232,9 @@ describe('ProfileTab', () => {
     const saveButton = screen.getByRole('button', { name: 'Save Credentials' });
     fireEvent.click(saveButton);
 
-    expect(screen.getByText('API ID and API Hash cannot be empty.')).toBeInTheDocument();
+    expect(
+      screen.getByText('API ID and API Hash cannot be empty.'),
+    ).toBeInTheDocument();
     expect(apiClient.updateCredentials).not.toHaveBeenCalled();
   });
 
@@ -204,7 +245,9 @@ describe('ProfileTab', () => {
     expect(saveButton).toBeDisabled();
 
     // Change one field
-    const apiIdInput = screen.getByPlaceholderText('Enter Telegram API ID (e.g. 1234567)');
+    const apiIdInput = screen.getByPlaceholderText(
+      'Enter Telegram API ID (e.g. 1234567)',
+    );
     fireEvent.change(apiIdInput, { target: { value: '9876543' } });
     expect(saveButton).not.toBeDisabled();
 

@@ -83,26 +83,28 @@ apps/web/
 
 ## Tech Stack & Dependencies
 
-| Dependency / Tool | Version | Purpose |
-|:---|:---|:---|
-| `react` / `react-dom` | ^18.3.1 | Core component rendering engine |
-| `react-router-dom` | ^7.15.0 | Web page routing and view navigation |
-| `@chakra-ui/react` | ^3.19.1 | UI library and components framework |
-| `zustand` | ^5.0.13 | App-wide frontend state management |
-| `framer-motion` | ^11.3.2 | Component transition and micro-animations |
-| `tailwind-css` | 3.x | Visual styling tokens and layout classes |
-| `@craco/craco` | ^7.1.0 | Webpack configuration override layer |
-| `jest` / `ts-jest` | ^29.7.0 | Test runner and spec assertion suites |
-| `cypress` | ^13.8.1 | Browser end-to-end user-flow verification |
+| Dependency / Tool     | Version | Purpose                                   |
+| :-------------------- | :------ | :---------------------------------------- |
+| `react` / `react-dom` | ^18.3.1 | Core component rendering engine           |
+| `react-router-dom`    | ^7.15.0 | Web page routing and view navigation      |
+| `@chakra-ui/react`    | ^3.19.1 | UI library and components framework       |
+| `zustand`             | ^5.0.13 | App-wide frontend state management        |
+| `framer-motion`       | ^11.3.2 | Component transition and micro-animations |
+| `tailwind-css`        | 3.x     | Visual styling tokens and layout classes  |
+| `@craco/craco`        | ^7.1.0  | Webpack configuration override layer      |
+| `jest` / `ts-jest`    | ^29.7.0 | Test runner and spec assertion suites     |
+| `cypress`             | ^13.8.1 | Browser end-to-end user-flow verification |
 
 ---
 
 ## How It Works
 
 ### React Render Loop & State
+
 The frontend mounts the root React node in [`index.tsx`](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/web/src/index.tsx). Global UI states are managed by Zustand stores in the `store/` directory.
 
 ### Localized Layouts
+
 The app loads strings dynamically using `react-i18next` hooks to avoid hardcoding text inside pages. Localized copies reside in `@localization/locales/` matching the user's preferred language.
 
 ---
@@ -110,6 +112,7 @@ The app loads strings dynamically using `react-i18next` hooks to avoid hardcodin
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js (v18+)
 - Yarn (v4 Berry)
 
@@ -147,4 +150,3 @@ yarn workspace telegramonic-web run test:cov
 # Open the interactive Cypress E2E test dashboard
 yarn workspace telegramonic-web cy:open
 ```
-

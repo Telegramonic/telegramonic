@@ -97,16 +97,16 @@ apps/mobile/
 
 ## Tech Stack & Dependencies
 
-| Dependency / Tool       | Version  | Purpose                                              |
-| :---------------------- | :------- | :--------------------------------------------------- |
-| `tauri`                 | ^2.0.0   | Native mobile/desktop wrapper framework              |
-| `@tauri-apps/api`       | ^2.0.0   | JS bindings for communicating with the Rust shell    |
-| `react` / `react-dom`   | ^18.3.1  | Rendering engine for the user interface              |
-| `react-router-dom`      | ^7.15.0  | Dynamic page routing and navigation                  |
-| `@chakra-ui/react`      | ^3.19.1  | Component design system                              |
-| `@tanstack/react-query` | ^5.51.23 | Server state caching and sync                        |
-| `telegramonic-server`   | *local*  | Embedded Axum Rust server library                    |
-| `jest` / `ts-jest`      | ^29.7.0  | Unit and snapshot testing suites                     |
+| Dependency / Tool       | Version  | Purpose                                           |
+| :---------------------- | :------- | :------------------------------------------------ |
+| `tauri`                 | ^2.0.0   | Native mobile/desktop wrapper framework           |
+| `@tauri-apps/api`       | ^2.0.0   | JS bindings for communicating with the Rust shell |
+| `react` / `react-dom`   | ^18.3.1  | Rendering engine for the user interface           |
+| `react-router-dom`      | ^7.15.0  | Dynamic page routing and navigation               |
+| `@chakra-ui/react`      | ^3.19.1  | Component design system                           |
+| `@tanstack/react-query` | ^5.51.23 | Server state caching and sync                     |
+| `telegramonic-server`   | _local_  | Embedded Axum Rust server library                 |
+| `jest` / `ts-jest`      | ^29.7.0  | Unit and snapshot testing suites                  |
 
 ---
 
@@ -120,6 +120,7 @@ It exposes this directory path as the `TELEGRAMONIC_DATA_DIR` environment variab
 ### Transitive Dependency Patch
 
 To resolve crates.io yanking errors with the `core2 v0.4.0` dependency (required transitively by `glass_pumpkin` which is used by `grammers-crypto`), the [Cargo.toml](file:///Users/mr.robot/z-stash/telegramonic/telegramonic/apps/mobile/src-tauri/Cargo.toml) includes a direct git branch patch:
+
 ```toml
 [patch.crates-io]
 core2 = { git = "https://github.com/bbqsrc/core2", commit = "545e84bc..." }
@@ -134,6 +135,7 @@ core2 = { git = "https://github.com/bbqsrc/core2", commit = "545e84bc..." }
 Before running or building the mobile applications, ensure your machine is configured with the necessary native build tools:
 
 #### iOS Prerequisites
+
 1. **Xcode**: Install Xcode from the Mac App Store and ensure Xcode Command Line Tools are active:
    ```bash
    xcode-select --install
@@ -148,7 +150,8 @@ Before running or building the mobile applications, ensure your machine is confi
    ```
 
 #### Android Prerequisites
-*Assuming **Android Studio** is already installed (which manages the SDK and emulator), the following additional configuration steps are required:*
+
+_Assuming **Android Studio** is already installed (which manages the SDK and emulator), the following additional configuration steps are required:_
 
 1. **Android NDK**: Open Android Studio's SDK Manager (Tools > SDK Manager > SDK Tools), check **NDK (Side by side)**, and install NDK version `26.3.11579264`.
 2. **Rust Targets**: Add the Android targets for cross-compilation:
@@ -163,6 +166,7 @@ Before running or building the mobile applications, ensure your machine is confi
 
 > [!TIP]
 > You can automatically install the Rust iOS targets, CocoaPods, and JavaScript dependencies by running the setup script from the monorepo root:
+>
 > ```bash
 > bash scripts/setup.sh
 > ```
@@ -172,23 +176,27 @@ Before running or building the mobile applications, ensure your machine is confi
 Follow these steps to build and launch the iOS application on the local simulator:
 
 #### 1. Boot the Simulator
+
 The Simulator must be active and booted before Tauri can deploy the application.
+
 1. Launch the macOS Simulator application:
    ```bash
    open -a Simulator
    ```
 2. Check available simulators and boot one if needed (for example, **iPhone 16**):
-   * *List devices:* `xcrun simctl list devices`
-   * *Boot device:* `xcrun simctl boot <SIMULATOR_UDID>`
+   - _List devices:_ `xcrun simctl list devices`
+   - _Boot device:_ `xcrun simctl boot <SIMULATOR_UDID>`
 
 #### 2. Start the Development Build
+
 Run the following command from the monorepo root:
+
 ```bash
 yarn workspace telegramonic-mobile run tauri ios dev
 ```
 
-* **Interactive Mode**: If you do not specify a device, the CLI will output a list of detected simulators. Enter the index number corresponding to your booted simulator.
-* **Targeted Mode**: You can directly target a booted simulator by passing its name or UDID:
+- **Interactive Mode**: If you do not specify a device, the CLI will output a list of detected simulators. Enter the index number corresponding to your booted simulator.
+- **Targeted Mode**: You can directly target a booted simulator by passing its name or UDID:
   ```bash
   yarn workspace telegramonic-mobile run tauri ios dev "iPhone 16"
   ```
@@ -198,26 +206,34 @@ Once launched, the Tauri dev runner will boot your Craco development server, com
 ### Running and Building the Android App
 
 #### Initialize Android Project
+
 If compiling Android for the first time, make sure the project structure is initialized:
+
 ```bash
 yarn workspace telegramonic-mobile run tauri android init
 ```
 
 #### Run on Emulator or Connected Device
+
 Make sure an Android Virtual Device (AVD) is running or a physical device with USB debugging enabled is connected, then run:
+
 ```bash
 yarn workspace telegramonic-mobile run tauri android dev
 ```
 
 #### Build APK & AAB (Debug or Release)
+
 The application has custom build naming configured via Gradle:
-* **Debug APK**: Builds the development APK with the suffix `-debug` and cleartext local traffic allowed:
+
+- **Debug APK**: Builds the development APK with the suffix `-debug` and cleartext local traffic allowed:
+
   ```bash
   yarn workspace telegramonic-mobile run android:build:debug
   ```
+
   Output path: `apps/mobile/src-tauri/gen/android/app/build/outputs/apk/universal/debug/Telegramonic-debug.apk`
 
-* **Release AAB & APK**: Builds the production-ready Android bundles using secure signing keys:
+- **Release AAB & APK**: Builds the production-ready Android bundles using secure signing keys:
   ```bash
   yarn workspace telegramonic-mobile run android:build:release
   ```
@@ -225,18 +241,22 @@ The application has custom build naming configured via Gradle:
   Output path (APK): `apps/mobile/src-tauri/gen/android/app/build/outputs/apk/universal/release/Telegramonic.apk`
 
 #### Secure Android Release Signing
+
 To generate a signed production build, Gradle looks for a `keystore.properties` file in `apps/mobile/src-tauri/gen/android/keystore.properties`.
 
 Create this file with the following keys:
+
 ```properties
 keyAlias=yourKeyAlias
 keyPassword=yourKeyPassword
 storeFile=path/to/keystore.jks
 storePassword=yourStorePassword
 ```
-*Note: Any keystores (`*.jks`) and `keystore.properties` files are ignored via git to prevent accidental credential leakage.*
+
+_Note: Any keystores (`_.jks`) and `keystore.properties` files are ignored via git to prevent accidental credential leakage.\*
 
 #### Cleartext HTTP Traffic
+
 To facilitate webview-to-localhost server communication (where the embedded Axum backend listens on `127.0.0.1:50065`), production release builds are configured with `usesCleartextTraffic` set to true specifically for local communication targets.
 
 ---
@@ -245,15 +265,15 @@ To facilitate webview-to-localhost server communication (where the embedded Axum
 
 Execute these commands from the monorepo root:
 
-| Command | Description |
-| :--- | :--- |
-| `yarn mobile:dev` | Start the development server (web browser preview). |
-| `yarn mobile:ios` | Compile and run the iOS app on a Simulator (interactive selector). |
-| `yarn mobile:ios:build` | Build the production/distribution-ready iOS application bundle. |
-| `yarn mobile:android` | Compile and run the Android app in development on an emulator. |
-| `yarn mobile:android:build:debug` | Build the development debug Android app. |
-| `yarn mobile:android:build:release` | Build the signed production release Android App Bundle (AAB). |
-| `yarn mobile:test` | Run the Jest unit tests for the mobile workspace. |
+| Command                             | Description                                                        |
+| :---------------------------------- | :----------------------------------------------------------------- |
+| `yarn mobile:dev`                   | Start the development server (web browser preview).                |
+| `yarn mobile:ios`                   | Compile and run the iOS app on a Simulator (interactive selector). |
+| `yarn mobile:ios:build`             | Build the production/distribution-ready iOS application bundle.    |
+| `yarn mobile:android`               | Compile and run the Android app in development on an emulator.     |
+| `yarn mobile:android:build:debug`   | Build the development debug Android app.                           |
+| `yarn mobile:android:build:release` | Build the signed production release Android App Bundle (AAB).      |
+| `yarn mobile:test`                  | Run the Jest unit tests for the mobile workspace.                  |
 
 ---
 

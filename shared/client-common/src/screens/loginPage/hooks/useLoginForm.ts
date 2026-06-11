@@ -9,7 +9,7 @@ import { LoginFormValues, SavedAccount } from '../types';
 export const useLoginForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  
+
   const savedAccounts = appStore((state) => state.savedAccounts);
   const saveAccount = appStore((state) => state.saveAccount);
   const removeAccount = appStore((state) => state.removeAccount);
@@ -93,7 +93,9 @@ export const useLoginForm = () => {
         setErrors({ apiId: res.error || t('LoginPage.api.errorSendCode') });
       }
     } catch (err: any) {
-      setErrors({ apiId: err.message || t('LoginPage.errors.serverConnection') });
+      setErrors({
+        apiId: err.message || t('LoginPage.errors.serverConnection'),
+      });
     } finally {
       setIsLoading(false);
     }
@@ -108,7 +110,11 @@ export const useLoginForm = () => {
     setErrors({});
 
     try {
-      const res = await apiClient.sendCode(account.phone, account.apiId, account.apiHash);
+      const res = await apiClient.sendCode(
+        account.phone,
+        account.apiId,
+        account.apiHash,
+      );
       if (res.success) {
         setPhoneCodeHash(res.next_step || 'mock_hash');
         setStep(3);
@@ -117,7 +123,9 @@ export const useLoginForm = () => {
         setStep(2);
       }
     } catch (err: any) {
-      setErrors({ apiId: err.message || t('LoginPage.errors.serverConnection') });
+      setErrors({
+        apiId: err.message || t('LoginPage.errors.serverConnection'),
+      });
       setStep(2);
     } finally {
       setIsLoading(false);
@@ -158,7 +166,9 @@ export const useLoginForm = () => {
         setErrors({ code: res.error || t('LoginPage.errors.invalidCode') });
       }
     } catch (err: any) {
-      setErrors({ code: err.message || t('LoginPage.errors.verificationFailed') });
+      setErrors({
+        code: err.message || t('LoginPage.errors.verificationFailed'),
+      });
     } finally {
       setIsLoading(false);
     }
