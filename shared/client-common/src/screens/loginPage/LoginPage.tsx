@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   Box,
   Button,
@@ -29,6 +29,7 @@ const LoginPage = () => {
     handleCredentialsSubmit,
     handlePhoneSubmit,
     handleCodeSubmit,
+    handlePasswordSubmit,
     handleBack,
     clearFieldError,
     dialCode,
@@ -37,6 +38,14 @@ const LoginPage = () => {
     handleSelectAccount,
     handleRemoveAccount,
   } = useLoginForm();
+
+  const otpRefs = [
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+  ];
 
   const authError = appStore((state) => state.authError);
   const setAuthError = appStore((state) => state.setAuthError);
@@ -93,7 +102,7 @@ const LoginPage = () => {
           overflow="hidden"
         >
           {/* Back Button */}
-          {((step > 1 && step < 4) ||
+          {((step > 1 && step < 5) ||
             (step === 1 && savedAccounts.length > 0)) && (
             <IconButton
               onClick={handleBack}
@@ -149,7 +158,7 @@ const LoginPage = () => {
                 <Text fontSize="sm" fontWeight="bold" color="fg">
                   {step === 2 || step === 0
                     ? t('LoginPage.loading')
-                    : step === 3
+                    : step === 3 || step === 4
                       ? t('LoginPage.verifying')
                       : t('LoginPage.loadingDefault')}
                 </Text>
@@ -667,41 +676,108 @@ const LoginPage = () => {
 
                     <form.Field
                       name="code"
-                      children={(field) => (
-                        <VStack align="stretch" gap={1.5}>
-                          <Text
-                            fontSize="xs"
-                            fontWeight="bold"
-                            color="fg.muted"
-                          >
-                            {t('LoginPage.code.label')}
-                          </Text>
-                          <Input
-                            placeholder={t('LoginPage.code.placeholder')}
-                            value={field.state.value}
-                            onChange={(e) => {
-                              field.handleChange(e.target.value);
-                              clearFieldError('code');
-                            }}
-                            onBlur={field.handleBlur}
-                            border="1px solid"
-                            borderColor="border"
-                            borderRadius="xl"
-                            size="lg"
-                            px={4}
-                            _focus={{
-                              borderColor: 'primary',
-                              ring: '1px',
-                              ringColor: 'primary',
-                            }}
-                          />
-                          {errors.code && (
-                            <Text fontSize="2xs" color="error.400" mt={0.5}>
-                              {errors.code}
+                      children={(field) => {
+                        const codeValue = field.state.value || '';
+                        const digits = [
+                          codeValue[0] || '',
+                          codeValue[1] || '',
+                          codeValue[2] || '',
+                          codeValue[3] || '',
+                          codeValue[4] || '',
+                        ];
+
+                        const handleChange = (val: string, index: number) => {
+                          const cleanVal = val.replace(/\D/g, '');
+                          if (cleanVal.length > 1) {
+                            const newCode = cleanVal.slice(0, 5);
+                            field.handleChange(newCode);
+                            clearFieldError('code');
+                            const targetIndex = Math.min(newCode.length, 4);
+                            otpRefs[targetIndex].current?.focus();
+                            return;
+                          }
+
+                          const nextDigits = [...digits];
+                          nextDigits[index] = cleanVal;
+                          const nextCode = nextDigits.join('');
+                          field.handleChange(nextCode);
+                          clearFieldError('code');
+
+                          if (cleanVal && index < 4) {
+                            otpRefs[index + 1].current?.focus();
+                          }
+                        };
+
+                        const handleKeyDown = (
+                          e: React.KeyboardEvent<HTMLInputElement>,
+                          index: number
+                        ) => {
+                          if (e.key === 'Backspace' && !digits[index] && index > 0) {
+                            const nextDigits = [...digits];
+                            nextDigits[index - 1] = '';
+                            field.handleChange(nextDigits.join(''));
+                            clearFieldError('code');
+                            otpRefs[index - 1].current?.focus();
+                          }
+                        };
+
+                        const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+                          e.preventDefault();
+                          const pastedText = e.clipboardData
+                            .getData('text')
+                            .replace(/\D/g, '')
+                            .slice(0, 5);
+                          field.handleChange(pastedText);
+                          clearFieldError('code');
+                          const targetIndex = Math.min(pastedText.length, 4);
+                          otpRefs[targetIndex].current?.focus();
+                        };
+
+                        return (
+                          <VStack align="stretch" gap={1.5}>
+                            <Text
+                              fontSize="xs"
+                              fontWeight="bold"
+                              color="fg.muted"
+                            >
+                              {t('LoginPage.code.label')}
                             </Text>
-                          )}
-                        </VStack>
-                      )}
+                            <HStack gap={3} justify="space-between" w="100%">
+                              {[0, 1, 2, 3, 4].map((i) => (
+                                <Input
+                                  key={i}
+                                  ref={otpRefs[i]}
+                                  value={digits[i]}
+                                  onChange={(e) => handleChange(e.target.value, i)}
+                                  onKeyDown={(e) => handleKeyDown(e, i)}
+                                  onPaste={handlePaste}
+                                  maxLength={1}
+                                  textAlign="center"
+                                  fontSize="xl"
+                                  fontWeight="extrabold"
+                                  h="56px"
+                                  flex={1}
+                                  inputMode="numeric"
+                                  pattern="[0-9]*"
+                                  border="1px solid"
+                                  borderColor="border"
+                                  borderRadius="xl"
+                                  _focus={{
+                                    borderColor: 'primary',
+                                    ring: '1px',
+                                    ringColor: 'primary',
+                                  }}
+                                />
+                              ))}
+                            </HStack>
+                            {errors.code && (
+                              <Text fontSize="2xs" color="error.400" mt={0.5}>
+                                {errors.code}
+                              </Text>
+                            )}
+                          </VStack>
+                        );
+                      }}
                     />
 
                     <Button
@@ -724,6 +800,89 @@ const LoginPage = () => {
             {step === 4 && (
               <motion.div
                 key="step4"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
+              >
+                <form onSubmit={handlePasswordSubmit}>
+                  <VStack gap={5} align="stretch">
+                    <VStack align="start" gap={1}>
+                      <Heading
+                        size={{ base: 'xs' }}
+                        fontWeight="bold"
+                        color="fg"
+                      >
+                        {t('LoginPage.password.title')}
+                      </Heading>
+                      <Text
+                        fontSize={{ base: '10px', sm: '11px' }}
+                        color="fg.muted"
+                      >
+                        {t('LoginPage.password.description')}
+                      </Text>
+                    </VStack>
+
+                    <form.Field
+                      name="password"
+                      children={(field) => (
+                        <VStack align="stretch" gap={1.5}>
+                          <Text
+                            fontSize="xs"
+                            fontWeight="bold"
+                            color="fg.muted"
+                          >
+                            {t('LoginPage.password.label')}
+                          </Text>
+                          <Input
+                            type="password"
+                            placeholder={t('LoginPage.password.placeholder')}
+                            value={field.state.value}
+                            onChange={(e) => {
+                              field.handleChange(e.target.value);
+                              clearFieldError('password');
+                            }}
+                            onBlur={field.handleBlur}
+                            border="1px solid"
+                            borderColor="border"
+                            borderRadius="xl"
+                            size="lg"
+                            px={4}
+                            _focus={{
+                              borderColor: 'primary',
+                              ring: '1px',
+                              ringColor: 'primary',
+                            }}
+                          />
+                          {errors.password && (
+                            <Text fontSize="2xs" color="error.400" mt={0.5}>
+                              {errors.password}
+                            </Text>
+                          )}
+                        </VStack>
+                      )}
+                    />
+
+                    <Button
+                      type="submit"
+                      size="lg"
+                      bg="primary"
+                      color="white"
+                      borderRadius="xl"
+                      fontWeight="bold"
+                      mt={2}
+                      _hover={{ bg: 'primary/90' }}
+                    >
+                      {t('LoginPage.password.button')}
+                    </Button>
+                  </VStack>
+                </form>
+              </motion.div>
+            )}
+
+            {step === 5 && (
+              <motion.div
+                key="step5"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}

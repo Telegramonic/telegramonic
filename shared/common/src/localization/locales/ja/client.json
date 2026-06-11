@@ -31,6 +31,15 @@
       "help": "API IDとHashを取得するには？",
       "errorSendCode": "コードの送信に失敗しました"
     },
+    "password": {
+      "title": "2段階認証パスワードを入力",
+      "description": "アカウントで2段階認証が有効になっています。以下にTelegramクラウドのパスワードを入力してください。",
+      "label": "2段階認証クラウドパスワード",
+      "placeholder": "2段階認証パスワードを入力",
+      "errorEmpty": "2段階認証パスワードが必要です。",
+      "errorIncorrect": "2FAパスワードが正しくありません。",
+      "button": "パスワードを検証"
+    },
     "loading": "接続を確立中...",
     "verifying": "検証中...",
     "loadingDefault": "読み込み中...",

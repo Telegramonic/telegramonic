@@ -5,6 +5,7 @@ export interface LoginFormValues {
   code: string;
   apiId: string;
   apiHash: string;
+  password?: string;
 }
 
 export type { SavedAccount };

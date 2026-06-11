@@ -15,7 +15,7 @@ export const useLoginForm = () => {
   const removeAccount = appStore((state) => state.removeAccount);
   const setCurrentAccount = appStore((state) => state.setCurrentAccount);
 
-  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4>(() => {
+  const [step, setStep] = useState<0 | 1 | 2 | 3 | 4 | 5>(() => {
     const storedAccounts = appStore.getState().savedAccounts;
     if (storedAccounts && storedAccounts.length > 0) {
       return 0;
@@ -35,11 +35,12 @@ export const useLoginForm = () => {
       code: '',
       apiId: '',
       apiHash: '',
+      password: '',
     } as LoginFormValues,
   });
 
   useEffect(() => {
-    if (step === 4) {
+    if (step === 5) {
       const timer = setTimeout(() => {
         navigate('/dashboard');
       }, 3000);
@@ -157,17 +158,53 @@ export const useLoginForm = () => {
     try {
       const res = await apiClient.signIn(currentPhone, value, phoneCodeHash);
       if (res.success) {
-        // Save account and set as active current account on successful sign in
-        saveAccount(currentPhone, apiId, apiHash);
-        setCurrentAccount({ phone: currentPhone, apiId, apiHash });
-
-        setStep(4);
+        if (res.next_step === 'password') {
+          setStep(4);
+        } else {
+          // Save account and set as active current account on successful sign in
+          saveAccount(currentPhone, apiId, apiHash);
+          setCurrentAccount({ phone: currentPhone, apiId, apiHash });
+          setStep(5);
+        }
       } else {
         setErrors({ code: res.error || t('LoginPage.errors.invalidCode') });
       }
     } catch (err: any) {
       setErrors({
         code: err.message || t('LoginPage.errors.verificationFailed'),
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePasswordSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const password = form.getFieldValue('password');
+    const apiId = form.getFieldValue('apiId');
+    const apiHash = form.getFieldValue('apiHash');
+
+    if (!password) {
+      setErrors((prev) => ({ ...prev, password: t('LoginPage.password.errorEmpty') }));
+      return;
+    }
+
+    setIsLoading(true);
+    setErrors({});
+
+    try {
+      const res = await apiClient.checkPassword(password);
+      if (res.success) {
+        // Save account and set as active current account on successful check_password
+        saveAccount(currentPhone, apiId, apiHash);
+        setCurrentAccount({ phone: currentPhone, apiId, apiHash });
+        setStep(5);
+      } else {
+        setErrors({ password: res.error || t('LoginPage.password.errorIncorrect') });
+      }
+    } catch (err: any) {
+      setErrors({
+        password: err.message || t('LoginPage.errors.verificationFailed'),
       });
     } finally {
       setIsLoading(false);
@@ -183,6 +220,8 @@ export const useLoginForm = () => {
       setStep(1);
     } else if (step === 3) {
       setStep(2);
+    } else if (step === 4) {
+      setStep(3);
     }
   };
 
@@ -199,12 +238,13 @@ export const useLoginForm = () => {
     step,
     setStep,
     isLoading,
-    isSuccess: step === 4,
+    isSuccess: step === 5,
     errors,
     setErrors,
     handleCredentialsSubmit,
     handlePhoneSubmit,
     handleCodeSubmit,
+    handlePasswordSubmit,
     handleBack,
     clearFieldError,
     dialCode,

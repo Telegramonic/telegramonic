@@ -31,6 +31,15 @@
       "help": "如何获取 API ID 和 Hash？",
       "errorSendCode": "发送代码失败"
     },
+    "password": {
+      "title": "输入两步验证密码",
+      "description": "您的账号已启用两步验证。请在下方输入您的 Telegram 云端密码。",
+      "label": "两步验证云端密码",
+      "placeholder": "输入两步验证密码",
+      "errorEmpty": "需要两步验证密码。",
+      "errorIncorrect": "2FA 密码不正确。",
+      "button": "验证密码"
+    },
     "loading": "正在建立连接...",
     "verifying": "正在验证...",
     "loadingDefault": "正在加载...",
