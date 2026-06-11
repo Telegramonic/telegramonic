@@ -26,28 +26,14 @@ export interface BreadcrumbsProps {
   setCurrentFolderId: (id: string | null) => void;
 }
 
-
-
-export interface FilesTableProps {
-  activeTab: ActiveTab;
-  filteredItems: DashboardItem[];
-  onItemClick: (item: DashboardItem) => void;
-  onToggleStar: (item: DashboardItem, e: React.MouseEvent) => void;
-  onShare: (item: DashboardItem, e: React.MouseEvent) => void;
-  onDownload: (item: DashboardItem, e: React.MouseEvent) => void;
-  onDeleteFolder: (folderId: string, e: React.MouseEvent) => void;
-  onDeleteFile: (item: DashboardItem, e: React.MouseEvent) => void;
-  onSync: () => void;
-  lastSynced: Date | null;
-  isSyncing: boolean;
-  /** Called when the user presses the back button (only shown when inside a folder) */
-  onBack?: () => void;
-  /** Whether we are currently inside a folder (not at root) */
-  isInsideFolder?: boolean;
-}
-
 export interface UploadProgressBannerProps {
-  uploadingFile: string | null;
-  uploadProgress: number;
+  uploadingFile?: string | null;
+  uploadProgress?: number;
   onCancelUpload?: () => void;
+  activeUploads?: Array<{
+    id: string;
+    name: string;
+    progress: number;
+    onCancel?: () => void;
+  }>;
 }

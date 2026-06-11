@@ -25,6 +25,13 @@ export enum IconType {
   PRESENTATION = 'PRESENTATION',
   CSV = 'CSV',
   AUDIO = 'AUDIO',
+  USER = 'USER',
+  DOWNLOAD = 'DOWNLOAD',
+  UPLOAD = 'UPLOAD',
+  CHEVRON_LEFT = 'CHEVRON_LEFT',
+  LIST_VIEW = 'LIST_VIEW',
+  GRID_VIEW = 'GRID_VIEW',
+  THREE_DOTS = 'THREE_DOTS',
 }
 
 export enum IconSize {

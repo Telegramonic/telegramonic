@@ -79,7 +79,10 @@ mod tests {
         // 2. Upload part
         let file_id = 9999i64;
         let part_data = b"Hello from chunk data".to_vec();
-        let uri_upload = format!("/files/upload-part?file_id={}&part_index=0", file_id);
+        let uri_upload = format!(
+            "/files/upload-part?file_id={}&part_index=0&file_size=21&total_parts=1",
+            file_id
+        );
 
         let req = Request::builder()
             .method("POST")

@@ -2,6 +2,7 @@ import { Box, Button, Input, Text, HStack, Center } from '@chakra-ui/react';
 import Icon from '@assets/Icon';
 import { IconType } from '@assets/types';
 import { useCurrentUser } from '@services';
+import { useTranslation } from 'react-i18next';
 import { TopNavBarProps } from './types';
 
 export const TopNavBar = ({
@@ -13,6 +14,7 @@ export const TopNavBar = ({
   onMenuClick,
 }: TopNavBarProps) => {
   const { data: currentUser } = useCurrentUser();
+  const { t } = useTranslation();
 
   const isAtRoot = currentFolderId === null;
 
@@ -58,7 +60,7 @@ export const TopNavBar = ({
             <Icon type={IconType.SEARCH} size={16} />
           </Box>
           <Input
-            placeholder="Search..."
+            placeholder={t('Dashboard.topNav.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             bg={{ base: '#e2e8f0/50', _dark: '#18202a' }}
@@ -97,7 +99,7 @@ export const TopNavBar = ({
           gap={2}
         >
           <Icon type={IconType.CLOUD_UPLOAD} size={16} />
-          <Box display={{ base: 'none', md: 'inline' }}>Upload File</Box>
+          <Box display={{ base: 'none', md: 'inline' }}>{t('Dashboard.topNav.uploadFile')}</Box>
         </Button>
 
         <Button
@@ -119,7 +121,7 @@ export const TopNavBar = ({
         >
           <Icon type={IconType.FOLDER} size={16} />
           <Box display={{ base: 'inline', md: 'none' }}>+</Box>
-          <Box display={{ base: 'none', md: 'inline' }}>+ New Folder</Box>
+          <Box display={{ base: 'none', md: 'inline' }}>{t('Dashboard.topNav.newFolder')}</Box>
         </Button>
       </HStack>
     </HStack>

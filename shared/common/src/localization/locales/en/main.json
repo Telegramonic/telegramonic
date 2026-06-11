@@ -145,9 +145,13 @@
       "hashLabel": "API Hash",
       "hashPlaceholder": "e.g., d58a9e...",
       "hashError": "API Hash is required.",
-      "button": "Continue"
+      "button": "Continue",
+      "help": "How to get API ID and Hash?",
+      "errorSendCode": "Failed to send code"
     },
     "loading": "Establishing connection...",
+    "verifying": "Verifying...",
+    "loadingDefault": "Loading...",
     "success": "Connected successfully! Redirecting...",
     "successConfigured": "Successfully configured Telegramonic.",
     "redirecting": "Redirecting to dashboard...",
@@ -155,6 +159,171 @@
       "title": "Saved Accounts",
       "description": "Select an existing account to sign in directly, or set up a new one.",
       "addNew": "Add New Account"
+    },
+    "errors": {
+      "serverConnection": "Server connection error",
+      "invalidCode": "Invalid code",
+      "verificationFailed": "Verification failed"
+    }
+  },
+  "Dashboard": {
+    "lastSynced": "Last synced: {{time}}",
+    "never": "Never",
+    "cancel": "Cancel",
+    "confirmDeleteFolder": "Are you sure you want to permanently delete this folder?",
+    "dragDrop": {
+      "active": "Drop files here",
+      "inactive": "Drag and drop files here, or click to upload",
+      "subtitle": "Supports multiple file uploads concurrently"
+    },
+    "createFolder": {
+      "title": "Create New Folder",
+      "label": "Folder Name",
+      "placeholder": "Enter folder name...",
+      "submit": "Create Folder"
+    },
+    "logout": {
+      "title": "Confirm Logout",
+      "message": "Are you sure you want to log out of Telegramonic? You will need to log back in to access your files.",
+      "submit": "Logout"
+    },
+    "toasts": {
+      "syncSuccess": "Drive synced successfully",
+      "syncFailed": "Sync failed: {{error}}",
+      "logoutSuccess": "Logged out successfully",
+      "copySuccess": "Telegram message link copied: {{name}}",
+      "copyFailed": "Failed to copy link",
+      "unpinned": "Unpinned: {{name}}",
+      "pinned": "Pinned: {{name}}",
+      "deleting": "Deleting {{name}}...",
+      "deleteSuccess": "Deleted successfully: {{name}}",
+      "deleteFailed": "Failed to delete file: {{error}}",
+      "uploadRootError": "Cannot upload files directly to the root 'In my drive'. Please enter a folder first.",
+      "uploadSuccess": "Uploaded successfully: {{name}}",
+      "uploadCancelled": "Upload cancelled: {{name}}",
+      "uploadFailed": "Upload failed: {{name}}: {{error}}",
+      "nestedFoldersError": "Nested folders are not supported. Folders can only be created at the root level.",
+      "createFolderSuccess": "Created folder: {{name}}",
+      "createFolderFailed": "Failed to create folder: {{error}}",
+      "deleteFolderSuccess": "Folder deleted successfully",
+      "deleteFolderFailed": "Failed to delete folder: {{error}}",
+      "downloading": "Downloading {{name}}...",
+      "downloadSuccess": "Downloaded successfully: {{name}}",
+      "downloadFailed": "Download failed: {{error}}"
+    },
+    "date": {
+      "justNow": "Just now",
+      "minsAgo": "{{count}}m ago",
+      "hoursAgo": "{{count}}h ago",
+      "recent": "Recent"
+    },
+    "nav": {
+      "drive": "Drive",
+      "inMyDrive": "In my drive",
+      "pinned": "Pinned",
+      "profile": "Profile",
+      "help": "Help"
+    },
+    "topNav": {
+      "searchPlaceholder": "Search...",
+      "uploadFile": "Upload File",
+      "newFolder": "+ New Folder"
+    },
+    "breadcrumbs": {
+      "root": "In my drive"
+    },
+    "uploadProgress": {
+      "uploading": "Uploading {{name}}..."
+    },
+    "filesTable": {
+      "pinned": "Pinned",
+      "goBack": "Go back",
+      "emptyState": "No files or folders found here.",
+      "listView": "List view",
+      "iconView": "Icon view",
+      "syncFolders": "Sync folders",
+      "sort": {
+        "az": "Name: A → Z",
+        "za": "Name: Z → A"
+      },
+      "headers": {
+        "name": "Name",
+        "owner": "Owner",
+        "lastModified": "Last Modified",
+        "size": "Size"
+      },
+      "actions": {
+        "pin": "Pin",
+        "unpin": "Unpin",
+        "share": "Share Link",
+        "download": "Download File",
+        "deleteFolder": "Delete Folder",
+        "deleteFile": "Delete File",
+        "options": "Options",
+        "delete": "Delete"
+      }
+    },
+    "profile": {
+      "loading": "Loading...",
+      "title": "Account Profile",
+      "subtitle": "Manage your account profile details, Telegram API credentials, and cloud drive settings.",
+      "copied": "Copied ✓",
+      "copy": "Copy",
+      "info": {
+        "title": "Account Information",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "phone": "Phone Number",
+        "userId": "User ID",
+        "username": "Username"
+      },
+      "credentials": {
+        "title": "Telegram API Credentials",
+        "subtitle": "Configure the API credentials used to connect to the Telegram MTProto servers.",
+        "apiId": "API ID",
+        "apiHash": "API Hash",
+        "apiIdPlaceholder": "Enter Telegram API ID (e.g. 1234567)",
+        "apiHashPlaceholder": "Enter Telegram API Hash (e.g. abcdef123456...)",
+        "show": "Show",
+        "hide": "Hide",
+        "save": "Save Credentials"
+      },
+      "actions": {
+        "title": "Account Actions",
+        "disconnect": "Disconnect Account",
+        "disconnectSubtitle": "Log out of your Telegram session and delete local credentials cache on this device.",
+        "logout": "Logout"
+      },
+      "confirmUpdate": {
+        "title": "Update API Credentials",
+        "message": "Updating your API credentials will reconnect your Telegram session. A verification code will be sent to your registered phone number ({{phone}}).",
+        "submit": "Continue"
+      },
+      "verification": {
+        "title": "Verify Connection",
+        "titlePassword": "Enter 2FA Password",
+        "titleSuccess": "Success",
+        "sending": "Sending Code...",
+        "verifying": "Verifying...",
+        "codeMessage": "Enter the 5-digit verification code sent to your Telegram account or phone.",
+        "codeLabel": "Verification Code",
+        "codePlaceholder": "Enter 5-digit code",
+        "passwordMessage": "Your account has 2FA enabled. Please enter your Telegram cloud password.",
+        "passwordLabel": "2FA Cloud Password",
+        "passwordPlaceholder": "Enter 2FA password",
+        "successMessage": "Credentials saved and verified successfully!",
+        "verify": "Verify",
+        "close": "Close"
+      },
+      "errors": {
+        "emptyCredentials": "API ID and API Hash cannot be empty.",
+        "phoneNotFound": "Phone number not found. Cannot verify credentials.",
+        "failedSendCode": "Failed to send verification code.",
+        "serverConnection": "Server connection error.",
+        "invalidCode": "Invalid code.",
+        "verificationFailed": "Verification failed.",
+        "incorrectPassword": "Incorrect 2FA password."
+      }
     }
   },
   "ProductPage": {

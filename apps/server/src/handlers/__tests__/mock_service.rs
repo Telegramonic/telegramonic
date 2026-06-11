@@ -377,6 +377,9 @@ impl TelegramService for MockTelegramService {
         &self,
         file_id: i64,
         part_index: i32,
+        _file_size: i64,
+        _total_parts: i32,
+        _byte_offset: i64,
         bytes: Vec<u8>,
     ) -> Result<bool, String> {
         let mut db = self.db.lock().await;
@@ -400,11 +403,16 @@ impl TelegramService for MockTelegramService {
         // Determine icon_type
         let icon_type = match file_ext.as_deref() {
             Some("pdf") => "pdf".to_string(),
-            Some("png") | Some("jpg") | Some("jpeg") | Some("gif") | Some("svg") => "image".to_string(),
+            Some("png") | Some("jpg") | Some("jpeg") | Some("gif") | Some("svg") => {
+                "image".to_string()
+            }
             Some("zip") | Some("tar") | Some("gz") | Some("rar") => "archive".to_string(),
             Some("mp4") | Some("mkv") | Some("avi") | Some("mov") => "video".to_string(),
-            Some("mp3") | Some("wav") | Some("ogg") | Some("m4a") | Some("flac") => "audio".to_string(),
-            Some("js") | Some("ts") | Some("tsx") | Some("rs") | Some("py") | Some("json") | Some("css") | Some("html") => "code".to_string(),
+            Some("mp3") | Some("wav") | Some("ogg") | Some("m4a") | Some("flac") => {
+                "audio".to_string()
+            }
+            Some("js") | Some("ts") | Some("tsx") | Some("rs") | Some("py") | Some("json")
+            | Some("css") | Some("html") => "code".to_string(),
             Some("csv") | Some("xlsx") | Some("xls") => "csv".to_string(),
             _ => "file".to_string(),
         };

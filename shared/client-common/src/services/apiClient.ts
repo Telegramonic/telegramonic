@@ -178,6 +178,9 @@ export const apiClient = {
     fileId: number,
     partIndex: number,
     bytes: ArrayBuffer | Uint8Array | Blob,
+    fileSize: number,
+    totalParts: number,
+    byteOffset: number,
     onProgress?: (loaded: number) => void,
     signal?: AbortSignal,
   ) => {
@@ -186,7 +189,7 @@ export const apiClient = {
         return reject(new Error('Upload cancelled'));
       }
       const xhr = new XMLHttpRequest();
-      const url = `${API_BASE_URL}${TELEGRAM_API_ROUTES.FILES.UPLOAD_PART}?file_id=${fileId}&part_index=${partIndex}`;
+      const url = `${API_BASE_URL}${TELEGRAM_API_ROUTES.FILES.UPLOAD_PART}?file_id=${fileId}&part_index=${partIndex}&file_size=${fileSize}&total_parts=${totalParts}&byte_offset=${byteOffset}`;
       xhr.open('POST', url, true);
       xhr.setRequestHeader('Content-Type', 'application/octet-stream');
 
@@ -272,10 +275,45 @@ export const apiClient = {
     signal?: AbortSignal,
   ): Promise<FileMetadata> => {
     const fileId = Math.floor(Math.random() * 100000000);
-    const chunkSize = 512 * 1024; // 512 KB chunks
+    const chunkSize = 8 * 1024 * 1024; // 8 MB chunks
     const totalParts = Math.ceil(file.size / chunkSize) || 1;
+    const concurrencyLimit = 4; // Upload up to 4 parts in parallel
 
-    for (let partIndex = 0; partIndex < totalParts; partIndex++) {
+    // ─── Open SSE stream BEFORE uploading any parts ──────────────────────
+    // This ensures we receive every incremental tick from the server as
+    // parts are acknowledged, covering the full 0→99% window.
+    let eventSource: EventSource | null = null;
+    const sseUrl = `${API_BASE_URL}${TELEGRAM_API_ROUTES.FILES.UPLOAD_PROGRESS_STREAM}?file_id=${fileId}`;
+
+    const closeSSE = () => {
+      if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+      }
+    };
+
+    if (signal) {
+      signal.addEventListener('abort', closeSSE);
+    }
+
+    if (onProgress) {
+      eventSource = new EventSource(sseUrl);
+      eventSource.onmessage = (event) => {
+        const percent = parseInt(event.data, 10);
+        if (!isNaN(percent) && percent >= 0) {
+          // Server reports 0-99 during upload_part, 100 on save_file.
+          // Cap at 99 here; we emit 100 ourselves after saveFile resolves.
+          onProgress(Math.min(99, percent));
+        }
+      };
+      eventSource.onerror = () => {
+        // Non-fatal: SSE can reconnect automatically; just close on error.
+        closeSSE();
+      };
+    }
+
+    // ─── Upload parts ─────────────────────────────────────────────────────
+    const uploadPartWithProgress = async (partIndex: number) => {
       if (signal?.aborted) {
         throw new Error('Upload cancelled');
       }
@@ -311,54 +349,44 @@ export const apiClient = {
         fileId,
         partIndex,
         arrayBuffer,
-        (loaded) => {
-          if (onProgress) {
-            const totalUploadedBytes = partIndex * chunkSize + loaded;
-            const percent = Math.min(
-              10,
-              Math.round((totalUploadedBytes / file.size) * 10),
-            );
-            onProgress(percent);
-          }
-        },
+        file.size,
+        totalParts,
+        start,
+        undefined, // no client-side XHR progress needed; SSE handles it
         signal,
       );
-    }
-
-    if (signal?.aborted) {
-      throw new Error('Upload cancelled');
-    }
-
-    // Connect to the Server-Sent Events stream for real-time Telegram upload progress
-    let eventSource: EventSource | null = null;
-    const sseUrl = `${API_BASE_URL}${TELEGRAM_API_ROUTES.FILES.UPLOAD_PROGRESS_STREAM}?file_id=${fileId}`;
-
-    const onAbortStream = () => {
-      if (eventSource) {
-        eventSource.close();
-      }
     };
-    if (signal) {
-      signal.addEventListener('abort', onAbortStream);
-    }
 
-    if (onProgress) {
-      eventSource = new EventSource(sseUrl);
-      eventSource.onmessage = (event) => {
-        const percent = parseInt(event.data, 10);
-        if (!isNaN(percent)) {
-          const scaledPercent = Math.min(99, 10 + Math.round(percent * 0.89));
-          onProgress(scaledPercent);
+    const partIndices = Array.from({ length: totalParts }, (_, i) => i);
+    const executeQueue = async () => {
+      const workers = [];
+      const getNextPart = () => {
+        if (partIndices.length === 0) return null;
+        return partIndices.shift()!;
+      };
+
+      const worker = async () => {
+        let partIndex = getNextPart();
+        while (partIndex !== null) {
+          await uploadPartWithProgress(partIndex);
+          partIndex = getNextPart();
         }
       };
-      eventSource.onerror = () => {
-        if (eventSource) {
-          eventSource.close();
-        }
-      };
-    }
+
+      for (let i = 0; i < Math.min(concurrencyLimit, totalParts); i++) {
+        workers.push(worker());
+      }
+      await Promise.all(workers);
+    };
 
     try {
+      await executeQueue();
+
+      if (signal?.aborted) {
+        throw new Error('Upload cancelled');
+      }
+
+      // ─── Finalise ───────────────────────────────────────────────────────
       const result = await apiClient.saveFile(
         fileId,
         file.name,
@@ -371,11 +399,9 @@ export const apiClient = {
       }
       return result;
     } finally {
-      if (eventSource) {
-        eventSource.close();
-      }
+      closeSSE();
       if (signal) {
-        signal.removeEventListener('abort', onAbortStream);
+        signal.removeEventListener('abort', closeSSE);
       }
     }
   },

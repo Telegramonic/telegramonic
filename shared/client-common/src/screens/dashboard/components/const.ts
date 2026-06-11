@@ -87,22 +87,22 @@ export const formatSize = (bytes: number): string => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 };
 
-export const formatDate = (isoString: string): string => {
+export const formatDate = (isoString: string, t?: (key: string, options?: any) => string): string => {
   try {
     const date = new Date(isoString);
     const diffMs = Date.now() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins}m ago`;
+    if (diffMins < 1) return t ? t('Dashboard.date.justNow') : 'Just now';
+    if (diffMins < 60) return t ? t('Dashboard.date.minsAgo', { count: diffMins }) : `${diffMins}m ago`;
     const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24) return `${diffHours}h ago`;
+    if (diffHours < 24) return t ? t('Dashboard.date.hoursAgo', { count: diffHours }) : `${diffHours}h ago`;
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
     });
   } catch (e) {
-    return 'Recent';
+    return t ? t('Dashboard.date.recent') : 'Recent';
   }
 };
 
@@ -121,6 +121,7 @@ export const buildDashboardItemFromFile = (
   ownerName: string,
   starredIds: string[],
   trashIds: string[],
+  t?: (key: string, options?: any) => string,
 ): DashboardItem => {
   const id = `file-${file.id}`;
   return {
@@ -129,7 +130,7 @@ export const buildDashboardItemFromFile = (
     name: file.name,
     type: getFileType(file.file_ext || ''),
     owner: ownerName,
-    lastModified: formatDate(file.created_at),
+    lastModified: formatDate(file.created_at, t),
     size: formatSize(file.size),
     sizeBytes: file.size,
     starred: starredIds.includes(id),

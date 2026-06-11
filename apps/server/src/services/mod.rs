@@ -28,7 +28,10 @@ pub struct AuthResult {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct FileMetadata {
-    #[serde(serialize_with = "serialize_i64_as_string", deserialize_with = "deserialize_i64_from_string_or_number")]
+    #[serde(
+        serialize_with = "serialize_i64_as_string",
+        deserialize_with = "deserialize_i64_from_string_or_number"
+    )]
     pub id: i64,
     #[serde(with = "serde_option_i64_string")]
     pub folder_id: Option<i64>,
@@ -44,7 +47,10 @@ pub struct FileMetadata {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct FolderMetadata {
-    #[serde(serialize_with = "serialize_i64_as_string", deserialize_with = "deserialize_i64_from_string_or_number")]
+    #[serde(
+        serialize_with = "serialize_i64_as_string",
+        deserialize_with = "deserialize_i64_from_string_or_number"
+    )]
     pub id: i64,
     #[serde(with = "serde_option_i64_string")]
     pub parent_id: Option<i64>,
@@ -53,7 +59,10 @@ pub struct FolderMetadata {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Drive {
-    #[serde(serialize_with = "serialize_i64_as_string", deserialize_with = "deserialize_i64_from_string_or_number")]
+    #[serde(
+        serialize_with = "serialize_i64_as_string",
+        deserialize_with = "deserialize_i64_from_string_or_number"
+    )]
     pub chat_id: i64,
     pub name: String,
     pub icon: Option<String>,
@@ -69,7 +78,10 @@ pub struct DriveStats {
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct TelegramUser {
-    #[serde(serialize_with = "serialize_i64_as_string", deserialize_with = "deserialize_i64_from_string_or_number")]
+    #[serde(
+        serialize_with = "serialize_i64_as_string",
+        deserialize_with = "deserialize_i64_from_string_or_number"
+    )]
     pub id: i64,
     pub first_name: String,
     pub last_name: Option<String>,
@@ -134,6 +146,9 @@ pub trait TelegramService: Send + Sync {
         &self,
         file_id: i64,
         part_index: i32,
+        file_size: i64,
+        total_parts: i32,
+        byte_offset: i64,
         bytes: Vec<u8>,
     ) -> Result<bool, String>;
     async fn save_file(

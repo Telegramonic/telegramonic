@@ -1,20 +1,29 @@
-use crate::services::{deserialize_i64_from_string_or_number, serde_option_i64_string, DynTelegramService};
+use crate::services::{
+    deserialize_i64_from_string_or_number, serde_option_i64_string, DynTelegramService,
+};
 use axum::{
     body::Bytes,
     extract::{Query, State},
     http::{header, HeaderMap, StatusCode},
-    response::{sse::{Event, Sse}, IntoResponse},
+    response::{
+        sse::{Event, Sse},
+        IntoResponse,
+    },
     Json,
 };
 use futures_util::stream::Stream;
-use std::convert::Infallible;
 use serde::Deserialize;
+use std::convert::Infallible;
 
 #[derive(Debug, Deserialize)]
 pub struct UploadPartQuery {
     #[serde(deserialize_with = "deserialize_i64_from_string_or_number")]
     pub file_id: i64,
     pub part_index: i32,
+    pub file_size: i64,
+    pub total_parts: i32,
+    #[serde(default)]
+    pub byte_offset: i64,
 }
 
 #[derive(Debug, Deserialize)]
@@ -72,7 +81,14 @@ pub async fn upload_part(
     body: Bytes,
 ) -> impl IntoResponse {
     match service
-        .upload_part(query.file_id, query.part_index, body.to_vec())
+        .upload_part(
+            query.file_id,
+            query.part_index,
+            query.file_size,
+            query.total_parts,
+            query.byte_offset,
+            body.to_vec(),
+        )
         .await
     {
         Ok(success) => (
@@ -177,7 +193,10 @@ pub async fn get_files(
     State(service): State<DynTelegramService>,
     Query(query): Query<DriveFilesQuery>,
 ) -> impl IntoResponse {
-    match service.get_files(query.folder_id, query.q.as_deref(), query.all).await {
+    match service
+        .get_files(query.folder_id, query.q.as_deref(), query.all)
+        .await
+    {
         Ok(files) => (StatusCode::OK, Json(files)).into_response(),
         Err(err) => (
             StatusCode::INTERNAL_SERVER_ERROR,
@@ -286,9 +305,12 @@ pub async fn get_upload_progress_stream(
                     if percent >= 100 {
                         finished = true;
                     }
-                    return Some((Ok::<Event, Infallible>(event), (service, file_id, last_percent, finished)));
+                    return Some((
+                        Ok::<Event, Infallible>(event),
+                        (service, file_id, last_percent, finished),
+                    ));
                 }
-                tokio::time::sleep(std::time::Duration::from_millis(200)).await;
+                tokio::time::sleep(std::time::Duration::from_millis(50)).await;
             }
         },
     );

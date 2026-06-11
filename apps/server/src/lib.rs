@@ -2,10 +2,10 @@ pub mod config;
 pub mod handlers;
 pub mod services;
 
-use std::net::SocketAddr;
-use std::sync::Arc;
 use handlers::create_router;
 use services::{telegram::RealTelegramService, TelegramService};
+use std::net::SocketAddr;
+use std::sync::Arc;
 
 pub async fn run_server(addr: SocketAddr) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     // Initialize Telegram Client service (Real mode only)
@@ -17,11 +17,9 @@ pub async fn run_server(addr: SocketAddr) -> Result<(), Box<dyn std::error::Erro
 
     tracing::info!("Telegramonic Rust backend server listening on {}", addr);
 
-    let listener = tokio::net::TcpListener::bind(&addr)
-        .await?;
+    let listener = tokio::net::TcpListener::bind(&addr).await?;
 
-    axum::serve(listener, app)
-        .await?;
+    axum::serve(listener, app).await?;
 
     Ok(())
 }

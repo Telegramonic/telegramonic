@@ -21,6 +21,10 @@ pub struct RealTelegramService {
     files: Arc<Mutex<Vec<FileMetadata>>>,
     uploaded_chunks: Arc<Mutex<HashMap<i64, Vec<(i32, Vec<u8>)>>>>,
     upload_progress: Arc<Mutex<HashMap<i64, i32>>>,
+    /// Running total of bytes confirmed uploaded for each in-flight file.
+    /// Atomically incremented per part so progress is always monotonic even
+    /// when concurrent parts complete out of order.
+    upload_bytes: Arc<Mutex<HashMap<i64, i64>>>,
     temp_client: Arc<Mutex<Option<Client>>>,
     temp_api_id: Arc<Mutex<Option<i32>>>,
     temp_api_hash: Arc<Mutex<Option<String>>>,
@@ -90,6 +94,7 @@ impl RealTelegramService {
             files: Arc::new(Mutex::new(Vec::new())),
             uploaded_chunks: Arc::new(Mutex::new(HashMap::new())),
             upload_progress: Arc::new(Mutex::new(HashMap::new())),
+            upload_bytes: Arc::new(Mutex::new(HashMap::new())),
             temp_client: Arc::new(Mutex::new(None)),
             temp_api_id: Arc::new(Mutex::new(None)),
             temp_api_hash: Arc::new(Mutex::new(None)),
@@ -150,7 +155,10 @@ impl RealTelegramService {
             return Ok(client.clone());
         }
 
-        let (api_id, api_hash) = match (*self.temp_api_id.lock().await, &*self.temp_api_hash.lock().await) {
+        let (api_id, api_hash) = match (
+            *self.temp_api_id.lock().await,
+            &*self.temp_api_hash.lock().await,
+        ) {
             (Some(id), Some(hash)) => (id, hash.clone()),
             _ => return Err("Temporary API credentials not set.".to_string()),
         };
@@ -174,7 +182,7 @@ impl RealTelegramService {
 #[axum::async_trait]
 impl TelegramService for RealTelegramService {
     async fn get_auth_state(&self) -> AuthState {
-        tracing::info!("get_auth_state request");
+        tracing::debug!("get_auth_state request");
         let res = match self.get_client().await {
             Ok(client) => match client.is_authorized().await {
                 Ok(true) => AuthState::LoggedIn,
@@ -199,7 +207,7 @@ impl TelegramService for RealTelegramService {
             },
             Err(_) => AuthState::LoggedOut,
         };
-        tracing::info!("get_auth_state response: {:?}", res);
+        tracing::debug!("get_auth_state response: {:?}", res);
         res
     }
 
@@ -209,7 +217,11 @@ impl TelegramService for RealTelegramService {
         api_id: i32,
         api_hash: &str,
     ) -> Result<AuthResult, String> {
-        tracing::info!("send_code request: phone={}, api_id={}, api_hash=[masked]", phone, api_id);
+        tracing::info!(
+            "send_code request: phone={}, api_id={}, api_hash=[masked]",
+            phone,
+            api_id
+        );
         // Reset temp client and credentials since new verification flow is starting
         {
             *self.temp_client.lock().await = None;
@@ -242,7 +254,11 @@ impl TelegramService for RealTelegramService {
         phone_code_hash: &str,
         code: &str,
     ) -> Result<AuthResult, String> {
-        tracing::info!("sign_in request: phone={}, phone_code_hash={}, code=[masked]", phone, phone_code_hash);
+        tracing::info!(
+            "sign_in request: phone={}, phone_code_hash={}, code=[masked]",
+            phone,
+            phone_code_hash
+        );
         let client = self.get_temp_client().await?;
         let token_lock = self.login_token.lock().await;
         let token = token_lock
@@ -389,7 +405,10 @@ impl TelegramService for RealTelegramService {
     }
 
     async fn update_credentials(&self, api_id: i32, api_hash: &str) -> Result<bool, String> {
-        tracing::info!("update_credentials request: api_id={}, api_hash=[masked]", api_id);
+        tracing::info!(
+            "update_credentials request: api_id={}, api_hash=[masked]",
+            api_id
+        );
         {
             *self.api_id.lock().await = Some(api_id);
             *self.api_hash.lock().await = Some(api_hash.to_string());
@@ -442,7 +461,11 @@ impl TelegramService for RealTelegramService {
         first_name: &str,
         last_name: Option<&str>,
     ) -> Result<bool, String> {
-        tracing::info!("update_profile request: first_name={}, last_name={:?}", first_name, last_name);
+        tracing::info!(
+            "update_profile request: first_name={}, last_name={:?}",
+            first_name,
+            last_name
+        );
         let res = Ok(true);
         tracing::info!("update_profile response: {:?}", res);
         res
@@ -480,7 +503,8 @@ impl TelegramService for RealTelegramService {
                 }
             }
             Ok(drives)
-        })().await;
+        })()
+        .await;
         tracing::info!("get_drives response: {:?}", res);
         res
     }
@@ -526,7 +550,8 @@ impl TelegramService for RealTelegramService {
 
             result.extend(filtered);
             Ok(result)
-        })().await;
+        })()
+        .await;
         tracing::info!("get_folders response: {:?}", res);
         res
     }
@@ -537,7 +562,12 @@ impl TelegramService for RealTelegramService {
         search_query: Option<&str>,
         all: Option<bool>,
     ) -> Result<Vec<FileMetadata>, String> {
-        tracing::info!("get_files request: folder_id={:?}, search_query={:?}, all={:?}", folder_id, search_query, all);
+        tracing::info!(
+            "get_files request: folder_id={:?}, search_query={:?}, all={:?}",
+            folder_id,
+            search_query,
+            all
+        );
         let res = (|| async {
             let mut result = Vec::new();
 
@@ -563,16 +593,26 @@ impl TelegramService for RealTelegramService {
                                 let file_ext = doc_name.split('.').last().map(|s| s.to_string());
                                 let icon_type = match file_ext.as_deref() {
                                     Some("pdf") => "pdf".to_string(),
-                                    Some("png") | Some("jpg") | Some("jpeg") | Some("gif") | Some("svg") => "image".to_string(),
-                                    Some("zip") | Some("tar") | Some("gz") | Some("rar") => "archive".to_string(),
-                                    Some("mp4") | Some("mkv") | Some("avi") | Some("mov") => "video".to_string(),
-                                    Some("mp3") | Some("wav") | Some("ogg") | Some("m4a") | Some("flac") => "audio".to_string(),
-                                    Some("js") | Some("ts") | Some("tsx") | Some("rs") | Some("py") | Some("json") | Some("css") | Some("html") => "code".to_string(),
+                                    Some("png") | Some("jpg") | Some("jpeg") | Some("gif")
+                                    | Some("svg") => "image".to_string(),
+                                    Some("zip") | Some("tar") | Some("gz") | Some("rar") => {
+                                        "archive".to_string()
+                                    }
+                                    Some("mp4") | Some("mkv") | Some("avi") | Some("mov") => {
+                                        "video".to_string()
+                                    }
+                                    Some("mp3") | Some("wav") | Some("ogg") | Some("m4a")
+                                    | Some("flac") => "audio".to_string(),
+                                    Some("js") | Some("ts") | Some("tsx") | Some("rs")
+                                    | Some("py") | Some("json") | Some("css") | Some("html") => {
+                                        "code".to_string()
+                                    }
                                     Some("csv") | Some("xlsx") | Some("xls") => "csv".to_string(),
                                     _ => "file".to_string(),
                                 };
-                                
-                                let created_at = doc.creation_date()
+
+                                let created_at = doc
+                                    .creation_date()
                                     .map(|d| d.to_rfc3339())
                                     .unwrap_or_else(|| Utc::now().to_rfc3339());
 
@@ -614,16 +654,26 @@ impl TelegramService for RealTelegramService {
                                 let file_ext = doc_name.split('.').last().map(|s| s.to_string());
                                 let icon_type = match file_ext.as_deref() {
                                     Some("pdf") => "pdf".to_string(),
-                                    Some("png") | Some("jpg") | Some("jpeg") | Some("gif") | Some("svg") => "image".to_string(),
-                                    Some("zip") | Some("tar") | Some("gz") | Some("rar") => "archive".to_string(),
-                                    Some("mp4") | Some("mkv") | Some("avi") | Some("mov") => "video".to_string(),
-                                    Some("mp3") | Some("wav") | Some("ogg") | Some("m4a") | Some("flac") => "audio".to_string(),
-                                    Some("js") | Some("ts") | Some("tsx") | Some("rs") | Some("py") | Some("json") | Some("css") | Some("html") => "code".to_string(),
+                                    Some("png") | Some("jpg") | Some("jpeg") | Some("gif")
+                                    | Some("svg") => "image".to_string(),
+                                    Some("zip") | Some("tar") | Some("gz") | Some("rar") => {
+                                        "archive".to_string()
+                                    }
+                                    Some("mp4") | Some("mkv") | Some("avi") | Some("mov") => {
+                                        "video".to_string()
+                                    }
+                                    Some("mp3") | Some("wav") | Some("ogg") | Some("m4a")
+                                    | Some("flac") => "audio".to_string(),
+                                    Some("js") | Some("ts") | Some("tsx") | Some("rs")
+                                    | Some("py") | Some("json") | Some("css") | Some("html") => {
+                                        "code".to_string()
+                                    }
                                     Some("csv") | Some("xlsx") | Some("xls") => "csv".to_string(),
                                     _ => "file".to_string(),
                                 };
-                                
-                                let created_at = doc.creation_date()
+
+                                let created_at = doc
+                                    .creation_date()
                                     .map(|d| d.to_rfc3339())
                                     .unwrap_or_else(|| Utc::now().to_rfc3339());
 
@@ -665,7 +715,8 @@ impl TelegramService for RealTelegramService {
             }
 
             Ok(filtered)
-        })().await;
+        })()
+        .await;
         tracing::info!("get_files response: {:?}", res);
         res
     }
@@ -675,8 +726,12 @@ impl TelegramService for RealTelegramService {
         name: &str,
         parent_id: Option<i64>,
     ) -> Result<FolderMetadata, String> {
-        tracing::info!("create_folder request: name={}, parent_id={:?}", name, parent_id);
-        
+        tracing::info!(
+            "create_folder request: name={}, parent_id={:?}",
+            name,
+            parent_id
+        );
+
         if name.is_empty() {
             return Err("Folder name cannot be empty".to_string());
         }
@@ -687,20 +742,23 @@ impl TelegramService for RealTelegramService {
             // Create a Telegram channel
             let client = client_res.unwrap();
             let title = name.to_string();
-            
+
             use grammers_client::grammers_tl_types as tl;
-            
-            let result = client.invoke(&tl::functions::channels::CreateChannel {
-                broadcast: true,
-                megagroup: false,
-                for_import: false,
-                title,
-                about: "Telegramonic Cloud Drive".to_string(),
-                address: None,
-                geo_point: None,
-                forum: false,
-                ttl_period: None,
-            }).await.map_err(|e| e.to_string())?;
+
+            let result = client
+                .invoke(&tl::functions::channels::CreateChannel {
+                    broadcast: true,
+                    megagroup: false,
+                    for_import: false,
+                    title,
+                    about: "Telegramonic Cloud Drive".to_string(),
+                    address: None,
+                    geo_point: None,
+                    forum: false,
+                    ttl_period: None,
+                })
+                .await
+                .map_err(|e| e.to_string())?;
 
             let channel_id = get_channel_id(&result)
                 .ok_or_else(|| "Failed to extract channel ID from updates".to_string())?;
@@ -728,7 +786,7 @@ impl TelegramService for RealTelegramService {
 
     async fn delete_folder(&self, id: i64) -> Result<bool, String> {
         tracing::info!("delete_folder request: id={}", id);
-        
+
         // Check if the folder is a Telegram channel (drive)
         let client = self.get_client().await?;
         let mut dialogs_iter = client.iter_dialogs();
@@ -744,12 +802,21 @@ impl TelegramService for RealTelegramService {
 
         let is_channel_deleted = if let Some(chat) = target_chat {
             if let Some(channel) = chat.try_to_input_channel() {
-                if let Err(e) = client.invoke(&grammers_tl_types::functions::channels::DeleteChannel { channel }).await {
+                if let Err(e) = client
+                    .invoke(&grammers_tl_types::functions::channels::DeleteChannel { channel })
+                    .await
+                {
                     tracing::warn!("Failed to delete channel as creator: {}. Trying delete_dialog/leave fallback...", e);
-                    client.delete_dialog(chat).await.map_err(|e| e.to_string())?;
+                    client
+                        .delete_dialog(chat)
+                        .await
+                        .map_err(|e| e.to_string())?;
                 }
             } else {
-                client.delete_dialog(chat).await.map_err(|e| e.to_string())?;
+                client
+                    .delete_dialog(chat)
+                    .await
+                    .map_err(|e| e.to_string())?;
             }
             true
         } else {
@@ -806,12 +873,16 @@ impl TelegramService for RealTelegramService {
             }
         }
 
-        let is_telegram_file_deleted = if let (Some(msg_id), Some(chat)) = (found_msg_id, found_chat) {
-            client.delete_messages(chat, &[msg_id]).await.map_err(|e| e.to_string())?;
-            true
-        } else {
-            false
-        };
+        let is_telegram_file_deleted =
+            if let (Some(msg_id), Some(chat)) = (found_msg_id, found_chat) {
+                client
+                    .delete_messages(chat, &[msg_id])
+                    .await
+                    .map_err(|e| e.to_string())?;
+                true
+            } else {
+                false
+            };
 
         // Also clean up local tracked lists
         let mut files = self.files.lock().await;
@@ -820,6 +891,7 @@ impl TelegramService for RealTelegramService {
 
         let mut chunks = self.uploaded_chunks.lock().await;
         chunks.remove(&id);
+        self.upload_bytes.lock().await.remove(&id);
 
         let res = Ok(files.len() < initial_len || is_telegram_file_deleted);
         tracing::info!("delete_file response: {:?}", res);
@@ -830,12 +902,124 @@ impl TelegramService for RealTelegramService {
         &self,
         file_id: i64,
         part_index: i32,
+        file_size: i64,
+        total_parts: i32,
+        byte_offset: i64,
         bytes: Vec<u8>,
     ) -> Result<bool, String> {
-        tracing::info!("upload_part request: file_id={}, part_index={}, bytes_len={}", file_id, part_index, bytes.len());
+        tracing::info!("upload_part request: file_id={}, part_index={}, byte_offset={}, bytes_len={}, file_size={}, total_parts={}", file_id, part_index, byte_offset, bytes.len(), file_size, total_parts);
+
+        let client_res = self.get_client().await;
+        let is_big = file_size > 10 * 1024 * 1024;
+
+        let sub_chunk_size: i64 = 512 * 1024; // 512 KB Telegram limit
+        let tg_total_parts = ((file_size + sub_chunk_size - 1) / sub_chunk_size) as i32;
+        let tg_total_parts = if tg_total_parts == 0 {
+            1
+        } else {
+            tg_total_parts
+        };
+
+        // Compute starting Telegram part index from the exact byte offset provided by the client
+        let tg_part_index_start = (byte_offset / sub_chunk_size) as i32;
+
+        // Slice incoming bytes into 512KB sub-chunks
+        let mut sub_chunks = Vec::new();
+        let mut start = 0;
+        while start < bytes.len() {
+            let end = std::cmp::min(start + sub_chunk_size as usize, bytes.len());
+            sub_chunks.push(bytes[start..end].to_vec());
+            start = end;
+        }
+
+        let mut completed_sub_chunks = Vec::new();
+
+        if let Ok(client) = &client_res {
+            use grammers_client::grammers_tl_types as tl;
+
+            let mut futures = Vec::new();
+            for (sub_index, sub_chunk) in sub_chunks.iter().enumerate() {
+                let client = client.clone();
+                let file_id = file_id;
+                let tg_part_index = tg_part_index_start + sub_index as i32;
+                let sub_chunk_bytes = sub_chunk.clone();
+                let sub_chunk_len = sub_chunk.len() as i64;
+                let upload_bytes = self.upload_bytes.clone();
+                let upload_progress = self.upload_progress.clone();
+
+                futures.push(async move {
+                    if is_big {
+                        client
+                            .invoke(&tl::functions::upload::SaveBigFilePart {
+                                file_id,
+                                file_part: tg_part_index,
+                                file_total_parts: tg_total_parts,
+                                bytes: sub_chunk_bytes.clone(),
+                            })
+                            .await
+                            .map_err(|e| e.to_string())?;
+                    } else {
+                        client
+                            .invoke(&tl::functions::upload::SaveFilePart {
+                                file_id,
+                                file_part: tg_part_index,
+                                bytes: sub_chunk_bytes.clone(),
+                            })
+                            .await
+                            .map_err(|e| e.to_string())?;
+                    }
+
+                    // Tick progress immediately on each 512 KB ACK so the SSE
+                    // stream gets continuous updates rather than stalling until
+                    // the full 4 MB client chunk is done.
+                    {
+                        let mut bytes_map = upload_bytes.lock().await;
+                        let total = bytes_map.entry(file_id).or_insert(0);
+                        *total += sub_chunk_len;
+                        let pct = ((*total * 100) / file_size).min(99) as i32;
+                        let mut prog = upload_progress.lock().await;
+                        prog.insert(file_id, pct);
+                    }
+
+                    Ok::<Vec<u8>, String>(sub_chunk_bytes)
+                });
+            }
+            let acked_chunks: Vec<Vec<u8>> = futures_util::future::try_join_all(futures).await?;
+
+            // Prepare sub_chunks to be saved in memory if not big
+            if !is_big {
+                for (sub_index, sub_chunk_bytes) in acked_chunks.into_iter().enumerate() {
+                    let tg_part_index = tg_part_index_start + sub_index as i32;
+                    completed_sub_chunks.push((tg_part_index, sub_chunk_bytes));
+                }
+            }
+        } else {
+            // Mock/test behavior fallback — tick progress per sub-chunk too
+            for (sub_index, sub_chunk) in sub_chunks.into_iter().enumerate() {
+                let tg_part_index = tg_part_index_start + sub_index as i32;
+                {
+                    let mut bytes_map = self.upload_bytes.lock().await;
+                    let total = bytes_map.entry(file_id).or_insert(0);
+                    *total += sub_chunk.len() as i64;
+                    let pct = ((*total * 100) / file_size).min(99) as i32;
+                    let mut prog = self.upload_progress.lock().await;
+                    prog.insert(file_id, pct);
+                }
+                completed_sub_chunks.push((tg_part_index, sub_chunk));
+            }
+        }
+
+        // Lock chunks map to record completion for small-file MD5 reassembly
         let mut chunks = self.uploaded_chunks.lock().await;
         let parts = chunks.entry(file_id).or_insert_with(Vec::new);
-        parts.push((part_index, bytes));
+
+        for (tg_part_index, sub_chunk_bytes) in completed_sub_chunks {
+            // Prevent duplicate parts accounting if retried
+            if !parts.iter().any(|p| p.0 == tg_part_index) {
+                parts.push((tg_part_index, sub_chunk_bytes));
+            }
+        }
+
         let res = Ok(true);
         tracing::info!("upload_part response: {:?}", res);
         res
@@ -848,22 +1032,13 @@ impl TelegramService for RealTelegramService {
         size: i64,
         folder_id: Option<i64>,
     ) -> Result<FileMetadata, String> {
-        tracing::info!("save_file request: file_id={}, name={}, size={}, folder_id={:?}", file_id, name, size, folder_id);
-        
-        let file_bytes = {
-            let mut chunks = self.uploaded_chunks.lock().await;
-            if let Some(parts) = chunks.remove(&file_id) {
-                let mut sorted_parts = parts;
-                sorted_parts.sort_by_key(|p| p.0);
-                let mut bytes = Vec::new();
-                for (_, chunk) in sorted_parts {
-                    bytes.extend(chunk);
-                }
-                bytes
-            } else {
-                return Err(format!("No uploaded parts found for file_id {}", file_id));
-            }
-        };
+        tracing::info!(
+            "save_file request: file_id={}, name={}, size={}, folder_id={:?}",
+            file_id,
+            name,
+            size,
+            folder_id
+        );
 
         let mut target_chat = None;
         let client_res = self.get_client().await;
@@ -883,47 +1058,42 @@ impl TelegramService for RealTelegramService {
 
         if let (Ok(client), Some(peer)) = (client_res, target_chat) {
             use grammers_client::grammers_tl_types as tl;
-            
+
             let chunk_size = 512 * 1024; // 512 KB
-            let total_parts = ((file_bytes.len() + chunk_size - 1) / chunk_size) as i32;
+            let total_parts = ((size + chunk_size - 1) / chunk_size) as i32;
             let total_parts = if total_parts == 0 { 1 } else { total_parts };
             let is_big = size > 10 * 1024 * 1024; // 10 MB
 
-            for part_index in 0..total_parts {
-                let start = (part_index as usize) * chunk_size;
-                let end = std::cmp::min(start + chunk_size, file_bytes.len());
-                let chunk_data = file_bytes[start..end].to_vec();
-
-                if is_big {
-                    client.invoke(&tl::functions::upload::SaveBigFilePart {
-                        file_id,
-                        file_part: part_index,
-                        file_total_parts: total_parts,
-                        bytes: chunk_data,
-                    }).await.map_err(|e| e.to_string())?;
-                } else {
-                    client.invoke(&tl::functions::upload::SaveFilePart {
-                        file_id,
-                        file_part: part_index,
-                        bytes: chunk_data,
-                    }).await.map_err(|e| e.to_string())?;
-                }
-
-                // Update progress
-                let progress_percent = ((part_index + 1) * 100) / total_parts;
-                {
-                    let mut progress = self.upload_progress.lock().await;
-                    progress.insert(file_id, progress_percent);
-                }
-            }
-
             let input_file = if is_big {
+                // Large files: no MD5 checksum needed
+                {
+                    let mut chunks = self.uploaded_chunks.lock().await;
+                    chunks.remove(&file_id);
+                }
+                self.upload_bytes.lock().await.remove(&file_id);
                 tl::enums::InputFile::Big(tl::types::InputFileBig {
                     id: file_id,
                     parts: total_parts,
                     name: name.to_string(),
                 })
             } else {
+                // Small files: retrieve bytes from memory to compute MD5 checksum
+                let file_bytes = {
+                    let mut chunks = self.uploaded_chunks.lock().await;
+                    if let Some(parts) = chunks.remove(&file_id) {
+                        let mut sorted_parts = parts;
+                        sorted_parts.sort_by_key(|p| p.0);
+                        let mut bytes = Vec::new();
+                        for (_, chunk) in sorted_parts {
+                            bytes.extend(chunk);
+                        }
+                        bytes
+                    } else {
+                        return Err(format!("No uploaded parts found for file_id {}", file_id));
+                    }
+                };
+                self.upload_bytes.lock().await.remove(&file_id);
+
                 let hash = md5::compute(&file_bytes);
                 let md5_checksum = format!("{:x}", hash);
                 tl::enums::InputFile::File(tl::types::InputFile {
@@ -943,9 +1113,14 @@ impl TelegramService for RealTelegramService {
 
             use grammers_client::types::InputMessage;
             let message = InputMessage::default().document(uploaded);
-            let sent_message = client.send_message(peer, message).await.map_err(|e| e.to_string())?;
+            let sent_message = client
+                .send_message(peer, message)
+                .await
+                .map_err(|e| e.to_string())?;
 
-            let media = sent_message.media().ok_or_else(|| "Sent message does not contain media".to_string())?;
+            let media = sent_message
+                .media()
+                .ok_or_else(|| "Sent message does not contain media".to_string())?;
             let doc = match media {
                 grammers_client::types::Media::Document(d) => d,
                 _ => return Err("Sent media is not a document".to_string()),
@@ -955,16 +1130,22 @@ impl TelegramService for RealTelegramService {
             let file_ext = doc_name.split('.').last().map(|s| s.to_string());
             let icon_type = match file_ext.as_deref() {
                 Some("pdf") => "pdf".to_string(),
-                Some("png") | Some("jpg") | Some("jpeg") | Some("gif") | Some("svg") => "image".to_string(),
+                Some("png") | Some("jpg") | Some("jpeg") | Some("gif") | Some("svg") => {
+                    "image".to_string()
+                }
                 Some("zip") | Some("tar") | Some("gz") | Some("rar") => "archive".to_string(),
                 Some("mp4") | Some("mkv") | Some("avi") | Some("mov") => "video".to_string(),
-                Some("mp3") | Some("wav") | Some("ogg") | Some("m4a") | Some("flac") => "audio".to_string(),
-                Some("js") | Some("ts") | Some("tsx") | Some("rs") | Some("py") | Some("json") | Some("css") | Some("html") => "code".to_string(),
+                Some("mp3") | Some("wav") | Some("ogg") | Some("m4a") | Some("flac") => {
+                    "audio".to_string()
+                }
+                Some("js") | Some("ts") | Some("tsx") | Some("rs") | Some("py") | Some("json")
+                | Some("css") | Some("html") => "code".to_string(),
                 Some("csv") | Some("xlsx") | Some("xls") => "csv".to_string(),
                 _ => "file".to_string(),
             };
 
-            let created_at = doc.creation_date()
+            let created_at = doc
+                .creation_date()
                 .map(|d| d.to_rfc3339())
                 .unwrap_or_else(|| Utc::now().to_rfc3339());
 
@@ -982,6 +1163,21 @@ impl TelegramService for RealTelegramService {
             })
         } else {
             // Fallback to local storage (mock/test behavior)
+            let file_bytes = {
+                let mut chunks = self.uploaded_chunks.lock().await;
+                if let Some(parts) = chunks.remove(&file_id) {
+                    let mut sorted_parts = parts;
+                    sorted_parts.sort_by_key(|p| p.0);
+                    let mut bytes = Vec::new();
+                    for (_, chunk) in sorted_parts {
+                        bytes.extend(chunk);
+                    }
+                    bytes
+                } else {
+                    Vec::new()
+                }
+            };
+
             {
                 let mut chunks = self.uploaded_chunks.lock().await;
                 chunks.insert(file_id, vec![(0, file_bytes)]);
@@ -991,11 +1187,16 @@ impl TelegramService for RealTelegramService {
             let file_ext = name.split('.').last().map(|s| s.to_string());
             let icon_type = match file_ext.as_deref() {
                 Some("pdf") => "pdf".to_string(),
-                Some("png") | Some("jpg") | Some("jpeg") | Some("gif") | Some("svg") => "image".to_string(),
+                Some("png") | Some("jpg") | Some("jpeg") | Some("gif") | Some("svg") => {
+                    "image".to_string()
+                }
                 Some("zip") | Some("tar") | Some("gz") | Some("rar") => "archive".to_string(),
                 Some("mp4") | Some("mkv") | Some("avi") | Some("mov") => "video".to_string(),
-                Some("mp3") | Some("wav") | Some("ogg") | Some("m4a") | Some("flac") => "audio".to_string(),
-                Some("js") | Some("ts") | Some("tsx") | Some("rs") | Some("py") | Some("json") | Some("css") | Some("html") => "code".to_string(),
+                Some("mp3") | Some("wav") | Some("ogg") | Some("m4a") | Some("flac") => {
+                    "audio".to_string()
+                }
+                Some("js") | Some("ts") | Some("tsx") | Some("rs") | Some("py") | Some("json")
+                | Some("css") | Some("html") => "code".to_string(),
                 Some("csv") | Some("xlsx") | Some("xls") => "csv".to_string(),
                 _ => "file".to_string(),
             };
@@ -1060,18 +1261,25 @@ impl TelegramService for RealTelegramService {
             if let Some(media) = found_media {
                 let temp_filename = format!("temp_download_{}.bin", file_id);
                 let temp_path = std::path::Path::new(&temp_filename);
-                
+
                 let downloadable = grammers_client::types::Downloadable::Media(media);
-                client.download_media(&downloadable, temp_path).await.map_err(|e| e.to_string())?;
-                
+                client
+                    .download_media(&downloadable, temp_path)
+                    .await
+                    .map_err(|e| e.to_string())?;
+
                 let bytes = std::fs::read(temp_path).map_err(|e| e.to_string())?;
                 let _ = std::fs::remove_file(temp_path);
-                
+
                 Ok(bytes)
             } else {
-                Err(format!("File with ID {} not found in memory or on Telegram channels.", file_id))
+                Err(format!(
+                    "File with ID {} not found in memory or on Telegram channels.",
+                    file_id
+                ))
             }
-        })().await;
+        })()
+        .await;
 
         match &res {
             Ok(bytes) => tracing::info!("download_file response: Ok(bytes_len={})", bytes.len()),

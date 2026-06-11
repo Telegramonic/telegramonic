@@ -1,8 +1,11 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { Box, HStack, VStack, Text, Button } from '@chakra-ui/react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { appStore, selectApiCredentials, useShallow } from '@appStore';
 import { motion, AnimatePresence } from 'framer-motion';
+import Icon from '@assets/Icon';
+import { IconType } from '@assets/types';
 import {
   apiClient,
   FolderMetadata,
@@ -18,12 +21,20 @@ import { TopNavBar } from './components/TopNavBar';
 import { SideNavBar } from './components/SideNavBar';
 import { Breadcrumbs } from './components/Breadcrumbs';
 import { UploadProgressBanner } from './components/UploadProgressBanner';
-import { FilesTable } from './components/FilesTable';
 import { BottomNavBar } from './components/BottomNavBar';
-import { ProfileTab } from './components/ProfileTab';
-import { getTelegramShareLink, formatSize, formatDate, getFileType } from './components/const';
+import {
+  getTelegramShareLink,
+  formatSize,
+  formatDate,
+  getFileType,
+} from './components/const';
+// Boards
+import { FilesTable } from './boards/FilesTable';
+import { ProfileTab } from './boards/ProfileTab';
+import { Pinned } from './boards/Pinned';
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const { clearApiCredentials } = appStore(useShallow(selectApiCredentials));
   const queryClient = useQueryClient();
 
@@ -56,7 +67,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     try {
-      localStorage.setItem('telegramonic_pinned_ids', JSON.stringify(starredIds));
+      localStorage.setItem(
+        'telegramonic_pinned_ids',
+        JSON.stringify(starredIds),
+      );
     } catch (_) {}
   }, [starredIds]);
 
@@ -70,23 +84,46 @@ const Dashboard = () => {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [toastType, setToastType] = useState<ToastType>('success');
 
-  // Uploading state
-  const [uploadingFile, setUploadingFile] = useState<string | null>(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const abortControllerRef = useRef<AbortController | null>(null);
+  // Uploading states for multi-file upload queue
+  interface UploadStatus {
+    id: string;
+    name: string;
+    progress: number;
+    controller: AbortController;
+  }
+  const [activeUploads, setActiveUploads] = useState<UploadStatus[]>([]);
+  const [isDragActive, setIsDragActive] = useState(false);
+
+  const activeUploadsProps = useMemo(() => {
+    return activeUploads.map((upload) => ({
+      id: upload.id,
+      name: upload.name,
+      progress: upload.progress,
+      onCancel: () => {
+        upload.controller.abort();
+      },
+    }));
+  }, [activeUploads]);
 
   // TanStack Query Hooks
   const { data: currentUser } = useCurrentUser();
-  const { data: folders = [], isFetching: isFetchingFolders } = useFolders(currentFolderId !== null ? currentFolderId : undefined);
+  const { data: folders = [], isFetching: isFetchingFolders } = useFolders(
+    currentFolderId !== null ? currentFolderId : undefined,
+  );
   const showAllFiles = activeTab === 'pinned';
   const { data: files = [], isFetching: isFetchingFiles } = useFiles(
     currentFolderId !== null ? currentFolderId : undefined,
     searchQuery || undefined,
-    showAllFiles
+    showAllFiles,
   );
-  const { data: allFolders = [], isFetching: isFetchingAllFolders } = useFolders(undefined);
+  const { data: allFolders = [], isFetching: isFetchingAllFolders } =
+    useFolders(undefined);
 
-  const isSyncing = !!(isFetchingFolders || isFetchingFiles || isFetchingAllFolders);
+  const isSyncing = !!(
+    isFetchingFolders ||
+    isFetchingFiles ||
+    isFetchingAllFolders
+  );
 
   // Toast Helper
   const showToast = (msg: string, type: ToastType = 'success') => {
@@ -123,8 +160,6 @@ const Dashboard = () => {
       : 'Me';
   }, [currentUser]);
 
-
-
   // Unified list mapping files and folders together
   const dashboardItems = useMemo(() => {
     const foldersToUse = activeTab === 'pinned' ? allFolders : folders;
@@ -153,7 +188,7 @@ const Dashboard = () => {
         name: f.name,
         type: getFileType(f.file_ext || ''),
         owner: ownerName,
-        lastModified: formatDate(f.created_at),
+        lastModified: formatDate(f.created_at, t),
         size: formatSize(f.size),
         sizeBytes: f.size,
         starred: starredIds.includes(itemId),
@@ -176,12 +211,12 @@ const Dashboard = () => {
       if (activeTab === 'pinned') {
         return item.starred;
       }
-      
+
       // 'all' tab: At root of "In my drive", list ONLY folders
       if (currentFolderId === null) {
         return item.isFolder;
       }
-      
+
       // Inside a folder, list all files/folders inside it
       return true;
     });
@@ -194,9 +229,9 @@ const Dashboard = () => {
         queryClient.invalidateQueries({ queryKey: ['stats'] }),
       ]);
       setLastSynced(new Date());
-      showToast('Drive synced successfully', 'success');
+      showToast(t('Dashboard.toasts.syncSuccess'), 'success');
     } catch (err: any) {
-      showToast(`Sync failed: ${err.message}`, 'error');
+      showToast(t('Dashboard.toasts.syncFailed', { error: err.message }), 'error');
     }
   };
 
@@ -210,7 +245,7 @@ const Dashboard = () => {
       await apiClient.logOut();
     } catch (_) {}
     clearApiCredentials();
-    showToast('Logged out successfully', 'info');
+    showToast(t('Dashboard.toasts.logoutSuccess'), 'info');
   };
 
   const handleShareFile = (item: DashboardItem, e: React.MouseEvent) => {
@@ -219,44 +254,51 @@ const Dashboard = () => {
     navigator.clipboard
       .writeText(link)
       .then(() => {
-        showToast(`Telegram message link copied: ${item.name}`, 'success');
+        showToast(t('Dashboard.toasts.copySuccess', { name: item.name }), 'success');
       })
       .catch(() => {
-        showToast(`Failed to copy link`, 'error');
+        showToast(t('Dashboard.toasts.copyFailed'), 'error');
       });
   };
 
   const handleToggleStar = (item: DashboardItem, e: React.MouseEvent) => {
     e.stopPropagation();
     setStarredIds((prev) =>
-      prev.includes(item.id) ? prev.filter((id) => id !== item.id) : [...prev, item.id]
+      prev.includes(item.id)
+        ? prev.filter((id) => id !== item.id)
+        : [...prev, item.id],
     );
     showToast(
-      item.starred ? `Unpinned: ${item.name}` : `Pinned: ${item.name}`,
-      'success'
+      item.starred
+        ? t('Dashboard.toasts.unpinned', { name: item.name })
+        : t('Dashboard.toasts.pinned', { name: item.name }),
+      'success',
     );
   };
 
   const handleDeleteFile = async (item: DashboardItem, e: React.MouseEvent) => {
     e.stopPropagation();
     try {
-      showToast(`Deleting ${item.name}...`, 'info');
+      showToast(t('Dashboard.toasts.deleting', { name: item.name }), 'info');
       await apiClient.deleteFile(item.dbId);
-      
+
       // Invalidate queries to refresh files list and stats
       queryClient.invalidateQueries({ queryKey: ['files'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
-      
-      showToast(`Deleted successfully: ${item.name}`, 'success');
+
+      showToast(t('Dashboard.toasts.deleteSuccess', { name: item.name }), 'success');
     } catch (err: any) {
-      showToast(`Failed to delete file: ${err.message}`, 'error');
+      showToast(t('Dashboard.toasts.deleteFailed', { error: err.message }), 'error');
     }
   };
 
   // Trigger hidden file picker
   const triggerFileUpload = () => {
     if (currentFolderId === null) {
-      showToast("Cannot upload files directly to the root 'In my drive'. Please enter a folder first.", 'error');
+      showToast(
+        t('Dashboard.toasts.uploadRootError'),
+        'error',
+      );
       return;
     }
     if (fileInputRef.current) {
@@ -264,44 +306,97 @@ const Dashboard = () => {
     }
   };
 
-  // Streaming upload implementation
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  // Streaming upload implementation supporting multiple files
+  const uploadFiles = async (filesToUpload: File[]) => {
+    if (currentFolderId === null) {
+      showToast(
+        t('Dashboard.toasts.uploadRootError'),
+        'error',
+      );
+      return;
+    }
+    if (filesToUpload.length === 0) return;
 
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
+    const newUploads = filesToUpload.map((file) => {
+      const controller = new AbortController();
+      const uploadId = Math.random().toString(36).substring(7);
+      return {
+        id: uploadId,
+        name: file.name,
+        progress: 0,
+        controller,
+        file,
+      };
+    });
 
-    setUploadingFile(file.name);
-    setUploadProgress(0);
+    setActiveUploads((prev) => [
+      ...prev,
+      ...newUploads.map(({ id, name, progress, controller }) => ({
+        id,
+        name,
+        progress,
+        controller,
+      })),
+    ]);
 
-    try {
-      await apiClient.uploadStream(file, currentFolderId, (percent) => {
-        setUploadProgress(percent);
-      }, controller.signal);
-      showToast(`Uploaded successfully: ${file.name}`, 'success');
-      
-      // Invalidate queries so TanStack query refetches fresh list and stats
+    const uploadFileTask = async (task: (typeof newUploads)[0]) => {
+      try {
+        await apiClient.uploadStream(
+          task.file,
+          currentFolderId,
+          (percent) => {
+            setActiveUploads((prev) =>
+              prev.map((u) =>
+                u.id === task.id ? { ...u, progress: percent } : u,
+              ),
+            );
+          },
+          task.controller.signal,
+        );
+        showToast(t('Dashboard.toasts.uploadSuccess', { name: task.name }), 'success');
+      } catch (err: any) {
+        if (err.name === 'AbortError' || err.message === 'Upload cancelled') {
+          showToast(t('Dashboard.toasts.uploadCancelled', { name: task.name }), 'info');
+        } else {
+          showToast(t('Dashboard.toasts.uploadFailed', { name: task.name, error: err.message }), 'error');
+        }
+      } finally {
+        setActiveUploads((prev) => prev.filter((u) => u.id !== task.id));
+      }
+    };
+
+    // Run queue with concurrency limit of 2 files
+    const runQueue = async () => {
+      const queue = [...newUploads];
+      const workers = [];
+
+      const worker = async () => {
+        let item = queue.shift();
+        while (item) {
+          await uploadFileTask(item);
+          item = queue.shift();
+        }
+      };
+
+      const concurrency = Math.min(2, queue.length);
+      for (let i = 0; i < concurrency; i++) {
+        workers.push(worker());
+      }
+      await Promise.all(workers);
+
+      // Refresh list and stats once the concurrent uploads are finished
       queryClient.invalidateQueries({ queryKey: ['files'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
-    } catch (err: any) {
-      if (err.name === 'AbortError' || err.message === 'Upload cancelled') {
-        showToast(`Upload cancelled: ${file.name}`, 'info');
-      } else {
-        showToast(`Upload failed: ${err.message}`, 'error');
-      }
-    } finally {
-      setUploadingFile(null);
-      abortControllerRef.current = null;
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
+    };
+
+    runQueue();
   };
 
-  const handleCancelUpload = () => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    await uploadFiles(files);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -313,7 +408,10 @@ const Dashboard = () => {
   // Create real folder on server
   const handleCreateFolder = () => {
     if (currentFolderId !== null) {
-      showToast("Nested folders are not supported. Folders can only be created at the root level.", 'error');
+      showToast(
+        t('Dashboard.toasts.nestedFoldersError'),
+        'error',
+      );
       return;
     }
     setNewFolderName('');
@@ -323,33 +421,38 @@ const Dashboard = () => {
   const submitCreateFolder = async () => {
     if (!newFolderName.trim()) return;
     try {
-      await apiClient.createFolder(newFolderName.trim(), currentFolderId || undefined);
-      showToast(`Created folder: ${newFolderName}`, 'success');
+      await apiClient.createFolder(
+        newFolderName.trim(),
+        currentFolderId || undefined,
+      );
+      showToast(t('Dashboard.toasts.createFolderSuccess', { name: newFolderName }), 'success');
       setIsCreateFolderOpen(false);
       setNewFolderName('');
-      
+
       // Invalidate queries to fetch new list and stats
       queryClient.invalidateQueries({ queryKey: ['folders'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
     } catch (err: any) {
-      showToast(`Failed to create folder: ${err.message}`, 'error');
+      showToast(t('Dashboard.toasts.createFolderFailed', { error: err.message }), 'error');
     }
   };
 
   // Delete folder from server
   const handleDeleteFolder = async (folderId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    const confirmed = window.confirm('Are you sure you want to permanently delete this folder?');
+    const confirmed = window.confirm(
+      t('Dashboard.confirmDeleteFolder'),
+    );
     if (!confirmed) return;
     try {
       await apiClient.deleteFolder(folderId);
-      showToast(`Folder deleted successfully`, 'success');
-      
+      showToast(t('Dashboard.toasts.deleteFolderSuccess'), 'success');
+
       // Invalidate queries to fetch new list and stats
       queryClient.invalidateQueries({ queryKey: ['folders'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
     } catch (err: any) {
-      showToast(`Failed to delete folder: ${err.message}`, 'error');
+      showToast(t('Dashboard.toasts.deleteFolderFailed', { error: err.message }), 'error');
     }
   };
 
@@ -357,16 +460,19 @@ const Dashboard = () => {
   const handleDownloadFile = async (item: DashboardItem) => {
     if (item.isFolder) return;
     try {
-      showToast(`Downloading ${item.name}...`, 'info');
-      
+      showToast(t('Dashboard.toasts.downloading', { name: item.name }), 'info');
+
       if (window.electronAPI && window.electronAPI.downloadFileDirectly) {
         // Use native Electron download stream flow to prevent macOS temp file leaks
         const downloadUrl = `${API_BASE_URL}${TELEGRAM_API_ROUTES.FILES.DOWNLOAD}?file_id=${item.dbId}`;
-        const res = await window.electronAPI.downloadFileDirectly(downloadUrl, item.name);
+        const res = await window.electronAPI.downloadFileDirectly(
+          downloadUrl,
+          item.name,
+        );
         if (res.success) {
-          showToast(`Downloaded successfully: ${item.name}`, 'success');
+          showToast(t('Dashboard.toasts.downloadSuccess', { name: item.name }), 'success');
         } else if (res.error !== 'Canceled') {
-          showToast(`Download failed: ${res.error}`, 'error');
+          showToast(t('Dashboard.toasts.downloadFailed', { error: res.error }), 'error');
         }
       } else {
         // Fallback for browser web flow
@@ -378,16 +484,16 @@ const Dashboard = () => {
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        
+
         // Delay revocation to ensure Chromium/Electron has completed the file save operation
         setTimeout(() => {
           window.URL.revokeObjectURL(url);
         }, 1000);
-        
-        showToast(`Downloaded successfully: ${item.name}`, 'success');
+
+        showToast(t('Dashboard.toasts.downloadSuccess', { name: item.name }), 'success');
       }
     } catch (err: any) {
-      showToast(`Download failed: ${err.message}`, 'error');
+      showToast(t('Dashboard.toasts.downloadFailed', { error: err.message }), 'error');
     }
   };
 
@@ -408,10 +514,32 @@ const Dashboard = () => {
       flexDirection="column"
       position="relative"
       overflow={{ base: 'visible', md: 'hidden' }}
+      onDragOver={(e) => {
+        e.preventDefault();
+        setIsDragActive(true);
+      }}
+      onDragLeave={(e) => {
+        e.preventDefault();
+        setIsDragActive(false);
+      }}
+      onDrop={(e) => {
+        e.preventDefault();
+        setIsDragActive(false);
+        if (currentFolderId !== null) {
+          const files = Array.from(e.dataTransfer.files);
+          uploadFiles(files);
+        } else {
+          showToast(
+            t('Dashboard.toasts.uploadRootError'),
+            'error',
+          );
+        }
+      }}
     >
       {/* Hidden file input */}
       <input
         type="file"
+        multiple
         ref={fileInputRef}
         onChange={handleFileUpload}
         style={{ display: 'none' }}
@@ -448,6 +576,21 @@ const Dashboard = () => {
           <VStack gap={8} align="stretch" maxW="1100px" mx="auto">
             {activeTab === 'profile' ? (
               <ProfileTab onLogout={handleLogout} />
+            ) : activeTab === 'pinned' ? (
+              <Pinned
+                filteredItems={filteredItems}
+                onItemClick={handleItemClick}
+                onToggleStar={handleToggleStar}
+                onShare={handleShareFile}
+                onDownload={handleDownloadFile}
+                onDeleteFolder={handleDeleteFolder}
+                onDeleteFile={handleDeleteFile}
+                onSync={handleSync}
+                lastSynced={lastSynced}
+                isSyncing={isSyncing}
+                onDropFiles={uploadFiles}
+                onUploadClick={triggerFileUpload}
+              />
             ) : (
               <>
                 {/* Breadcrumbs Navigation */}
@@ -458,23 +601,82 @@ const Dashboard = () => {
                     setCurrentFolderId={setCurrentFolderId}
                   />
                   <Text fontSize="2xs" color="fg.muted">
-                    Last synced:{' '}
-                    {lastSynced
-                      ? lastSynced.toLocaleTimeString([], {
-                          hour: 'numeric',
-                          minute: '2-digit',
-                          second: '2-digit',
-                        })
-                      : 'Never'}
+                    {t('Dashboard.lastSynced', {
+                      time: lastSynced
+                        ? lastSynced.toLocaleTimeString([], {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            second: '2-digit',
+                          })
+                        : t('Dashboard.never'),
+                    })}
                   </Text>
                 </VStack>
 
                 {/* Upload progress banner */}
-                <UploadProgressBanner
-                  uploadingFile={uploadingFile}
-                  uploadProgress={uploadProgress}
-                  onCancelUpload={handleCancelUpload}
-                />
+                <UploadProgressBanner activeUploads={activeUploadsProps} />
+
+                {/* Drag and Drop Zone Card — only shown inside folders */}
+                {currentFolderId !== null && (
+                  <Box
+                    onDragOver={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setIsDragActive(true);
+                    }}
+                    onDragLeave={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setIsDragActive(false);
+                    }}
+                    onDrop={(e) => {
+                      e.stopPropagation();
+                      e.preventDefault();
+                      setIsDragActive(false);
+                      const files = Array.from(e.dataTransfer.files);
+                      uploadFiles(files);
+                    }}
+                    onClick={triggerFileUpload}
+                    p={6}
+                    bg={
+                      isDragActive
+                        ? { base: 'primary/10', _dark: 'primary/15' }
+                        : { base: 'white', _dark: '#131c26' }
+                    }
+                    borderWidth="1px"
+                    borderColor={isDragActive ? 'primary' : 'border'}
+                    borderStyle="dashed"
+                    borderRadius="2xl"
+                    cursor="pointer"
+                    _hover={{
+                      borderColor: 'primary',
+                      bg: { base: 'primary/5', _dark: 'primary/10' },
+                    }}
+                    transition="all 0.2s"
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    gap={2}
+                  >
+                    <Box
+                      color={isDragActive ? 'primary' : 'fg.muted'}
+                      transition="color 0.2s"
+                    >
+                      <Icon type={IconType.UPLOAD} size={28} />
+                    </Box>
+                    <VStack gap={0.5} align="center">
+                      <Text fontSize="sm" fontWeight="bold" color="fg">
+                        {isDragActive
+                          ? t('Dashboard.dragDrop.active')
+                          : t('Dashboard.dragDrop.inactive')}
+                      </Text>
+                      <Text fontSize="2xs" color="fg.muted">
+                        {t('Dashboard.dragDrop.subtitle')}
+                      </Text>
+                    </VStack>
+                  </Box>
+                )}
 
                 {/* Detailed Files Table */}
                 <FilesTable
@@ -490,6 +692,8 @@ const Dashboard = () => {
                   lastSynced={lastSynced}
                   isSyncing={isSyncing}
                   isInsideFolder={currentFolderId !== null}
+                  onDropFiles={uploadFiles}
+                  onUploadClick={triggerFileUpload}
                   onBack={() => {
                     // Navigate to parent: find parent of currentFolder from breadcrumbs
                     const parent = breadcrumbs[breadcrumbs.length - 2];
@@ -508,7 +712,6 @@ const Dashboard = () => {
         setActiveTab={setActiveTab}
         setCurrentFolderId={setCurrentFolderId}
       />
-
 
       {/* Create Folder Dialog */}
       <AnimatePresence>
@@ -545,7 +748,7 @@ const Dashboard = () => {
               >
                 <HStack justify="space-between">
                   <Text fontWeight="extrabold" fontSize="md" color="fg">
-                    Create New Folder
+                    {t('Dashboard.createFolder.title')}
                   </Text>
                   <Box
                     as="button"
@@ -561,13 +764,13 @@ const Dashboard = () => {
 
                 <VStack align="stretch" gap={1.5}>
                   <Text fontSize="xs" fontWeight="bold" color="fg.muted">
-                    Folder Name
+                    {t('Dashboard.createFolder.label')}
                   </Text>
                   <input
                     type="text"
                     value={newFolderName}
                     onChange={(e) => setNewFolderName(e.target.value)}
-                    placeholder="Enter folder name..."
+                    placeholder={t('Dashboard.createFolder.placeholder')}
                     autoFocus
                     style={{
                       width: '100%',
@@ -600,7 +803,7 @@ const Dashboard = () => {
                     fontWeight="bold"
                     _hover={{ bg: 'bg.hover' }}
                   >
-                    Cancel
+                    {t('Dashboard.cancel')}
                   </Button>
                   <Button
                     onClick={submitCreateFolder}
@@ -612,7 +815,7 @@ const Dashboard = () => {
                     fontWeight="bold"
                     _hover={{ filter: 'brightness(1.1)' }}
                   >
-                    Create Folder
+                    {t('Dashboard.createFolder.submit')}
                   </Button>
                 </HStack>
               </VStack>
@@ -656,7 +859,7 @@ const Dashboard = () => {
               >
                 <HStack justify="space-between">
                   <Text fontWeight="extrabold" fontSize="md" color="fg">
-                    Confirm Logout
+                    {t('Dashboard.logout.title')}
                   </Text>
                   <Box
                     as="button"
@@ -672,7 +875,7 @@ const Dashboard = () => {
                 </HStack>
 
                 <Text fontSize="sm" color="fg.muted">
-                  Are you sure you want to log out of Telegramonic? You will need to log back in to access your files.
+                  {t('Dashboard.logout.message')}
                 </Text>
 
                 <HStack justify="flex-end" gap={3}>
@@ -687,7 +890,7 @@ const Dashboard = () => {
                     fontWeight="bold"
                     _hover={{ bg: 'bg.hover' }}
                   >
-                    Cancel
+                    {t('Dashboard.cancel')}
                   </Button>
                   <Button
                     onClick={confirmLogout}
@@ -699,7 +902,7 @@ const Dashboard = () => {
                     fontSize="xs"
                     fontWeight="bold"
                   >
-                    Logout
+                    {t('Dashboard.logout.submit')}
                   </Button>
                 </HStack>
               </VStack>
@@ -744,13 +947,17 @@ const Dashboard = () => {
                 borderRadius="full"
                 bg={
                   toastType === 'success'
-                     ? 'success.400'
+                    ? 'success.400'
                     : toastType === 'error'
                       ? 'error.400'
                       : 'primary'
                 }
               />
-              <Text fontSize={{ base: 'xs', md: 'sm' }} fontWeight="bold" color="fg">
+              <Text
+                fontSize={{ base: 'xs', md: 'sm' }}
+                fontWeight="bold"
+                color="fg"
+              >
                 {toastMessage}
               </Text>
             </HStack>
