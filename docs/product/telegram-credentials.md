@@ -5,15 +5,18 @@ To connect Telegramonic to your custom Telegram API instance, you need to obtain
 ## Steps to Obtain Telegram API Credentials
 
 1. **Log in to Telegram Core Applications Portal**:
+
    - Go to [my.telegram.org](https://my.telegram.org/).
    - Enter your phone number in international format (e.g., `+1234567890`) associated with your Telegram account.
    - Click **Next**.
    - You will receive a confirmation code via the official Telegram application. Paste this code into the **Confirmation code** box on the webpage and click **Sign In**.
 
 2. **Access API Development Tools**:
+
    - Once logged in, select the **API development tools** option.
 
 3. **Register Your Application**:
+
    - If this is your first time, a **Create new application** form will be displayed.
    - Fill in the required fields:
      - **App title**: Enter a name for your application (e.g., `Telegramonic App`).
@@ -32,6 +35,7 @@ To connect Telegramonic to your custom Telegram API instance, you need to obtain
 ## Using the Credentials in Telegramonic
 
 During the login process of Telegramonic:
+
 1. Paste your **API ID** and **API Hash** into the corresponding credential fields.
 2. Complete authentication via your Telegram account's OTP / Two-Factor Authentication (2FA) if enabled.
 

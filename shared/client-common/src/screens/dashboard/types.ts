@@ -6,7 +6,16 @@ export interface DashboardItem {
   id: string; // "file-101" or "folder-1"
   dbId: string;
   name: string;
-  type: 'folder' | 'presentation' | 'code' | 'zip' | 'document' | 'video' | 'csv' | 'audio' | 'file';
+  type:
+    | 'folder'
+    | 'presentation'
+    | 'code'
+    | 'zip'
+    | 'document'
+    | 'video'
+    | 'csv'
+    | 'audio'
+    | 'file';
   owner: string;
   ownerAvatar?: string;
   lastModified: string;

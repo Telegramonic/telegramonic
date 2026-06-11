@@ -6,8 +6,6 @@ import { FolderMetadata } from '@services';
  */
 
 export interface TopNavBarProps {
-  searchQuery: string;
-  setSearchQuery: (q: string) => void;
   onUploadClick: () => void;
   onCreateFolderClick: () => void;
   currentFolderId: string | null;

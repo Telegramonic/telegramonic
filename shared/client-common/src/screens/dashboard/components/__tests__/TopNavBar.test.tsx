@@ -16,8 +16,6 @@ jest.mock('@services/apiClient', () => ({
 }));
 
 const defaultProps = {
-  searchQuery: '',
-  setSearchQuery: jest.fn(),
   onUploadClick: jest.fn(),
   onCreateFolderClick: jest.fn(),
   currentFolderId: null as string | null,
@@ -29,31 +27,6 @@ describe('TopNavBar', () => {
   it('renders the Telegramonic brand name', () => {
     renderWithProvidersAndRouter(<TopNavBar {...defaultProps} />);
     expect(screen.getByText('Telegramonic')).toBeInTheDocument();
-  });
-
-  it('renders the search input with placeholder', () => {
-    renderWithProvidersAndRouter(<TopNavBar {...defaultProps} />);
-    expect(
-      screen.getByPlaceholderText('Search...'),
-    ).toBeInTheDocument();
-  });
-
-  it('calls setSearchQuery when user types in the search input', () => {
-    const setSearchQuery = jest.fn();
-    renderWithProvidersAndRouter(
-      <TopNavBar {...defaultProps} setSearchQuery={setSearchQuery} />,
-    );
-    const input = screen.getByPlaceholderText('Search...');
-    fireEvent.change(input, { target: { value: 'my-file' } });
-    expect(setSearchQuery).toHaveBeenCalledWith('my-file');
-  });
-
-  it('reflects the current search query as the input value', () => {
-    renderWithProvidersAndRouter(
-      <TopNavBar {...defaultProps} searchQuery="hello" />,
-    );
-    const input = screen.getByPlaceholderText('Search...');
-    expect(input).toHaveValue('hello');
   });
 
   it('renders the Upload and New Folder buttons', () => {
@@ -107,5 +80,4 @@ describe('TopNavBar', () => {
     fireEvent.click(screen.getByText('+ New Folder'));
     expect(onCreateFolderClick).toHaveBeenCalledTimes(1);
   });
-
 });

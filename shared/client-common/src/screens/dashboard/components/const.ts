@@ -24,7 +24,8 @@ export const getFileType = (ext: string): Exclude<FileType, 'folder'> => {
   if (['png', 'jpg', 'jpeg', 'gif', 'svg'].includes(e)) return 'presentation';
   if (['mp4', 'mkv', 'avi', 'mov'].includes(e)) return 'video';
   if (['zip', 'tar', 'gz', 'rar'].includes(e)) return 'zip';
-  if (['js', 'ts', 'tsx', 'rs', 'py', 'json', 'css', 'html'].includes(e)) return 'code';
+  if (['js', 'ts', 'tsx', 'rs', 'py', 'json', 'css', 'html'].includes(e))
+    return 'code';
   if (['csv', 'xlsx', 'xls'].includes(e)) return 'csv';
   if (['mp3', 'wav', 'ogg', 'm4a', 'flac'].includes(e)) return 'audio';
   return 'file';
@@ -87,15 +88,24 @@ export const formatSize = (bytes: number): string => {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
 };
 
-export const formatDate = (isoString: string, t?: (key: string, options?: any) => string): string => {
+export const formatDate = (
+  isoString: string,
+  t?: (key: string, options?: any) => string,
+): string => {
   try {
     const date = new Date(isoString);
     const diffMs = Date.now() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
     if (diffMins < 1) return t ? t('Dashboard.date.justNow') : 'Just now';
-    if (diffMins < 60) return t ? t('Dashboard.date.minsAgo', { count: diffMins }) : `${diffMins}m ago`;
+    if (diffMins < 60)
+      return t
+        ? t('Dashboard.date.minsAgo', { count: diffMins })
+        : `${diffMins}m ago`;
     const diffHours = Math.floor(diffMins / 60);
-    if (diffHours < 24) return t ? t('Dashboard.date.hoursAgo', { count: diffHours }) : `${diffHours}h ago`;
+    if (diffHours < 24)
+      return t
+        ? t('Dashboard.date.hoursAgo', { count: diffHours })
+        : `${diffHours}h ago`;
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',

@@ -183,29 +183,35 @@ impl RealTelegramService {
 impl TelegramService for RealTelegramService {
     async fn get_auth_state(&self) -> AuthState {
         tracing::debug!("get_auth_state request");
+        let has_credentials = self.api_id.lock().await.is_some() && self.api_hash.lock().await.is_some();
+        let session_exists = std::path::Path::new(&self.session_file).exists();
+
         let res = match self.get_client().await {
             Ok(client) => match client.is_authorized().await {
                 Ok(true) => AuthState::LoggedIn,
-                _ => {
-                    // Session file exists on disk — try to reconnect using it
-                    if std::path::Path::new(&self.session_file).exists() {
-                        tracing::info!("Session file found, attempting session reconnect...");
-                        match client.get_me().await {
-                            Ok(_) => {
-                                tracing::info!("Session reconnect succeeded");
-                                AuthState::LoggedIn
-                            }
-                            Err(e) => {
-                                tracing::warn!("Session reconnect failed: {}, session is stale", e);
-                                AuthState::LoggedOut
-                            }
-                        }
+                Ok(false) => {
+                    // Telegram explicitly confirmed that we are unauthorized
+                    AuthState::LoggedOut
+                }
+                Err(e) => {
+                    // is_authorized failed (likely a network or connection error)
+                    if session_exists && has_credentials {
+                        tracing::warn!("is_authorized check failed due to error: {}. Assuming LoggedIn since session exists.", e);
+                        AuthState::LoggedIn
                     } else {
                         AuthState::LoggedOut
                     }
                 }
             },
-            Err(_) => AuthState::LoggedOut,
+            Err(e) => {
+                // get_client failed (could be missing credentials or a network connection error)
+                if session_exists && has_credentials {
+                    tracing::warn!("get_client failed due to error: {}. Assuming LoggedIn since session exists.", e);
+                    AuthState::LoggedIn
+                } else {
+                    AuthState::LoggedOut
+                }
+            }
         };
         tracing::debug!("get_auth_state response: {:?}", res);
         res

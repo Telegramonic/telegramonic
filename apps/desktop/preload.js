@@ -8,7 +8,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     try {
       const start = Date.now();
       // Check connection to Telegram API endpoint or standard public check
-      await fetch('http://127.0.0.1:50065', { mode: 'no-cors', cache: 'no-store' });
+      await fetch('http://127.0.0.1:50065', {
+        mode: 'no-cors',
+        cache: 'no-store',
+      });
       return { status: 'connected', latency: Date.now() - start };
     } catch (e) {
       return { status: 'disconnected', latency: null };

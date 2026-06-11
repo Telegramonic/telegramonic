@@ -18,14 +18,18 @@ graph TD
 ```
 
 ### 1. File Chunk Size
-Files are divided into standard chunks of **512 KB** each (the maximum chunk size supported by Telegram). 
+
+Files are divided into standard chunks of **512 KB** each (the maximum chunk size supported by Telegram).
 
 ### 2. Standard Uploads vs. Big Uploads
+
 The backend handles uploads differently depending on file dimensions:
-*   **Files <= 10 MB**: Standard upload flow using `SaveFilePart`. Each chunk is uploaded along with an MD5 checksum to verify network package integrity.
-*   **Files > 10 MB**: Large file upload flow using `SaveBigFilePart`. This bypasses MD5 checks to increase transmission speeds. Files up to **2 GB** (or **4 GB** for Telegram Premium accounts) are fully supported.
+
+- **Files <= 10 MB**: Standard upload flow using `SaveFilePart`. Each chunk is uploaded along with an MD5 checksum to verify network package integrity.
+- **Files > 10 MB**: Large file upload flow using `SaveBigFilePart`. This bypasses MD5 checks to increase transmission speeds. Files up to **2 GB** (or **4 GB** for Telegram Premium accounts) are fully supported.
 
 ### 3. Upload Progress Streams (SSE)
+
 While a file is transferring, the server exposes real-time status updates via Server-Sent Events (SSE) at the `/files/upload-progress/stream?file_id=<id>` endpoint. This allows the client UI to render an accurate progress percentage bar.
 
 ---

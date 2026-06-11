@@ -38,7 +38,8 @@ module.exports = {
     '^@data$': '<rootDir>/../../docs',
     '^@data/(.*)$': '<rootDir>/../../docs/$1',
     '^@providers$': '<rootDir>/../../shared/client-common/src/providers',
-    '^@providers/(.*)$': '<rootDir>/../../shared/client-common/src/providers/$1',
+    '^@providers/(.*)$':
+      '<rootDir>/../../shared/client-common/src/providers/$1',
     '^@localization$': '<rootDir>/../../shared/common/src/localization',
     '^@localization/(.*)$': '<rootDir>/../../shared/common/src/localization/$1',
     '^@routes$': '<rootDir>/../../shared/client-common/src/routes',

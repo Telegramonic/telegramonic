@@ -9,8 +9,11 @@ const TitleBar = () => {
   const [isOnline, setIsOnline] = useState<boolean>(() => navigator.onLine);
   const [checkingInternet, setCheckingInternet] = useState<boolean>(false);
 
-  const checkInternet = async () => {
-    setCheckingInternet(true);
+  const checkInternet = async (options?: { silent?: boolean }) => {
+    const silent = options?.silent ?? false;
+    if (!silent) {
+      setCheckingInternet(true);
+    }
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3000);
     try {
@@ -21,17 +24,36 @@ const TitleBar = () => {
       });
       setIsOnline(true);
     } catch (_) {
-      setIsOnline(navigator.onLine);
+      // Fallback: try Apple's captive portal check which is extremely reliable globally
+      const fallbackController = new AbortController();
+      const fallbackTimeout = setTimeout(
+        () => fallbackController.abort(),
+        3000,
+      );
+      try {
+        await fetch('http://captive.apple.com/hotspot-detect.html', {
+          mode: 'no-cors',
+          cache: 'no-store',
+          signal: fallbackController.signal,
+        });
+        setIsOnline(true);
+      } catch (err) {
+        setIsOnline(false);
+      } finally {
+        clearTimeout(fallbackTimeout);
+      }
     } finally {
       clearTimeout(timeoutId);
-      setCheckingInternet(false);
+      if (!silent) {
+        setCheckingInternet(false);
+      }
     }
   };
 
   useEffect(() => {
     const handleOnline = () => {
       setIsOnline(true);
-      checkInternet();
+      checkInternet({ silent: true });
     };
     const handleOffline = () => setIsOnline(false);
 
@@ -39,11 +61,17 @@ const TitleBar = () => {
     window.addEventListener('offline', handleOffline);
 
     // Initial check
-    checkInternet();
+    checkInternet({ silent: false });
+
+    // Periodic fallback check (especially for mobile webviews where online/offline events are unreliable)
+    const intervalId = setInterval(() => {
+      checkInternet({ silent: true });
+    }, 10000);
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      clearInterval(intervalId);
     };
   }, []);
 
@@ -84,7 +112,10 @@ const TitleBar = () => {
             window.electronAPI?.setDockIcon?.(dataUrl);
           } catch (err) {
             // eslint-disable-next-line no-console
-            console.error('Failed to generate padded macOS dock icon URL:', err);
+            console.error(
+              'Failed to generate padded macOS dock icon URL:',
+              err,
+            );
           }
         }
       };
@@ -96,7 +127,11 @@ const TitleBar = () => {
   }, []);
 
   const isMac = platform === 'darwin';
-  const isMobile = typeof navigator !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  const isMobile =
+    typeof navigator !== 'undefined' &&
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent,
+    );
 
   const handleMinimize = () => {
     window.electronAPI?.minimize();
@@ -108,8 +143,12 @@ const TitleBar = () => {
 
   return (
     <HStack
-      h={isMobile ? "calc(40px + max(24px, env(safe-area-inset-top, 24px)))" : "38px"}
-      pt={isMobile ? "max(24px, env(safe-area-inset-top, 24px))" : "0px"}
+      h={
+        isMobile
+          ? 'calc(40px + max(24px, env(safe-area-inset-top, 24px)))'
+          : '38px'
+      }
+      pt={isMobile ? 'max(24px, env(safe-area-inset-top, 24px))' : '0px'}
       bg="bg.panel/85"
       backdropFilter="blur(12px)"
       borderBottom="1px solid"
@@ -127,7 +166,12 @@ const TitleBar = () => {
           <Box w={4} h={4}>
             <Logo size="100%" />
           </Box>
-          <Text fontSize="xs" fontWeight="bold" color="fg" letterSpacing="wider">
+          <Text
+            fontSize="xs"
+            fontWeight="bold"
+            color="fg"
+            letterSpacing="wider"
+          >
             Telegramonic
           </Text>
         </HStack>
@@ -137,7 +181,11 @@ const TitleBar = () => {
       <Box flex={1} h="100%" style={{ WebkitAppRegion: 'drag' } as any} />
 
       {/* Right side: Connection Indicators + Window Controls */}
-      <HStack gap={3} style={{ WebkitAppRegion: 'no-drag' } as any} alignItems="center">
+      <HStack
+        gap={3}
+        style={{ WebkitAppRegion: 'no-drag' } as any}
+        alignItems="center"
+      >
         {/* Unified Connection Status Column */}
         <VStack
           align="stretch"
@@ -154,7 +202,7 @@ const TitleBar = () => {
           <HStack
             gap={1.5}
             cursor="pointer"
-            onClick={checkInternet}
+            onClick={() => checkInternet({ silent: false })}
             title="Click to recheck Internet Connection"
             alignItems="center"
           >
@@ -179,9 +227,15 @@ const TitleBar = () => {
               }
             />
             {checkingInternet ? (
-              <Spinner size="2xs" color="primary" />
+              <Spinner size="xs" color="primary" />
             ) : (
-              <Text fontSize="9px" fontWeight="bold" color="fg.muted" whiteSpace="nowrap" lineHeight="1">
+              <Text
+                fontSize="9px"
+                fontWeight="bold"
+                color="fg.muted"
+                whiteSpace="nowrap"
+                lineHeight="1"
+              >
                 {isOnline ? 'Internet: Online' : 'Internet: Offline'}
               </Text>
             )}
@@ -206,7 +260,11 @@ const TitleBar = () => {
                     ? 'success.400'
                     : 'error.400'
               }
-              className={status === 'checking' || status === 'connected' ? 'pulse-anim' : ''}
+              className={
+                status === 'checking' || status === 'connected'
+                  ? 'pulse-anim'
+                  : ''
+              }
               style={
                 status === 'connected'
                   ? { boxShadow: '0 0 6px var(--chakra-colors-success-400)' }
@@ -216,9 +274,15 @@ const TitleBar = () => {
               }
             />
             {status === 'checking' ? (
-              <Spinner size="2xs" color="primary" />
+              <Spinner size="xs" color="primary" />
             ) : (
-              <Text fontSize="9px" fontWeight="bold" color="fg.muted" whiteSpace="nowrap" lineHeight="1">
+              <Text
+                fontSize="9px"
+                fontWeight="bold"
+                color="fg.muted"
+                whiteSpace="nowrap"
+                lineHeight="1"
+              >
                 {status === 'connected' && latency !== null
                   ? `TG Connected: ${latency}ms`
                   : status === 'error'

@@ -37,7 +37,9 @@ describe('Pinned Board Screen', () => {
   it('renders Pinned heading and empty state message when no items', () => {
     renderWithRouter(<Pinned {...defaultProps} filteredItems={[]} />);
     expect(screen.getByText('Pinned')).toBeInTheDocument();
-    expect(screen.getByText('No files or folders found here.')).toBeInTheDocument();
+    expect(
+      screen.getByText('No files or folders found here.'),
+    ).toBeInTheDocument();
   });
 
   it('renders pinned item names correctly', () => {

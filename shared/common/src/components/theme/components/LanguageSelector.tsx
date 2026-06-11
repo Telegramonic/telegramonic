@@ -15,7 +15,9 @@ const LANGUAGES = [
   { code: 'ja', label: '日本語 (Japanese)', flag: '🇯🇵' },
 ];
 
-export const LanguageSelector = ({ variant = 'pill' }: LanguageSelectorProps) => {
+export const LanguageSelector = ({
+  variant = 'pill',
+}: LanguageSelectorProps) => {
   const { i18n } = useTranslation();
 
   const currentLang = i18n.language || 'en';
@@ -24,7 +26,8 @@ export const LanguageSelector = ({ variant = 'pill' }: LanguageSelectorProps) =>
     i18n.changeLanguage(e.target.value);
   };
 
-  const currentLanguageOption = LANGUAGES.find((l) => l.code === currentLang) || LANGUAGES[0];
+  const currentLanguageOption =
+    LANGUAGES.find((l) => l.code === currentLang) || LANGUAGES[0];
 
   if (variant === 'form') {
     return (
@@ -94,7 +97,11 @@ export const LanguageSelector = ({ variant = 'pill' }: LanguageSelectorProps) =>
             height="10"
             aria-hidden="true"
           >
-            <path d="M1 1l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M1 1l4 4 4-4"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </Box>
       </Box>

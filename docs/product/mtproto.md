@@ -15,9 +15,9 @@ graph TD
     KeyExchange --> Sign["Integrity Check<br/>(SHA-256 Message Signature)"]
 ```
 
-*   **Symmetric Encryption**: All communication payloads (including file chunks) are encrypted via **AES-256** in **IGE (Infinite Garble Extension)** mode. IGE links cipher block vectors in both directions, making it more resilient to tampering than standard CBC mode.
-*   **Key Exchange**: Auth keys are negotiated using a secure **Diffie-Hellman (DH)** exchange, ensuring no party can reconstruct the key by eavesdropping on the network.
-*   **Message Verification**: Employs **SHA-256** checksums computed on the payload to protect against man-in-the-middle injection and payload manipulation.
+- **Symmetric Encryption**: All communication payloads (including file chunks) are encrypted via **AES-256** in **IGE (Infinite Garble Extension)** mode. IGE links cipher block vectors in both directions, making it more resilient to tampering than standard CBC mode.
+- **Key Exchange**: Auth keys are negotiated using a secure **Diffie-Hellman (DH)** exchange, ensuring no party can reconstruct the key by eavesdropping on the network.
+- **Message Verification**: Employs **SHA-256** checksums computed on the payload to protect against man-in-the-middle injection and payload manipulation.
 
 ---
 
@@ -40,12 +40,12 @@ sequenceDiagram
     Srv-->>UI: Return Success Response
 ```
 
-*   📁 `telegram.session`: Generated automatically upon successful authentication. It stores the binary MTProto session information (authorization key, IP address/port of connection data center, and session sequence indicators) parsed by the `grammers-session` crate.
-*   📁 `telegram.credentials`: Stores the user's `api_id` and `api_hash` values in plain text (separated by a newline). This allows the Rust server to automatically rebuild the Grammers client on restart.
+- 📁 `telegram.session`: Generated automatically upon successful authentication. It stores the binary MTProto session information (authorization key, IP address/port of connection data center, and session sequence indicators) parsed by the `grammers-session` crate.
+- 📁 `telegram.credentials`: Stores the user's `api_id` and `api_hash` values in plain text (separated by a newline). This allows the Rust server to automatically rebuild the Grammers client on restart.
 
 > [!IMPORTANT]
-> Both `telegram.session` and `telegram.credentials` are saved in the `apps/server/` root directory and are explicitly configured in `.gitignore`. They are never transmitted, backed up, or shared. 
-> 
+> Both `telegram.session` and `telegram.credentials` are saved in the `apps/server/` root directory and are explicitly configured in `.gitignore`. They are never transmitted, backed up, or shared.
+>
 > Running `POST /auth/log-out` or `POST /auth/reset-authorization` deletes these files and cleans up the memory instantly.
 
 ---

@@ -27,7 +27,14 @@ const App = () => {
           <HelmetProvider>
             <ThemeProvider>
               <ModalProvider>
-                <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '100vh',
+                    overflow: 'hidden',
+                  }}
+                >
                   <TitleBar />
                   <div style={{ flex: 1, overflow: 'auto' }}>
                     <RouterProvider />

@@ -66,13 +66,17 @@ describe('FilesTable', () => {
 
   it('shows empty state message when filteredItems is empty', () => {
     renderWithRouter(<FilesTable {...defaultProps} filteredItems={[]} />);
-    expect(screen.getByText('No files or folders found here.')).toBeInTheDocument();
+    expect(
+      screen.getByText('No files or folders found here.'),
+    ).toBeInTheDocument();
   });
 
   // ── Items Rendering ────────────────────────────────────────────────────────
 
   it('renders file name and metadata in the table', () => {
-    renderWithRouter(<FilesTable {...defaultProps} filteredItems={[makeFile()]} />);
+    renderWithRouter(
+      <FilesTable {...defaultProps} filteredItems={[makeFile()]} />,
+    );
     expect(screen.getByText('report.pdf')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('2h ago')).toBeInTheDocument();
@@ -80,12 +84,16 @@ describe('FilesTable', () => {
   });
 
   it('renders a folder in the table', () => {
-    renderWithRouter(<FilesTable {...defaultProps} filteredItems={[makeFolder()]} />);
+    renderWithRouter(
+      <FilesTable {...defaultProps} filteredItems={[makeFolder()]} />,
+    );
     expect(screen.getByText('Marketing Assets')).toBeInTheDocument();
   });
 
   it('renders table column headers', () => {
-    renderWithRouter(<FilesTable {...defaultProps} filteredItems={[makeFile()]} />);
+    renderWithRouter(
+      <FilesTable {...defaultProps} filteredItems={[makeFile()]} />,
+    );
     expect(screen.getByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Owner')).toBeInTheDocument();
     expect(screen.getByText('Last Modified')).toBeInTheDocument();
@@ -98,7 +106,11 @@ describe('FilesTable', () => {
     const onItemClick = jest.fn();
     const file = makeFile();
     renderWithRouter(
-      <FilesTable {...defaultProps} filteredItems={[file]} onItemClick={onItemClick} />,
+      <FilesTable
+        {...defaultProps}
+        filteredItems={[file]}
+        onItemClick={onItemClick}
+      />,
     );
     fireEvent.click(screen.getByText('report.pdf'));
     expect(onItemClick).toHaveBeenCalledWith(file);
@@ -108,7 +120,11 @@ describe('FilesTable', () => {
     const onToggleStar = jest.fn();
     const file = makeFile();
     renderWithRouter(
-      <FilesTable {...defaultProps} filteredItems={[file]} onToggleStar={onToggleStar} />,
+      <FilesTable
+        {...defaultProps}
+        filteredItems={[file]}
+        onToggleStar={onToggleStar}
+      />,
     );
     fireEvent.click(screen.getByTitle('Pin'));
     expect(onToggleStar).toHaveBeenCalledWith(file, expect.any(Object));
@@ -128,7 +144,11 @@ describe('FilesTable', () => {
     const onDeleteFile = jest.fn();
     const file = makeFile();
     renderWithRouter(
-      <FilesTable {...defaultProps} filteredItems={[file]} onDeleteFile={onDeleteFile} />,
+      <FilesTable
+        {...defaultProps}
+        filteredItems={[file]}
+        onDeleteFile={onDeleteFile}
+      />,
     );
     fireEvent.click(screen.getByTitle('Delete File'));
     expect(onDeleteFile).toHaveBeenCalledWith(file, expect.any(Object));
@@ -138,7 +158,11 @@ describe('FilesTable', () => {
     const onDownload = jest.fn();
     const file = makeFile();
     renderWithRouter(
-      <FilesTable {...defaultProps} filteredItems={[file]} onDownload={onDownload} />,
+      <FilesTable
+        {...defaultProps}
+        filteredItems={[file]}
+        onDownload={onDownload}
+      />,
     );
     fireEvent.click(screen.getByTitle('Download File'));
     expect(onDownload).toHaveBeenCalledWith(file, expect.any(Object));
@@ -148,7 +172,11 @@ describe('FilesTable', () => {
     const onDeleteFolder = jest.fn();
     const folder = makeFolder();
     renderWithRouter(
-      <FilesTable {...defaultProps} filteredItems={[folder]} onDeleteFolder={onDeleteFolder} />,
+      <FilesTable
+        {...defaultProps}
+        filteredItems={[folder]}
+        onDeleteFolder={onDeleteFolder}
+      />,
     );
     fireEvent.click(screen.getByTitle('Delete Folder'));
     expect(onDeleteFolder).toHaveBeenCalledWith(10, expect.any(Object));
@@ -165,7 +193,10 @@ describe('FilesTable', () => {
 
   it('shows "Unpin" title when item is pinned', () => {
     renderWithRouter(
-      <FilesTable {...defaultProps} filteredItems={[makeFile({ starred: true })]} />,
+      <FilesTable
+        {...defaultProps}
+        filteredItems={[makeFile({ starred: true })]}
+      />,
     );
     expect(screen.getByTitle('Unpin')).toBeInTheDocument();
   });
@@ -187,23 +218,14 @@ describe('FilesTable', () => {
   it('calls onSync when sync button is clicked', () => {
     const onSync = jest.fn();
     renderWithRouter(
-      <FilesTable
-        {...defaultProps}
-        onSync={onSync}
-        isSyncing={false}
-      />,
+      <FilesTable {...defaultProps} onSync={onSync} isSyncing={false} />,
     );
     fireEvent.click(screen.getByTitle('Sync folders'));
     expect(onSync).toHaveBeenCalled();
   });
 
   it('disables sync button when isSyncing is true', () => {
-    renderWithRouter(
-      <FilesTable
-        {...defaultProps}
-        isSyncing={true}
-      />,
-    );
+    renderWithRouter(<FilesTable {...defaultProps} isSyncing={true} />);
     expect(screen.getByTitle('Sync folders')).toBeDisabled();
   });
 });

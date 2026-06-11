@@ -6,8 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { TopNavBarProps } from './types';
 
 export const TopNavBar = ({
-  searchQuery,
-  setSearchQuery,
   onUploadClick,
   onCreateFolderClick,
   currentFolderId,
@@ -53,32 +51,6 @@ export const TopNavBar = ({
             Telegramonic
           </Text>
         </HStack>
-
-        {/* Search bar */}
-        <Box position="relative" maxW="380px" w="100%">
-          <Box position="absolute" left={3} top="50%" transform="translateY(-50%)" color="fg.muted" zIndex={2}>
-            <Icon type={IconType.SEARCH} size={16} />
-          </Box>
-          <Input
-            placeholder={t('Dashboard.topNav.searchPlaceholder')}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            bg={{ base: '#e2e8f0/50', _dark: '#18202a' }}
-            border="none"
-            borderRadius="xl"
-            h="40px"
-            pl={10}
-            pr={4}
-            fontSize="sm"
-            color="fg"
-            _focus={{
-              borderColor: 'primary',
-              ring: '1px',
-              ringColor: 'primary',
-            }}
-            _placeholder={{ color: 'outline' }}
-          />
-        </Box>
       </HStack>
 
       <HStack gap={{ base: 2, md: 4 }} flexShrink={0}>
@@ -99,7 +71,9 @@ export const TopNavBar = ({
           gap={2}
         >
           <Icon type={IconType.CLOUD_UPLOAD} size={16} />
-          <Box display={{ base: 'none', md: 'inline' }}>{t('Dashboard.topNav.uploadFile')}</Box>
+          <Box display={{ base: 'none', md: 'inline' }}>
+            {t('Dashboard.topNav.uploadFile')}
+          </Box>
         </Button>
 
         <Button
@@ -121,7 +95,9 @@ export const TopNavBar = ({
         >
           <Icon type={IconType.FOLDER} size={16} />
           <Box display={{ base: 'inline', md: 'none' }}>+</Box>
-          <Box display={{ base: 'none', md: 'inline' }}>{t('Dashboard.topNav.newFolder')}</Box>
+          <Box display={{ base: 'none', md: 'inline' }}>
+            {t('Dashboard.topNav.newFolder')}
+          </Box>
         </Button>
       </HStack>
     </HStack>

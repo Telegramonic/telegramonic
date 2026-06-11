@@ -139,7 +139,8 @@ The server runs in **Real Mode**, connecting to Telegram's official Data Centers
 ### Standalone Binary vs. Embedded Library
 
 The crate exposes two build targets:
-1. **Standalone Binary** (`[[bin]]` target in `Cargo.toml` compiled from `src/main.rs`): 
+
+1. **Standalone Binary** (`[[bin]]` target in `Cargo.toml` compiled from `src/main.rs`):
    - Bootstraps tracing, CORS, configuration, and runs the Axum server directly on the host machine.
    - Used during development (via `yarn server:start`) and when packaging the desktop client.
 2. **Embedded Library** (`[lib]` target in `Cargo.toml` compiled from `src/lib.rs`):
@@ -227,40 +228,40 @@ All endpoints return JSON. Large 64-bit integer IDs (`i64`) are serialized as **
 
 ### Route Summary
 
-| Method | Path                                                | Auth Required | Description                           |
-| :----- | :-------------------------------------------------- | :-----------: | :------------------------------------ |
-| `GET`  | `/health`                                           |      No       | Server health check                   |
-| `GET`  | `/auth/state`                                       |      No       | Current auth state                    |
-| `POST` | `/auth/send-code`                                   |      No       | Request OTP to phone                  |
-| `POST` | `/auth/sign-in`                                     |      No       | Submit OTP code                       |
-| `POST` | `/auth/sign-up`                                     |      No       | Alias for sign-in                     |
-| `POST` | `/auth/check-password`                              |      No       | Submit 2FA password                   |
-| `POST` | `/auth/log-out`                                     |    **Yes**    | Sign out and clear session            |
-| `POST` | `/auth/update-credentials`                         |    **Yes**    | Update Telegram API credentials       |
-| `POST` | `/auth/reset-authorization`                         |      No       | Force-clear client state              |
-| `GET`  | `/users/me`                                         |    **Yes**    | Get authenticated user profile        |
-| `GET`  | `/users/get-users`                                  |    **Yes**    | Get contacts (returns self)           |
-| `GET`  | `/users/get-full-user?id=<i64>`                     |    **Yes**    | Get full user by ID                   |
-| `POST` | `/account/update-profile`                           |    **Yes**    | Update first/last name                |
-| `POST` | `/account/update-status`                            |    **Yes**    | Set online/offline status             |
-| `POST` | `/account/update-username`                          |    **Yes**    | Change username                       |
-| `GET`  | `/account/get-password`                             |    **Yes**    | Get 2FA password settings             |
-| `GET`  | `/contacts/get-contacts`                            |    **Yes**    | Get contacts (stub, returns `[]`)     |
-| `GET`  | `/contacts/search`                                  |    **Yes**    | Search contacts (stub, returns `[]`)  |
-| `POST` | `/contacts/import-contacts`                         |    **Yes**    | Import contacts (stub)                |
-| `GET`  | `/drive/list`                                       |    **Yes**    | List Telegram channels as drives      |
-| `GET`  | `/drive/stats`                                      |    **Yes**    | Storage statistics                    |
-| `GET`  | `/drive/folders?parent_id=<i64>`                    |    **Yes**    | List folders (channels at root level) |
-| `GET`  | `/drive/files?folder_id=<i64>&q=<str>&all=<bool>`   |    **Yes**    | List files in a drive/folder          |
-| `POST` | `/drive/folders/create`                             |    **Yes**    | Create folder / Telegram channel      |
-| `POST` | `/drive/folders/delete`                             |    **Yes**    | Delete folder / leave channel         |
+| Method | Path                                                                                  | Auth Required | Description                           |
+| :----- | :------------------------------------------------------------------------------------ | :-----------: | :------------------------------------ |
+| `GET`  | `/health`                                                                             |      No       | Server health check                   |
+| `GET`  | `/auth/state`                                                                         |      No       | Current auth state                    |
+| `POST` | `/auth/send-code`                                                                     |      No       | Request OTP to phone                  |
+| `POST` | `/auth/sign-in`                                                                       |      No       | Submit OTP code                       |
+| `POST` | `/auth/sign-up`                                                                       |      No       | Alias for sign-in                     |
+| `POST` | `/auth/check-password`                                                                |      No       | Submit 2FA password                   |
+| `POST` | `/auth/log-out`                                                                       |    **Yes**    | Sign out and clear session            |
+| `POST` | `/auth/update-credentials`                                                            |    **Yes**    | Update Telegram API credentials       |
+| `POST` | `/auth/reset-authorization`                                                           |      No       | Force-clear client state              |
+| `GET`  | `/users/me`                                                                           |    **Yes**    | Get authenticated user profile        |
+| `GET`  | `/users/get-users`                                                                    |    **Yes**    | Get contacts (returns self)           |
+| `GET`  | `/users/get-full-user?id=<i64>`                                                       |    **Yes**    | Get full user by ID                   |
+| `POST` | `/account/update-profile`                                                             |    **Yes**    | Update first/last name                |
+| `POST` | `/account/update-status`                                                              |    **Yes**    | Set online/offline status             |
+| `POST` | `/account/update-username`                                                            |    **Yes**    | Change username                       |
+| `GET`  | `/account/get-password`                                                               |    **Yes**    | Get 2FA password settings             |
+| `GET`  | `/contacts/get-contacts`                                                              |    **Yes**    | Get contacts (stub, returns `[]`)     |
+| `GET`  | `/contacts/search`                                                                    |    **Yes**    | Search contacts (stub, returns `[]`)  |
+| `POST` | `/contacts/import-contacts`                                                           |    **Yes**    | Import contacts (stub)                |
+| `GET`  | `/drive/list`                                                                         |    **Yes**    | List Telegram channels as drives      |
+| `GET`  | `/drive/stats`                                                                        |    **Yes**    | Storage statistics                    |
+| `GET`  | `/drive/folders?parent_id=<i64>`                                                      |    **Yes**    | List folders (channels at root level) |
+| `GET`  | `/drive/files?folder_id=<i64>&q=<str>&all=<bool>`                                     |    **Yes**    | List files in a drive/folder          |
+| `POST` | `/drive/folders/create`                                                               |    **Yes**    | Create folder / Telegram channel      |
+| `POST` | `/drive/folders/delete`                                                               |    **Yes**    | Delete folder / leave channel         |
 | `POST` | `/files/upload-part?file_id=<i64>&part_index=<i32>&file_size=<i64>&total_parts=<i32>` |    **Yes**    | Upload a raw binary chunk             |
-| `POST` | `/files/save-file`                                  |    **Yes**    | Finalize and send file to Telegram    |
-| `GET`  | `/files/download?file_id=<i64>`                     |    **Yes**    | Download file bytes                   |
-| `GET`  | `/files/get-file?file_id=<i64>`                     |    **Yes**    | Alias for download                    |
-| `POST` | `/files/delete`                                     |    **Yes**    | Delete file from Telegram             |
-| `GET`  | `/files/upload-progress?file_id=<i64>`              |    **Yes**    | Poll upload progress (0–100)          |
-| `GET`  | `/files/upload-progress/stream?file_id=<i64>`       |    **Yes**    | SSE stream of upload progress         |
+| `POST` | `/files/save-file`                                                                    |    **Yes**    | Finalize and send file to Telegram    |
+| `GET`  | `/files/download?file_id=<i64>`                                                       |    **Yes**    | Download file bytes                   |
+| `GET`  | `/files/get-file?file_id=<i64>`                                                       |    **Yes**    | Alias for download                    |
+| `POST` | `/files/delete`                                                                       |    **Yes**    | Delete file from Telegram             |
+| `GET`  | `/files/upload-progress?file_id=<i64>`                                                |    **Yes**    | Poll upload progress (0–100)          |
+| `GET`  | `/files/upload-progress/stream?file_id=<i64>`                                         |    **Yes**    | SSE stream of upload progress         |
 
 ---
 
@@ -631,6 +632,8 @@ Upon successful sign-in:
 - `telegram.credentials` (`api_id\napi_hash`) is saved.
 
 The server loads these files at startup to restore the session automatically.
+
+> **Note on Offline Behavior:** If the server is offline or loses connection to Telegram but valid `telegram.credentials` and `telegram.session` files exist on disk, `get_auth_state` will assume `LoggedIn` status instead of forcing a logout. This prevents premature session resets and 401 errors when offline.
 
 ---
 

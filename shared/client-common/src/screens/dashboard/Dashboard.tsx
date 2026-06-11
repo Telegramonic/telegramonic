@@ -43,7 +43,6 @@ const Dashboard = () => {
 
   // Navigation & Filter States
   const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<ActiveTab>('all');
   const [lastSynced, setLastSynced] = useState<Date | null>(() => new Date());
 
@@ -113,7 +112,7 @@ const Dashboard = () => {
   const showAllFiles = activeTab === 'pinned';
   const { data: files = [], isFetching: isFetchingFiles } = useFiles(
     currentFolderId !== null ? currentFolderId : undefined,
-    searchQuery || undefined,
+    undefined,
     showAllFiles,
   );
   const { data: allFolders = [], isFetching: isFetchingAllFolders } =
@@ -163,6 +162,7 @@ const Dashboard = () => {
   // Unified list mapping files and folders together
   const dashboardItems = useMemo(() => {
     const foldersToUse = activeTab === 'pinned' ? allFolders : folders;
+
     const folderItems: DashboardItem[] = foldersToUse.map((f) => {
       const itemId = `folder-${f.id}`;
       return {
@@ -200,7 +200,16 @@ const Dashboard = () => {
     });
 
     return [...folderItems, ...fileItems];
-  }, [activeTab, folders, allFolders, files, starredIds, trashIds, ownerName]);
+  }, [
+    activeTab,
+    folders,
+    allFolders,
+    files,
+    starredIds,
+    trashIds,
+    ownerName,
+    t,
+  ]);
 
   // Filtering based on active tab
   const filteredItems = useMemo(() => {
@@ -231,7 +240,10 @@ const Dashboard = () => {
       setLastSynced(new Date());
       showToast(t('Dashboard.toasts.syncSuccess'), 'success');
     } catch (err: any) {
-      showToast(t('Dashboard.toasts.syncFailed', { error: err.message }), 'error');
+      showToast(
+        t('Dashboard.toasts.syncFailed', { error: err.message }),
+        'error',
+      );
     }
   };
 
@@ -254,7 +266,10 @@ const Dashboard = () => {
     navigator.clipboard
       .writeText(link)
       .then(() => {
-        showToast(t('Dashboard.toasts.copySuccess', { name: item.name }), 'success');
+        showToast(
+          t('Dashboard.toasts.copySuccess', { name: item.name }),
+          'success',
+        );
       })
       .catch(() => {
         showToast(t('Dashboard.toasts.copyFailed'), 'error');
@@ -286,19 +301,22 @@ const Dashboard = () => {
       queryClient.invalidateQueries({ queryKey: ['files'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
 
-      showToast(t('Dashboard.toasts.deleteSuccess', { name: item.name }), 'success');
+      showToast(
+        t('Dashboard.toasts.deleteSuccess', { name: item.name }),
+        'success',
+      );
     } catch (err: any) {
-      showToast(t('Dashboard.toasts.deleteFailed', { error: err.message }), 'error');
+      showToast(
+        t('Dashboard.toasts.deleteFailed', { error: err.message }),
+        'error',
+      );
     }
   };
 
   // Trigger hidden file picker
   const triggerFileUpload = () => {
     if (currentFolderId === null) {
-      showToast(
-        t('Dashboard.toasts.uploadRootError'),
-        'error',
-      );
+      showToast(t('Dashboard.toasts.uploadRootError'), 'error');
       return;
     }
     if (fileInputRef.current) {
@@ -309,10 +327,7 @@ const Dashboard = () => {
   // Streaming upload implementation supporting multiple files
   const uploadFiles = async (filesToUpload: File[]) => {
     if (currentFolderId === null) {
-      showToast(
-        t('Dashboard.toasts.uploadRootError'),
-        'error',
-      );
+      showToast(t('Dashboard.toasts.uploadRootError'), 'error');
       return;
     }
     if (filesToUpload.length === 0) return;
@@ -353,12 +368,24 @@ const Dashboard = () => {
           },
           task.controller.signal,
         );
-        showToast(t('Dashboard.toasts.uploadSuccess', { name: task.name }), 'success');
+        showToast(
+          t('Dashboard.toasts.uploadSuccess', { name: task.name }),
+          'success',
+        );
       } catch (err: any) {
         if (err.name === 'AbortError' || err.message === 'Upload cancelled') {
-          showToast(t('Dashboard.toasts.uploadCancelled', { name: task.name }), 'info');
+          showToast(
+            t('Dashboard.toasts.uploadCancelled', { name: task.name }),
+            'info',
+          );
         } else {
-          showToast(t('Dashboard.toasts.uploadFailed', { name: task.name, error: err.message }), 'error');
+          showToast(
+            t('Dashboard.toasts.uploadFailed', {
+              name: task.name,
+              error: err.message,
+            }),
+            'error',
+          );
         }
       } finally {
         setActiveUploads((prev) => prev.filter((u) => u.id !== task.id));
@@ -408,10 +435,7 @@ const Dashboard = () => {
   // Create real folder on server
   const handleCreateFolder = () => {
     if (currentFolderId !== null) {
-      showToast(
-        t('Dashboard.toasts.nestedFoldersError'),
-        'error',
-      );
+      showToast(t('Dashboard.toasts.nestedFoldersError'), 'error');
       return;
     }
     setNewFolderName('');
@@ -425,7 +449,10 @@ const Dashboard = () => {
         newFolderName.trim(),
         currentFolderId || undefined,
       );
-      showToast(t('Dashboard.toasts.createFolderSuccess', { name: newFolderName }), 'success');
+      showToast(
+        t('Dashboard.toasts.createFolderSuccess', { name: newFolderName }),
+        'success',
+      );
       setIsCreateFolderOpen(false);
       setNewFolderName('');
 
@@ -433,16 +460,17 @@ const Dashboard = () => {
       queryClient.invalidateQueries({ queryKey: ['folders'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
     } catch (err: any) {
-      showToast(t('Dashboard.toasts.createFolderFailed', { error: err.message }), 'error');
+      showToast(
+        t('Dashboard.toasts.createFolderFailed', { error: err.message }),
+        'error',
+      );
     }
   };
 
   // Delete folder from server
   const handleDeleteFolder = async (folderId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    const confirmed = window.confirm(
-      t('Dashboard.confirmDeleteFolder'),
-    );
+    const confirmed = window.confirm(t('Dashboard.confirmDeleteFolder'));
     if (!confirmed) return;
     try {
       await apiClient.deleteFolder(folderId);
@@ -452,7 +480,10 @@ const Dashboard = () => {
       queryClient.invalidateQueries({ queryKey: ['folders'] });
       queryClient.invalidateQueries({ queryKey: ['stats'] });
     } catch (err: any) {
-      showToast(t('Dashboard.toasts.deleteFolderFailed', { error: err.message }), 'error');
+      showToast(
+        t('Dashboard.toasts.deleteFolderFailed', { error: err.message }),
+        'error',
+      );
     }
   };
 
@@ -470,9 +501,15 @@ const Dashboard = () => {
           item.name,
         );
         if (res.success) {
-          showToast(t('Dashboard.toasts.downloadSuccess', { name: item.name }), 'success');
+          showToast(
+            t('Dashboard.toasts.downloadSuccess', { name: item.name }),
+            'success',
+          );
         } else if (res.error !== 'Canceled') {
-          showToast(t('Dashboard.toasts.downloadFailed', { error: res.error }), 'error');
+          showToast(
+            t('Dashboard.toasts.downloadFailed', { error: res.error }),
+            'error',
+          );
         }
       } else {
         // Fallback for browser web flow
@@ -490,10 +527,16 @@ const Dashboard = () => {
           window.URL.revokeObjectURL(url);
         }, 1000);
 
-        showToast(t('Dashboard.toasts.downloadSuccess', { name: item.name }), 'success');
+        showToast(
+          t('Dashboard.toasts.downloadSuccess', { name: item.name }),
+          'success',
+        );
       }
     } catch (err: any) {
-      showToast(t('Dashboard.toasts.downloadFailed', { error: err.message }), 'error');
+      showToast(
+        t('Dashboard.toasts.downloadFailed', { error: err.message }),
+        'error',
+      );
     }
   };
 
@@ -529,10 +572,7 @@ const Dashboard = () => {
           const files = Array.from(e.dataTransfer.files);
           uploadFiles(files);
         } else {
-          showToast(
-            t('Dashboard.toasts.uploadRootError'),
-            'error',
-          );
+          showToast(t('Dashboard.toasts.uploadRootError'), 'error');
         }
       }}
     >
@@ -548,8 +588,6 @@ const Dashboard = () => {
 
       {/* 1. Header/TopNavBar */}
       <TopNavBar
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
         onUploadClick={triggerFileUpload}
         onCreateFolderClick={handleCreateFolder}
         currentFolderId={currentFolderId}

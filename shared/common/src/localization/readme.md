@@ -5,6 +5,7 @@ Localization is built using the `i18next` library. The localization files are lo
 ### Supported Languages
 
 The application currently supports the following locales out of the box:
+
 - **English (`en`)** (Default / Fallback)
 - **Hindi (`hi`)**
 - **Spanish (`es`)**

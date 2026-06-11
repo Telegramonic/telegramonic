@@ -1,5 +1,14 @@
 import React, { useMemo } from 'react';
-import { Box, VStack, HStack, Stack, Text, Button, Center, Input } from '@chakra-ui/react';
+import {
+  Box,
+  VStack,
+  HStack,
+  Stack,
+  Text,
+  Button,
+  Center,
+  Input,
+} from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser, apiClient } from '@services';
 import { appStore } from '@appStore';
@@ -25,14 +34,19 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
   const [showApiHash, setShowApiHash] = React.useState(false);
 
   // Saving states
-  const [saveStatus, setSaveStatus] = React.useState<{ type: 'success' | 'error' | null; message: string | null }>({
+  const [saveStatus, setSaveStatus] = React.useState<{
+    type: 'success' | 'error' | null;
+    message: string | null;
+  }>({
     type: null,
     message: null,
   });
 
   // Credentials Verification local states
   const [isConfirmSaveOpen, setIsConfirmSaveOpen] = React.useState(false);
-  const [verificationStep, setVerificationStep] = React.useState<'idle' | 'code' | 'password' | 'success'>('idle');
+  const [verificationStep, setVerificationStep] = React.useState<
+    'idle' | 'code' | 'password' | 'success'
+  >('idle');
   const [verificationCode, setVerificationCode] = React.useState('');
   const [verificationPassword, setVerificationPassword] = React.useState('');
   const [verificationError, setVerificationError] = React.useState('');
@@ -53,7 +67,10 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
   const isChanged = useMemo(() => {
     const originalApiId = currentAccount?.apiId || '';
     const originalApiHash = currentAccount?.apiHash || '';
-    return apiId.trim() !== originalApiId.trim() || apiHash.trim() !== originalApiHash.trim();
+    return (
+      apiId.trim() !== originalApiId.trim() ||
+      apiHash.trim() !== originalApiHash.trim()
+    );
   }, [apiId, apiHash, currentAccount]);
 
   React.useEffect(() => {
@@ -96,10 +113,14 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
       if (res.success) {
         setPhoneCodeHash(res.next_step || 'mock_hash');
       } else {
-        setVerificationError(res.error || t('Dashboard.profile.errors.failedSendCode'));
+        setVerificationError(
+          res.error || t('Dashboard.profile.errors.failedSendCode'),
+        );
       }
     } catch (err: any) {
-      setVerificationError(err.message || t('Dashboard.profile.errors.serverConnection'));
+      setVerificationError(
+        err.message || t('Dashboard.profile.errors.serverConnection'),
+      );
     } finally {
       setVerificationLoading(false);
     }
@@ -113,7 +134,11 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
     setVerificationError('');
 
     try {
-      const res = await apiClient.signIn(phone, verificationCode, phoneCodeHash);
+      const res = await apiClient.signIn(
+        phone,
+        verificationCode,
+        phoneCodeHash,
+      );
       if (res.success) {
         if (res.next_step === 'password') {
           setVerificationStep('password');
@@ -128,10 +153,14 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
           setVerificationStep('success');
         }
       } else {
-        setVerificationError(res.error || t('Dashboard.profile.errors.invalidCode'));
+        setVerificationError(
+          res.error || t('Dashboard.profile.errors.invalidCode'),
+        );
       }
     } catch (err: any) {
-      setVerificationError(err.message || t('Dashboard.profile.errors.verificationFailed'));
+      setVerificationError(
+        err.message || t('Dashboard.profile.errors.verificationFailed'),
+      );
     } finally {
       setVerificationLoading(false);
     }
@@ -156,10 +185,14 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
         });
         setVerificationStep('success');
       } else {
-        setVerificationError(res.error || t('Dashboard.profile.errors.incorrectPassword'));
+        setVerificationError(
+          res.error || t('Dashboard.profile.errors.incorrectPassword'),
+        );
       }
     } catch (err: any) {
-      setVerificationError(err.message || t('Dashboard.profile.errors.verificationFailed'));
+      setVerificationError(
+        err.message || t('Dashboard.profile.errors.verificationFailed'),
+      );
     } finally {
       setVerificationLoading(false);
     }
@@ -232,16 +265,40 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
         gap={4}
         shadow="md"
       >
-        <Text fontWeight="extrabold" fontSize="md" color="fg" pb={2} borderBottom="1px solid" borderColor="border/30">
+        <Text
+          fontWeight="extrabold"
+          fontSize="md"
+          color="fg"
+          pb={2}
+          borderBottom="1px solid"
+          borderColor="border/30"
+        >
           {t('Dashboard.profile.info.title')}
         </Text>
 
         {[
-          { label: t('Dashboard.profile.info.firstName'), value: currentUser?.first_name || '—' },
-          { label: t('Dashboard.profile.info.lastName'), value: currentUser?.last_name || '—' },
-          { label: t('Dashboard.profile.info.phone'), value: currentUser?.phone || '—' },
-          { label: t('Dashboard.profile.info.userId'), value: currentUser?.id || '—', copyable: true },
-          { label: t('Dashboard.profile.info.username'), value: currentUser?.username ? `@${currentUser.username}` : '—', copyable: !!currentUser?.username }
+          {
+            label: t('Dashboard.profile.info.firstName'),
+            value: currentUser?.first_name || '—',
+          },
+          {
+            label: t('Dashboard.profile.info.lastName'),
+            value: currentUser?.last_name || '—',
+          },
+          {
+            label: t('Dashboard.profile.info.phone'),
+            value: currentUser?.phone || '—',
+          },
+          {
+            label: t('Dashboard.profile.info.userId'),
+            value: currentUser?.id || '—',
+            copyable: true,
+          },
+          {
+            label: t('Dashboard.profile.info.username'),
+            value: currentUser?.username ? `@${currentUser.username}` : '—',
+            copyable: !!currentUser?.username,
+          },
         ].map((item) => (
           <Stack
             key={item.label}
@@ -251,11 +308,24 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
             direction={{ base: 'column', sm: 'row' }}
             gap={{ base: 1, sm: 4 }}
           >
-            <Text fontSize="sm" fontWeight="bold" color="fg.muted" w={{ base: 'auto', sm: '140px' }}>
+            <Text
+              fontSize="sm"
+              fontWeight="bold"
+              color="fg.muted"
+              w={{ base: 'auto', sm: '140px' }}
+            >
               {item.label}
             </Text>
             <HStack flex={1} justify="space-between" overflow="hidden" w="100%">
-              <Text fontSize="sm" color="fg" fontWeight="semibold" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap" minW={0}>
+              <Text
+                fontSize="sm"
+                color="fg"
+                fontWeight="semibold"
+                textOverflow="ellipsis"
+                overflow="hidden"
+                whiteSpace="nowrap"
+                minW={0}
+              >
                 {item.value}
               </Text>
               {item.copyable && item.value !== '—' && (
@@ -286,7 +356,13 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
           </Text>
         </VStack>
 
-        <VStack align="stretch" gap={4} pt={2} borderTop="1px solid" borderColor="border/30">
+        <VStack
+          align="stretch"
+          gap={4}
+          pt={2}
+          borderTop="1px solid"
+          borderColor="border/30"
+        >
           {/* API ID Input */}
           <VStack align="stretch" gap={1.5}>
             <Text fontSize="xs" fontWeight="bold" color="fg.muted">
@@ -297,7 +373,9 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                 type={showApiId ? 'text' : 'password'}
                 value={apiId}
                 onChange={(e) => setApiId(e.target.value)}
-                placeholder={t('Dashboard.profile.credentials.apiIdPlaceholder')}
+                placeholder={t(
+                  'Dashboard.profile.credentials.apiIdPlaceholder',
+                )}
                 border="1px solid"
                 borderColor="border"
                 borderRadius="xl"
@@ -325,7 +403,9 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                 fontSize="2xs"
                 fontWeight="bold"
               >
-                {showApiId ? t('Dashboard.profile.credentials.hide') : t('Dashboard.profile.credentials.show')}
+                {showApiId
+                  ? t('Dashboard.profile.credentials.hide')
+                  : t('Dashboard.profile.credentials.show')}
               </Button>
             </HStack>
           </VStack>
@@ -340,7 +420,9 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                 type={showApiHash ? 'text' : 'password'}
                 value={apiHash}
                 onChange={(e) => setApiHash(e.target.value)}
-                placeholder={t('Dashboard.profile.credentials.apiHashPlaceholder')}
+                placeholder={t(
+                  'Dashboard.profile.credentials.apiHashPlaceholder',
+                )}
                 border="1px solid"
                 borderColor="border"
                 borderRadius="xl"
@@ -368,7 +450,9 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                 fontSize="2xs"
                 fontWeight="bold"
               >
-                {showApiHash ? t('Dashboard.profile.credentials.hide') : t('Dashboard.profile.credentials.show')}
+                {showApiHash
+                  ? t('Dashboard.profile.credentials.hide')
+                  : t('Dashboard.profile.credentials.show')}
               </Button>
             </HStack>
           </VStack>
@@ -378,11 +462,21 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
           <Box
             p={3.5}
             borderRadius="xl"
-            bg={saveStatus.type === 'success' ? 'success.500/10' : 'error.500/10'}
+            bg={
+              saveStatus.type === 'success' ? 'success.500/10' : 'error.500/10'
+            }
             border="1px solid"
-            borderColor={saveStatus.type === 'success' ? 'success.500/30' : 'error.500/30'}
+            borderColor={
+              saveStatus.type === 'success' ? 'success.500/30' : 'error.500/30'
+            }
           >
-            <Text fontSize="xs" fontWeight="bold" color={saveStatus.type === 'success' ? 'success.400' : 'error.400'}>
+            <Text
+              fontSize="xs"
+              fontWeight="bold"
+              color={
+                saveStatus.type === 'success' ? 'success.400' : 'error.400'
+              }
+            >
               {saveStatus.message}
             </Text>
           </Box>
@@ -548,7 +642,10 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
 
                 <Text fontSize="sm" color="fg.muted">
                   {t('Dashboard.profile.confirmUpdate.message', {
-                    phone: currentUser?.phone || currentAccount?.phone || 'your phone number',
+                    phone:
+                      currentUser?.phone ||
+                      currentAccount?.phone ||
+                      'your phone number',
                   })}
                 </Text>
 
@@ -669,7 +766,9 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                         style={{ animation: 'spin 0.8s linear infinite' }}
                       />
                       <Text fontSize="xs" fontWeight="bold" color="fg">
-                        {verificationStep === 'code' ? t('Dashboard.profile.verification.sending') : t('Dashboard.profile.verification.verifying')}
+                        {verificationStep === 'code'
+                          ? t('Dashboard.profile.verification.sending')
+                          : t('Dashboard.profile.verification.verifying')}
                       </Text>
                     </VStack>
                   </Center>
@@ -693,7 +792,9 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                           setVerificationCode(e.target.value);
                           setVerificationError('');
                         }}
-                        placeholder={t('Dashboard.profile.verification.codePlaceholder')}
+                        placeholder={t(
+                          'Dashboard.profile.verification.codePlaceholder',
+                        )}
                         maxLength={5}
                         border="1px solid"
                         borderColor="border"
@@ -709,7 +810,10 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                           ringColor: 'primary',
                         }}
                         onKeyDown={(e) => {
-                          if (e.key === 'Enter' && verificationCode.length === 5) {
+                          if (
+                            e.key === 'Enter' &&
+                            verificationCode.length === 5
+                          ) {
                             handleVerifyCode();
                           }
                         }}
@@ -735,7 +839,9 @@ export const ProfileTab = ({ onLogout }: ProfileTabProps) => {
                           setVerificationPassword(e.target.value);
                           setVerificationError('');
                         }}
-                        placeholder={t('Dashboard.profile.verification.passwordPlaceholder')}
+                        placeholder={t(
+                          'Dashboard.profile.verification.passwordPlaceholder',
+                        )}
                         border="1px solid"
                         borderColor="border"
                         borderRadius="xl"

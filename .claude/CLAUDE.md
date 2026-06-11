@@ -83,22 +83,22 @@ This section serves as the primary source of truth for AI agents working on the 
 
 ## 1. Project Overview
 
-| Core Stack           | Technology                                        |
-| :------------------- | :------------------------------------------------ |
-| **Framework (Web)**  | [React 18.3+](https://react.dev/)                 |
-| **Desktop Shell**    | [Electron v31](https://www.electronjs.org/)       |
-| **Desktop Packager** | [electron-builder](https://www.electron.build/)   |
-| **UI Library**       | [Chakra UI v3](https://chakra-ui.com/)            |
-| **State Management** | [Zustand v5](https://zustand.docs.pmnd.rs/)       |
-| **Routing**          | [React Router v7](https://reactrouter.com/)       |
-| **Styling**          | Vanilla CSS + Chakra UI v3 (Panda CSS)            |
+| Core Stack           | Technology                                                                             |
+| :------------------- | :------------------------------------------------------------------------------------- |
+| **Framework (Web)**  | [React 18.3+](https://react.dev/)                                                      |
+| **Desktop Shell**    | [Electron v31](https://www.electronjs.org/)                                            |
+| **Desktop Packager** | [electron-builder](https://www.electron.build/)                                        |
+| **UI Library**       | [Chakra UI v3](https://chakra-ui.com/)                                                 |
+| **State Management** | [Zustand v5](https://zustand.docs.pmnd.rs/)                                            |
+| **Routing**          | [React Router v7](https://reactrouter.com/)                                            |
+| **Styling**          | Vanilla CSS + Chakra UI v3 (Panda CSS)                                                 |
 | **Language**         | [TypeScript 5.x](https://www.typescriptlang.org/) & [Rust](https://www.rust-lang.org/) |
-| **Testing**          | Jest + React Testing Library (v16+) + Cypress     |
-| **Backend (Server)** | [Axum v0.7](https://github.com/tokio-rs/axum) (Tokio Runtime) |
-| **Telegram MTProto** | [Grammers v0.7](https://github.com/Lonami/grammers) |
-| **Package Manager**  | [Yarn 4 (Berry)](https://yarnpkg.com/)            |
-| **Aesthetic**        | Utilitarian Minimalism / Terminal-Luxury          |
-| **Brand Colors**     | Charcoal (#15111e) & Violet (#8b5cf6)             |
+| **Testing**          | Jest + React Testing Library (v16+) + Cypress                                          |
+| **Backend (Server)** | [Axum v0.7](https://github.com/tokio-rs/axum) (Tokio Runtime)                          |
+| **Telegram MTProto** | [Grammers v0.7](https://github.com/Lonami/grammers)                                    |
+| **Package Manager**  | [Yarn 4 (Berry)](https://yarnpkg.com/)                                                 |
+| **Aesthetic**        | Utilitarian Minimalism / Terminal-Luxury                                               |
+| **Brand Colors**     | Charcoal (#15111e) & Violet (#8b5cf6)                                                  |
 
 ## 2. Design & Product Identity
 

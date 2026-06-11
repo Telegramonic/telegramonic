@@ -26,8 +26,16 @@ export const SideNavBar = ({
         {/* Navigation links */}
         <VStack gap={1} align="stretch">
           {[
-            { tab: 'all', label: t('Dashboard.nav.inMyDrive'), icon: IconType.CLOUD },
-            { tab: 'pinned', label: t('Dashboard.nav.pinned'), icon: IconType.PIN },
+            {
+              tab: 'all',
+              label: t('Dashboard.nav.inMyDrive'),
+              icon: IconType.CLOUD,
+            },
+            {
+              tab: 'pinned',
+              label: t('Dashboard.nav.pinned'),
+              icon: IconType.PIN,
+            },
           ].map(({ tab, label, icon }) => (
             <HStack
               key={tab}

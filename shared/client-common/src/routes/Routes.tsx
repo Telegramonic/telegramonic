@@ -21,7 +21,7 @@ export const getAppRouter = (isUserLogin: boolean) => {
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         )}
-      </>
+      </>,
     ),
   );
 };

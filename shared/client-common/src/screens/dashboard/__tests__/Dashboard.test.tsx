@@ -21,15 +21,40 @@ if (!Blob.prototype.arrayBuffer) {
 // Mock data structures
 const allFilesBase = [
   // id 1 and 3 are inside the folder with ID 2 (Marketing Assets)
-  { id: '1', folder_id: '2', name: 'Project_Requirements_v2.pdf', size: 2.4 * 1024 * 1024, created_at: '2024-10-24T12:00:00Z', icon_type: 'pdf', file_ext: 'pdf', telegram_message_id: 101 },
-  { id: '3', folder_id: '2', name: 'Product_Demo_Final.mp4', size: 854 * 1024 * 1024, created_at: '2024-10-20T12:00:00Z', icon_type: 'video', file_ext: 'mp4', telegram_message_id: 303 },
+  {
+    id: '1',
+    folder_id: '2',
+    name: 'Project_Requirements_v2.pdf',
+    size: 2.4 * 1024 * 1024,
+    created_at: '2024-10-24T12:00:00Z',
+    icon_type: 'pdf',
+    file_ext: 'pdf',
+    telegram_message_id: 101,
+  },
+  {
+    id: '3',
+    folder_id: '2',
+    name: 'Product_Demo_Final.mp4',
+    size: 854 * 1024 * 1024,
+    created_at: '2024-10-20T12:00:00Z',
+    icon_type: 'video',
+    file_ext: 'mp4',
+    telegram_message_id: 303,
+  },
   // id 4 is at the root level (folder_id is null)
-  { id: '4', folder_id: null, name: 'User_Data_Analytics.csv', size: 12.5 * 1024 * 1024, created_at: '2024-10-19T12:00:00Z', icon_type: 'file', file_ext: 'csv', telegram_message_id: null }
+  {
+    id: '4',
+    folder_id: null,
+    name: 'User_Data_Analytics.csv',
+    size: 12.5 * 1024 * 1024,
+    created_at: '2024-10-19T12:00:00Z',
+    icon_type: 'file',
+    file_ext: 'csv',
+    telegram_message_id: null,
+  },
 ];
 
-const allFoldersBase = [
-  { id: '2', parent_id: null, name: 'Marketing Assets' }
-];
+const allFoldersBase = [{ id: '2', parent_id: null, name: 'Marketing Assets' }];
 
 // Mock apiClient implementation
 const mockGetMe = jest.fn().mockResolvedValue({
@@ -37,46 +62,61 @@ const mockGetMe = jest.fn().mockResolvedValue({
   first_name: 'John',
   last_name: 'Doe',
   username: 'johndoe',
-  phone: '+919876543210'
+  phone: '+919876543210',
 });
 const mockGetStats = jest.fn().mockResolvedValue({
   total_space: 100 * 1024 * 1024 * 1024,
   used_space: 45.2 * 1024 * 1024 * 1024,
   file_count: 3,
-  folder_count: 1
+  folder_count: 1,
 });
 const mockGetDrives = jest.fn().mockResolvedValue([]);
 
 const mockGetFolders = jest.fn().mockImplementation((parentId?: string) => {
   if (parentId) {
-    return Promise.resolve(allFoldersBase.filter((f) => f.parent_id === parentId));
+    return Promise.resolve(
+      allFoldersBase.filter((f) => f.parent_id === parentId),
+    );
   }
   return Promise.resolve(allFoldersBase);
 });
 
-const mockGetFiles = jest.fn().mockImplementation((folderId?: string | null, q?: string, all?: boolean) => {
-  let filtered = allFilesBase;
-  if (!all) {
-    filtered = filtered.filter((f) => f.folder_id === (folderId || null));
-  }
-  if (q) {
-    filtered = filtered.filter((f) => f.name.toLowerCase().includes(q.toLowerCase()));
-  }
-  return Promise.resolve(filtered);
-});
-
-const mockUploadStream = jest.fn().mockImplementation((_file: File, _folderId: string | null, onProgress?: (p: number) => void, _signal?: AbortSignal) => {
-  if (onProgress) onProgress(100);
-  return Promise.resolve({
-    id: '999',
-    folder_id: null,
-    name: 'Marketing_Strategy_2026.docx',
-    size: 1000,
-    created_at: new Date().toISOString(),
-    icon_type: 'file',
-    file_ext: 'docx'
+const mockGetFiles = jest
+  .fn()
+  .mockImplementation((folderId?: string | null, q?: string, all?: boolean) => {
+    let filtered = allFilesBase;
+    if (!all) {
+      filtered = filtered.filter((f) => f.folder_id === (folderId || null));
+    }
+    if (q) {
+      filtered = filtered.filter((f) =>
+        f.name.toLowerCase().includes(q.toLowerCase()),
+      );
+    }
+    return Promise.resolve(filtered);
   });
-});
+
+const mockUploadStream = jest
+  .fn()
+  .mockImplementation(
+    (
+      _file: File,
+      _folderId: string | null,
+      onProgress?: (p: number) => void,
+      _signal?: AbortSignal,
+    ) => {
+      if (onProgress) onProgress(100);
+      return Promise.resolve({
+        id: '999',
+        folder_id: null,
+        name: 'Marketing_Strategy_2026.docx',
+        size: 1000,
+        created_at: new Date().toISOString(),
+        icon_type: 'file',
+        file_ext: 'docx',
+      });
+    },
+  );
 
 jest.mock('@services/apiClient', () => ({
   apiClient: {
@@ -84,13 +124,21 @@ jest.mock('@services/apiClient', () => ({
     getStats: () => mockGetStats(),
     getDrives: () => mockGetDrives(),
     getFolders: (parentId?: string) => mockGetFolders(parentId),
-    getFiles: (folderId?: string | null, q?: string, all?: boolean) => mockGetFiles(folderId, q, all),
-    uploadStream: (file: File, folderId: string | null, onProgress?: (p: number) => void, signal?: AbortSignal) => mockUploadStream(file, folderId, onProgress, signal),
+    getFiles: (folderId?: string | null, q?: string, all?: boolean) =>
+      mockGetFiles(folderId, q, all),
+    uploadStream: (
+      file: File,
+      folderId: string | null,
+      onProgress?: (p: number) => void,
+      signal?: AbortSignal,
+    ) => mockUploadStream(file, folderId, onProgress, signal),
     deleteFile: jest.fn().mockResolvedValue({ success: true }),
     deleteFolder: jest.fn().mockResolvedValue({ success: true }),
-    downloadFile: jest.fn().mockResolvedValue(new Blob(['content'], { type: 'video/mp4' })),
+    downloadFile: jest
+      .fn()
+      .mockResolvedValue(new Blob(['content'], { type: 'video/mp4' })),
     logOut: jest.fn().mockResolvedValue(true),
-  }
+  },
 }));
 
 // Mock framer-motion to render plain HTML elements in tests to avoid animation lag/timing issues
@@ -130,59 +178,59 @@ describe('Dashboard', () => {
     expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
   });
 
-  it('should filter files/folders based on search query', async () => {
-    renderWithProvidersAndRouter(<Dashboard />);
-    expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
-    const searchInput = screen.getByPlaceholderText('Search...');
-    
-    await act(async () => {
-      fireEvent.change(searchInput, { target: { value: 'Marketing' } });
-    });
-    
-    expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
-  });
-
   it('should toggle folder pin status when clicking pin button', async () => {
     renderWithProvidersAndRouter(<Dashboard />);
     expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
     const pinButtons = await screen.findAllByTitle('Pin');
-    
+
     fireEvent.click(pinButtons[0]);
-    expect(await screen.findByText('Pinned: Marketing Assets')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Pinned: Marketing Assets'),
+    ).toBeInTheDocument();
   });
 
   it('should remove a file when clicking remove button inside a folder', async () => {
     renderWithProvidersAndRouter(<Dashboard />);
     expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
-    
+
     // Navigate inside Marketing Assets
     fireEvent.click(screen.getByText('Marketing Assets'));
-    
-    expect((await screen.findAllByText('Product_Demo_Final.mp4'))[0]).toBeInTheDocument();
+
+    expect(
+      (await screen.findAllByText('Product_Demo_Final.mp4'))[0],
+    ).toBeInTheDocument();
     const deleteButtons = await screen.findAllByTitle('Delete File');
-    
+
     fireEvent.click(deleteButtons[0]); // remove Product_Demo_Final.mp4 (index 0)
-    expect(await screen.findByText('Deleted successfully: Product_Demo_Final.mp4')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Deleted successfully: Product_Demo_Final.mp4'),
+    ).toBeInTheDocument();
   });
 
   it('should filter files on tab switching', async () => {
     renderWithProvidersAndRouter(<Dashboard />);
     expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
-    
+
     // Navigate inside Marketing Assets
     fireEvent.click(screen.getByText('Marketing Assets'));
-    expect((await screen.findAllByText('Product_Demo_Final.mp4'))[0]).toBeInTheDocument();
-    
+    expect(
+      (await screen.findAllByText('Product_Demo_Final.mp4'))[0],
+    ).toBeInTheDocument();
+
     // Pin it
     const pinButtons = await screen.findAllByTitle('Pin');
     fireEvent.click(pinButtons[0]); // pin Product_Demo_Final.mp4 (index 0)
-    expect(await screen.findByText('Pinned: Product_Demo_Final.mp4')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Pinned: Product_Demo_Final.mp4'),
+    ).toBeInTheDocument();
 
     // Switch to Pinned tab
     fireEvent.click(screen.getAllByText('Pinned')[0]);
-    
+
     // Pinned tab should show pinned file Product_Demo_Final.mp4
-    expect((await screen.findAllByText('Product_Demo_Final.mp4'))[0]).toBeInTheDocument();
+    expect(
+      (await screen.findAllByText('Product_Demo_Final.mp4'))[0],
+    ).toBeInTheDocument();
     // But should not show Marketing Assets (which is not pinned)
     expect(screen.queryByText('Marketing Assets')).not.toBeInTheDocument();
   });
@@ -197,18 +245,24 @@ describe('Dashboard', () => {
 
     renderWithProvidersAndRouter(<Dashboard />);
     expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
-    
+
     // Navigate inside Marketing Assets
     fireEvent.click(screen.getByText('Marketing Assets'));
-    expect((await screen.findAllByText('Product_Demo_Final.mp4'))[0]).toBeInTheDocument();
-    
+    expect(
+      (await screen.findAllByText('Product_Demo_Final.mp4'))[0],
+    ).toBeInTheDocument();
+
     const shareButtons = await screen.findAllByRole('button', {
       name: 'Share Link',
       hidden: true,
     });
     fireEvent.click(shareButtons[0]); // share Product_Demo_Final.mp4 (index 0)
 
-    expect(await screen.findByText('Telegram message link copied: Product_Demo_Final.mp4')).toBeInTheDocument();
+    expect(
+      await screen.findByText(
+        'Telegram message link copied: Product_Demo_Final.mp4',
+      ),
+    ).toBeInTheDocument();
     expect(mockWriteText).toHaveBeenCalledWith('https://t.me/c/2/303');
   });
 
@@ -219,14 +273,20 @@ describe('Dashboard', () => {
     // Navigate inside Marketing Assets
     fireEvent.click(screen.getByText('Marketing Assets'));
 
-    const file = new File(['hello'], 'Marketing_Strategy_2026.docx', { type: 'text/plain' });
+    const file = new File(['hello'], 'Marketing_Strategy_2026.docx', {
+      type: 'text/plain',
+    });
     const fileInput = screen.getByTestId('file-input');
 
     await act(async () => {
       fireEvent.change(fileInput, { target: { files: [file] } });
     });
 
-    expect(await screen.findByText('Uploaded successfully: Marketing_Strategy_2026.docx')).toBeInTheDocument();
+    expect(
+      await screen.findByText(
+        'Uploaded successfully: Marketing_Strategy_2026.docx',
+      ),
+    ).toBeInTheDocument();
     expect(mockUploadStream).toHaveBeenCalled();
   });
 
@@ -237,19 +297,25 @@ describe('Dashboard', () => {
     const deleteButtons = await screen.findAllByTitle('Delete Folder');
 
     // Mock window.confirm
-    const confirmSpy = jest.spyOn(window, 'confirm').mockImplementation(() => true);
+    const confirmSpy = jest
+      .spyOn(window, 'confirm')
+      .mockImplementation(() => true);
 
     fireEvent.click(deleteButtons[0]);
 
-    expect(confirmSpy).toHaveBeenCalledWith('Are you sure you want to permanently delete this folder?');
-    expect(await screen.findByText('Folder deleted successfully')).toBeInTheDocument();
+    expect(confirmSpy).toHaveBeenCalledWith(
+      'Are you sure you want to permanently delete this folder?',
+    );
+    expect(
+      await screen.findByText('Folder deleted successfully'),
+    ).toBeInTheDocument();
 
     confirmSpy.mockRestore();
   });
 
   it('should open confirmation dialog when clicking logout inside Profile, and perform logout when confirmed', async () => {
     const logOutSpy = jest.spyOn(apiClient, 'logOut').mockResolvedValue(true);
-    
+
     renderWithProvidersAndRouter(<Dashboard />);
     expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
 
@@ -263,7 +329,11 @@ describe('Dashboard', () => {
 
     // Confirmation dialog should be visible now
     expect(await screen.findByText('Confirm Logout')).toBeInTheDocument();
-    expect(screen.getByText('Are you sure you want to log out of Telegramonic? You will need to log back in to access your files.')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Are you sure you want to log out of Telegramonic? You will need to log back in to access your files.',
+      ),
+    ).toBeInTheDocument();
 
     // Clicking Cancel should close the dialog
     const cancelBtn = screen.getByRole('button', { name: 'Cancel' });
@@ -281,7 +351,9 @@ describe('Dashboard', () => {
     fireEvent.click(confirmButtons[confirmButtons.length - 1]);
 
     expect(logOutSpy).toHaveBeenCalled();
-    expect(await screen.findByText('Logged out successfully')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Logged out successfully'),
+    ).toBeInTheDocument();
 
     logOutSpy.mockRestore();
   }, 15000);
@@ -293,18 +365,24 @@ describe('Dashboard', () => {
     // Navigate inside Marketing Assets
     fireEvent.click(screen.getByText('Marketing Assets'));
 
-    const file = new File(['hello'], 'dragged_file.txt', { type: 'text/plain' });
-    const dropzone = await screen.findByText('Drag and drop files here, or click to upload');
+    const file = new File(['hello'], 'dragged_file.txt', {
+      type: 'text/plain',
+    });
+    const dropzone = await screen.findByText(
+      'Drag and drop files here, or click to upload',
+    );
 
     await act(async () => {
       fireEvent.drop(dropzone, {
         dataTransfer: {
-          files: [file]
-        }
+          files: [file],
+        },
       });
     });
 
-    expect(await screen.findByText('Uploaded successfully: dragged_file.txt')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Uploaded successfully: dragged_file.txt'),
+    ).toBeInTheDocument();
     expect(mockUploadStream).toHaveBeenCalled();
   });
 
@@ -312,20 +390,25 @@ describe('Dashboard', () => {
     renderWithProvidersAndRouter(<Dashboard />);
     expect(await screen.findByText('Marketing Assets')).toBeInTheDocument();
 
-    const file = new File(['hello'], 'dragged_file.txt', { type: 'text/plain' });
-    
+    const file = new File(['hello'], 'dragged_file.txt', {
+      type: 'text/plain',
+    });
+
     // Drop directly on the brand title to bubble up to root Box
     const brandTitle = screen.getByText('Telegramonic');
     await act(async () => {
       fireEvent.drop(brandTitle, {
         dataTransfer: {
-          files: [file]
-        }
+          files: [file],
+        },
       });
     });
 
-    expect(await screen.findByText("Cannot upload files directly to the root 'In my drive'. Please enter a folder first.")).toBeInTheDocument();
+    expect(
+      await screen.findByText(
+        "Cannot upload files directly to the root 'In my drive'. Please enter a folder first.",
+      ),
+    ).toBeInTheDocument();
     expect(mockUploadStream).not.toHaveBeenCalled();
   });
 });
-

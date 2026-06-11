@@ -36,8 +36,16 @@ export const BottomNavBar = ({
       shadow="0 -4px 12px rgba(0, 0, 0, 0.05)"
     >
       {[
-        { tab: 'all' as ActiveTab, label: t('Dashboard.nav.drive'), icon: IconType.CLOUD },
-        { tab: 'pinned' as ActiveTab, label: t('Dashboard.nav.pinned'), icon: IconType.PIN },
+        {
+          tab: 'all' as ActiveTab,
+          label: t('Dashboard.nav.drive'),
+          icon: IconType.CLOUD,
+        },
+        {
+          tab: 'pinned' as ActiveTab,
+          label: t('Dashboard.nav.pinned'),
+          icon: IconType.PIN,
+        },
       ].map(({ tab, label, icon }) => {
         const isActive = activeTab === tab;
         return (

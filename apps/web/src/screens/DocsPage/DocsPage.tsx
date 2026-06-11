@@ -1,6 +1,14 @@
 import * as React from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
-import { Box, Flex, Text, VStack, Button, Menu, Spinner } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Text,
+  VStack,
+  Button,
+  Menu,
+  Spinner,
+} from '@chakra-ui/react';
 import { MdPreview, getMdFileDataInString } from '@components/MdPreview';
 import { TitleBoxContainer } from '@components';
 import { Icon, IconType } from '@assets';

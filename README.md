@@ -281,7 +281,7 @@ The desktop client bypasses Chromium's standard download manager to avoid leavin
   - `ci-desktop.yml`: Electron desktop application lints, tests, and builds.
   - `build-mobile.yml`: Dedicated checks for mobile changes (debug builds).
   - `build-android-release.yml`: Runs on releases to sign and package production Android outputs (`Telegramonic.apk` and `Telegramonic.aab`) and publish them using `secrets.PA_TOKEN`.
-- **Release Tracking & Documentation**: 
+- **Release Tracking & Documentation**:
   - Version history is divided into [Desktop Version History](docs/product/version-history-desktop.md) and [Mobile Version History](docs/product/version-history-mobile.md).
   - Credentials guide is documented in [Telegram Credentials Guide](docs/product/telegram-credentials.md).
 - **Localization**: Dynamic translation handling via `i18next` localized schemas, with out-of-the-box support for English (`en`), Hindi (`hi`), Spanish (`es`), Russian (`ru`), Chinese (`zh`), and Japanese (`ja`).

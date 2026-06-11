@@ -40,7 +40,9 @@ describe('Icon Wrapper', () => {
   });
 
   it('renders PresentationIcon correctly', () => {
-    const { container } = render(<Icon type={IconType.PRESENTATION} size={20} />);
+    const { container } = render(
+      <Icon type={IconType.PRESENTATION} size={20} />,
+    );
     const svgElement = container.querySelector('svg');
     expect(svgElement).toBeInTheDocument();
     expect(svgElement).toHaveAttribute('width', '20');
